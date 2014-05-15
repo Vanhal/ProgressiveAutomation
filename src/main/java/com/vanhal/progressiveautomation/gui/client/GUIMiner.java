@@ -13,7 +13,6 @@ public class GUIMiner extends BaseGUI {
 
 	public GUIMiner(InventoryPlayer inv, TileEntity entity) {
 		super(new ContainerMiner(inv, entity), texture);
-		
 	}
 	
 }

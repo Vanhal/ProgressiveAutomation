@@ -18,7 +18,8 @@ public class BaseGUI extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float f, int x, int y) {
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		mc.renderEngine.bindTexture(background);
-		drawTexturedModalRect(1, 1, 0, 0, 176, 166);
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, 176, 166);
+		
 	}
 
 }
