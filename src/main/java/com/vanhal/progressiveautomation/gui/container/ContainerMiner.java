@@ -15,7 +15,7 @@ public class ContainerMiner extends BaseContainer {
 		
 		//add slots
 		this.addSlotToContainer(new Slot(miner, 0, 11, 16)); //cobble
-		/*this.addSlotToContainer(new Slot(miner, 1, 11, 52)); //burnable
+		this.addSlotToContainer(new Slot(miner, 1, 11, 52)); //burnable
 		this.addSlotToContainer(new Slot(miner, 2, 49, 52)); //pickaxe
 		this.addSlotToContainer(new Slot(miner, 3, 74, 52)); //shovel
 		
@@ -28,7 +28,7 @@ public class ContainerMiner extends BaseContainer {
 		this.addSlotToContainer(new Slot(miner, 9, 148, 34));
 		this.addSlotToContainer(new Slot(miner, 10, 112, 52));
 		this.addSlotToContainer(new Slot(miner, 11, 130, 52));
-		this.addSlotToContainer(new Slot(miner, 12, 148, 52));*/
+		this.addSlotToContainer(new Slot(miner, 12, 148, 52));
 		
 		addPlayerInventory(inv);
 	}
