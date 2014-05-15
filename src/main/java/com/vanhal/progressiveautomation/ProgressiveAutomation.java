@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.core.Proxy;
+import com.vanhal.progressiveautomation.gui.GuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
 
 import cpw.mods.fml.common.Mod;
@@ -25,6 +26,8 @@ public class ProgressiveAutomation {
 	
 	public static final Logger logger = LogManager.getLogger(Ref.MODID);
 	
+	public static GuiHandler guiHandler = new GuiHandler();
+	
 	
 	public ProgressiveAutomation() {
 		logger.info("Starting automation");
@@ -41,6 +44,8 @@ public class ProgressiveAutomation {
 	public void init(FMLInitializationEvent event) {
 		PAItems.init();
 		PABlocks.init();
+		
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 	}
 	
 	@EventHandler

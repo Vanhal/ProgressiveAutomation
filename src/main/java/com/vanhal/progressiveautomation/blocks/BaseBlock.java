@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseBlock extends BlockContainer {
 	public String name;
-	public in GUIid;
+	public int GUIid;
 	protected IIcon[] blockIcons = new IIcon[6];
 	
 	
