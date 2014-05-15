@@ -20,7 +20,7 @@ public class ProgressiveAutomation {
 	@Instance(Ref.MODID)
 	public static ProgressiveAutomation instance;
 	
-	@SidedProxy(clientSide = "com.vanhal."+Ref.MODID+".core.ProxyClient", serverSide = "com.vanhal."+Ref.MODID+".core.Proxy")
+	@SidedProxy(clientSide = "com.vanhal."+Ref.MODID+".core.ClientProxy", serverSide = "com.vanhal."+Ref.MODID+".core.Proxy")
 	public static Proxy proxy;
 	
 	public static final Logger logger = LogManager.getLogger(Ref.MODID);

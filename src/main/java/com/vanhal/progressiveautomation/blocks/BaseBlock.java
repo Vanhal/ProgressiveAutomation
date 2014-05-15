@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.Ref;
 
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -16,7 +17,8 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseBlock extends BlockContainer {
 	public String name;
-	protected IIcon[] blockIcons = new IIcon[2];
+	public in GUIid;
+	protected IIcon[] blockIcons = new IIcon[6];
 	
 	
 	
@@ -25,7 +27,7 @@ public class BaseBlock extends BlockContainer {
 		name = blockName;
 		setBlockName(name);
 		setHardness(1.0f);
-		//setBlockTextureName(Ref.MODID+":"+name);
+		GUIid = ProgressiveAutomation.proxy.registerGui(name);
 	}
 
 	public TileEntity createNewTileEntity(World world, int var2) {
@@ -35,12 +37,16 @@ public class BaseBlock extends BlockContainer {
 	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
 		blockIcons[0] = register.registerIcon(Ref.MODID+":"+name+"_Top");
-		blockIcons[1] = register.registerIcon(Ref.MODID+":"+name+"_Side");
+		blockIcons[1] = register.registerIcon(Ref.MODID+":"+name+"_Top");
+		blockIcons[2]= register.registerIcon(Ref.MODID+":"+name+"_Side");
+		blockIcons[3]= register.registerIcon(Ref.MODID+":"+name+"_Side");
+		blockIcons[4]= register.registerIcon(Ref.MODID+":"+name+"_Side");
+		blockIcons[5]= register.registerIcon(Ref.MODID+":"+name+"_Side");
     }
 	
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
-        return this.blockIcon;
+        return blockIcons[side];
     }
 	
 	public void preInit() {
