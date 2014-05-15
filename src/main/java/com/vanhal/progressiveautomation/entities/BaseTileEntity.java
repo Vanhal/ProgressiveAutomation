@@ -29,6 +29,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 			}
 		}
 		nbt.setTag("Contents", contents);
+		
+		
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -46,23 +48,44 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	
 	/* Inventory methods */
 	public int getSizeInventory() {
-		return 0;
+		return slots.length;
 	}
 
 	public ItemStack getStackInSlot(int slot) {
-		return null;
+		return slots[slot];
 	}
 
 	public ItemStack decrStackSize(int slot, int amt) {
+		if (slots[slot] != null) {
+			ItemStack newStack;
+			if (slots[slot].stackSize <= amt) {
+				newStack = slots[slot];
+				slots[slot] = null;
+			} else {
+				newStack = slots[slot].splitStack(amt);
+				if (slots[slot].stackSize == 0) {
+					slots[slot] = null;
+				}
+			}
+			return newStack;
+		}
 		return null;
 	}
 
 	public ItemStack getStackInSlotOnClosing(int slot) {
+		if (slots[slot]!=null) {
+			ItemStack stack = slots[slot];
+			slots[slot] = null;
+			return stack;
+		}
 		return null;
 	}
 
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-
+		slots[slot] = stack;
+		if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
+			stack.stackSize = this.getInventoryStackLimit();
+		}
 	}
 
 	public String getInventoryName() {
@@ -74,11 +97,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 
 	public int getInventoryStackLimit() {
-		return 0;
+		return 64;
 	}
 
-	public boolean isUseableByPlayer(EntityPlayer var1) {
-		return false;
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this &&
+		 player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
 	}
 
 	public void openInventory() { }
@@ -94,6 +118,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		if (slots[slot] != null) {
+			int availSpace = this.getInventoryStackLimit() - slots[slot].stackSize;
+			if (availSpace>0) {
+				return true;
+			}
+		} else {
+			return true;
+		}
 		return false;
 	}
 
