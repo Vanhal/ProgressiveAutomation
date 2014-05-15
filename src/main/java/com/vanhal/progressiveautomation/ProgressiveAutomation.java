@@ -12,6 +12,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = Ref.MODID, name = Ref.MODNAME, version = Ref.Version)
@@ -42,6 +43,12 @@ public class ProgressiveAutomation {
 		PABlocks.init();
 	}
 	
-	
+	@EventHandler
+	public void postInit(FMLPostInitializationEvent event) {
+		PAItems.postInit();
+		PABlocks.postInit();
+		
+		proxy.registerEntities();
+	}
 	
 }
