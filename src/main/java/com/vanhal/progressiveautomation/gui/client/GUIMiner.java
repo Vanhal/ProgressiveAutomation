@@ -1,5 +1,11 @@
 package com.vanhal.progressiveautomation.gui.client;
 
-public class GUIMiner {
+import net.minecraft.inventory.Container;
 
+public class GUIMiner extends BaseGUI {
+
+	public GUIMiner(InventoryPlayer inv, TileEntity entity) {
+		super(container);
+	}
+	
 }
