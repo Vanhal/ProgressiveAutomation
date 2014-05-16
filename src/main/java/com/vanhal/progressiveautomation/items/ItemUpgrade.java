@@ -9,4 +9,18 @@ public class ItemUpgrade extends Item {
 	public ItemUpgrade() {
 		
 	}
+	
+	public void setLevel(int useLevel) {
+		level = useLevel;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public void setName(String newName) {
+		itemName = newName;
+	}
+	
+	
 }
