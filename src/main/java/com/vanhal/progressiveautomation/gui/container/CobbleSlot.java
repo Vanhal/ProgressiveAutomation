@@ -1,4 +1,4 @@
-package progressiveautomation.gui.container;
+package com.vanhal.progressiveautomation.gui.container;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
