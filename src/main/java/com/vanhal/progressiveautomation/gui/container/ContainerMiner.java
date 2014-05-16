@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.gui.container;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.tileentity.TileEntity;
 
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
@@ -15,10 +16,10 @@ public class ContainerMiner extends BaseContainer {
 
 		//add slots
 		this.addSlotToContainer(new CobbleSlot(miner, 0, 11, 16)); //cobble
-		this.addSlotToContainer(new Slot(miner, 1, 11, 52)); //burnable
-		this.addSlotToContainer(new Slot(miner, 2, 49, 52)); //pickaxe
-		this.addSlotToContainer(new Slot(miner, 3, 74, 52)); //shovel
-		this.addSlotToContainer(new Slot(miner, 4, 74, 52)); //upgrades
+		this.addSlotToContainer(new BurnSlot(miner, 1, 11, 52)); //burnable
+		this.addSlotToContainer(new Slot(miner, 2, 37, 52)); //pickaxe
+		this.addSlotToContainer(new Slot(miner, 3, 63, 52)); //shovel
+		this.addSlotToContainer(new Slot(miner, 4, 89, 52)); //upgrades
 
 		//output slots
 		this.addSlotToContainer(new Slot(miner, 5, 112, 16));
