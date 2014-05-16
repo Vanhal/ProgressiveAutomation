@@ -31,6 +31,16 @@ public class ItemUpgrade extends Item {
 	
 	public void preInit() {
 		GameRegistry.registerItem(this, itemName);
+		addNormalRecipe();
+		addUpgradeRecipe();
+	}
+
+	protected void addUpgradeRecipe() {
+		
+	}
+
+	protected void addNormalRecipe() {
+		
 	}
 	
 }

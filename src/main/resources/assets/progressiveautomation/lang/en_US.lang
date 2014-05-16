@@ -1,1 +1,5 @@
 tile.Miner.name=Stone Miner
+item.WoodUpgrade.name=Wooden Upgrade
+item.StoneUpgrade.name=Stone Upgrade
+item.IronUpgrade.name=Iron Upgrade
+item.DiamondUpgrade.name=Diamond Upgrade
