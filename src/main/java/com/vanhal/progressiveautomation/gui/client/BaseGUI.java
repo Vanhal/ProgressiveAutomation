@@ -49,6 +49,8 @@ public class BaseGUI extends GuiContainer {
 		fontRendererObj.drawString(text, x, y, colour);
 	}
 	
-	
+	protected void drawString(String text, int x, int w, int y, int colour) {
+		drawString(text, x + ((w - fontRendererObj.getStringWidth(text)) / 2) , y, colour);
+	}
 
 }

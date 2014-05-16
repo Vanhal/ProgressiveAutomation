@@ -11,6 +11,11 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIMiner extends BaseGUI {
 	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Miner.png");
+	protected int infoScreenX = 38;
+	protected int infoScreenW = 66;
+	protected int infroScreenY1 = 17;
+	protected int infroScreenY2 = 27;
+	protected int infroScreenY3 = 37;
 	
 	private TileMiner miner;
 
@@ -20,10 +25,17 @@ public class GUIMiner extends BaseGUI {
 	}
 	
 	protected void drawText() {
-		drawString("Miner", 6, GRAY);
-		drawString("Status:", 38, 17, BLUE);
-		drawString("<-Cobble", 38, 27, BLUE);
-		drawString("Ready to Mine", 38, 37, BLUE);
+		drawString("Miner", 5, GRAY);
+		drawString("Status:", infoScreenX, infroScreenY1, WHITE);
+		if (miner.getStackInSlot(0) == null) {
+			drawString("Needs Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
+		} else if (miner.getStackInSlot(1) == null) {
+			drawString("Needs Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
+		} else {
+			drawString("0 / 20192", infoScreenX, infoScreenW, infroScreenY2, BLUE);
+		}
+		
+		drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
 	}
 	
 }
