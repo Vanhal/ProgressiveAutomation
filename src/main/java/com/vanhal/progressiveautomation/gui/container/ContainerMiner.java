@@ -13,6 +13,7 @@ public class ContainerMiner extends BaseContainer {
 	public ContainerMiner(InventoryPlayer inv, TileEntity entity) {
 		super((BaseTileEntity)entity);
 		TileMiner miner = (TileMiner) entity;
+		
 
 		//add slots
 		this.addSlotToContainer(new CobbleSlot(miner, 0, 11, 16)); //cobble
