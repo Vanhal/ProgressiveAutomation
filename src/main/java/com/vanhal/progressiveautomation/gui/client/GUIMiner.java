@@ -31,8 +31,12 @@ public class GUIMiner extends BaseGUI {
 			drawString("Needs Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else if (miner.getStackInSlot(1) == null) {
 			drawString("Needs Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
+		} else if (miner.getStackInSlot(2) == null) {
+			drawString("Needs Pickaxe", infoScreenX, infoScreenW, infroScreenY2, RED);
+		} else if (miner.getStackInSlot(3) == null) {
+			drawString("Needs Shovel", infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else {
-			drawString("0 / 20192", infoScreenX, infoScreenW, infroScreenY2, BLUE);
+			drawString("0 / "+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
 		}
 		
 		drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
