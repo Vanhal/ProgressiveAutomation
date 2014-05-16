@@ -13,4 +13,8 @@ public class PAItems {
 	public static void postInit() {
 		
 	}
+	
+	//items
+	public static ItemWoodUpgrade woodUpgrade;
+	
 }
