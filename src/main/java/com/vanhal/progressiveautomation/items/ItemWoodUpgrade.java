@@ -4,6 +4,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
@@ -18,8 +19,8 @@ public class ItemWoodUpgrade extends ItemUpgrade {
 	}
 	
 	protected void addNormalRecipe() {
-		GameRegistry.addRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Item.getItemFromBlock(Blocks.planks), 'r', Items.redstone
-		});
+		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
+			"ppp", "prp", "ppp", 'p', Blocks.log, 'r', Items.redstone});
+		GameRegistry.addRecipe(recipe);
 	}
 }
