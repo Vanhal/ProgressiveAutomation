@@ -7,6 +7,7 @@ import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.gui.GuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
+import com.vanhal.progressiveautomation.ref.Ref;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;

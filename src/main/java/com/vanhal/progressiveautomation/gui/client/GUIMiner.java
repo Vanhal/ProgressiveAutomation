@@ -1,7 +1,7 @@
 package com.vanhal.progressiveautomation.gui.client;
 
-import com.vanhal.progressiveautomation.Ref;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
+import com.vanhal.progressiveautomation.ref.Ref;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

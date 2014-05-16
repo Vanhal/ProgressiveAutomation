@@ -1,12 +1,17 @@
 package com.vanhal.progressiveautomation.gui.container;
 
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.TileMiner;
+import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
+import com.vanhal.progressiveautomation.gui.slots.SlotItem;
 
 public class ContainerMiner extends BaseContainer {
 
@@ -16,10 +21,10 @@ public class ContainerMiner extends BaseContainer {
 		
 
 		//add slots
-		this.addSlotToContainer(new CobbleSlot(miner, 0, 11, 16)); //cobble
-		this.addSlotToContainer(new BurnSlot(miner, 1, 11, 52)); //burnable
-		this.addSlotToContainer(new Slot(miner, 2, 37, 52)); //pickaxe
-		this.addSlotToContainer(new Slot(miner, 3, 63, 52)); //shovel
+		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 0, 11, 16)); //cobble
+		this.addSlotToContainer(new SlotBurn(miner, 1, 11, 52)); //burnable
+		this.addSlotToContainer(new SlotItem(new ItemStack(Items.stone_pickaxe), miner, 2, 37, 52)); //pickaxe
+		this.addSlotToContainer(new SlotItem(new ItemStack(Items.stone_shovel), miner, 3, 63, 52)); //shovel
 		this.addSlotToContainer(new Slot(miner, 4, 89, 52)); //upgrades
 
 		//output slots

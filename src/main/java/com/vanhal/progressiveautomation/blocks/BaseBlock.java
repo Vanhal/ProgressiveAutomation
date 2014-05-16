@@ -1,7 +1,7 @@
 package com.vanhal.progressiveautomation.blocks;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.Ref;
+import com.vanhal.progressiveautomation.ref.Ref;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameRegistry;

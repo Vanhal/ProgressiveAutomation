@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation;
+package com.vanhal.progressiveautomation.ref;
 
 public class Ref {
 	public static final String MODID = "progressiveautomation";
