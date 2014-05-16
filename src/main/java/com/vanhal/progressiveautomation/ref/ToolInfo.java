@@ -1,6 +1,10 @@
 package com.vanhal.progressiveautomation.ref;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 
 public class ToolInfo {
 	//tools
@@ -16,4 +20,14 @@ public class ToolInfo {
 	public static int LEVEL_IRON = 2;
 	public static int LEVEL_GOLD = 3;
 	public static int LEVEL_DIAMOND = 4;
+	
+	public static int getType(Item item) {
+		if (item instanceof ItemTool) {
+			
+		} else if (item instanceof ItemSword) {
+			return TYPE_SWORD;
+		} else if (item instanceof ItemHoe) {
+			return TYPE_HOE;
+		}
+	}
 }
