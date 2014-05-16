@@ -57,4 +57,11 @@ public class ToolInfo {
 		else if (material.equals("EMERALD")) return LEVEL_DIAMOND;
 		else return -1;
 	}
+	
+	public static int getHarvestLevel(Item item) {
+		int value = getLevel(item);
+		if (value == LEVEL_GOLD) value = 0;
+		if (value == LEVEL_DIAMOND) value = 3;
+		return value;
+	}
 }
