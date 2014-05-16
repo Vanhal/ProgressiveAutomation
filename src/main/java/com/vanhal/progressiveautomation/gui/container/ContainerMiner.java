@@ -12,6 +12,8 @@ import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.gui.slots.SlotItem;
+import com.vanhal.progressiveautomation.gui.slots.SlotTool;
+import com.vanhal.progressiveautomation.ref.ToolInfo;
 
 public class ContainerMiner extends BaseContainer {
 
@@ -23,8 +25,8 @@ public class ContainerMiner extends BaseContainer {
 		//add slots
 		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 0, 11, 16)); //cobble
 		this.addSlotToContainer(new SlotBurn(miner, 1, 11, 52)); //burnable
-		this.addSlotToContainer(new SlotItem(new ItemStack(Items.stone_pickaxe), miner, 2, 37, 52)); //pickaxe
-		this.addSlotToContainer(new SlotItem(new ItemStack(Items.stone_shovel), miner, 3, 63, 52)); //shovel
+		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_PICKAXE, ToolInfo.LEVEL_STONE, miner, 2, 37, 52)); //pickaxe
+		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_SHOVEL, ToolInfo.LEVEL_STONE, miner, 3, 63, 52)); //shovel
 		this.addSlotToContainer(new Slot(miner, 4, 89, 52)); //upgrades
 
 		//output slots
