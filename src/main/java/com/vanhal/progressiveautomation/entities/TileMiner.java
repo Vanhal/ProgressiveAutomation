@@ -4,6 +4,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemTool;
 
 public class TileMiner extends BaseTileEntity {
@@ -26,7 +27,9 @@ public class TileMiner extends BaseTileEntity {
 					(tryBlock.getHarvestLevel(0)>=0)
 					) {
 					boolean mine = false;
-					if (tryBlock.getHarvestTool(0)=="pickaxe") {
+					if (tryBlock == Blocks.cobblestone) {
+						currentMineBlocks++;
+					} if (tryBlock.getHarvestTool(0)=="pickaxe") {
 						if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
 							totalMineBlocks++;
 							mine = true;
@@ -64,6 +67,10 @@ public class TileMiner extends BaseTileEntity {
 			return ToolInfo.getHarvestLevel(tool);
 		}
 		return -1;
+	}
+	
+	public int getMinedBlocks() {
+		return currentMineBlocks;
 	}
 	
 	public int getMineBlocks() {

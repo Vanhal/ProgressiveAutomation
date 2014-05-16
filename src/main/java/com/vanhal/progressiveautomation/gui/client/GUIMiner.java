@@ -36,7 +36,7 @@ public class GUIMiner extends BaseGUI {
 		} else if (miner.getStackInSlot(3) == null) {
 			drawString("Needs Shovel", infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else {
-			drawString("0 / "+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
+			drawString(miner.getMinedBlocks()+" / "+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
 		}
 		
 		drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
