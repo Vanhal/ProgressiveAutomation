@@ -79,7 +79,7 @@ public class TileMiner extends BaseTileEntity {
 			checkForChanges();
 			checkInventory();
 			
-			if ( (isBurning()) && (!invFull) ) {
+			if ( (!isDone()) && (isBurning()) && (!invFull) ) {
 				//mine!
 				mine();
 			} else if (invFull && !stuffItems.isEmpty()) {
@@ -181,11 +181,6 @@ public class TileMiner extends BaseTileEntity {
 				miningTime--;
 			}
 		} else {
-			if (isDone()) {
-				scanBlocks();
-				currentColumn = getRange();
-			}
-			
 			if (!isDone()) {
 				currentBlock = getNextBlock();
 				if (currentBlock != null) {
@@ -201,6 +196,12 @@ public class TileMiner extends BaseTileEntity {
 				}
 			}
 		}
+		
+		if (isDone()) {
+			ProgressiveAutomation.logger.info("Done Update");
+			scanBlocks();
+			currentColumn = getRange();
+		}
 	}
 	
 	public Block getNextBlock() {
@@ -214,6 +215,7 @@ public class TileMiner extends BaseTileEntity {
 				currentYLevel = yCoord - 1;
 				currentColumn--;
 				if (currentColumn<0) {
+					ProgressiveAutomation.logger.info("Last Column done Update");
 					scanBlocks();
 					currentColumn = getRange();
 				}
@@ -302,6 +304,7 @@ public class TileMiner extends BaseTileEntity {
 		
 		//update
 		if (update) {
+			ProgressiveAutomation.logger.info("INventory Changed Update");
 			scanBlocks();
 			currentColumn = getRange();
 			currentBlock = null;
