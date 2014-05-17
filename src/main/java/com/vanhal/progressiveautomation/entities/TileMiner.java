@@ -142,7 +142,7 @@ public class TileMiner extends BaseTileEntity {
 	}
 
 	public void mine() {
-		if ( (slots[1]==null) && (slots[2]==null) && (slots[3]==null) ) return;
+		if ( (slots[1]==null) || (slots[2]==null) || (slots[3]==null) ) return;
 		if (currentBlock!=null) {
 			//continue to mine this block
 			if (miningTime<=0) {
@@ -185,12 +185,11 @@ public class TileMiner extends BaseTileEntity {
 				currentBlock = getNextBlock();
 				if (currentBlock != null) {
 					Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+					miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 * 20 ) ;
 					if (miningWith!=1) {
 						ItemTool tool = (ItemTool)slots[miningWith].getItem();
-						miningTime = (int)Math.ceil( tool.getDigSpeed( slots[miningWith], currentBlock, 
-								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) ) );
-					} else {
-						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 );
+						miningTime = (int) Math.ceil(miningTime / ( tool.getDigSpeed( slots[miningWith], currentBlock, 
+								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) ) ) );
 					}
 					ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
 				}
