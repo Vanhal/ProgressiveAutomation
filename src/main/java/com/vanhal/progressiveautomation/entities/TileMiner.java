@@ -36,45 +36,43 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	public void scanBlocks() {
-		ProgressiveAutomation.logger.info("Range: "+getRange());
-		for (int i = 0; i < getRange(); i++) {
-			Point block = spiral(i, 0, 0);
-			ProgressiveAutomation.logger.info("Mine Block: "+block.getX()+", "+block.getY());
-		}
 		totalMineBlocks = currentMineBlocks = 0;
-		boolean bedrock = false;
-		int newY = this.yCoord - 1;
-		while (!bedrock) {
-			Block tryBlock = worldObj.getBlock(this.xCoord, newY, this.zCoord);
-			if (tryBlock != null) {
-				if (
-					(tryBlock.getBlockHardness(worldObj, xCoord, newY, zCoord)>=0) &&
-					(tryBlock.getHarvestLevel(0)>=0)
-					) {
-					boolean mine = false;
-					if (tryBlock == Blocks.cobblestone) {
-						currentMineBlocks++;
-					} if (tryBlock.getHarvestTool(0)=="pickaxe") {
-						if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
+		for (int i = 1; i <= getRange(); i++) {
+			Point currentPoint = spiral(i, xCoord, yCoord);
+			boolean bedrock = false;
+			int newY = this.yCoord - 1;
+			while (!bedrock) {
+				Block tryBlock = worldObj.getBlock(currentPoint.getX(), newY, currentPoint.getX());
+				if (tryBlock != null) {
+					if (
+						(tryBlock.getBlockHardness(worldObj, currentPoint.getX(), newY, currentPoint.getX())>=0) &&
+						(tryBlock.getHarvestLevel(0)>=0)
+						) {
+						boolean mine = false;
+						if (tryBlock == Blocks.cobblestone) {
+							currentMineBlocks++;
+						} if (tryBlock.getHarvestTool(0)=="pickaxe") {
+							if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
+								totalMineBlocks++;
+								mine = true;
+							}
+						} else if (tryBlock.getHarvestTool(0)=="shovel") {
+							if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(0)) {
+								totalMineBlocks++;
+								mine = true;
+							}
+						} else {
 							totalMineBlocks++;
 							mine = true;
 						}
-					} else if (tryBlock.getHarvestTool(0)=="shovel") {
-						if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(0)) {
-							totalMineBlocks++;
-							mine = true;
-						}
-					} else {
-						totalMineBlocks++;
-						mine = true;
+						/*ProgressiveAutomation.logger.info("Block: "+newY+", Harvest Tool: "+
+								tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
+								". Mine: "+mine);*/
 					}
-					/*ProgressiveAutomation.logger.info("Block: "+newY+", Harvest Tool: "+
-							tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
-							". Mine: "+mine);*/
 				}
+				newY--;
+				if (newY<0) bedrock = true;
 			}
-			newY--;
-			if (newY<0) bedrock = true;
 		}
 	}
 
@@ -150,12 +148,11 @@ public class TileMiner extends BaseTileEntity {
 	}
 
 	public static Point spiral(int n, int x, int y) {
-		n = n-1;
 		int dx, dy;
 		
 		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
 		int t = 2*k + 1;
-		int m = t^2;
+		int m = t*t;
 		t = t-1;
 		
 		if (n>=(m-t)) {
