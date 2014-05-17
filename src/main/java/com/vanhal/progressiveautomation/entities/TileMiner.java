@@ -78,7 +78,7 @@ public class TileMiner extends BaseTileEntity {
 	
 	/* Tests a block to see if it can be mined with the current equipment 
 	 * Returns 0 if it can't, -1 if it is cobble
-	 * Will return 1 if mined with pick, 2 if shovel, 3 if none */
+	 * Will return 2 if mined with pick, 3 if shovel, 1 if none */
 	public int canMineBlock(int x, int y, int z) {
 		Block tryBlock = worldObj.getBlock(x, y, z);
 		if (tryBlock != null) {
@@ -91,14 +91,14 @@ public class TileMiner extends BaseTileEntity {
 					return -1;
 				} if (tryBlock.getHarvestTool(0)=="pickaxe") {
 					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
-						return 1;
+						return 2;
 					}
 				} else if (tryBlock.getHarvestTool(0)=="shovel") {
 					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(0)) {
-						return 2;
+						return 3;
 					}
 				} else {
-					return 3;
+					return 1;
 				}
 			}
 		}
@@ -116,15 +116,21 @@ public class TileMiner extends BaseTileEntity {
 			}
 			
 			if (!isDone()) {
-				currentBlock = getGetBlock();
+				currentBlock = getNextBlock();
 				if (currentBlock != null) {
 					Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+					if (miningWith!=1) {
+						ItemTool tool = (ItemTool)slots[miningWith].getItem();
+						ProgressiveAutomation.logger.info("Name: "+currentBlock.getUnlocalizedName());
+						ProgressiveAutomation.logger.info("First: "+tool.func_150893_a(slots[miningWith], currentBlock));
+						ProgressiveAutomation.logger.info("Second: "+tool.getDigSpeed(slots[miningWith], currentBlock, 0));
+					}
 				}
 			}
 		}
 	}
 	
-	public Block getGetBlock() {
+	public Block getNextBlock() {
 		Point currentPoint = spiral(currentColumn, xCoord, zCoord);
 		miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
 		if (miningWith>0) {
