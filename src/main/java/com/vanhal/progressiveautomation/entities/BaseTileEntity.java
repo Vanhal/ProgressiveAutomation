@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	protected ItemStack[] slots;
+	protected int progress = 0;
 	
 	public BaseTileEntity(int numSlots) {
 		slots = new ItemStack[numSlots];
@@ -44,6 +45,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 				slots[slot] = ItemStack.loadItemStackFromNBT(tag);
 			}
 		}
+	}
+	
+	public int getProgress() {
+		return progress;
+	}
+	
+	public void setProgress(int value) {
+		progress = value;
 	}
 	
 	/* Inventory methods */

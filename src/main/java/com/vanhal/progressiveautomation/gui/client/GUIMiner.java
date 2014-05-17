@@ -42,4 +42,6 @@ public class GUIMiner extends BaseGUI {
 		drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
 	}
 	
+	
+	
 }

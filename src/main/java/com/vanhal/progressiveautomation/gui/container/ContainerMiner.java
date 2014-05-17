@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.gui.container;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
@@ -42,6 +43,14 @@ public class ContainerMiner extends BaseContainer {
 		this.addSlotToContainer(new Slot(miner, 13, 148, 52));
 
 		addPlayerInventory(inv);
+	}
+	
+	
+	/* deal with updates */
+	protected int lastMinedBlocks = -1;
+	protected int lastMineBlocks = -1;
+	public void sendUpdates(ICrafting i) {
+		
 	}
 
 

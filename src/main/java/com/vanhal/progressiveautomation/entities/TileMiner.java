@@ -32,20 +32,23 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	public void updateEntity() {
-		checkForChanges();
+		if (!worldObj.isRemote) {
+			checkForChanges();
+		}
 	}
 	
 	public void scanBlocks() {
+		ProgressiveAutomation.logger.info("Updating Blocks");
 		totalMineBlocks = currentMineBlocks = 0;
 		for (int i = 1; i <= getRange(); i++) {
 			Point currentPoint = spiral(i, xCoord, yCoord);
 			boolean bedrock = false;
 			int newY = this.yCoord - 1;
 			while (!bedrock) {
-				Block tryBlock = worldObj.getBlock(currentPoint.getX(), newY, currentPoint.getX());
+				Block tryBlock = worldObj.getBlock(currentPoint.getX(), newY, currentPoint.getY());
 				if (tryBlock != null) {
 					if (
-						(tryBlock.getBlockHardness(worldObj, currentPoint.getX(), newY, currentPoint.getX())>=0) &&
+						(tryBlock.getBlockHardness(worldObj, currentPoint.getX(), newY, currentPoint.getY())>=0) &&
 						(tryBlock.getHarvestLevel(0)>=0)
 						) {
 						boolean mine = false;
@@ -65,7 +68,7 @@ public class TileMiner extends BaseTileEntity {
 							totalMineBlocks++;
 							mine = true;
 						}
-						/*ProgressiveAutomation.logger.info("Block: "+newY+", Harvest Tool: "+
+						/*ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
 								tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
 								". Mine: "+mine);*/
 					}
@@ -74,6 +77,7 @@ public class TileMiner extends BaseTileEntity {
 				if (newY<0) bedrock = true;
 			}
 		}
+		ProgressiveAutomation.logger.info("Update Finished: "+currentMineBlocks+"/"+totalMineBlocks);
 	}
 
 	public int getRange() {
@@ -98,13 +102,18 @@ public class TileMiner extends BaseTileEntity {
 		return currentMineBlocks;
 	}
 	
+	public void setMinedBlocks(int value) {
+		currentMineBlocks = value;
+	}
+	
 	public int getMineBlocks() {
-		if (totalMineBlocks==-1) {
-			scanBlocks();
-		}
 		return totalMineBlocks;
 	}
 	
+	public void setMineBlocks(int value) {
+		totalMineBlocks = value;
+	}
+
 	
 	/* Check for changes to tools and upgrades */
 	protected int lastPick = -1;
