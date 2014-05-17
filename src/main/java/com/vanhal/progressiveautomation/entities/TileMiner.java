@@ -151,11 +151,33 @@ public class TileMiner extends BaseTileEntity {
 
 	public static Point spiral(int n, int x, int y) {
 		n = n-1;
-		int dx = x;
-		int dy = y;
+		int dx, dy;
 		
+		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
+		int t = 2*k + 1;
+		int m = t^2;
+		t = t-1;
 		
+		if (n>=(m-t)) {
+			dx = k-(m-n);
+			dy = -k;
+		} else {
+			m = m-t;
+			if (n>=(m-t)) {
+				dx = -k;
+				dy = -k + (m-n);
+			} else {
+				m = m-t;
+				if (n>=(m-t)) {
+					dx = -k + (m-n);
+					dy = k;
+				} else {
+					dx = k;
+					dy = k - (m-n-t);
+				}
+			}
+		}
 		
-		return new Point(dx, dy);
+		return new Point(x + dx, y + dy);
 	}
 }
