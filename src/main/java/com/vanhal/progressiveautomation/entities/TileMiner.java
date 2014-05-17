@@ -40,10 +40,10 @@ public class TileMiner extends BaseTileEntity {
 		nbt.setBoolean("InvFull", invFull);
 		
 		//save the mining Vars
-		nbt.setInteger("CurrentColumn", currentColumn);
+		/*nbt.setInteger("CurrentColumn", currentColumn);
 		nbt.setInteger("CurrentYLevel", currentYLevel);
 		nbt.setInteger("MiningTime", miningTime);
-		nbt.setInteger("MiningWith", miningWith);
+		nbt.setInteger("MiningWith", miningWith);*/
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -53,11 +53,11 @@ public class TileMiner extends BaseTileEntity {
 		invFull = nbt.getBoolean("InvFull");
 		
 		//get the mining Vars
-		currentColumn = nbt.getInteger("CurrentColumn");
+		/*currentColumn = nbt.getInteger("CurrentColumn");
 		currentYLevel = nbt.getInteger("CurrentYLevel");
 		miningTime = nbt.getInteger("MiningTime");
-		miningWith = nbt.getInteger("MiningWith");
-		currentBlock = getNextBlock();
+		miningWith = nbt.getInteger("MiningWith");*/
+		//currentBlock = getNextBlock();
 	}
 	
 	public void updateEntity() {
@@ -129,6 +129,7 @@ public class TileMiner extends BaseTileEntity {
 	}
 
 	public void mine() {
+		if ( (slots[1]==null) && (slots[2]==null) && (slots[3]==null) ) return;
 		if (currentBlock!=null) {
 			//continue to mine this block
 			if (miningTime<=0) {
@@ -137,6 +138,7 @@ public class TileMiner extends BaseTileEntity {
 				Point currentPoint = spiral(currentColumn, xCoord, zCoord);
 				ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(), 
 						worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), 0); //last number is fortune
+				//get the drops
 				for (ItemStack item : items) {
 					item = addToInventory(item);
 					if (item!=null) {
@@ -144,6 +146,16 @@ public class TileMiner extends BaseTileEntity {
 						stuffItems.add(item);
 					}
 				}
+				
+				//remove the block and entity if there is one
+				worldObj.removeTileEntity( currentPoint.getX(), currentYLevel, currentPoint.getY() );
+				worldObj.setBlock( currentPoint.getX(), currentYLevel, currentPoint.getY(), Blocks.cobblestone);
+				slots[1].stackSize--;
+				if (slots[1].stackSize == 0) {
+					slots[1] = null;
+				}
+				currentMineBlocks++;
+				currentBlock = null;
 				
 			} else {
 				miningTime--;
@@ -359,27 +371,31 @@ public class TileMiner extends BaseTileEntity {
 	public ItemStack addToInventory(ItemStack item) {
 		for (int i = 5; i <= 13; i++) {
 			if (slots[i]!=null) {
-				if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
-					int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
-					if (avail >= item.stackSize) {
-						slots[i].stackSize += item.stackSize;
-						item = null;
-					} else {
-						item.stackSize -= avail;
-						slots[i].stackSize += avail;
+				if (item!=null) {
+					if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
+						int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
+						if (avail >= item.stackSize) {
+							slots[i].stackSize += item.stackSize;
+							item = null;
+							break;
+						} else {
+							item.stackSize -= avail;
+							slots[i].stackSize += avail;
+						}
 					}
 				}
 			}
 		}
-		if (item.stackSize>0) {
+		if ( (item != null) && (item.stackSize>0) ) {
 			for (int i = 5; i <= 13; i++) {
 				if (slots[i]==null) {
 					slots[i] = item;
 					item = null;
+					break;
 				}
 			}
 		}
-		if (item.stackSize==0) {
+		if ( (item != null) && (item.stackSize==0) ) {
 			item = null;
 		}
 		return item;
