@@ -16,6 +16,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.WorldServer;
 
 public class TileMiner extends BaseTileEntity {
 	protected int totalMineBlocks = -1;
@@ -29,11 +30,20 @@ public class TileMiner extends BaseTileEntity {
 	protected int miningTime = 0;
 	protected int miningWith = 0;
 	
+	protected FakePlayer player = null;
+	
 	//deal with a full inventory
 	protected ArrayList<ItemStack> stuffItems;
 
 	public TileMiner() {
 		super(13);
+	}
+	
+	public FakePlayer getPlayer() {
+		if (player==null) {
+			player = new FakePlayer((WorldServer) worldObj);
+		}
+		return player;
 	}
 	
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -164,7 +174,7 @@ public class TileMiner extends BaseTileEntity {
 				currentMineBlocks++;
 				currentBlock = null;
 				if (miningWith!=1) {
-					slots[miningWith].damageItem(1, );
+					slots[miningWith].damageItem(1, getPlayer());
 				}
 				
 			} else {
