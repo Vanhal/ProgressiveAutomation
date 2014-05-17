@@ -91,6 +91,10 @@ public class TileMiner extends BaseTileEntity {
 		ProgressiveAutomation.logger.info("Update Finished: "+currentMineBlocks+"/"+totalMineBlocks);
 	}
 
+	public void mine() {
+		
+	}
+	
 	public int getRange() {
 		if (this.getStackInSlot(4)==null) {
 			return 1;
@@ -217,10 +221,31 @@ public class TileMiner extends BaseTileEntity {
 	public void checkInventory() {
 		for (int i = 5; i <= 13; i++) {
 			if (slots[i]!=null) {
-				ProgressiveAutomation.logger.info("Slot: "+i);
+				int moveTo = -1;
 				if (slots[i].isItemEqual(new ItemStack(Blocks.cobblestone))) {
-					ProgressiveAutomation.logger.info("Is Cobble");
-					setInventorySlotContents(1, slots[i]);
+					moveTo = 1;
+				} else if (getBurnTime(slots[i])>0) {
+					if (slots[0]==null) {
+						moveTo = 0;
+					} else if (slots[i].isItemEqual(slots[0])) {
+						moveTo = 0;
+					}
+				}
+				
+				if (moveTo>=0) {
+					if (slots[moveTo]==null) {
+						slots[moveTo] = slots[i];
+						slots[i] = null;
+					} else if (slots[moveTo].stackSize < slots[moveTo].getMaxStackSize()) {
+						int avail = slots[moveTo].getMaxStackSize() - slots[moveTo].stackSize;
+						if (avail >= slots[i].stackSize) {
+							slots[moveTo].stackSize += slots[i].stackSize;
+							slots[i] = null;
+						} else {
+							slots[i].stackSize -= avail;
+							slots[1].stackSize += avail;
+						}
+					}
 				}
 			}
 		}
