@@ -1,5 +1,7 @@
 package com.vanhal.progressiveautomation.entities;
 
+import org.lwjgl.util.vector.Vector2f;
+
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
 
@@ -33,6 +35,11 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	public void scanBlocks() {
+		ProgressiveAutomation.logger.info("Range: "+getRange());
+		for (int i = 0; i < getRange(); i++) {
+			Vector2f block = spiral(i, xCoord, zCoord);
+			ProgressiveAutomation.logger.info("Mine Block: "+(int)block.getX()+", "+(int)block.getY());
+		}
 		totalMineBlocks = currentMineBlocks = 0;
 		boolean bedrock = false;
 		int newY = this.yCoord - 1;
@@ -60,9 +67,9 @@ public class TileMiner extends BaseTileEntity {
 						totalMineBlocks++;
 						mine = true;
 					}
-					ProgressiveAutomation.logger.info("Block: "+newY+", Harvest Tool: "+
+					/*ProgressiveAutomation.logger.info("Block: "+newY+", Harvest Tool: "+
 							tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
-							". Mine: "+mine);
+							". Mine: "+mine);*/
 				}
 			}
 			newY--;
@@ -141,4 +148,27 @@ public class TileMiner extends BaseTileEntity {
 		}
 	}
 
+	public static Vector2f spiral(int n, int x, int y) {
+		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
+		int t = 2*k + 1;
+		int m = t^2;
+		t = t-1;
+		if (n>=(m-t)) {
+			return new Vector2f( x + (k-(m-n)), y - k);
+		} else {
+			m = m-t;
+		}
+		if (n>=(m-t)) {
+			return new Vector2f( x - k, y + (-k + (m-n)) );
+		} else {
+			m = m-t;
+		}
+		
+		if (n>=(m-t)) {
+			return new Vector2f( x + (-k + (m-n)), y + k );
+		} else {
+			return new Vector2f( x + k, y + (k - (m-n-t)) );
+		}
+		
+	}
 }
