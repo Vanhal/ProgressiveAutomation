@@ -1,5 +1,7 @@
 package com.vanhal.progressiveautomation.entities;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -61,6 +63,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 					if (slots[0]!=null) {
 						if (isFuel()) {
 							burnLevel = progress = getBurnTime();
+							ProgressiveAutomation.logger.info("Burning fuel for: "+getBurnTime());
 							slots[0].stackSize--;
 							if (slots[0].stackSize==0) {
 								slots[0] = null;
@@ -69,6 +72,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 					}
 				}
 			} else {
+				//ProgressiveAutomation.logger.info("Ticks Left for fuel: "+progress);
 				progress--;
 				if (progress<=0) {
 					burnLevel = progress = 0;
@@ -84,6 +88,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	
 	public void setProgress(int value) {
 		progress = value;
+	}
+	
+	public int getBurnLevel() {
+		return burnLevel;
+	}
+	
+	public void setBurnLevel(int value) {
+		burnLevel = value;
 	}
 	
 	/* Inventory methods */
@@ -183,7 +195,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 	
 	public float getPercentDone() {
-		if (isBurning()) {
+		if ( (isBurning()) && (burnLevel>0) ) {
 			return (burnLevel - progress)/burnLevel;
 		} else {
 			return 0;
@@ -197,4 +209,6 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	public boolean isFuel() {
 		return (getBurnTime()>0);
 	}
+	
+	
 }

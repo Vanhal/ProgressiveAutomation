@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.gui.client;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
@@ -27,10 +28,10 @@ public class GUIMiner extends BaseGUI {
 	protected void drawText() {
 		drawString("Miner", 5, GRAY);
 		drawString("Status:", infoScreenX, infroScreenY1, WHITE);
-		if (miner.getStackInSlot(0) == null) {
-			drawString("Need Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else if (miner.getStackInSlot(1) == null) {
+		if ( (miner.getStackInSlot(0) == null) && (!miner.isBurning()) ) {
 			drawString("Need Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
+		} else if (miner.getStackInSlot(1) == null) {
+			drawString("Need Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
 		} /*else if (miner.getStackInSlot(2) == null) {
 			drawString("Need Pickaxe", infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else if (miner.getStackInSlot(3) == null) {
@@ -43,6 +44,7 @@ public class GUIMiner extends BaseGUI {
 	}
 	
 	protected void drawElements() {
+		ProgressiveAutomation.logger.info(miner.getPercentDone()+","+miner.getBurnLevel()+","+miner.getProgress());
 		drawFlame(miner.getPercentDone(), 10, 33);
 	}
 	

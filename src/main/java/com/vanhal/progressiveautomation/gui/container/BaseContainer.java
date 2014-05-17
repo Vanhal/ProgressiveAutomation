@@ -15,6 +15,7 @@ public class BaseContainer extends Container {
 	protected BaseTileEntity entity;
 	
 	protected int lastProgress = -1;
+	protected int lastBurnLevel = -1;
 	
 	public BaseContainer(BaseTileEntity inEntity, int x, int y) {
 		entity = inEntity;
@@ -46,6 +47,11 @@ public class BaseContainer extends Container {
 		for (Object o : this.crafters){
 			ICrafting i = (ICrafting) o;
 			
+			if (entity.getBurnLevel() != lastBurnLevel) {
+				lastBurnLevel = entity.getBurnLevel();
+				i.sendProgressBarUpdate(this, 0, lastBurnLevel);
+			}
+			
 			if (entity.getProgress() != lastProgress) {
 				lastProgress = entity.getProgress();
 				i.sendProgressBarUpdate(this, 1, lastProgress);
@@ -58,7 +64,9 @@ public class BaseContainer extends Container {
 	@SideOnly(Side.CLIENT)
     public void updateProgressBar(int i, int value) {
 		super.updateProgressBar(i, value);
-		if (i==1) {
+		if (i==0) {
+			entity.setBurnLevel(value);
+		} else if (i==1) {
 			entity.setProgress(value);
 		}
 	}

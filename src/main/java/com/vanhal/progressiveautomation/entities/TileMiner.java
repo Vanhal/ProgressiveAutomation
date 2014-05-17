@@ -70,9 +70,9 @@ public class TileMiner extends BaseTileEntity {
 							totalMineBlocks++;
 							mine = true;
 						}
-						ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
+						/*ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
 								tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
-								". Mine: "+mine);
+								". Mine: "+mine);*/
 					}
 				}
 				newY--;
