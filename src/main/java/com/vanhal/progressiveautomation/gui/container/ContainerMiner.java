@@ -17,6 +17,9 @@ import com.vanhal.progressiveautomation.gui.slots.SlotTool;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 public class ContainerMiner extends BaseContainer {
 
 	public ContainerMiner(InventoryPlayer inv, TileEntity entity) {
@@ -49,8 +52,28 @@ public class ContainerMiner extends BaseContainer {
 	/* deal with updates */
 	protected int lastMinedBlocks = -1;
 	protected int lastMineBlocks = -1;
+	
 	public void sendUpdates(ICrafting i) {
+		TileMiner miner = (TileMiner) entity;
+		if (lastMineBlocks != miner.getMineBlocks()) {
+			lastMineBlocks = miner.getMineBlocks();
+			i.sendProgressBarUpdate(this, 2, lastMineBlocks);
+		}
 		
+		if (lastMinedBlocks != miner.getMinedBlocks()) {
+			lastMinedBlocks = miner.getMinedBlocks();
+			i.sendProgressBarUpdate(this, 3, lastMinedBlocks);
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+    public void updateProgressBar(int i, int value) {
+		super.updateProgressBar(i, value);
+		if (i==2) {
+			((TileMiner) entity).setMineBlocks(value);
+		} else if (i==3) {
+			((TileMiner) entity).setMinedBlocks(value);
+		}
 	}
 
 

@@ -41,7 +41,7 @@ public class TileMiner extends BaseTileEntity {
 		ProgressiveAutomation.logger.info("Updating Blocks");
 		totalMineBlocks = currentMineBlocks = 0;
 		for (int i = 1; i <= getRange(); i++) {
-			Point currentPoint = spiral(i, xCoord, yCoord);
+			Point currentPoint = spiral(i, xCoord, zCoord);
 			boolean bedrock = false;
 			int newY = this.yCoord - 1;
 			while (!bedrock) {
@@ -68,9 +68,9 @@ public class TileMiner extends BaseTileEntity {
 							totalMineBlocks++;
 							mine = true;
 						}
-						/*ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
+						ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
 								tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
-								". Mine: "+mine);*/
+								". Mine: "+mine);
 					}
 				}
 				newY--;
