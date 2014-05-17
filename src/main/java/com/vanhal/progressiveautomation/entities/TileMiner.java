@@ -13,6 +13,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
@@ -84,6 +85,14 @@ public class TileMiner extends BaseTileEntity {
 				mine();
 			} else if (invFull && !stuffItems.isEmpty()) {
 				//check to see if we can remove the items now
+				for (ItemStack item : stuffItems) {
+					stuffItems.remove(item);
+					item = addToInventory(item);
+					if (item!=null) {
+						invFull = true;
+						stuffItems.add(item);
+					}
+				}
 				
 			} else if (invFull && stuffItems.isEmpty()) {
 				invFull = false;
@@ -153,8 +162,24 @@ public class TileMiner extends BaseTileEntity {
 				if (miningWith!=1) {
 					fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
 				}
+				//get the inventory of anything under it
+				if (worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY()) instanceof IInventory) {
+					IInventory inv = (IInventory) worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY());
+					for (int i = 0; i < inv.getSizeInventory(); i++) {
+						if (inv.getStackInSlot(i)!=null) {
+							ItemStack insert = addToInventory(inv.getStackInSlot(i));
+							if (insert!=null) {
+								invFull = true;
+								stuffItems.add(insert);
+							}
+							inv.setInventorySlotContents(i, null);
+						}
+					}
+				}
+				
+				//then break the block
 				ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(), 
-						worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel); //last number is fortune
+						worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel);
 				//get the drops
 				for (ItemStack item : items) {
 					item = addToInventory(item);
