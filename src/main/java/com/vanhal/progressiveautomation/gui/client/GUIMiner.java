@@ -28,20 +28,30 @@ public class GUIMiner extends BaseGUI {
 	protected void drawText() {
 		drawString("Miner", 5, GRAY);
 		drawString("Status:", infoScreenX, infroScreenY1, WHITE);
-		boolean readyToMine = false;
+		boolean readyToMine = true;
 		if ( (miner.getStackInSlot(0) == null) && (!miner.isBurning()) ) {
 			drawString("Need Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
+			readyToMine = false;
 		} else if (miner.getStackInSlot(1) == null) {
 			drawString("Need Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
+			readyToMine = false;
 		} else if (miner.getStackInSlot(2) == null) {
 			drawString("Need Pickaxe", infoScreenX, infoScreenW, infroScreenY2, RED);
+			readyToMine = false;
 		} else if (miner.getStackInSlot(3) == null) {
 			drawString("Need Shovel", infoScreenX, infoScreenW, infroScreenY2, RED);
+			readyToMine = false;
 		} else {
 			drawString(miner.getMinedBlocks()+" / "+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
 		}
 		
-		drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
+		if (!readyToMine) {
+			drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
+		} else if (miner.getMinedBlocks()==miner.getMineBlocks()) {
+			drawString("Finished", infoScreenX, infoScreenW, infroScreenY3, BLUE);
+		} else {
+			drawString("Mining", infoScreenX, infoScreenW, infroScreenY3, GREEN);
+		}
 	}
 	
 	protected void drawElements() {

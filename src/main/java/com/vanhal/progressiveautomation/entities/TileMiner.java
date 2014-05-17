@@ -16,6 +16,12 @@ public class TileMiner extends BaseTileEntity {
 	protected int totalMineBlocks = -1;
 	protected int currentMineBlocks = 0;
 	protected boolean invFull = false;
+	
+	//mining vars
+	protected int currentColumn = 0;
+	protected int currentYLevel = 0;
+	protected Block currentBlock = null;
+	protected int miningTime = 0;
 
 	public TileMiner() {
 		super(13);
@@ -43,7 +49,7 @@ public class TileMiner extends BaseTileEntity {
 			
 			if ( (isBurning()) && (!invFull) ) {
 				//mine!
-				//mine();
+				mine();
 			}
 		}
 	}
@@ -90,9 +96,62 @@ public class TileMiner extends BaseTileEntity {
 		}
 		ProgressiveAutomation.logger.info("Update Finished: "+currentMineBlocks+"/"+totalMineBlocks);
 	}
+	
+	/* Tests a block to see if it can be mined with the current equipment 
+	 * Returns 0 if it can't, 1 if it can or -1 if it is cobble */
+	public int canMineBlock(int x, int y, int z) {
+		Block tryBlock = worldObj.getBlock(x, y, z);
+		if (tryBlock != null) {
+			if (
+				(tryBlock.getBlockHardness(worldObj, currentPoint.getX(), newY, currentPoint.getY())>=0) &&
+				(tryBlock.getHarvestLevel(0)>=0)
+				) {
+				boolean mine = false;
+				if (tryBlock == Blocks.cobblestone) {
+					currentMineBlocks++;
+				} if (tryBlock.getHarvestTool(0)=="pickaxe") {
+					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
+						totalMineBlocks++;
+						mine = true;
+					}
+				} else if (tryBlock.getHarvestTool(0)=="shovel") {
+					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(0)) {
+						totalMineBlocks++;
+						mine = true;
+					}
+				} else {
+					totalMineBlocks++;
+					mine = true;
+				}
+				/*ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
+						tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
+						". Mine: "+mine);*/
+			}
+		}
+	}
 
 	public void mine() {
+		if (currentBlock!=null) {
+			//continue to mine this block
+			
+		} else {
+			if (isDone()) {
+				scanBlocks();
+				currentColumn = getRange();
+			}
+			
+			if (!isDone()) {
+				currentBlock = getGetBlock();
+				if (currentBlock != null) {
+					
+				}
+			}
+		}
+	}
+	
+	public Block getGetBlock() {
 		
+		return null;
 	}
 	
 	public int getRange() {
@@ -131,6 +190,10 @@ public class TileMiner extends BaseTileEntity {
 	
 	public boolean isInventoryFull() {
 		return invFull;
+	}
+	
+	public boolean isDone() {
+		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
 	}
 
 	
@@ -172,6 +235,10 @@ public class TileMiner extends BaseTileEntity {
 		//update
 		if (update) {
 			scanBlocks();
+			currentColumn = getRange();
+			currentBlock = null;
+			miningTime = 0;
+			currentYLevel = yCoord - 1;
 		}
 	}
 
