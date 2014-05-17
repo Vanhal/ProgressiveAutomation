@@ -6,6 +6,7 @@ import com.vanhal.progressiveautomation.ref.ToolInfo;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileMiner extends BaseTileEntity {
 	protected int totalMineBlocks = -1;
@@ -13,6 +14,18 @@ public class TileMiner extends BaseTileEntity {
 
 	public TileMiner() {
 		super(14);
+	}
+	
+	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		nbt.setInteger("MineBlocks", totalMineBlocks);
+		nbt.setInteger("MinedBlocks", currentMineBlocks);
+	}
+	
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		totalMineBlocks = nbt.getInteger("MineBlocks");
+		currentMineBlocks = nbt.getInteger("MinedBlocks");
 	}
 	
 	public void scanBlocks() {
@@ -78,6 +91,15 @@ public class TileMiner extends BaseTileEntity {
 			scanBlocks();
 		}
 		return totalMineBlocks;
+	}
+	
+	
+	/* Check for changes to tools and upgrades */
+	protected int lastPick = -1;
+	protected int lastShovel = -1;
+	protected int lastUpgrades = 0;
+	public void checkForChanges() {
+		
 	}
 
 }
