@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.entities;
 
+import org.lwjgl.util.Point;
 import org.lwjgl.util.vector.Vector2f;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -37,8 +38,8 @@ public class TileMiner extends BaseTileEntity {
 	public void scanBlocks() {
 		ProgressiveAutomation.logger.info("Range: "+getRange());
 		for (int i = 0; i < getRange(); i++) {
-			Vector2f block = spiral(i, xCoord, zCoord);
-			ProgressiveAutomation.logger.info("Mine Block: "+(int)block.getX()+", "+(int)block.getY());
+			Point block = spiral(i, 0, 0);
+			ProgressiveAutomation.logger.info("Mine Block: "+block.getX()+", "+block.getY());
 		}
 		totalMineBlocks = currentMineBlocks = 0;
 		boolean bedrock = false;
@@ -148,27 +149,13 @@ public class TileMiner extends BaseTileEntity {
 		}
 	}
 
-	public static Vector2f spiral(int n, int x, int y) {
-		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
-		int t = 2*k + 1;
-		int m = t^2;
-		t = t-1;
-		if (n>=(m-t)) {
-			return new Vector2f( x + (k-(m-n)), y - k);
-		} else {
-			m = m-t;
-		}
-		if (n>=(m-t)) {
-			return new Vector2f( x - k, y + (-k + (m-n)) );
-		} else {
-			m = m-t;
-		}
+	public static Point spiral(int n, int x, int y) {
+		n = n-1;
+		int dx = x;
+		int dy = y;
 		
-		if (n>=(m-t)) {
-			return new Vector2f( x + (-k + (m-n)), y + k );
-		} else {
-			return new Vector2f( x + k, y + (k - (m-n-t)) );
-		}
 		
+		
+		return new Point(dx, dy);
 	}
 }
