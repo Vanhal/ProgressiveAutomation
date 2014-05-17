@@ -29,7 +29,10 @@ public class GUIMiner extends BaseGUI {
 		drawString("Miner", 5, GRAY);
 		drawString("Status:", infoScreenX, infroScreenY1, WHITE);
 		boolean readyToMine = true;
-		if ( (miner.getStackInSlot(0) == null) && (!miner.isBurning()) ) {
+		if ( miner.isInventoryFull() ) {
+			drawString("Full", infoScreenX, infoScreenW, infroScreenY2, RED);
+			readyToMine = false;
+		} else if ( (miner.getStackInSlot(0) == null) && (!miner.isBurning()) ) {
 			drawString("Need Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else if (miner.getStackInSlot(1) == null) {

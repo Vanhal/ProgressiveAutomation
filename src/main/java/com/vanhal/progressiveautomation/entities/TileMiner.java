@@ -31,21 +31,14 @@ public class TileMiner extends BaseTileEntity {
 	protected int miningTime = 0;
 	protected int miningWith = 0;
 	
-	protected FakePlayer player = null;
 	
 	//deal with a full inventory
-	protected ArrayList<ItemStack> stuffItems;
+	protected ArrayList<ItemStack> stuffItems = new ArrayList<ItemStack>();
 
 	public TileMiner() {
 		super(13);
 	}
 	
-	public FakePlayer getPlayer() {
-		if (player==null) {
-			player = new FakePlayer((WorldServer) worldObj);
-		}
-		return player;
-	}
 	
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -85,9 +78,8 @@ public class TileMiner extends BaseTileEntity {
 				mine();
 			} else if (invFull && !stuffItems.isEmpty()) {
 				//check to see if we can remove the items now
-				for (ItemStack item : stuffItems) {
-					stuffItems.remove(item);
-					item = addToInventory(item);
+				for (int i =0; i < stuffItems.size(); i++) {
+					ItemStack item = addToInventory(stuffItems.remove(i));
 					if (item!=null) {
 						invFull = true;
 						stuffItems.add(item);
