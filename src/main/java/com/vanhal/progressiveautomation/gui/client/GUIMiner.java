@@ -44,7 +44,6 @@ public class GUIMiner extends BaseGUI {
 	}
 	
 	protected void drawElements() {
-		ProgressiveAutomation.logger.info(miner.getPercentDone()+","+miner.getBurnLevel()+","+miner.getProgress());
 		drawFlame(miner.getPercentDone(), 10, 33);
 	}
 	

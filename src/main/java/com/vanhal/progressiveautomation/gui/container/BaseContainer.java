@@ -52,9 +52,9 @@ public class BaseContainer extends Container {
 				i.sendProgressBarUpdate(this, 0, lastBurnLevel);
 			}
 			
-			if (entity.getProgress() != lastProgress) {
-				lastProgress = entity.getProgress();
-				i.sendProgressBarUpdate(this, 1, lastProgress);
+			if (entity.getScaledDone(16) != lastProgress) {
+				lastProgress = entity.getScaledDone(16);
+				i.sendProgressBarUpdate(this, 1, entity.getProgress());
 			}
 			
 			sendUpdates(i);

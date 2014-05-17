@@ -196,10 +196,16 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	
 	public float getPercentDone() {
 		if ( (isBurning()) && (burnLevel>0) ) {
-			return (burnLevel - progress)/burnLevel;
+			float done = (burnLevel - progress);
+			done = done/(float)burnLevel;
+			return done;
 		} else {
 			return 0;
 		}
+	}
+	
+	public int getScaledDone(int scale) {
+		return (int) Math.floor(scale * getPercentDone());
 	}
 	
 	public int getBurnTime() {
