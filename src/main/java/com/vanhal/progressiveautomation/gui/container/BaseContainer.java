@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.gui.container;
 
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -15,8 +16,9 @@ public class BaseContainer extends Container {
 	
 	protected int lastProgress = -1;
 	
-	public BaseContainer(BaseTileEntity inEntity) {
+	public BaseContainer(BaseTileEntity inEntity, int x, int y) {
 		entity = inEntity;
+		this.addSlotToContainer(new SlotBurn(entity, 0, x, y)); //burnable
 	}
 	
 	public boolean canInteractWith(EntityPlayer player) {

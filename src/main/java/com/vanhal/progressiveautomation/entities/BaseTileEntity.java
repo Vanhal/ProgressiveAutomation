@@ -12,7 +12,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	protected int progress = 0;
 	
 	public BaseTileEntity(int numSlots) {
-		slots = new ItemStack[numSlots];
+		slots = new ItemStack[numSlots+1];
 	}
 	
 	//deal with NBT
@@ -140,6 +140,11 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
 		return false;
+	}
+	
+	public boolean readyToBurn() {
+		
+		return true;
 	}
 	
 }

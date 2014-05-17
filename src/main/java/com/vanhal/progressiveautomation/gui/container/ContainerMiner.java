@@ -23,13 +23,12 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class ContainerMiner extends BaseContainer {
 
 	public ContainerMiner(InventoryPlayer inv, TileEntity entity) {
-		super((BaseTileEntity)entity);
+		super((BaseTileEntity)entity, 11, 52);
 		TileMiner miner = (TileMiner) entity;
 		
 
 		//add slots
-		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 0, 11, 16)); //cobble
-		this.addSlotToContainer(new SlotBurn(miner, 1, 11, 52)); //burnable
+		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
 		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_PICKAXE, ToolInfo.LEVEL_STONE, miner, 2, 37, 52)); //pickaxe
 		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_SHOVEL, ToolInfo.LEVEL_STONE, miner, 3, 63, 52)); //shovel
 		this.addSlotToContainer(new SlotItem(new ItemStack(PAItems.stoneUpgrade), miner, 4, 89, 52)); //upgrades

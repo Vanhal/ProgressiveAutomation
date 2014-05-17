@@ -16,7 +16,7 @@ public class TileMiner extends BaseTileEntity {
 	protected int currentMineBlocks = 0;
 
 	public TileMiner() {
-		super(14);
+		super(13);
 	}
 	
 	public void writeToNBT(NBTTagCompound nbt) {
@@ -34,6 +34,7 @@ public class TileMiner extends BaseTileEntity {
 	public void updateEntity() {
 		if (!worldObj.isRemote) {
 			checkForChanges();
+			
 		}
 	}
 	
