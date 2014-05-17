@@ -28,14 +28,14 @@ public class GUIMiner extends BaseGUI {
 		drawString("Miner", 5, GRAY);
 		drawString("Status:", infoScreenX, infroScreenY1, WHITE);
 		if (miner.getStackInSlot(0) == null) {
-			drawString("Needs Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
+			drawString("Need Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else if (miner.getStackInSlot(1) == null) {
-			drawString("Needs Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else if (miner.getStackInSlot(2) == null) {
-			drawString("Needs Pickaxe", infoScreenX, infoScreenW, infroScreenY2, RED);
+			drawString("Need Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
+		} /*else if (miner.getStackInSlot(2) == null) {
+			drawString("Need Pickaxe", infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else if (miner.getStackInSlot(3) == null) {
-			drawString("Needs Shovel", infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else {
+			drawString("Need Shovel", infoScreenX, infoScreenW, infroScreenY2, RED);
+		}*/ else {
 			drawString(miner.getMinedBlocks()+" / "+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
 		}
 		

@@ -28,8 +28,12 @@ public class TileMiner extends BaseTileEntity {
 		currentMineBlocks = nbt.getInteger("MinedBlocks");
 	}
 	
+	public void updateEntity() {
+		checkForChanges();
+	}
+	
 	public void scanBlocks() {
-		totalMineBlocks = 0;
+		totalMineBlocks = currentMineBlocks = 0;
 		boolean bedrock = false;
 		int newY = this.yCoord - 1;
 		while (!bedrock) {
@@ -75,9 +79,11 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	public int getToolMineLevel(int slot) {
-		if (getStackInSlot(slot).getItem() instanceof ItemTool) {
-			ItemTool tool = (ItemTool) getStackInSlot(slot).getItem();
-			return ToolInfo.getHarvestLevel(tool);
+		if (getStackInSlot(slot) != null) {
+			if (getStackInSlot(slot).getItem() instanceof ItemTool) {
+				ItemTool tool = (ItemTool) getStackInSlot(slot).getItem();
+				return ToolInfo.getHarvestLevel(tool);
+			}
 		}
 		return -1;
 	}
@@ -98,8 +104,41 @@ public class TileMiner extends BaseTileEntity {
 	protected int lastPick = -1;
 	protected int lastShovel = -1;
 	protected int lastUpgrades = 0;
+	
 	public void checkForChanges() {
+		boolean update = false;
+		//check pickaxe
+		if ( (slots[2] == null) && (lastPick>=0) ) {
+			lastPick = -1;
+			update = true;
+		} else if (slots[2] != null) {
+			if (ToolInfo.getLevel(slots[2].getItem()) != lastPick) {
+				lastPick = ToolInfo.getLevel(slots[2].getItem());
+				update = true;
+			}
+		}
 		
+		//check shovel
+		if ( (slots[3] == null) && (lastShovel>=0) ) {
+			lastShovel = -1;
+			update = true;
+		} else if (slots[3] != null) {
+			if (ToolInfo.getLevel(slots[3].getItem()) != lastShovel) {
+				lastShovel = ToolInfo.getLevel(slots[3].getItem());
+				update = true;
+			}
+		}
+		
+		//check upgrades
+		if (getRange() != lastUpgrades) {
+			lastUpgrades = getRange();
+			update = true;
+		}
+		
+		//update
+		if (update) {
+			scanBlocks();
+		}
 	}
 
 }
