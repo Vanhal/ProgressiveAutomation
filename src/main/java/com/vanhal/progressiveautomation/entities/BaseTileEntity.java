@@ -54,14 +54,24 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 	
 	public void updateEntity() {
+		super.updateEntity();
 		if (!worldObj.isRemote) {
 			if (!isBurning()) {
 				if (readyToBurn()) {
 					if (slots[0]!=null) {
 						if (isFuel()) {
-							
+							burnLevel = progress = getBurnTime();
+							slots[0].stackSize--;
+							if (slots[0].stackSize==0) {
+								slots[0] = null;
+							}
 						}
 					}
+				}
+			} else {
+				progress--;
+				if (progress<=0) {
+					burnLevel = progress = 0;
 				}
 			}
 			

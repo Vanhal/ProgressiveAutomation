@@ -42,6 +42,9 @@ public class GUIMiner extends BaseGUI {
 		drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
 	}
 	
+	protected void drawElements() {
+		drawFlame(miner.getPercentDone(), 10, 33);
+	}
 	
 	
 }

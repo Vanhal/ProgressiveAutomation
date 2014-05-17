@@ -32,6 +32,7 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	public void updateEntity() {
+		super.updateEntity();
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			
