@@ -23,6 +23,9 @@ public class TileMiner extends BaseTileEntity {
 	protected Block currentBlock = null;
 	protected int miningTime = 0;
 	protected int miningWith = 0;
+	
+	//deal with a full inventory
+	protected ItemStack[] stuffItems;
 
 	public TileMiner() {
 		super(13);
@@ -33,6 +36,12 @@ public class TileMiner extends BaseTileEntity {
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
 		nbt.setBoolean("InvFull", invFull);
+		
+		//save the mining Vars
+		nbt.setInteger("CurrentColumn", currentColumn);
+		nbt.setInteger("CurrentYLevel", currentYLevel);
+		nbt.setInteger("MiningTime", miningTime);
+		nbt.setInteger("MiningWith", miningWith);
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -40,6 +49,13 @@ public class TileMiner extends BaseTileEntity {
 		totalMineBlocks = nbt.getInteger("MineBlocks");
 		currentMineBlocks = nbt.getInteger("MinedBlocks");
 		invFull = nbt.getBoolean("InvFull");
+		
+		//get the mining Vars
+		currentColumn = nbt.getInteger("CurrentColumn");
+		currentYLevel = nbt.getInteger("CurrentYLevel");
+		miningTime = nbt.getInteger("MiningTime");
+		miningWith = nbt.getInteger("MiningWith");
+		currentBlock = getNextBlock();
 	}
 	
 	public void updateEntity() {
@@ -51,6 +67,11 @@ public class TileMiner extends BaseTileEntity {
 			if ( (isBurning()) && (!invFull) ) {
 				//mine!
 				mine();
+			} else if (invFull && stuffItems.length>0) {
+				//check to see if we can remove the items now
+				
+			} else if (invFull && stuffItems.length==0) {
+				invFull = false;
 			}
 		}
 	}
@@ -90,11 +111,11 @@ public class TileMiner extends BaseTileEntity {
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
 				} if (tryBlock.getHarvestTool(0)=="pickaxe") {
-					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
+					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(tryBlock.getDamageValue(worldObj, x, y, z))) {
 						return 2;
 					}
 				} else if (tryBlock.getHarvestTool(0)=="shovel") {
-					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(0)) {
+					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(tryBlock.getDamageValue(worldObj, x, y, z))) {
 						return 3;
 					}
 				} else {
@@ -108,7 +129,13 @@ public class TileMiner extends BaseTileEntity {
 	public void mine() {
 		if (currentBlock!=null) {
 			//continue to mine this block
-			
+			if (miningTime<=0) {
+				miningTime = 0;
+				//clock is done, lets mine it
+				
+			} else {
+				miningTime--;
+			}
 		} else {
 			if (isDone()) {
 				scanBlocks();
@@ -121,10 +148,12 @@ public class TileMiner extends BaseTileEntity {
 					Point currentPoint = spiral(currentColumn, xCoord, zCoord);
 					if (miningWith!=1) {
 						ItemTool tool = (ItemTool)slots[miningWith].getItem();
-						ProgressiveAutomation.logger.info("Name: "+currentBlock.getUnlocalizedName());
-						ProgressiveAutomation.logger.info("First: "+tool.func_150893_a(slots[miningWith], currentBlock));
-						ProgressiveAutomation.logger.info("Second: "+tool.getDigSpeed(slots[miningWith], currentBlock, 0));
+						miningTime = (int)Math.ceil(tool.getDigSpeed(slots[miningWith], currentBlock, 
+								currentBlock.getDamageValue(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY())));
+					} else {
+						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 );
 					}
+					ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
 				}
 			}
 		}
@@ -309,6 +338,8 @@ public class TileMiner extends BaseTileEntity {
 						}
 					}
 				}
+			} else {
+				invFull = false;
 			}
 		}
 	}
