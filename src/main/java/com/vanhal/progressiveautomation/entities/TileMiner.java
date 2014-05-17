@@ -9,6 +9,9 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
 
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
@@ -136,8 +139,12 @@ public class TileMiner extends BaseTileEntity {
 				miningTime = 0;
 				//clock is done, lets mine it
 				Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+				int fortuneLevel = 0;
+				if (miningWith!=1) {
+					fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
+				}
 				ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(), 
-						worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), 0); //last number is fortune
+						worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel); //last number is fortune
 				//get the drops
 				for (ItemStack item : items) {
 					item = addToInventory(item);
@@ -156,6 +163,9 @@ public class TileMiner extends BaseTileEntity {
 				}
 				currentMineBlocks++;
 				currentBlock = null;
+				if (miningWith!=1) {
+					slots[miningWith].damageItem(1, );
+				}
 				
 			} else {
 				miningTime--;
