@@ -20,7 +20,7 @@ public class BaseGUI extends GuiContainer {
 	
 	
 	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
-	public static final ResourceLocation flame = new ResourceLocation(Ref.MODID, "textures/gui/1flame.png");
+	public static final ResourceLocation flame = new ResourceLocation(Ref.MODID, "textures/gui/flame.png");
 	
 	protected ResourceLocation background;
 
@@ -59,10 +59,8 @@ public class BaseGUI extends GuiContainer {
 	}
 	
 	public void drawFlame(float progress, int x, int y) {
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		mc.renderEngine.bindTexture(flame);
-		int level = (int)Math.floor(16*progress);
-		drawTexturedModalRect(guiLeft + x, guiTop + y + 16 - level, 0, 0, 16, level);
+		int level = (int)Math.ceil(16*progress);
+		drawTexturedModalRect(guiLeft + x, guiTop + y + 16 - level, 240, 240 + (16-level), 16, level);
 	}
 
 }

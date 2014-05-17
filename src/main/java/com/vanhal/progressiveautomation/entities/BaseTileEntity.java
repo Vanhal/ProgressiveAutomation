@@ -63,7 +63,6 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 					if (slots[0]!=null) {
 						if (isFuel()) {
 							burnLevel = progress = getBurnTime();
-							ProgressiveAutomation.logger.info("Burning fuel for: "+getBurnTime());
 							slots[0].stackSize--;
 							if (slots[0].stackSize==0) {
 								slots[0] = null;
@@ -196,7 +195,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	
 	public float getPercentDone() {
 		if ( (isBurning()) && (burnLevel>0) ) {
-			float done = (burnLevel - progress);
+			float done = (float)progress;//(burnLevel - progress);
 			done = done/(float)burnLevel;
 			return done;
 		} else {

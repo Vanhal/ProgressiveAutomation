@@ -44,7 +44,7 @@ public class GUIMiner extends BaseGUI {
 	}
 	
 	protected void drawElements() {
-		drawFlame(miner.getPercentDone(), 10, 33);
+		drawFlame(miner.getPercentDone(), 10, 34);
 	}
 	
 	
