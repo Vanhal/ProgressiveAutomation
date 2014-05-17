@@ -6,10 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 
 public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	protected ItemStack[] slots;
 	protected int progress = 0;
+	protected int burnLevel = 0;
 	
 	public BaseTileEntity(int numSlots) {
 		slots = new ItemStack[numSlots+1];
@@ -31,7 +33,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 		}
 		nbt.setTag("Contents", contents);
 		
-		
+		nbt.setInteger("Progress", progress);
+		nbt.setInteger("BurnLevel", burnLevel);
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -44,6 +47,24 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 			if (slot < slots.length) {
 				slots[slot] = ItemStack.loadItemStackFromNBT(tag);
 			}
+		}
+		
+		progress = nbt.getInteger("Progress");
+		burnLevel = nbt.getInteger("BurnLevel");
+	}
+	
+	public void updateEntity() {
+		if (!worldObj.isRemote) {
+			if (!isBurning()) {
+				if (readyToBurn()) {
+					if (slots[0]!=null) {
+						if (isFuel()) {
+							
+						}
+					}
+				}
+			}
+			
 		}
 	}
 	
@@ -147,4 +168,23 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 		return true;
 	}
 	
+	public boolean isBurning() {
+		return (progress>0);
+	}
+	
+	public float getPercentDone() {
+		if (isBurning()) {
+			return (burnLevel - progress)/burnLevel;
+		} else {
+			return 0;
+		}
+	}
+	
+	public int getBurnTime() {
+		return TileEntityFurnace.getItemBurnTime(slots[0]);
+	}
+	
+	public boolean isFuel() {
+		return (getBurnTime()>0);
+	}
 }
