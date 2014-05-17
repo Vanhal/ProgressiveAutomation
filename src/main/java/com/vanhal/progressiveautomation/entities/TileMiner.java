@@ -22,6 +22,7 @@ public class TileMiner extends BaseTileEntity {
 	protected int currentYLevel = 0;
 	protected Block currentBlock = null;
 	protected int miningTime = 0;
+	protected int miningWith = 0;
 
 	public TileMiner() {
 		super(13);
@@ -55,40 +56,18 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	public void scanBlocks() {
-		ProgressiveAutomation.logger.info("Updating Blocks");
 		totalMineBlocks = currentMineBlocks = 0;
 		for (int i = 1; i <= getRange(); i++) {
 			Point currentPoint = spiral(i, xCoord, zCoord);
 			boolean bedrock = false;
 			int newY = this.yCoord - 1;
 			while (!bedrock) {
-				Block tryBlock = worldObj.getBlock(currentPoint.getX(), newY, currentPoint.getY());
-				if (tryBlock != null) {
-					if (
-						(tryBlock.getBlockHardness(worldObj, currentPoint.getX(), newY, currentPoint.getY())>=0) &&
-						(tryBlock.getHarvestLevel(0)>=0)
-						) {
-						boolean mine = false;
-						if (tryBlock == Blocks.cobblestone) {
-							currentMineBlocks++;
-						} if (tryBlock.getHarvestTool(0)=="pickaxe") {
-							if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
-								totalMineBlocks++;
-								mine = true;
-							}
-						} else if (tryBlock.getHarvestTool(0)=="shovel") {
-							if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(0)) {
-								totalMineBlocks++;
-								mine = true;
-							}
-						} else {
-							totalMineBlocks++;
-							mine = true;
-						}
-						/*ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
-								tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
-								". Mine: "+mine);*/
-					}
+				int result = canMineBlock(currentPoint.getX(), newY, currentPoint.getY());
+				if (result >= 1) {
+					totalMineBlocks++;
+				} else if (result == -1) {
+					totalMineBlocks++;
+					currentMineBlocks++;
 				}
 				newY--;
 				if (newY<0) bedrock = true;
@@ -98,36 +77,32 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	/* Tests a block to see if it can be mined with the current equipment 
-	 * Returns 0 if it can't, 1 if it can or -1 if it is cobble */
+	 * Returns 0 if it can't, -1 if it is cobble
+	 * Will return 1 if mined with pick, 2 if shovel, 3 if none */
 	public int canMineBlock(int x, int y, int z) {
 		Block tryBlock = worldObj.getBlock(x, y, z);
 		if (tryBlock != null) {
 			if (
-				(tryBlock.getBlockHardness(worldObj, currentPoint.getX(), newY, currentPoint.getY())>=0) &&
+				(tryBlock.getBlockHardness(worldObj, x, y, z)>=0) &&
 				(tryBlock.getHarvestLevel(0)>=0)
 				) {
 				boolean mine = false;
 				if (tryBlock == Blocks.cobblestone) {
-					currentMineBlocks++;
+					return -1;
 				} if (tryBlock.getHarvestTool(0)=="pickaxe") {
 					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(0)) {
-						totalMineBlocks++;
-						mine = true;
+						return 1;
 					}
 				} else if (tryBlock.getHarvestTool(0)=="shovel") {
 					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(0)) {
-						totalMineBlocks++;
-						mine = true;
+						return 2;
 					}
 				} else {
-					totalMineBlocks++;
-					mine = true;
+					return 3;
 				}
-				/*ProgressiveAutomation.logger.info("Block: "+currentPoint.getX()+","+newY+","+currentPoint.getY()+" Harvest Tool: "+
-						tryBlock.getHarvestTool(0)+", Harvest Level: "+tryBlock.getHarvestLevel(0)+
-						". Mine: "+mine);*/
 			}
 		}
+		return 0;
 	}
 
 	public void mine() {
@@ -143,14 +118,28 @@ public class TileMiner extends BaseTileEntity {
 			if (!isDone()) {
 				currentBlock = getGetBlock();
 				if (currentBlock != null) {
-					
+					Point currentPoint = spiral(currentColumn, xCoord, zCoord);
 				}
 			}
 		}
 	}
 	
 	public Block getGetBlock() {
-		
+		Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+		miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
+		if (miningWith>0) {
+			return worldObj.getBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
+		} else {
+			currentYLevel--;
+			if (currentYLevel<0) {
+				currentYLevel = yCoord - 1;
+				currentColumn--;
+				if (currentColumn<0) {
+					scanBlocks();
+					currentColumn = getRange();
+				}
+			}
+		}
 		return null;
 	}
 	
