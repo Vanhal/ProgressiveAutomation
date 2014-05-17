@@ -1,5 +1,7 @@
 package com.vanhal.progressiveautomation.entities;
 
+import java.util.ArrayList;
+
 import org.lwjgl.util.Point;
 import org.lwjgl.util.vector.Vector2f;
 
@@ -25,7 +27,7 @@ public class TileMiner extends BaseTileEntity {
 	protected int miningWith = 0;
 	
 	//deal with a full inventory
-	protected ItemStack[] stuffItems;
+	protected ArrayList<ItemStack> stuffItems;
 
 	public TileMiner() {
 		super(13);
@@ -67,10 +69,10 @@ public class TileMiner extends BaseTileEntity {
 			if ( (isBurning()) && (!invFull) ) {
 				//mine!
 				mine();
-			} else if (invFull && stuffItems.length>0) {
+			} else if (invFull && !stuffItems.isEmpty()) {
 				//check to see if we can remove the items now
 				
-			} else if (invFull && stuffItems.length==0) {
+			} else if (invFull && stuffItems.isEmpty()) {
 				invFull = false;
 			}
 		}
@@ -111,11 +113,11 @@ public class TileMiner extends BaseTileEntity {
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
 				} if (tryBlock.getHarvestTool(0)=="pickaxe") {
-					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(tryBlock.getDamageValue(worldObj, x, y, z))) {
+					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(worldObj.getBlockMetadata( x, y, z ))) {
 						return 2;
 					}
 				} else if (tryBlock.getHarvestTool(0)=="shovel") {
-					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(tryBlock.getDamageValue(worldObj, x, y, z))) {
+					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(worldObj.getBlockMetadata( x, y, z ))) {
 						return 3;
 					}
 				} else {
@@ -132,6 +134,16 @@ public class TileMiner extends BaseTileEntity {
 			if (miningTime<=0) {
 				miningTime = 0;
 				//clock is done, lets mine it
+				Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+				ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(), 
+						worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), 0); //last number is fortune
+				for (ItemStack item : items) {
+					item = addToInventory(item);
+					if (item!=null) {
+						invFull = true;
+						stuffItems.add(item);
+					}
+				}
 				
 			} else {
 				miningTime--;
@@ -148,8 +160,8 @@ public class TileMiner extends BaseTileEntity {
 					Point currentPoint = spiral(currentColumn, xCoord, zCoord);
 					if (miningWith!=1) {
 						ItemTool tool = (ItemTool)slots[miningWith].getItem();
-						miningTime = (int)Math.ceil(tool.getDigSpeed(slots[miningWith], currentBlock, 
-								currentBlock.getDamageValue(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY())));
+						miningTime = (int)Math.ceil( tool.getDigSpeed( slots[miningWith], currentBlock, 
+								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) ) );
 					} else {
 						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 );
 					}
@@ -334,7 +346,7 @@ public class TileMiner extends BaseTileEntity {
 							slots[i] = null;
 						} else {
 							slots[i].stackSize -= avail;
-							slots[1].stackSize += avail;
+							slots[moveTo].stackSize += avail;
 						}
 					}
 				}
@@ -342,6 +354,35 @@ public class TileMiner extends BaseTileEntity {
 				invFull = false;
 			}
 		}
+	}
+	
+	public ItemStack addToInventory(ItemStack item) {
+		for (int i = 5; i <= 13; i++) {
+			if (slots[i]!=null) {
+				if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
+					int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
+					if (avail >= item.stackSize) {
+						slots[i].stackSize += item.stackSize;
+						item = null;
+					} else {
+						item.stackSize -= avail;
+						slots[i].stackSize += avail;
+					}
+				}
+			}
+		}
+		if (item.stackSize>0) {
+			for (int i = 5; i <= 13; i++) {
+				if (slots[i]==null) {
+					slots[i] = item;
+					item = null;
+				}
+			}
+		}
+		if (item.stackSize==0) {
+			item = null;
+		}
+		return item;
 	}
 
 }
