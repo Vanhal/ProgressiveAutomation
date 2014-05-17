@@ -8,12 +8,14 @@ import com.vanhal.progressiveautomation.ref.ToolInfo;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileMiner extends BaseTileEntity {
 	protected int totalMineBlocks = -1;
 	protected int currentMineBlocks = 0;
+	protected boolean invFull = false;
 
 	public TileMiner() {
 		super(13);
@@ -23,19 +25,26 @@ public class TileMiner extends BaseTileEntity {
 		super.writeToNBT(nbt);
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
+		nbt.setBoolean("InvFull", invFull);
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		totalMineBlocks = nbt.getInteger("MineBlocks");
 		currentMineBlocks = nbt.getInteger("MinedBlocks");
+		invFull = nbt.getBoolean("InvFull");
 	}
 	
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 			checkForChanges();
+			checkInventory();
 			
+			if ( (isBurning()) && (!invFull) ) {
+				//mine!
+				//mine();
+			}
 		}
 	}
 	
@@ -115,6 +124,10 @@ public class TileMiner extends BaseTileEntity {
 	public void setMineBlocks(int value) {
 		totalMineBlocks = value;
 	}
+	
+	public boolean isInventoryFull() {
+		return invFull;
+	}
 
 	
 	/* Check for changes to tools and upgrades */
@@ -188,4 +201,29 @@ public class TileMiner extends BaseTileEntity {
 		
 		return new Point(x + dx, y + dy);
 	}
+
+	/* Check if we are ready to go */
+	public boolean readyToBurn() {
+		if ( (totalMineBlocks>0) && (currentMineBlocks < totalMineBlocks) ) {
+			if ( (slots[1]!=null) && (slots[2]!=null) && (slots[3]!=null) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	/* Check the inventory, move any useful items to their correct slots */
+	public void checkInventory() {
+		for (int i = 5; i <= 13; i++) {
+			if (slots[i]!=null) {
+				ProgressiveAutomation.logger.info("Slot: "+i);
+				if (slots[i].isItemEqual(new ItemStack(Blocks.cobblestone))) {
+					ProgressiveAutomation.logger.info("Is Cobble");
+					setInventorySlotContents(1, slots[i]);
+				}
+			}
+		}
+	}
+
 }
