@@ -13,6 +13,8 @@ public class BlockMiner extends BaseBlock {
 	}
 	
 	public TileEntity createNewTileEntity(World world, int var2) {
-		return new TileMiner(ToolInfo.LEVEL_GOLD);
+		TileMiner ent = new TileMiner();
+		ent.setMiningLevel(ToolInfo.LEVEL_STONE);
+		return ent;
 	}
 }

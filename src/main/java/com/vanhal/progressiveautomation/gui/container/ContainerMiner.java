@@ -9,6 +9,7 @@ import net.minecraft.inventory.SlotFurnace;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
@@ -26,6 +27,8 @@ public class ContainerMiner extends BaseContainer {
 		super((BaseTileEntity)entity, 11, 52);
 		TileMiner miner = (TileMiner) entity;
 		
+		ProgressiveAutomation.logger.info("Mining Level: "+miner.getMiningLevel());
+		
 		ItemStack updateType;
 		if (miner.getMiningLevel()==ToolInfo.LEVEL_DIAMOND) {
 			updateType = new ItemStack(PAItems.diamondUpgrade);
@@ -41,7 +44,7 @@ public class ContainerMiner extends BaseContainer {
 
 		//add slots
 		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
-		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_PICKAXE, miner.getMiningLevel(), miner, 2, 37, 52)); //pickaxe
+		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_PICKAXE, ToolInfo.LEVEL_STONE, miner, 2, 37, 52)); //pickaxe
 		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_SHOVEL, miner.getMiningLevel(), miner, 3, 63, 52)); //shovel
 		this.addSlotToContainer(new SlotItem(updateType, miner, 4, 89, 52)); //upgrades
 

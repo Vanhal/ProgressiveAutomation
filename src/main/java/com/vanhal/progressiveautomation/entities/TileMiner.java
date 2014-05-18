@@ -36,9 +36,8 @@ public class TileMiner extends BaseTileEntity {
 	protected int miningWith = 0;
 	
 	
-	public TileMiner(int level) {
+	public TileMiner() {
 		super(13);
-		mineLevel = level;
 	}
 	
 	
@@ -60,6 +59,10 @@ public class TileMiner extends BaseTileEntity {
 	
 	public int getMiningLevel() {
 		return mineLevel;
+	}
+	
+	public void setMiningLevel(int level) {
+		mineLevel = level;
 	}
 	
 	public void updateEntity() {
@@ -436,7 +439,28 @@ public class TileMiner extends BaseTileEntity {
 	
 	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			
+			if (inv.getStackInSlot(i)!=null) {
+				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot])) && (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize()) ) {
+					int avail = inv.getStackInSlot(i).getMaxStackSize() - inv.getStackInSlot(i).stackSize;
+					if (avail >= slots[fromSlot].stackSize) {
+						inv.getStackInSlot(i).stackSize += slots[fromSlot].stackSize;
+						slots[fromSlot] = null;
+						return true;
+					} else {
+						slots[fromSlot].stackSize -= avail;
+						inv.getStackInSlot(i).stackSize += avail;
+					}
+				}
+			}
+		}
+		if ( (slots[fromSlot] != null) && (slots[fromSlot].stackSize>0) ) {
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
+				if (inv.getStackInSlot(i)==null) {
+					inv.setInventorySlotContents(i, slots[fromSlot]);
+					slots[fromSlot] = null;
+					return true;
+				}
+			}
 		}
 		return false;
 	}
