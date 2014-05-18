@@ -76,12 +76,16 @@ public class ContainerMiner extends BaseContainer {
 	            		if (!this.mergeItemStack(stackInSlot, 2, 3, false)) {
 	            			return null;
 	            		}
+            		} else {
+            			return null;
             		}
             	} else if ( ToolInfo.getType(stackInSlot.getItem()) == ToolInfo.TYPE_SHOVEL ) {
             		if (ToolInfo.getLevel(stackInSlot.getItem()) <= ((TileMiner) entity).getMiningLevel()) {
 	             		if (!this.mergeItemStack(stackInSlot, 3, 4, false)) {
 	             			return null;
 	             		}
+            		} else {
+            			return null;
             		}
              	} else if (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) {
             		if (!this.mergeItemStack(stackInSlot, 0, 1, false)) {
@@ -91,8 +95,7 @@ public class ContainerMiner extends BaseContainer {
              		if (!this.mergeItemStack(stackInSlot, 4, 5, false)) {
              			return null;
              		}
-             	} else
-            	if (!this.mergeItemStack(stackInSlot, 5, 14, false)) {
+             	} else if (!this.mergeItemStack(stackInSlot, 5, 14, false)) {
              		return null;
              	}
             }
