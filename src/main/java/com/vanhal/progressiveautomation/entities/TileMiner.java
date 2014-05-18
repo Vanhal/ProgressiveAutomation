@@ -23,6 +23,7 @@ public class TileMiner extends BaseTileEntity {
 	protected int totalMineBlocks = -1;
 	protected int currentMineBlocks = 0;
 	protected boolean invFull = false;
+	protected int mineLevel = ToolInfo.LEVEL_STONE;
 	
 	//mining vars
 	protected int currentColumn = 0;
@@ -32,8 +33,9 @@ public class TileMiner extends BaseTileEntity {
 	protected int miningWith = 0;
 	
 	
-	public TileMiner() {
+	public TileMiner(int level) {
 		super(13);
+		mineLevel = level;
 	}
 	
 	
@@ -49,6 +51,10 @@ public class TileMiner extends BaseTileEntity {
 		totalMineBlocks = nbt.getInteger("MineBlocks");
 		currentMineBlocks = nbt.getInteger("MinedBlocks");
 		invFull = nbt.getBoolean("InvFull");
+	}
+	
+	public int getMiningLevel() {
+		return mineLevel;
 	}
 	
 	public void updateEntity() {
@@ -414,7 +420,7 @@ public class TileMiner extends BaseTileEntity {
 		}
 	}
 	
-	public ItemStack addToInventory(ItemStack item) {
+	public boolean addToInventory(ItemStack item) {
 		for (int i = 5; i <= 13; i++) {
 			if (slots[i]!=null) {
 				if (item!=null) {
@@ -423,7 +429,7 @@ public class TileMiner extends BaseTileEntity {
 						if (avail >= item.stackSize) {
 							slots[i].stackSize += item.stackSize;
 							item = null;
-							break;
+							return true;
 						} else {
 							item.stackSize -= avail;
 							slots[i].stackSize += avail;
@@ -437,14 +443,17 @@ public class TileMiner extends BaseTileEntity {
 				if (slots[i]==null) {
 					slots[i] = item;
 					item = null;
-					break;
+					return true;
 				}
 			}
 		}
 		if ( (item != null) && (item.stackSize==0) ) {
 			item = null;
 		}
-		return item;
+		//if we still have an item, drop in on the ground
+		
+		
+		return false;
 	}
 
 }

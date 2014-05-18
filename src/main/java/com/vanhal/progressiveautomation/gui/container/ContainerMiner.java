@@ -26,12 +26,24 @@ public class ContainerMiner extends BaseContainer {
 		super((BaseTileEntity)entity, 11, 52);
 		TileMiner miner = (TileMiner) entity;
 		
+		ItemStack updateType;
+		if (miner.getMiningLevel()==ToolInfo.LEVEL_DIAMOND) {
+			updateType = new ItemStack(PAItems.diamondUpgrade);
+		} else if (miner.getMiningLevel()==ToolInfo.LEVEL_IRON) {
+			updateType = new ItemStack(PAItems.ironUpgrade);
+		} else if (miner.getMiningLevel()==ToolInfo.LEVEL_GOLD) {
+			updateType = new ItemStack(PAItems.ironUpgrade);
+		} else if (miner.getMiningLevel()==ToolInfo.LEVEL_STONE) {
+			updateType = new ItemStack(PAItems.stoneUpgrade);
+		} else {
+			updateType = new ItemStack(PAItems.woodUpgrade);
+		}
 
 		//add slots
 		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
-		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_PICKAXE, ToolInfo.LEVEL_STONE, miner, 2, 37, 52)); //pickaxe
-		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_SHOVEL, ToolInfo.LEVEL_STONE, miner, 3, 63, 52)); //shovel
-		this.addSlotToContainer(new SlotItem(new ItemStack(PAItems.stoneUpgrade), miner, 4, 89, 52)); //upgrades
+		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_PICKAXE, miner.getMiningLevel(), miner, 2, 37, 52)); //pickaxe
+		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_SHOVEL, miner.getMiningLevel(), miner, 3, 63, 52)); //shovel
+		this.addSlotToContainer(new SlotItem(updateType, miner, 4, 89, 52)); //upgrades
 
 		//output slots
 		this.addSlotToContainer(new Slot(miner, 5, 112, 16));
