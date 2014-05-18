@@ -10,6 +10,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 
 public class BaseContainer extends Container {
 	protected BaseTileEntity entity;
@@ -40,6 +41,39 @@ public class BaseContainer extends Container {
 		for (int i = 0; i < 9; i++) {
 			this.addSlotToContainer(new Slot(inv, i, 8 + i*18, 142));
 		}
+	}
+	
+	/* Deal with shift clicking */
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+		ItemStack stack = null;
+		Slot slotObject = (Slot) inventorySlots.get(slot);
+		
+		if (slotObject!=null && slotObject.getHasStack()) {
+			ItemStack stackInSlot = slotObject.getStack();
+            stack = stackInSlot.copy();
+
+            if (slot < entity.getSizeInventory()) {
+                if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
+                	return null;
+                }
+            } else if (!allowItem(stackInSlot)) {
+            	return null;
+            } else if (!this.mergeItemStack(stackInSlot, 0, entity.getSizeInventory(), false)) {
+            	return null;
+            }
+
+            if (stackInSlot.stackSize == 0) {
+                    slotObject.putStack(null);
+            } else {
+                    slotObject.onSlotChanged();
+            }
+		}
+		
+		return stack;
+	}
+	
+	public boolean allowItem(ItemStack item) {
+		return true;
 	}
 	
 	public void detectAndSendChanges() {
