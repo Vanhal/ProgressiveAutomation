@@ -14,16 +14,19 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileMiner extends BaseTileEntity {
 	protected int totalMineBlocks = -1;
 	protected int currentMineBlocks = 0;
 	protected boolean invFull = false;
-	protected int mineLevel = ToolInfo.LEVEL_STONE;
+	protected int numUpgrades = 0;
+	protected int mineLevel;
 	
 	//mining vars
 	protected int currentColumn = 0;
@@ -43,6 +46,7 @@ public class TileMiner extends BaseTileEntity {
 		super.writeToNBT(nbt);
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
+		nbt.setInteger("NumUpgrades", numUpgrades);
 		nbt.setBoolean("InvFull", invFull);
 	}
 	
@@ -50,6 +54,7 @@ public class TileMiner extends BaseTileEntity {
 		super.readFromNBT(nbt);
 		totalMineBlocks = nbt.getInteger("MineBlocks");
 		currentMineBlocks = nbt.getInteger("MinedBlocks");
+		numUpgrades = nbt.getInteger("NumUpgrades");
 		invFull = nbt.getBoolean("InvFull");
 	}
 	
@@ -418,6 +423,22 @@ public class TileMiner extends BaseTileEntity {
 				invFull = false;
 			}
 		}
+		//then check if there is any inventories on top of this block that we can output to
+		if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof IInventory) {
+			IInventory externalInv = (IInventory) worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+			for (int i = 5; i <= 13; i++) {
+				if (slots[i]!=null) {
+					addtoExtInventory(externalInv, i);
+				}
+			}
+		}
+	}
+	
+	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			
+		}
+		return false;
 	}
 	
 	public boolean addToInventory(ItemStack item) {
