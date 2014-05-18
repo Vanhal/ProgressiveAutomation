@@ -19,6 +19,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -511,4 +512,36 @@ public class TileMiner extends BaseTileEntity {
 		return false;
 	}
 
+	/* ISided Stuff */
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if ( (slot==1) && (stack.isItemEqual(new ItemStack(Blocks.cobblestone))) ) {
+    		return true;
+    	} else if ( ToolInfo.getType(stack.getItem()) == ToolInfo.TYPE_PICKAXE ) {
+    		if (ToolInfo.getLevel(stack.getItem()) <= getMiningLevel()) {
+    			return true;
+    		}
+    	} else if ( ToolInfo.getType(stack.getItem()) == ToolInfo.TYPE_SHOVEL ) {
+    		if (ToolInfo.getLevel(stack.getItem()) <= getMiningLevel()) {
+    			return true;
+    		}
+     	} else if (TileEntityFurnace.getItemBurnTime(stack)>0) {
+     		return true;
+    	} else if (stack.isItemEqual(ToolInfo.getUpgradeType(getMiningLevel()))) {
+    		return true;
+     	}
+		return false;
+	}
+
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		int[] output = {5,6,7,8,9,10,11,12,13};
+		return output;
+	}
+	
+	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		if (slot>=5) {
+			return true;
+		}
+		return false;
+	}
+	
 }

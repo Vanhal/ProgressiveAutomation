@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.ref;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.items.PAItems;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
@@ -56,6 +57,20 @@ public class ToolInfo {
 		else if (material.equals("GOLD")) return LEVEL_GOLD;
 		else if (material.equals("EMERALD")) return LEVEL_DIAMOND;
 		else return -1;
+	}
+	
+	public static ItemStack getUpgradeType(int level) {
+		if (level==ToolInfo.LEVEL_DIAMOND) {
+			return new ItemStack(PAItems.diamondUpgrade);
+		} else if (level==ToolInfo.LEVEL_IRON) {
+			return new ItemStack(PAItems.ironUpgrade);
+		} else if (level==ToolInfo.LEVEL_GOLD) {
+			return new ItemStack(PAItems.ironUpgrade);
+		} else if (level==ToolInfo.LEVEL_STONE) {
+			return new ItemStack(PAItems.stoneUpgrade);
+		} else {
+			return new ItemStack(PAItems.woodUpgrade);
+		}
 	}
 	
 	public static int getHarvestLevel(Item item) {

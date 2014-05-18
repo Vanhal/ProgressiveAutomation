@@ -30,19 +30,9 @@ public class ContainerMiner extends BaseContainer {
 		super((BaseTileEntity)entity, 11, 52);
 		TileMiner miner = (TileMiner) entity;
 		
-		ProgressiveAutomation.logger.info("Mining Level: "+miner.getMiningLevel());
+		//ProgressiveAutomation.logger.info("Mining Level: "+miner.getMiningLevel());
 		
-		if (miner.getMiningLevel()==ToolInfo.LEVEL_DIAMOND) {
-			updateType = new ItemStack(PAItems.diamondUpgrade);
-		} else if (miner.getMiningLevel()==ToolInfo.LEVEL_IRON) {
-			updateType = new ItemStack(PAItems.ironUpgrade);
-		} else if (miner.getMiningLevel()==ToolInfo.LEVEL_GOLD) {
-			updateType = new ItemStack(PAItems.ironUpgrade);
-		} else if (miner.getMiningLevel()==ToolInfo.LEVEL_STONE) {
-			updateType = new ItemStack(PAItems.stoneUpgrade);
-		} else {
-			updateType = new ItemStack(PAItems.woodUpgrade);
-		}
+		updateType = ToolInfo.getUpgradeType(miner.getMiningLevel());
 
 		//add slots
 		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
