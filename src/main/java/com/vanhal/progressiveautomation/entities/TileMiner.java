@@ -210,7 +210,7 @@ public class TileMiner extends BaseTileEntity {
 						float miningSpeed = tool.getDigSpeed( slots[miningWith], currentBlock, 
 								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) );
 						
-						//check for efficenty on the tool
+						//check for efficiency on the tool
 						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
 						if (eff>0) {
 							for (int i = 0; i<eff; i++) {
@@ -245,6 +245,9 @@ public class TileMiner extends BaseTileEntity {
 				currentYLevel--;
 				miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
 			}
+		}
+		if (miningWith>0) {
+			return worldObj.getBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
 		}
 		if (currentYLevel<0) {
 			currentYLevel = yCoord - 1;
