@@ -17,9 +17,9 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "1.0"
-group= "com.vanhal.modid" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "modid"
+version = "1.0.0"
+group= "com.vanhal.progressiveautomation" 
+archivesBaseName = "progressiveautomation"
 
 minecraft {
     version = "1.7.2-10.12.1.1073"
