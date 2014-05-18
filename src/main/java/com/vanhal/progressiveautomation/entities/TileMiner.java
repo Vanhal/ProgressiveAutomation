@@ -547,7 +547,7 @@ public class TileMiner extends BaseTileEntity {
     		if (ToolInfo.getLevel(stack.getItem()) <= getMiningLevel()) {
     			return true;
     		}
-     	} else if ( (slot==0) && (TileEntityFurnace.getItemBurnTime(stack)>0) ) {
+     	} else if ( (slot==0) && (TileEntityFurnace.getItemBurnTime(stack)>0) && (ToolInfo.getType(stack.getItem())==-1) ) {
      		return true;
     	} else if ( (slot==4) && (stack.isItemEqual(ToolInfo.getUpgradeType(getMiningLevel()))) ) {
     		return true;
