@@ -46,8 +46,8 @@ public class BaseBlock extends BlockContainer {
 	
 	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-		blockIcons[0] = register.registerIcon(Ref.MODID+":"+name+"_Top");
-		blockIcons[1] = register.registerIcon(Ref.MODID+":"+name+"_Bottom");
+		blockIcons[0] = register.registerIcon(Ref.MODID+":"+name+"_Bottom");
+		blockIcons[1] = register.registerIcon(Ref.MODID+":"+name+"_Top");
 		blockIcons[2]= register.registerIcon(Ref.MODID+":"+name+"_Side");
 		blockIcons[3]= register.registerIcon(Ref.MODID+":"+name+"_Side");
 		blockIcons[4]= register.registerIcon(Ref.MODID+":"+name+"_Side");
