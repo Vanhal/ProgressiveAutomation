@@ -23,4 +23,8 @@ public class ItemWoodUpgrade extends ItemUpgrade {
 			"ppp", "prp", "ppp", 'p', Blocks.log, 'r', Items.redstone});
 		GameRegistry.addRecipe(recipe);
 	}
+	
+	protected void addUpgradeRecipe() {
+		addNormalRecipe();
+	}
 }
