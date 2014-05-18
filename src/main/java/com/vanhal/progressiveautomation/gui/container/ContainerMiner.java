@@ -101,7 +101,7 @@ public class ContainerMiner extends BaseContainer {
              		if (!this.mergeItemStack(stackInSlot, 4, 5, false)) {
              			return null;
              		}
-             	} 
+             	} else
             	if (!this.mergeItemStack(stackInSlot, 5, 14, false)) {
              		return null;
              	}

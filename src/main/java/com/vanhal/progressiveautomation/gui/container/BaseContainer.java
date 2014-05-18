@@ -43,32 +43,6 @@ public class BaseContainer extends Container {
 		}
 	}
 	
-	/* Deal with shift clicking */
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		ItemStack stack = null;
-		Slot slotObject = (Slot) inventorySlots.get(slot);
-		
-		if (slotObject!=null && slotObject.getHasStack()) {
-			ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
-
-            if (slot < entity.getSizeInventory()) {
-                if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
-                	return null;
-                }
-            } else if (!this.mergeItemStack(stackInSlot, 0, entity.getSizeInventory(), false)) {
-            	return null;
-            }
-
-            if (stackInSlot.stackSize == 0) {
-                    slotObject.putStack(null);
-            } else {
-                    slotObject.onSlotChanged();
-            }
-		}
-		
-		return stack;
-	}
 	
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
