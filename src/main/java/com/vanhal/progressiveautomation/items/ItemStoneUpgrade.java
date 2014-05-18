@@ -18,13 +18,13 @@ public class ItemStoneUpgrade extends ItemUpgrade {
 	
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Blocks.cobblestone, 'r', Items.redstone});
+			"ppp", "prp", "ppp", 'p', Blocks.stone, 'r', Items.redstone});
 		GameRegistry.addRecipe(recipe);
 	}
 	
 	protected void addUpgradeRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Blocks.cobblestone, 'r', PAItems.woodUpgrade});
+			"ppp", "prp", "ppp", 'p', Blocks.stone, 'r', PAItems.woodUpgrade});
 		GameRegistry.addRecipe(recipe);
 	}
 }
