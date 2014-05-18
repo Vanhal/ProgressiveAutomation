@@ -1,18 +1,27 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import java.util.Random;
+
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -57,6 +66,47 @@ public class BaseBlock extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
         return blockIcons[side];
+    }
+	
+	public void breakBlock(World world, int x, int y, int z, Block p_149749_5_, int p_149749_6_)
+    {
+		TileMiner tileMiner = (TileMiner)world.getTileEntity(x, y, z);
+
+        if (tileMiner != null) {
+            for (int i = 0; i < tileMiner.getSizeInventory(); ++i) {
+                ItemStack itemstack = tileMiner.getStackInSlot(i);
+
+                if (itemstack != null) {
+                    float f = world.rand.nextFloat() * 0.8F + 0.1F;
+                    float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
+                    EntityItem entityitem;
+
+                    for (float f2 = world.rand.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; world.spawnEntityInWorld(entityitem)) {
+                        int j1 = world.rand.nextInt(21) + 10;
+
+                        if (j1 > itemstack.stackSize)
+                        {
+                            j1 = itemstack.stackSize;
+                        }
+
+                        itemstack.stackSize -= j1;
+                        entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+                        float f3 = 0.05F;
+                        entityitem.motionX = (double)((float)world.rand.nextGaussian() * f3);
+                        entityitem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
+                        entityitem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
+
+                        if (itemstack.hasTagCompound())
+                        {
+                            entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+                        }
+                    }
+                }
+            }
+
+            world.func_147453_f(x, y, z, p_149749_5_);
+        }
+        super.breakBlock(world, x, y, z, p_149749_5_, p_149749_6_);
     }
 	
 	public void preInit() {
