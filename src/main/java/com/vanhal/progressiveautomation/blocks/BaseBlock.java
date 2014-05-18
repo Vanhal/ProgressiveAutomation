@@ -19,7 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseBlock extends BlockContainer {
 	public String name;
-	public int GUIid;
+	public int GUIid = -1;
 	protected IIcon[] blockIcons = new IIcon[6];
 	
 	
@@ -29,12 +29,13 @@ public class BaseBlock extends BlockContainer {
 		name = blockName;
 		setBlockName(name);
 		setHardness(1.0f);
-		GUIid = ProgressiveAutomation.proxy.registerGui(name);
 	}
 	
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, x, y, z);
+			if (GUIid>=0) {
+				FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, x, y, z);
+			}
 		}
 		return true;
 	}

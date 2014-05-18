@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
 
@@ -10,11 +11,10 @@ public class BlockMiner extends BaseBlock {
 
 	public BlockMiner() {
 		super("Miner");
+		GUIid = ProgressiveAutomation.guiHandler.MinerGUI;
 	}
 	
 	public TileEntity createNewTileEntity(World world, int var2) {
-		TileMiner ent = new TileMiner();
-		ent.setMiningLevel(ToolInfo.LEVEL_STONE);
-		return ent;
+		return new TileMiner();
 	}
 }
