@@ -32,9 +32,6 @@ public class TileMiner extends BaseTileEntity {
 	protected int miningWith = 0;
 	
 	
-	//deal with a full inventory
-	protected ArrayList<ItemStack> stuffItems = new ArrayList<ItemStack>();
-
 	public TileMiner() {
 		super(13);
 	}
@@ -45,12 +42,6 @@ public class TileMiner extends BaseTileEntity {
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
 		nbt.setBoolean("InvFull", invFull);
-		
-		//save the mining Vars
-		/*nbt.setInteger("CurrentColumn", currentColumn);
-		nbt.setInteger("CurrentYLevel", currentYLevel);
-		nbt.setInteger("MiningTime", miningTime);
-		nbt.setInteger("MiningWith", miningWith);*/
 	}
 	
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -58,13 +49,6 @@ public class TileMiner extends BaseTileEntity {
 		totalMineBlocks = nbt.getInteger("MineBlocks");
 		currentMineBlocks = nbt.getInteger("MinedBlocks");
 		invFull = nbt.getBoolean("InvFull");
-		
-		//get the mining Vars
-		/*currentColumn = nbt.getInteger("CurrentColumn");
-		currentYLevel = nbt.getInteger("CurrentYLevel");
-		miningTime = nbt.getInteger("MiningTime");
-		miningWith = nbt.getInteger("MiningWith");*/
-		//currentBlock = getNextBlock();
 	}
 	
 	public void updateEntity() {
@@ -76,18 +60,6 @@ public class TileMiner extends BaseTileEntity {
 			if ( (!isDone()) && (isBurning()) && (!invFull) ) {
 				//mine!
 				mine();
-			} else if (invFull && !stuffItems.isEmpty()) {
-				//check to see if we can remove the items now
-				for (int i =0; i < stuffItems.size(); i++) {
-					ItemStack item = addToInventory(stuffItems.remove(i));
-					if (item!=null) {
-						invFull = true;
-						stuffItems.add(item);
-					}
-				}
-				
-			} else if (invFull && stuffItems.isEmpty()) {
-				invFull = false;
 			}
 		}
 	}
@@ -150,34 +122,42 @@ public class TileMiner extends BaseTileEntity {
 				miningTime = 0;
 				//clock is done, lets mine it
 				Point currentPoint = spiral(currentColumn, xCoord, zCoord);
-				int fortuneLevel = 0;
-				if (miningWith!=1) {
-					fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
-				}
+				
+
 				//get the inventory of anything under it
 				if (worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY()) instanceof IInventory) {
 					IInventory inv = (IInventory) worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY());
 					for (int i = 0; i < inv.getSizeInventory(); i++) {
 						if (inv.getStackInSlot(i)!=null) {
-							ItemStack insert = addToInventory(inv.getStackInSlot(i));
-							if (insert!=null) {
-								invFull = true;
-								stuffItems.add(insert);
-							}
+							addToInventory(inv.getStackInSlot(i));
 							inv.setInventorySlotContents(i, null);
 						}
 					}
 				}
 				
-				//then break the block
-				ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(), 
-						worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel);
-				//get the drops
-				for (ItemStack item : items) {
-					item = addToInventory(item);
-					if (item!=null) {
-						invFull = true;
-						stuffItems.add(item);
+				//silk touch the block if we have it
+				int silkTouch = 0;
+				if (miningWith!=1) {
+					silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch.effectId, slots[miningWith]);
+				}
+				
+				if (silkTouch>0) {
+					ItemStack item = new ItemStack(currentBlock);
+					addToInventory(item);
+					
+				} else {
+					//mine the block
+					int fortuneLevel = 0;
+					if (miningWith!=1) {
+						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
+					}
+					
+					//then break the block
+					ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(), 
+							worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel);
+					//get the drops
+					for (ItemStack item : items) {
+						addToInventory(item);
 					}
 				}
 				
