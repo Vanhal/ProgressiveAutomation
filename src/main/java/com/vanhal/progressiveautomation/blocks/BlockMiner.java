@@ -4,11 +4,15 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
 
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockMiner extends BaseBlock {
 
@@ -48,5 +52,11 @@ public class BlockMiner extends BaseBlock {
 	    	}
 	    }
 	    super.breakBlock(world, x, y, z, p_149749_5_, p_149749_6_);
+	}
+	
+	public void addRecipe() {
+		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
+			"scs", "srs", "sps", 's', Blocks.log, 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_pickaxe});
+		GameRegistry.addRecipe(recipe);
 	}
 }

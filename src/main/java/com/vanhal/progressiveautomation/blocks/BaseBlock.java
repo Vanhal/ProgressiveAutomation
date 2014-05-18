@@ -107,8 +107,13 @@ public class BaseBlock extends BlockContainer {
         super.breakBlock(world, x, y, z, p_149749_5_, p_149749_6_);
     }
 	
+	public void addRecipe() {
+		
+	}
+	
 	public void preInit() {
 		GameRegistry.registerBlock(this, name);
+		addRecipe();
 	}
 	
 	public void init() {
