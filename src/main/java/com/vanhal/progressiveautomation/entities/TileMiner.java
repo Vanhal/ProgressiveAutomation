@@ -207,14 +207,18 @@ public class TileMiner extends BaseTileEntity {
 					miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 * 20 ) ;
 					if (miningWith!=1) {
 						ItemTool tool = (ItemTool)slots[miningWith].getItem();
-						miningTime = (int) Math.ceil(miningTime / ( tool.getDigSpeed( slots[miningWith], currentBlock, 
-								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) ) ) );
+						float miningSpeed = tool.getDigSpeed( slots[miningWith], currentBlock, 
+								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) );
 						
 						//check for efficenty on the tool
 						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
 						if (eff>0) {
-							
+							for (int i = 0; i<eff; i++) {
+								miningSpeed = miningSpeed * 1.3f;
+							}
 						}
+						
+						miningTime = (int) Math.ceil(miningTime / miningSpeed);
 					}
 					
 					
@@ -245,6 +249,8 @@ public class TileMiner extends BaseTileEntity {
 					ProgressiveAutomation.logger.info("Last Column done Update");
 					scanBlocks();
 					currentColumn = getRange();
+				} else {
+					getNextBlock();
 				}
 			}
 		}
