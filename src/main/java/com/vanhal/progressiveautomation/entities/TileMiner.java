@@ -238,20 +238,23 @@ public class TileMiner extends BaseTileEntity {
 	public Block getNextBlock() {
 		Point currentPoint = spiral(currentColumn, xCoord, zCoord);
 		miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
-		if (miningWith>0) {
-			return worldObj.getBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
-		} else {
-			currentYLevel--;
-			if (currentYLevel<0) {
-				currentYLevel = yCoord - 1;
-				currentColumn--;
-				if (currentColumn<0) {
-					ProgressiveAutomation.logger.info("Last Column done Update");
-					scanBlocks();
-					currentColumn = getRange();
-				} else {
-					getNextBlock();
-				}
+		while ( (miningWith<=0) && (currentYLevel>=0) ) {
+			if (miningWith>0) {
+				return worldObj.getBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
+			} else {
+				currentYLevel--;
+				miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
+			}
+		}
+		if (currentYLevel<0) {
+			currentYLevel = yCoord - 1;
+			currentColumn--;
+			if (currentColumn<0) {
+				ProgressiveAutomation.logger.info("Last Column done Update");
+				scanBlocks();
+				currentColumn = getRange();
+			} else {
+				return getNextBlock();
 			}
 		}
 		return null;
