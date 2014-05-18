@@ -10,7 +10,11 @@ import net.minecraft.world.World;
 public class BlockMiner extends BaseBlock {
 
 	public BlockMiner() {
-		super("Miner");
+		this("Miner");
+	}
+	
+	public BlockMiner(String name) {
+		super(name);
 		GUIid = ProgressiveAutomation.guiHandler.MinerGUI;
 	}
 	

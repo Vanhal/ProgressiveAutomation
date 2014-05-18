@@ -40,7 +40,7 @@ public class TileMiner extends BaseTileEntity {
 	
 	public TileMiner() {
 		super(13);
-		setMiningLevel(ToolInfo.LEVEL_STONE);
+		setMiningLevel(ToolInfo.LEVEL_WOOD);
 	}
 	
 	

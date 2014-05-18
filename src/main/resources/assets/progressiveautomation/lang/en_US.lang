@@ -1,4 +1,7 @@
-tile.Miner.name=Stone Miner
+tile.Miner.name=Wooden Miner
+tile.MinerStone.name=Stone Miner
+tile.MinerIron.name=Iron Miner
+tile.MinerDiamond.name=Diamond Miner
 item.WoodUpgrade.name=Wooden Upgrade
 item.StoneUpgrade.name=Stone Upgrade
 item.IronUpgrade.name=Iron Upgrade
