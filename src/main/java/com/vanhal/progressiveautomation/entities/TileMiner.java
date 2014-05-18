@@ -269,6 +269,14 @@ public class TileMiner extends BaseTileEntity {
 		}*/
 	}
 	
+	protected int getCurrentUpgrades() {
+		if (this.getStackInSlot(4)==null) {
+			return 0;
+		} else {
+			return this.getStackInSlot(4).stackSize;
+		}
+	}
+	
 	public int getToolMineLevel(int slot) {
 		if (getStackInSlot(slot) != null) {
 			if (getStackInSlot(slot).getItem() instanceof ItemTool) {
@@ -349,8 +357,11 @@ public class TileMiner extends BaseTileEntity {
 		}
 		
 		//check upgrades
-		if (getRange() != lastUpgrades) {
-			lastUpgrades = getRange();
+		if (getCurrentUpgrades() != lastUpgrades) {
+			//remove the upgrade and add it to the upgrades var
+			addUpgrades(getCurrentUpgrades());
+			slots[4] = null;
+			lastUpgrades = getCurrentUpgrades();
 			update = true;
 		}
 		

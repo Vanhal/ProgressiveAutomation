@@ -104,12 +104,6 @@ public class BaseBlock extends BlockContainer {
 
             world.func_147453_f(x, y, z, p_149749_5_);
         }
-        
-        //check if it's a miner, if it is then we need to dump out the upgrades as well!
-        if (world.getTileEntity(x, y, z) instanceof TileMiner) {
-        	TileMiner tileMiner = (TileMiner)world.getTileEntity(x, y, z);
-        }
-        
         super.breakBlock(world, x, y, z, p_149749_5_, p_149749_6_);
     }
 	

@@ -27,7 +27,7 @@ public class GUIMiner extends BaseGUI {
 	
 	protected void drawText() {
 		drawString("Miner", 5, GRAY);
-		drawString("Upgrades: "+miner.getUpgrades(), infoScreenX, infoScreenW, infroScreenY1, WHITE);
+		drawString("Range: "+miner.getRange(), infoScreenX, infoScreenW, infroScreenY3, WHITE);
 		boolean readyToMine = true;
 		if ( miner.isInventoryFull() ) {
 			drawString("Full", infoScreenX, infoScreenW, infroScreenY2, RED);
@@ -45,7 +45,7 @@ public class GUIMiner extends BaseGUI {
 			drawString("Need Shovel", infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else {
-			drawString(miner.getMinedBlocks()+" / "+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
+			drawString(miner.getMinedBlocks()+"/"+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
 		}
 		
 		if (!readyToMine) {
