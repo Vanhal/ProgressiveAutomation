@@ -56,8 +56,6 @@ public class BaseContainer extends Container {
                 if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
                 	return null;
                 }
-            } else if (!allowItem(stackInSlot)) {
-            	return null;
             } else if (!this.mergeItemStack(stackInSlot, 0, entity.getSizeInventory(), false)) {
             	return null;
             }
@@ -70,10 +68,6 @@ public class BaseContainer extends Container {
 		}
 		
 		return stack;
-	}
-	
-	public boolean allowItem(ItemStack item) {
-		return true;
 	}
 	
 	public void detectAndSendChanges() {
