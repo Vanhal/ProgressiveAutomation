@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -497,7 +498,15 @@ public class TileMiner extends BaseTileEntity {
 			item = null;
 		}
 		//if we still have an item, drop in on the ground
-		
+		if (item!=null) {
+			EntityItem entItem = new EntityItem(worldObj, xCoord + 0.5f, yCoord + 1.5f, zCoord + 0.5f, item);
+			entItem.delayBeforeCanPickup = 1;
+			float f3 = 0.05F;
+			entItem.motionX = (double)((float)worldObj.rand.nextGaussian() * f3);
+			entItem.motionY = (double)((float)worldObj.rand.nextGaussian() * f3 + 0.2F);
+			entItem.motionZ = (double)((float)worldObj.rand.nextGaussian() * f3);
+			worldObj.spawnEntityInWorld(entItem);
+		}
 		
 		return false;
 	}
