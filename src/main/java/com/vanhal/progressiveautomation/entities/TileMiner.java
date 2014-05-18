@@ -97,7 +97,7 @@ public class TileMiner extends BaseTileEntity {
 				if (newY<0) bedrock = true;
 			}
 		}
-		ProgressiveAutomation.logger.info("Update Finished: "+currentMineBlocks+"/"+totalMineBlocks);
+		//ProgressiveAutomation.logger.info("Update Finished: "+currentMineBlocks+"/"+totalMineBlocks);
 	}
 	
 	/* Tests a block to see if it can be mined with the current equipment 
@@ -218,13 +218,13 @@ public class TileMiner extends BaseTileEntity {
 					
 					
 					
-					ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
+					//ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
 				}
 			}
 		}
 		
 		if (isDone()) {
-			ProgressiveAutomation.logger.info("Done Update");
+			//ProgressiveAutomation.logger.info("Done Update");
 			scanBlocks();
 			currentColumn = getRange();
 		}
@@ -248,7 +248,7 @@ public class TileMiner extends BaseTileEntity {
 			currentYLevel = yCoord - 1;
 			currentColumn--;
 			if (currentColumn<0) {
-				ProgressiveAutomation.logger.info("Last Column done Update");
+				//ProgressiveAutomation.logger.info("Last Column done Update");
 				scanBlocks();
 				currentColumn = getRange();
 			} else {
@@ -342,7 +342,7 @@ public class TileMiner extends BaseTileEntity {
 		
 		//update
 		if (update) {
-			ProgressiveAutomation.logger.info("INventory Changed Update");
+			//ProgressiveAutomation.logger.info("INventory Changed Update");
 			scanBlocks();
 			currentColumn = getRange();
 			currentBlock = null;

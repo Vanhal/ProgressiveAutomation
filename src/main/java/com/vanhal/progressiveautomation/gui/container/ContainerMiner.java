@@ -78,29 +78,32 @@ public class ContainerMiner extends BaseContainer {
                 }
             } else {
             	if (stackInSlot.isItemEqual(new ItemStack(Blocks.cobblestone))) {
-            		if (!this.mergeItemStack(stackInSlot, 1, entity.getSizeInventory(), false)) {
+            		if (!this.mergeItemStack(stackInSlot, 1, 2, false)) {
             			return null;
             		}
-            	} else if (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) {
-            		if (!this.mergeItemStack(stackInSlot, 0, entity.getSizeInventory(), false)) {
+            	} else if ( ToolInfo.getType(stackInSlot.getItem()) == ToolInfo.TYPE_PICKAXE ) {
+            		if (ToolInfo.getLevel(stackInSlot.getItem()) <= ((TileMiner) entity).getMiningLevel()) {
+	            		if (!this.mergeItemStack(stackInSlot, 2, 3, false)) {
+	            			return null;
+	            		}
+            		}
+            	} else if ( ToolInfo.getType(stackInSlot.getItem()) == ToolInfo.TYPE_SHOVEL ) {
+            		if (ToolInfo.getLevel(stackInSlot.getItem()) <= ((TileMiner) entity).getMiningLevel()) {
+	             		if (!this.mergeItemStack(stackInSlot, 3, 4, false)) {
+	             			return null;
+	             		}
+            		}
+             	} else if (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) {
+            		if (!this.mergeItemStack(stackInSlot, 0, 1, false)) {
             			return null;
             		}
-            	} else if (ToolInfo.getType(stackInSlot.getItem()) == ToolInfo.TYPE_PICKAXE ) {
-            		if (!this.mergeItemStack(stackInSlot, 2, entity.getSizeInventory(), false)) {
-            			return null;
-            		}
-            	} else if (ToolInfo.getType(stackInSlot.getItem()) == ToolInfo.TYPE_SHOVEL ) {
-             		if (!this.mergeItemStack(stackInSlot, 3, entity.getSizeInventory(), false)) {
+            	} else if (stackInSlot.isItemEqual(updateType)) {
+             		if (!this.mergeItemStack(stackInSlot, 4, 5, false)) {
              			return null;
              		}
-             	} else if (stackInSlot.isItemEqual(updateType)) {
-             		if (!this.mergeItemStack(stackInSlot, 4, entity.getSizeInventory(), false)) {
-             			return null;
-             		}
-             	} else {
-             		if (!this.mergeItemStack(stackInSlot, 5, entity.getSizeInventory(), true)) {
-             			return null;
-             		}
+             	} 
+            	if (!this.mergeItemStack(stackInSlot, 5, 14, false)) {
+             		return null;
              	}
             }
 
