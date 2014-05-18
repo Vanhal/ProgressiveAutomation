@@ -1,7 +1,7 @@
 package com.vanhal.progressiveautomation.entities;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
-
+import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
@@ -14,6 +14,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
+	
+	protected Random RND = new Random();
 	
 	public BaseTileEntity(int numSlots) {
 		slots = new ItemStack[numSlots+1];

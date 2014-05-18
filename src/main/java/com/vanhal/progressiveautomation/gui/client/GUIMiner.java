@@ -52,6 +52,8 @@ public class GUIMiner extends BaseGUI {
 			drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY3, RED);
 		} else if (miner.getMinedBlocks()==miner.getMineBlocks()) {
 			drawString("Finished", infoScreenX, infoScreenW, infroScreenY3, BLUE);
+		} else if (miner.isSearching()) {
+			drawString("Searching", infoScreenX, infoScreenW, infroScreenY3, GREEN);
 		} else {
 			drawString("Mining", infoScreenX, infoScreenW, infroScreenY3, GREEN);
 		}

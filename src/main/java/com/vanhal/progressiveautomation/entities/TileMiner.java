@@ -191,7 +191,9 @@ public class TileMiner extends BaseTileEntity {
 				currentMineBlocks++;
 				currentBlock = null;
 				if (miningWith!=1) {
-					slots[miningWith].damageItem(1, getPlayer());
+					if (slots[miningWith].attemptDamageItem(1, this.RND)) {
+						slots[miningWith] = null;
+					}
 				}
 				
 			} else {
@@ -207,7 +209,16 @@ public class TileMiner extends BaseTileEntity {
 						ItemTool tool = (ItemTool)slots[miningWith].getItem();
 						miningTime = (int) Math.ceil(miningTime / ( tool.getDigSpeed( slots[miningWith], currentBlock, 
 								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) ) ) );
+						
+						//check for efficenty on the tool
+						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
+						if (eff>0) {
+							
+						}
 					}
+					
+					
+					
 					ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
 				}
 			}
@@ -280,6 +291,10 @@ public class TileMiner extends BaseTileEntity {
 	
 	public boolean isDone() {
 		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
+	}
+	
+	public boolean isSearching() {
+		return (currentBlock!=null);
 	}
 
 	
