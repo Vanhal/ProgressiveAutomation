@@ -516,24 +516,24 @@ public class TileMiner extends BaseTileEntity {
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if ( (slot==1) && (stack.isItemEqual(new ItemStack(Blocks.cobblestone))) ) {
     		return true;
-    	} else if ( ToolInfo.getType(stack.getItem()) == ToolInfo.TYPE_PICKAXE ) {
+    	} else if ( (slot==2) && ( ToolInfo.getType(stack.getItem()) == ToolInfo.TYPE_PICKAXE ) ) {
     		if (ToolInfo.getLevel(stack.getItem()) <= getMiningLevel()) {
     			return true;
     		}
-    	} else if ( ToolInfo.getType(stack.getItem()) == ToolInfo.TYPE_SHOVEL ) {
+    	} else if ( (slot==3) && ( ToolInfo.getType(stack.getItem()) == ToolInfo.TYPE_SHOVEL ) ) {
     		if (ToolInfo.getLevel(stack.getItem()) <= getMiningLevel()) {
     			return true;
     		}
-     	} else if (TileEntityFurnace.getItemBurnTime(stack)>0) {
+     	} else if ( (slot==0) && (TileEntityFurnace.getItemBurnTime(stack)>0) ) {
      		return true;
-    	} else if (stack.isItemEqual(ToolInfo.getUpgradeType(getMiningLevel()))) {
+    	} else if ( (slot==4) && (stack.isItemEqual(ToolInfo.getUpgradeType(getMiningLevel()))) ) {
     		return true;
      	}
 		return false;
 	}
 
 	public int[] getAccessibleSlotsFromSide(int var1) {
-		int[] output = {5,6,7,8,9,10,11,12,13};
+		int[] output = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
 		return output;
 	}
 	
