@@ -261,11 +261,12 @@ public class TileMiner extends BaseTileEntity {
 	}
 	
 	public int getRange() {
-		if (this.getStackInSlot(4)==null) {
+		return numUpgrades + 1;
+		/*if (this.getStackInSlot(4)==null) {
 			return 1;
 		} else {
 			return this.getStackInSlot(4).stackSize + 1;
-		}
+		}*/
 	}
 	
 	public int getToolMineLevel(int slot) {
@@ -306,6 +307,17 @@ public class TileMiner extends BaseTileEntity {
 		return (currentBlock!=null);
 	}
 
+	public int getUpgrades() {
+		return numUpgrades;
+	}
+	
+	public void setUpgrades(int value) {
+		numUpgrades = value;
+	}
+	
+	public void addUpgrades(int addValue) {
+		numUpgrades += addValue;
+	}
 	
 	/* Check for changes to tools and upgrades */
 	protected int lastPick = -1;

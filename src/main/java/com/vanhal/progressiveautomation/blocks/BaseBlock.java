@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.blocks;
 import java.util.Random;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
 
@@ -68,13 +69,12 @@ public class BaseBlock extends BlockContainer {
         return blockIcons[side];
     }
 	
-	public void breakBlock(World world, int x, int y, int z, Block p_149749_5_, int p_149749_6_)
-    {
-		TileMiner tileMiner = (TileMiner)world.getTileEntity(x, y, z);
+	public void breakBlock(World world, int x, int y, int z, Block p_149749_5_, int p_149749_6_) {
+		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
 
-        if (tileMiner != null) {
-            for (int i = 0; i < tileMiner.getSizeInventory(); ++i) {
-                ItemStack itemstack = tileMiner.getStackInSlot(i);
+        if (tileEntity != null) {
+            for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
+                ItemStack itemstack = tileEntity.getStackInSlot(i);
 
                 if (itemstack != null) {
                     float f = world.rand.nextFloat() * 0.8F + 0.1F;
@@ -84,8 +84,7 @@ public class BaseBlock extends BlockContainer {
                     for (float f2 = world.rand.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; world.spawnEntityInWorld(entityitem)) {
                         int j1 = world.rand.nextInt(21) + 10;
 
-                        if (j1 > itemstack.stackSize)
-                        {
+                        if (j1 > itemstack.stackSize) {
                             j1 = itemstack.stackSize;
                         }
 
@@ -96,8 +95,7 @@ public class BaseBlock extends BlockContainer {
                         entityitem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
                         entityitem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
 
-                        if (itemstack.hasTagCompound())
-                        {
+                        if (itemstack.hasTagCompound()) {
                             entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
                         }
                     }
@@ -106,6 +104,12 @@ public class BaseBlock extends BlockContainer {
 
             world.func_147453_f(x, y, z, p_149749_5_);
         }
+        
+        //check if it's a miner, if it is then we need to dump out the upgrades as well!
+        if (world.getTileEntity(x, y, z) instanceof TileMiner) {
+        	TileMiner tileMiner = (TileMiner)world.getTileEntity(x, y, z);
+        }
+        
         super.breakBlock(world, x, y, z, p_149749_5_, p_149749_6_);
     }
 	

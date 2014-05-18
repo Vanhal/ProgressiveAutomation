@@ -111,6 +111,7 @@ public class ContainerMiner extends BaseContainer {
 	/* deal with updates */
 	protected int lastMinedBlocks = -1;
 	protected int lastMineBlocks = -1;
+	protected int lastUpgrades = -1;
 	
 	public void sendUpdates(ICrafting i) {
 		TileMiner miner = (TileMiner) entity;
@@ -123,6 +124,11 @@ public class ContainerMiner extends BaseContainer {
 			lastMinedBlocks = miner.getMinedBlocks();
 			i.sendProgressBarUpdate(this, 3, lastMinedBlocks);
 		}
+		
+		if (lastUpgrades != miner.getUpgrades()) {
+			lastUpgrades = miner.getUpgrades();
+			i.sendProgressBarUpdate(this, 4, lastUpgrades);
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -132,6 +138,8 @@ public class ContainerMiner extends BaseContainer {
 			((TileMiner) entity).setMineBlocks(value);
 		} else if (i==3) {
 			((TileMiner) entity).setMinedBlocks(value);
+		} else if (i==4) {
+			((TileMiner) entity).setUpgrades(value);
 		}
 	}
 
