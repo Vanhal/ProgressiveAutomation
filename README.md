@@ -1,9 +1,11 @@
 ModJam4 - Progressive Automation
 ======
 
-<html>
-<head><title>Progressive Automation</title></head>
-<body>
+Build Status: 
+[![Build Status](https://drone.io/github.com/Vanhal/ModJam/status.png)](https://drone.io/github.com/Vanhal/ModJam/latest)
+
+Latest Builds can be found on <a href="https://drone.io/github.com/Vanhal/ModJam/files">drone.io</a>
+
 <p>This mod provides low tech automation tools for common tasks.&nbsp;<span style="font-size: 14.3px; line-height: 1.7;" data-mce-mark="1">The tools will be upgradable as the player progresses. You can see my spotlight of the mod below:</span></p>
 <p><iframe src="http://www.youtube.com/embed/rYgfP_eZ-kM?wmode=transparent" height="358" width="638"></iframe></p>
 <p><em><span style="font-size: 14.3px; line-height: 1.7;" data-mce-mark="1"><span>Mod requires Forge to be installed.</span></span></em></p>
@@ -37,7 +39,4 @@ ModJam4 - Progressive Automation
 <p><img alt="Iron Upgrade" src="https://dl.dropboxusercontent.com/u/3886989/World%20Snapshots/PA/IronUpgrade.png" height="115" width="245" /></p>
 <p>Diamond Upgrade:</p>
 <p><img alt="Diamond Upgrade" src="https://dl.dropboxusercontent.com/u/3886989/World%20Snapshots/PA/DiamondUpgrade.png" height="115" width="245" /></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-</body>
-</html>
+
