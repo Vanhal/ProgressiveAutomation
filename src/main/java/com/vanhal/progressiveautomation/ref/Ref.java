@@ -3,6 +3,6 @@ package com.vanhal.progressiveautomation.ref;
 public class Ref {
 	public static final String MODID = "progressiveautomation";
 	public static final String MODNAME = "Progressive Automation";
-	public static final String Version = "1.0.0";
-	
+	public static final String Version = "@VERSION@";
+
 }
