@@ -33,7 +33,7 @@ apply plugin: 'forge'
 
 
 
-version = config.mod_version + "-" + buildNum
+version = config.mod_version + "." + buildNum
 group= "com.vanhal.progressiveautomation" 
 archivesBaseName = "progressiveautomation"
 
