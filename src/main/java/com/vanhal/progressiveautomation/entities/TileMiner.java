@@ -359,10 +359,12 @@ public class TileMiner extends BaseTileEntity {
 		//check upgrades
 		if (getCurrentUpgrades() != lastUpgrades) {
 			//remove the upgrade and add it to the upgrades var
-			addUpgrades(getCurrentUpgrades());
-			slots[4] = null;
-			lastUpgrades = getCurrentUpgrades();
-			update = true;
+			if (slots[4].isItemEqual(ToolInfo.getUpgradeType(mineLevel))) {
+				addUpgrades(getCurrentUpgrades());
+				slots[4] = null;
+				lastUpgrades = getCurrentUpgrades();
+				update = true;
+			}
 		}
 		
 		//update

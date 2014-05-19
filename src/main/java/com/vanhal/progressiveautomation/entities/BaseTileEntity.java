@@ -176,7 +176,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 			if (availSpace>0) {
 				return true;
 			}
-		} else {
+		} else if (isItemValidForSlot(slot, stack)) {
 			return true;
 		}
 		return false;
