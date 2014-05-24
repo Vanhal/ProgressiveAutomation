@@ -26,16 +26,16 @@ configFile.withReader {
 }
 
 if(ENV.DRONE_BUILD_NUMBER)
-buildNum = ENV.DRONE_BUILD_NUMBER
+config.buildNum = ENV.DRONE_BUILD_NUMBER
 
 
 apply plugin: 'forge'
 
 
 
-version = config.mod_version + "." + buildNum
+version = config.mod_version + "." + config.buildNum
 group= "com.vanhal.progressiveautomation" 
-archivesBaseName = "progressiveautomation"
+archivesBaseName = "ProgressiveAutomation-" + config.minecraft_version
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version

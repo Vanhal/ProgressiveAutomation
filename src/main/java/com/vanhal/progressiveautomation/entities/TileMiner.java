@@ -2,9 +2,7 @@ package com.vanhal.progressiveautomation.entities;
 
 import java.util.ArrayList;
 
-import org.lwjgl.util.Point;
-import org.lwjgl.util.vector.Vector2f;
-
+import com.vanhal.progressiveautomation.util.Point;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.ToolInfo;
 
