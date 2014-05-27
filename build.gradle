@@ -26,9 +26,12 @@ configFile.withReader {
 }
 
 y = config.droneAlter as Integer
+x = y
 
 if(ENV.DRONE_BUILD_NUMBER)
-config.buildNum = ENV.DRONE_BUILD_NUMBER - y
+x = ENV.DRONE_BUILD_NUMBER as Integer
+
+config.buildNum = x - y
 
 apply plugin: 'forge'
 
