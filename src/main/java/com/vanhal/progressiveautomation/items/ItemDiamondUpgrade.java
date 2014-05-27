@@ -23,7 +23,7 @@ public class ItemDiamondUpgrade extends ItemUpgrade {
 	}
 	
 	protected void addUpgradeRecipe() {
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this), Items.diamond, PAItems.ironUpgrade, Items.diamond);
+		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this), PAItems.ironUpgrade, Items.diamond, Items.diamond);
 		//ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 		//	"ppp", "prp", "ppp", 'p', Items.diamond, 'r', PAItems.ironUpgrade});
 		GameRegistry.addRecipe(recipe);

@@ -25,13 +25,12 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-if(ENV.DRONE_BUILD_NUMBER)
-config.buildNum = ENV.DRONE_BUILD_NUMBER - config.droneAlter
+y = config.droneAlter as Integer
 
+if(ENV.DRONE_BUILD_NUMBER)
+config.buildNum = ENV.DRONE_BUILD_NUMBER - y
 
 apply plugin: 'forge'
-
-
 
 version = config.mod_version + "." + config.buildNum
 group= "com.vanhal.progressiveautomation" 
