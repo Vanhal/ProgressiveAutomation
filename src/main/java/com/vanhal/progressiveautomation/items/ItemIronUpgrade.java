@@ -6,13 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.ref.ToolInfo;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemIronUpgrade extends ItemUpgrade {
 	public ItemIronUpgrade() {
-		super("IronUpgrade", ToolInfo.LEVEL_IRON);
+		super("IronUpgrade", ToolHelper.LEVEL_IRON);
 		this.setTextureName(Ref.MODID+":Iron_Upgrade");
 	}
 	
@@ -24,7 +24,7 @@ public class ItemIronUpgrade extends ItemUpgrade {
 	
 	protected void addUpgradeRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Items.iron_ingot, 'r', PAItems.stoneUpgrade});
+			"p p", "prp", "p p", 'p', Items.iron_ingot, 'r', PAItems.stoneUpgrade});
 		GameRegistry.addRecipe(recipe);
 	}
 }

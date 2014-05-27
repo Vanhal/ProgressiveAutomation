@@ -214,7 +214,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 	
 	public int getBurnTime(ItemStack item) {
-		return TileEntityFurnace.getItemBurnTime(item);
+		return TileEntityFurnace.getItemBurnTime(item)/2;
 	}
 	
 	public boolean isFuel() {

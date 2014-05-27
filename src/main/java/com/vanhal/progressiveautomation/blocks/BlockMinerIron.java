@@ -22,7 +22,7 @@ public class BlockMinerIron extends BlockMiner {
 	
 	public void addRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"sss", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.stoneMiner, 'p', Items.iron_pickaxe});
+			"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.stoneMiner, 'p', Items.iron_pickaxe, 'b', Blocks.iron_block});
 		GameRegistry.addRecipe(recipe);
 	}
 }

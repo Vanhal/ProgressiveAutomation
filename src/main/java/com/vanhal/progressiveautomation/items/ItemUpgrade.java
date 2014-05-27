@@ -1,5 +1,7 @@
 package com.vanhal.progressiveautomation.items;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 
@@ -14,6 +16,7 @@ public class ItemUpgrade extends Item {
 	public ItemUpgrade(String name, int setLevel) {
 		setName(name);
 		setLevel(setLevel);
+		setCreativeTab(ProgressiveAutomation.PATab);
 	}
 	
 	public void setLevel(int useLevel) {

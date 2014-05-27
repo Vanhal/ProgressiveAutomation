@@ -1,5 +1,8 @@
 package com.vanhal.progressiveautomation;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,6 +32,14 @@ public class ProgressiveAutomation {
 	public static final Logger logger = LogManager.getLogger(Ref.MODID);
 	
 	public static SimpleGuiHandler guiHandler = new SimpleGuiHandler();
+	
+	//Creative Tab
+	public static CreativeTabs PATab = new CreativeTabs("PATab") {
+		@Override
+		public Item getTabIconItem() {
+			return Item.getItemFromBlock(PABlocks.stoneMiner);
+		}
+	};
 	
 	
 	public ProgressiveAutomation() {

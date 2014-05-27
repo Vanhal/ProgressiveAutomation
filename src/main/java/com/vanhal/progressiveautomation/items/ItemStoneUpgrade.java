@@ -6,13 +6,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.ref.ToolInfo;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemStoneUpgrade extends ItemUpgrade {
 	public ItemStoneUpgrade() {
-		super("StoneUpgrade", ToolInfo.LEVEL_STONE);
+		super("StoneUpgrade", ToolHelper.LEVEL_STONE);
 		this.setTextureName(Ref.MODID+":Stone_Upgrade");
 	}
 	

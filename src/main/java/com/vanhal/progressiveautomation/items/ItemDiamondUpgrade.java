@@ -3,15 +3,16 @@ package com.vanhal.progressiveautomation.items;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.ref.ToolInfo;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemDiamondUpgrade extends ItemUpgrade {
 	public ItemDiamondUpgrade() {
-		super("DiamondUpgrade", ToolInfo.LEVEL_DIAMOND);
+		super("DiamondUpgrade", ToolHelper.LEVEL_DIAMOND);
 		this.setTextureName(Ref.MODID+":Diamond_Upgrade");
 	}
 	
@@ -22,8 +23,9 @@ public class ItemDiamondUpgrade extends ItemUpgrade {
 	}
 	
 	protected void addUpgradeRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Items.diamond, 'r', PAItems.ironUpgrade});
+		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this), Items.diamond, PAItems.ironUpgrade, Items.diamond);
+		//ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
+		//	"ppp", "prp", "ppp", 'p', Items.diamond, 'r', PAItems.ironUpgrade});
 		GameRegistry.addRecipe(recipe);
 	}
 }

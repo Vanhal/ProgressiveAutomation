@@ -2,7 +2,7 @@ package com.vanhal.progressiveautomation.blocks;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.TileMiner;
-import com.vanhal.progressiveautomation.ref.ToolInfo;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
@@ -35,7 +35,7 @@ public class BlockMiner extends BaseBlock {
 	    	TileMiner tileMiner = (TileMiner)world.getTileEntity(x, y, z);
 	    	int numUpgrades = tileMiner.getUpgrades();
 	    	while (numUpgrades>0) {
-	    		ItemStack upgrades = ToolInfo.getUpgradeType(tileMiner.getMiningLevel());
+	    		ItemStack upgrades = ToolHelper.getUpgradeType(tileMiner.getMiningLevel());
 	    		if (numUpgrades<=64) {
 	    			upgrades.stackSize = numUpgrades;
 	    			numUpgrades = 0;

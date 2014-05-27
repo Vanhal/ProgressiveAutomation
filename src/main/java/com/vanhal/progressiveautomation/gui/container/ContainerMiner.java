@@ -18,7 +18,7 @@ import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.gui.slots.SlotItem;
 import com.vanhal.progressiveautomation.gui.slots.SlotTool;
 import com.vanhal.progressiveautomation.items.PAItems;
-import com.vanhal.progressiveautomation.ref.ToolInfo;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -32,12 +32,12 @@ public class ContainerMiner extends BaseContainer {
 		
 		//ProgressiveAutomation.logger.info("Mining Level: "+miner.getMiningLevel());
 		
-		updateType = ToolInfo.getUpgradeType(miner.getMiningLevel());
+		updateType = ToolHelper.getUpgradeType(miner.getMiningLevel());
 
 		//add slots
 		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
-		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_PICKAXE,  miner.getMiningLevel(), miner, 2, 37, 52)); //pickaxe
-		this.addSlotToContainer(new SlotTool(ToolInfo.TYPE_SHOVEL, miner.getMiningLevel(), miner, 3, 63, 52)); //shovel
+		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_PICKAXE,  miner.getMiningLevel(), miner, 2, 37, 52)); //pickaxe
+		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_SHOVEL, miner.getMiningLevel(), miner, 3, 63, 52)); //shovel
 		this.addSlotToContainer(new SlotItem(updateType, miner, 4, 89, 52)); //upgrades
 
 		//output slots
@@ -71,16 +71,16 @@ public class ContainerMiner extends BaseContainer {
             		if (!this.mergeItemStack(stackInSlot, 1, 2, false)) {
             			return null;
             		}
-            	} else if ( ToolInfo.getType(stackInSlot.getItem()) == ToolInfo.TYPE_PICKAXE ) {
-            		if (ToolInfo.getLevel(stackInSlot.getItem()) <= ((TileMiner) entity).getMiningLevel()) {
+            	} else if ( ToolHelper.getType(stackInSlot.getItem()) == ToolHelper.TYPE_PICKAXE ) {
+            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getMiningLevel()) {
 	            		if (!this.mergeItemStack(stackInSlot, 2, 3, false)) {
 	            			return null;
 	            		}
             		} else {
             			return null;
             		}
-            	} else if ( ToolInfo.getType(stackInSlot.getItem()) == ToolInfo.TYPE_SHOVEL ) {
-            		if (ToolInfo.getLevel(stackInSlot.getItem()) <= ((TileMiner) entity).getMiningLevel()) {
+            	} else if ( ToolHelper.getType(stackInSlot.getItem()) == ToolHelper.TYPE_SHOVEL ) {
+            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getMiningLevel()) {
 	             		if (!this.mergeItemStack(stackInSlot, 3, 4, false)) {
 	             			return null;
 	             		}
