@@ -1,9 +1,13 @@
 package com.vanhal.progressiveautomation.entities;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+
 import java.util.Random;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -65,9 +69,13 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 					if (slots[0]!=null) {
 						if (isFuel()) {
 							burnLevel = progress = getBurnTime();
-							slots[0].stackSize--;
-							if (slots[0].stackSize==0) {
-								slots[0] = null;
+							if (slots[0].getItem() instanceof ItemBucket) {
+								slots[0] = new ItemStack(Items.bucket);
+							} else {
+								slots[0].stackSize--;
+								if (slots[0].stackSize==0) {
+									slots[0] = null;
+								}
 							}
 						}
 					}

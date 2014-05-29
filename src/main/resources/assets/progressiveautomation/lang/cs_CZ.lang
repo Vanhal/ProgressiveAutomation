@@ -1,0 +1,9 @@
+tile.Miner.name=Drevený Horník
+tile.MinerStone.name=Kámen Horník
+tile.MinerIron.name=Zelezo Horník
+tile.MinerDiamond.name=Diamant Horník
+item.WoodUpgrade.name=Drevený Vylepsit
+item.StoneUpgrade.name=Kámen Vylepsit
+item.IronUpgrade.name=Zelezo Vylepsit
+item.DiamondUpgrade.name=Diamant Vylepsit
+itemGroup.PATab=Progressive Automation

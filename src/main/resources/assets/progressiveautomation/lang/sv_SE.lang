@@ -1,0 +1,9 @@
+tile.Miner.name=Trä Gruvarbetare
+tile.MinerStone.name=Sten Gruvarbetare
+tile.MinerIron.name=Järn Gruvarbetare
+tile.MinerDiamond.name=Diamant Gruvarbetare
+item.WoodUpgrade.name=Trä Uppvärdera
+item.StoneUpgrade.name=Sten Uppvärdera
+item.IronUpgrade.name=Järn Uppvärdera
+item.DiamondUpgrade.name=Diamant Uppvärdera
+itemGroup.PATab=Progressive Automation

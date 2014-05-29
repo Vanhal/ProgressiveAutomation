@@ -111,20 +111,22 @@ public class TileMiner extends BaseTileEntity {
 			if (
 				(tryBlock.getBlockHardness(worldObj, x, y, z)>=0) &&
 				(!tryBlock.isAir(worldObj, x, y, z)) 
-				) {
+			) {
 				boolean mine = false;
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
 				} if (tryBlock.getHarvestTool(meta)=="pickaxe") {
-					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(worldObj.getBlockMetadata( x, y, z ))) {
+					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(meta)) {
 						return 2;
 					}
 				} else if (tryBlock.getHarvestTool(meta)=="shovel") {
-					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(worldObj.getBlockMetadata( x, y, z ))) {
+					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(meta)) {
 						return 3;
 					}
 				} else {
-					return 1;
+					if (!tryBlock.getMaterial().isLiquid()) {
+						return 1;
+					}
 				}
 			}
 		}
