@@ -8,7 +8,6 @@ import com.vanhal.progressiveautomation.util.PlayerFake;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemHoe;
@@ -112,8 +111,6 @@ public class ToolHelper {
 						(name.substring(14).equalsIgnoreCase("Rapier")) ||
 						(name.substring(14).equalsIgnoreCase("Cutlass")) ) {
 					return TYPE_SWORD;
-				} else {
-					Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText(name.substring(14)));
 				}
 			}
 		}

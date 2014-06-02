@@ -4,6 +4,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
+import com.vanhal.progressiveautomation.util.StringHelper;
 
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -26,36 +27,34 @@ public class GUIMiner extends BaseGUI {
 	}
 	
 	protected void drawText() {
-		drawString("Miner", 5, GRAY);
-		drawString("Range: "+miner.getRange(), infoScreenX, infoScreenW, infroScreenY3, WHITE);
+		drawString(StringHelper.localize("gui.miner"), 5, GRAY);
+		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(miner.getRange()), infoScreenX, infoScreenW, infroScreenY3, WHITE);
 		boolean readyToMine = true;
 		if ( miner.isInventoryFull() ) {
-			drawString("Full", infoScreenX, infoScreenW, infroScreenY2, RED);
+			drawString(StringHelper.localize("gui.full"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else if ( (miner.getStackInSlot(0) == null) && (!miner.isBurning()) ) {
-			drawString("Need Fuel", infoScreenX, infoScreenW, infroScreenY2, RED);
+			drawString(StringHelper.localize("gui.need.fuel"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else if (miner.getStackInSlot(1) == null) {
-			drawString("Need Cobble", infoScreenX, infoScreenW, infroScreenY2, RED);
+			drawString(StringHelper.localize("gui.need.cobble"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else if (miner.getStackInSlot(2) == null) {
-			drawString("Need Pickaxe", infoScreenX, infoScreenW, infroScreenY2, RED);
+			drawString(StringHelper.localize("gui.need.pick"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else if (miner.getStackInSlot(3) == null) {
-			drawString("Need Shovel", infoScreenX, infoScreenW, infroScreenY2, RED);
+			drawString(StringHelper.localize("gui.need.shovel"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else {
-			drawString(miner.getMinedBlocks()+"/"+miner.getMineBlocks(), infoScreenX, infoScreenW, infroScreenY2, BLUE);
+			drawString(StringHelper.getScaledNumber(miner.getMinedBlocks())+"/"+StringHelper.getScaledNumber(miner.getMineBlocks()), infoScreenX, infoScreenW, infroScreenY2, BLUE);
 		}
 		
 		if (!readyToMine) {
-			drawString("Not Ready", infoScreenX, infoScreenW, infroScreenY1, RED);
+			drawString(StringHelper.localize("gui.notready"), infoScreenX, infoScreenW, infroScreenY1, RED);
 		} else if (miner.getMinedBlocks()==miner.getMineBlocks()) {
-			drawString("Finished", infoScreenX, infoScreenW, infroScreenY1, BLUE);
-		} else if (miner.isSearching()) {
-			drawString("Searching", infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			drawString(StringHelper.localize("gui.finished"), infoScreenX, infoScreenW, infroScreenY1, BLUE);
 		} else {
-			drawString("Mining", infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			drawString(StringHelper.localize("gui.mining"), infoScreenX, infoScreenW, infroScreenY1, GREEN);
 		}
 	}
 	

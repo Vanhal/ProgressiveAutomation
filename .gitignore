@@ -23,3 +23,5 @@
 /*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+
+*Thumbs.db

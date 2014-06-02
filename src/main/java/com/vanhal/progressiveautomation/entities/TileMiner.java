@@ -3,7 +3,9 @@ package com.vanhal.progressiveautomation.entities;
 import java.util.ArrayList;
 
 import com.vanhal.progressiveautomation.util.Point;
+import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
@@ -113,6 +115,7 @@ public class TileMiner extends BaseTileEntity {
 				(!tryBlock.isAir(worldObj, x, y, z)) 
 			) {
 				boolean mine = false;
+				//ProgressiveAutomation.logger.info("Tool: "+tryBlock.getHarvestTool(meta)+", Level: "+tryBlock.getHarvestLevel(meta)+", Can use Pick: "+tryBlock.isToolEffective("pickaxe", meta));
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
 				} if (tryBlock.getHarvestTool(meta)=="pickaxe") {
@@ -207,8 +210,11 @@ public class TileMiner extends BaseTileEntity {
 				if (currentBlock != null) {
 					Point currentPoint = spiral(currentColumn, xCoord, zCoord);
 					miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 * 20 ) ;
+					
+					Item tool = (Item)slots[miningWith].getItem();
+					
 					if (miningWith!=1) {
-						Item tool = (Item)slots[miningWith].getItem();
+						/*Item tool = (Item)slots[miningWith].getItem();*/
 						float miningSpeed = tool.getDigSpeed( slots[miningWith], currentBlock,
 								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) );
 
@@ -223,9 +229,8 @@ public class TileMiner extends BaseTileEntity {
 						miningTime = (int) Math.ceil(miningTime / miningSpeed);
 					}
 
-
-
 					//ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
+					
 				}
 			}
 		}
@@ -266,7 +271,7 @@ public class TileMiner extends BaseTileEntity {
 	}
 
 	public int getRange() {
-		return numUpgrades + 1;
+		return (numUpgrades * PAConfig.upgradeRange) + 1;
 	}
 
 	protected int getCurrentUpgrades() {
