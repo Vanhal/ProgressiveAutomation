@@ -36,6 +36,13 @@ public class ToolHelper {
 	public static int LEVEL_GOLD = 0;
 	public static int LEVEL_DIAMOND =3;
 	
+	//speeds for levels
+	public static int SPEED_WOOD = 2;
+	public static int SPEED_STONE = 4;
+	public static int SPEED_IRON = 6;
+	public static int SPEED_DIAMOND = 8;
+	public static int SPEED_GOLD = 12;
+	
 	//random
 	protected static Random RND = new Random();
 
@@ -132,6 +139,22 @@ public class ToolHelper {
 	public static int getHarvestLevel(ItemStack item) {
 		int value = getLevel(item);
 		return value;
+	}
+	
+	public static int getSpeed(int level) {
+		if (level == LEVEL_GOLD) {
+			return SPEED_GOLD;
+		} else if (level >= LEVEL_DIAMOND) {
+			return SPEED_DIAMOND;
+		} else if (level == LEVEL_IRON) {
+			return SPEED_IRON;
+		} else if (level == LEVEL_STONE) {
+			return SPEED_STONE;
+		} else if (level == LEVEL_WOOD) {
+			return SPEED_WOOD;
+		} else {
+			return 1;
+		}
 	}
 	
 	public static boolean damageTool(ItemStack tool, World world, int x, int y, int z) {

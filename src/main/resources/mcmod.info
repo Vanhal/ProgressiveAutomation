@@ -2,7 +2,7 @@
 {
   "modid": "progressiveautomation",
   "name": "Progressive Automation",
-  "description": "A mod that adds automation that can be built in the early game and upgraded throughout late game. (Currently only adds a miner)",
+  "description": "A mod that adds automation that can be built in the early game and upgraded throughout late game.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://github.com/Vanhal/ModJam/",

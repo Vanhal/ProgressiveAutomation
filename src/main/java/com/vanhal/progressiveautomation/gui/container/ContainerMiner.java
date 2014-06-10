@@ -32,24 +32,24 @@ public class ContainerMiner extends BaseContainer {
 		
 		//ProgressiveAutomation.logger.info("Mining Level: "+miner.getMiningLevel());
 		
-		updateType = ToolHelper.getUpgradeType(miner.getMiningLevel());
+		updateType = ToolHelper.getUpgradeType(miner.getUpgradeLevel());
 
 		//add slots
 		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
-		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_PICKAXE,  miner.getMiningLevel(), miner, 2, 37, 52)); //pickaxe
-		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_SHOVEL, miner.getMiningLevel(), miner, 3, 63, 52)); //shovel
-		this.addSlotToContainer(new SlotItem(updateType, miner, 4, 89, 52)); //upgrades
+		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_PICKAXE,  miner.getUpgradeLevel(), miner, miner.SLOT_PICKAXE, 37, 52)); //pickaxe
+		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_SHOVEL, miner.getUpgradeLevel(), miner, miner.SLOT_SHOVEL, 63, 52)); //shovel
+		this.addSlotToContainer(new SlotItem(updateType, miner, miner.SLOT_UPGRADE, 89, 52)); //upgrades
 
 		//output slots
-		this.addSlotToContainer(new Slot(miner, 5, 112, 16));
-		this.addSlotToContainer(new Slot(miner, 6, 130, 16));
-		this.addSlotToContainer(new Slot(miner, 7, 148, 16));
-		this.addSlotToContainer(new Slot(miner, 8, 112, 34));
-		this.addSlotToContainer(new Slot(miner, 9, 130, 34));
-		this.addSlotToContainer(new Slot(miner, 10, 148, 34));
-		this.addSlotToContainer(new Slot(miner, 11, 112, 52));
-		this.addSlotToContainer(new Slot(miner, 12, 130, 52));
-		this.addSlotToContainer(new Slot(miner, 13, 148, 52));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START, 112, 16));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 1, 130, 16));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 2, 148, 16));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 3, 112, 34));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 4, 130, 34));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 5, 148, 34));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 6, 112, 52));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 7, 130, 52));
+		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 8, 148, 52));
 
 		addPlayerInventory(inv);
 	}
@@ -72,7 +72,7 @@ public class ContainerMiner extends BaseContainer {
             			return null;
             		}
             	} else if ( ToolHelper.getType(stackInSlot.getItem()) == ToolHelper.TYPE_PICKAXE ) {
-            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getMiningLevel()) {
+            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getUpgradeLevel()) {
 	            		if (!this.mergeItemStack(stackInSlot, 2, 3, false)) {
 	            			return null;
 	            		}
@@ -80,7 +80,7 @@ public class ContainerMiner extends BaseContainer {
             			return null;
             		}
             	} else if ( ToolHelper.getType(stackInSlot.getItem()) == ToolHelper.TYPE_SHOVEL ) {
-            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getMiningLevel()) {
+            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getUpgradeLevel()) {
 	             		if (!this.mergeItemStack(stackInSlot, 3, 4, false)) {
 	             			return null;
 	             		}
@@ -88,7 +88,7 @@ public class ContainerMiner extends BaseContainer {
             			return null;
             		}
              	} else if (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) {
-            		if (!this.mergeItemStack(stackInSlot, 0, 1, false)) {
+            		if (!this.mergeItemStack(stackInSlot, entity.SLOT_FUEL, 1, false)) {
             			return null;
             		}
             	} else if (stackInSlot.isItemEqual(updateType)) {

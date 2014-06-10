@@ -1,14 +1,14 @@
 package com.vanhal.progressiveautomation.util;
 
 /* A Point case to allow for an x, y point */
-public class Point {
+public class Point2I {
 	private int x, y;
 	
-	public Point() {
+	public Point2I() {
 		
 	}
 	
-	public Point(int x, int y) {
+	public Point2I(int x, int y) {
 		setLocation(x, y);
 	}
 	
@@ -32,5 +32,9 @@ public class Point {
 	
 	public int getY() {
 		return y;
+	}
+	
+	public String toString() {
+		return ""+x+", "+y;
 	}
 }

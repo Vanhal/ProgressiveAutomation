@@ -1,11 +1,15 @@
 package com.vanhal.progressiveautomation.entities;
 
+import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 
 import java.util.Random;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
@@ -21,8 +25,24 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	
 	protected Random RND = new Random();
 	
+	//inventory slots variables
+	public int SLOT_FUEL = 0;
+	public int SLOT_PICKAXE = -1;
+	public int SLOT_SHOVEL = -1;
+	public int SLOT_AXE = -1;
+	public int SLOT_SWORD = -1;
+	public int SLOT_HOE = -1;
+	public int SLOT_UPGRADE = -1;
+	public int SLOT_INVENTORY_START = -1;
+	public int SLOT_INVENTORY_END = -1;
+	
 	public BaseTileEntity(int numSlots) {
 		slots = new ItemStack[numSlots+1];
+		if (numSlots > 9) {
+			SLOT_INVENTORY_START = numSlots - 8;
+			SLOT_INVENTORY_END = numSlots;
+			//ProgressiveAutomation.logger.info("Start: "+SLOT_INVENTORY_START+" End: "+SLOT_INVENTORY_END);
+		}
 	}
 	
 	//deal with NBT
@@ -66,15 +86,15 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 		if (!worldObj.isRemote) {
 			if (!isBurning()) {
 				if (readyToBurn()) {
-					if (slots[0]!=null) {
+					if (slots[SLOT_FUEL]!=null) {
 						if (isFuel()) {
 							burnLevel = progress = getBurnTime();
-							if (slots[0].getItem() instanceof ItemBucket) {
-								slots[0] = new ItemStack(Items.bucket);
+							if (slots[SLOT_FUEL].getItem() instanceof ItemBucket) {
+								slots[SLOT_FUEL] = new ItemStack(Items.bucket);
 							} else {
-								slots[0].stackSize--;
-								if (slots[0].stackSize==0) {
-									slots[0] = null;
+								slots[SLOT_FUEL].stackSize--;
+								if (slots[SLOT_FUEL].stackSize==0) {
+									slots[SLOT_FUEL] = null;
 								}
 							}
 						}
@@ -175,7 +195,11 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 
 	public int[] getAccessibleSlotsFromSide(int var1) {
-		return null;
+		int[] output = new int[slots.length];
+		for (int i=0; i<slots.length; i++) {
+			output[i] = i;
+		}
+		return output;
 	}
 
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
@@ -191,6 +215,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		if ( (SLOT_INVENTORY_START>=0) && (slot>=SLOT_INVENTORY_START) ) {
+			return true;
+		}
 		return false;
 	}
 	
@@ -222,12 +249,133 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 	
 	public int getBurnTime(ItemStack item) {
-		return TileEntityFurnace.getItemBurnTime(item)/2;
+		return TileEntityFurnace.getItemBurnTime(item)/PAConfig.fuelCost;
 	}
 	
 	public boolean isFuel() {
 		return (getBurnTime()>0);
 	}
 	
+	/* do some checks for block specific items, must return -1 on failure */
+	public int extraSlotCheck(int slot) {
+		return -1;
+	}
 	
+	/* Check the inventory, move any useful items to their correct slots */
+	public void checkInventory() {
+		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return;
+		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+			if (slots[i]!=null) {
+				int moveTo = extraSlotCheck(i);
+				
+				if (moveTo == -1) {
+					if (getBurnTime(slots[i])>0) {
+						if (slots[0]==null) {
+							moveTo = 0;
+						} else if (slots[i].isItemEqual(slots[0])) {
+							moveTo = 0;
+						}
+					}
+				}
+
+				if (moveTo>=0) {
+					if (slots[moveTo]==null) {
+						slots[moveTo] = slots[i];
+						slots[i] = null;
+					} else if (slots[moveTo].stackSize < slots[moveTo].getMaxStackSize()) {
+						int avail = slots[moveTo].getMaxStackSize() - slots[moveTo].stackSize;
+						if (avail >= slots[i].stackSize) {
+							slots[moveTo].stackSize += slots[i].stackSize;
+							slots[i] = null;
+						} else {
+							slots[i].stackSize -= avail;
+							slots[moveTo].stackSize += avail;
+						}
+					}
+				}
+			}
+		}
+		//then check if there is any inventories on top of this block that we can output to
+		if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof IInventory) {
+			IInventory externalInv = (IInventory) worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+			for (int i = 5; i <= 13; i++) {
+				if (slots[i]!=null) {
+					addtoExtInventory(externalInv, i);
+				}
+			}
+		}
+	}
+
+	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			if (inv.getStackInSlot(i)!=null) {
+				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot])) && (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize()) ) {
+					int avail = inv.getStackInSlot(i).getMaxStackSize() - inv.getStackInSlot(i).stackSize;
+					if (avail >= slots[fromSlot].stackSize) {
+						inv.getStackInSlot(i).stackSize += slots[fromSlot].stackSize;
+						slots[fromSlot] = null;
+						return true;
+					} else {
+						slots[fromSlot].stackSize -= avail;
+						inv.getStackInSlot(i).stackSize += avail;
+					}
+				}
+			}
+		}
+		if ( (slots[fromSlot] != null) && (slots[fromSlot].stackSize>0) ) {
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
+				if ( (inv.getStackInSlot(i)==null) && (inv.isItemValidForSlot(i, slots[fromSlot])) ) {
+					inv.setInventorySlotContents(i, slots[fromSlot]);
+					slots[fromSlot] = null;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean addToInventory(ItemStack item) {
+		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return false;
+		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+			if (slots[i]!=null) {
+				if (item!=null) {
+					if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
+						int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
+						if (avail >= item.stackSize) {
+							slots[i].stackSize += item.stackSize;
+							item = null;
+							return true;
+						} else {
+							item.stackSize -= avail;
+							slots[i].stackSize += avail;
+						}
+					}
+				}
+			}
+		}
+		if ( (item != null) && (item.stackSize>0) ) {
+			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+				if (slots[i]==null) {
+					slots[i] = item;
+					item = null;
+					return true;
+				}
+			}
+		}
+		if ( (item != null) && (item.stackSize==0) ) {
+			item = null;
+		}
+		//if we still have an item, drop in on the ground
+		if (item!=null) {
+			EntityItem entItem = new EntityItem(worldObj, xCoord + 0.5f, yCoord + 1.5f, zCoord + 0.5f, item);
+			entItem.delayBeforeCanPickup = 1;
+			float f3 = 0.05F;
+			entItem.motionX = (double)((float)worldObj.rand.nextGaussian() * f3);
+			entItem.motionY = (double)((float)worldObj.rand.nextGaussian() * f3 + 0.2F);
+			entItem.motionZ = (double)((float)worldObj.rand.nextGaussian() * f3);
+			worldObj.spawnEntityInWorld(entItem);
+		}
+
+		return false;
+	}
 }

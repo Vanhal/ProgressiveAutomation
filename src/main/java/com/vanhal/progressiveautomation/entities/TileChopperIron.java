@@ -2,10 +2,10 @@ package com.vanhal.progressiveautomation.entities;
 
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
-public class TileMinerDiamond extends TileMiner {
+public class TileChopperIron extends TileChopper {
 
-	public TileMinerDiamond() {
+	public TileChopperIron() {
 		super();
-		setUpgradeLevel(10);
+		setUpgradeLevel(ToolHelper.LEVEL_IRON);
 	}
 }

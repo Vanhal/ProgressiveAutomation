@@ -30,19 +30,16 @@ public class GUIMiner extends BaseGUI {
 		drawString(StringHelper.localize("gui.miner"), 5, GRAY);
 		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(miner.getRange()), infoScreenX, infoScreenW, infroScreenY3, WHITE);
 		boolean readyToMine = true;
-		if ( miner.isInventoryFull() ) {
-			drawString(StringHelper.localize("gui.full"), infoScreenX, infoScreenW, infroScreenY2, RED);
-			readyToMine = false;
-		} else if ( (miner.getStackInSlot(0) == null) && (!miner.isBurning()) ) {
+		if ( (miner.getStackInSlot(0) == null) && (!miner.isBurning()) ) {
 			drawString(StringHelper.localize("gui.need.fuel"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else if (miner.getStackInSlot(1) == null) {
 			drawString(StringHelper.localize("gui.need.cobble"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
-		} else if (miner.getStackInSlot(2) == null) {
+		} else if (miner.getStackInSlot(miner.SLOT_PICKAXE) == null) {
 			drawString(StringHelper.localize("gui.need.pick"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
-		} else if (miner.getStackInSlot(3) == null) {
+		} else if (miner.getStackInSlot(miner.SLOT_SHOVEL) == null) {
 			drawString(StringHelper.localize("gui.need.shovel"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			readyToMine = false;
 		} else {

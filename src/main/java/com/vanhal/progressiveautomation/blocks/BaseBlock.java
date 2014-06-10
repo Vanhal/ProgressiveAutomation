@@ -4,8 +4,10 @@ import java.util.Random;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.entities.IUpgradeable;
 import com.vanhal.progressiveautomation.entities.TileMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -30,9 +32,25 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class BaseBlock extends BlockContainer {
 	public String name;
 	public int GUIid = -1;
+	
+	protected int blockLevel = ToolHelper.LEVEL_WOOD;
 	protected IIcon[] blockIcons = new IIcon[6];
 	
+	public static String returnLevelName(int level) {
+		if (level==ToolHelper.LEVEL_STONE) {
+			return "Stone";
+		} else if (level==ToolHelper.LEVEL_IRON) {
+			return "Iron";
+		} else if (level==ToolHelper.LEVEL_DIAMOND) {
+			return "Diamond";
+		}
+		return "";
+	}
 	
+	public BaseBlock(String baseName, int level) {
+		this(baseName+returnLevelName(level));
+		blockLevel = level;
+	}
 	
 	public BaseBlock(String blockName) {
 		super(Material.iron);
@@ -70,43 +88,54 @@ public class BaseBlock extends BlockContainer {
         return blockIcons[side];
     }
 	
-	public void breakBlock(World world, int x, int y, int z, Block p_149749_5_, int p_149749_6_) {
+	public void breakBlock(World world, int x, int y, int z, Block block, int p_149749_6_) {
 		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
 
         if (tileEntity != null) {
+        	//dump out the inventory
             for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
                 ItemStack itemstack = tileEntity.getStackInSlot(i);
 
                 if (itemstack != null) {
-                    float f = world.rand.nextFloat() * 0.8F + 0.1F;
-                    float f1 = world.rand.nextFloat() * 0.8F + 0.1F;
-                    EntityItem entityitem;
-
-                    for (float f2 = world.rand.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; world.spawnEntityInWorld(entityitem)) {
-                        int j1 = world.rand.nextInt(21) + 10;
-
-                        if (j1 > itemstack.stackSize) {
-                            j1 = itemstack.stackSize;
-                        }
-
-                        itemstack.stackSize -= j1;
-                        entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
-                        float f3 = 0.05F;
-                        entityitem.motionX = (double)((float)world.rand.nextGaussian() * f3);
-                        entityitem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
-                        entityitem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
-
-                        if (itemstack.hasTagCompound()) {
-                            entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
-                        }
-                    }
+                	dumpItems(world, x, y, z, itemstack);
                 }
             }
+            
+            //if entity is IUpgradeable, drop the upgrades
+            if (world.getTileEntity(x, y, z) instanceof IUpgradeable) {
+            	IUpgradeable tileMachine = (IUpgradeable)world.getTileEntity(x, y, z);
+    	    	int numUpgrades = tileMachine.getUpgrades();
+    	    	while (numUpgrades>0) {
+    	    		ItemStack upgrades = ToolHelper.getUpgradeType(tileMachine.getUpgradeLevel());
+    	    		if (numUpgrades<=64) {
+    	    			upgrades.stackSize = numUpgrades;
+    	    			numUpgrades = 0;
+    	    		} else {
+    	    			upgrades.stackSize = 64;
+    	    			numUpgrades -= 64;
+    	    		}
+    	    		dumpItems(world, x, y, z, upgrades);
+    	    	}
+    	    }
 
-            world.func_147453_f(x, y, z, p_149749_5_);
+            world.func_147453_f(x, y, z, block);
         }
-        super.breakBlock(world, x, y, z, p_149749_5_, p_149749_6_);
+        super.breakBlock(world, x, y, z, block, p_149749_6_);
     }
+	
+	public void dumpItems(World world, int x, int y, int z, ItemStack items) {
+		EntityItem entItem = new EntityItem(world, (float)x + 0.5f, (float)y + 0.5f, (float)z + 0.5f, items);
+		float f3 = 0.05F;
+		entItem.motionX = (double)((float)world.rand.nextGaussian() * f3);
+		entItem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
+		entItem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
+		
+		if (items.hasTagCompound()) {
+			entItem.getEntityItem().setTagCompound((NBTTagCompound)items.getTagCompound().copy());
+        }
+		
+		world.spawnEntityInWorld(entItem);
+	}
 	
 	public void addRecipe() {
 		

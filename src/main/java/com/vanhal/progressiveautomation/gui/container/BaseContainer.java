@@ -20,7 +20,7 @@ public class BaseContainer extends Container {
 	
 	public BaseContainer(BaseTileEntity inEntity, int x, int y) {
 		entity = inEntity;
-		this.addSlotToContainer(new SlotBurn(entity, 0, x, y)); //burnable
+		this.addSlotToContainer(new SlotBurn(entity, entity.SLOT_FUEL, x, y)); //burnable
 	}
 	
 	public boolean canInteractWith(EntityPlayer player) {

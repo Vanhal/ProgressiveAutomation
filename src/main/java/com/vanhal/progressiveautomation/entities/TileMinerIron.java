@@ -5,6 +5,6 @@ import com.vanhal.progressiveautomation.ref.ToolHelper;
 public class TileMinerIron extends TileMiner {
 	public TileMinerIron() {
 		super();
-		setMiningLevel(ToolHelper.LEVEL_IRON);
+		setUpgradeLevel(ToolHelper.LEVEL_IRON);
 	}
 }

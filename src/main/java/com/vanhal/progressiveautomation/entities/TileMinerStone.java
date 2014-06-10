@@ -6,6 +6,6 @@ public class TileMinerStone extends TileMiner {
 
 	public TileMinerStone() {
 		super();
-		setMiningLevel(ToolHelper.LEVEL_STONE);
+		setUpgradeLevel(ToolHelper.LEVEL_STONE);
 	}
 }

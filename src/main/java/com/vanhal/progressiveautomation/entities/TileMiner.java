@@ -2,7 +2,7 @@ package com.vanhal.progressiveautomation.entities;
 
 import java.util.ArrayList;
 
-import com.vanhal.progressiveautomation.util.Point;
+import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.PABlocks;
@@ -24,12 +24,10 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileMiner extends BaseTileEntity {
+public class TileMiner extends UpgradeableTileEntity {
 	protected int totalMineBlocks = -1;
 	protected int currentMineBlocks = 0;
-	protected boolean invFull = false;
-	protected int numUpgrades = 0;
-	protected int mineLevel;
+
 
 	//mining vars
 	protected int currentColumn = 0;
@@ -41,7 +39,12 @@ public class TileMiner extends BaseTileEntity {
 
 	public TileMiner() {
 		super(13);
-		setMiningLevel(ToolHelper.LEVEL_WOOD);
+		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
+		
+		//set the slots
+		SLOT_PICKAXE = 2;
+		SLOT_SHOVEL = 3;
+		SLOT_UPGRADE = 4;
 	}
 
 
@@ -49,25 +52,15 @@ public class TileMiner extends BaseTileEntity {
 		super.writeToNBT(nbt);
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
-		nbt.setInteger("NumUpgrades", numUpgrades);
-		nbt.setBoolean("InvFull", invFull);
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		totalMineBlocks = nbt.getInteger("MineBlocks");
 		currentMineBlocks = nbt.getInteger("MinedBlocks");
-		numUpgrades = nbt.getInteger("NumUpgrades");
-		invFull = nbt.getBoolean("InvFull");
 	}
 
-	public int getMiningLevel() {
-		return mineLevel;
-	}
 
-	public void setMiningLevel(int level) {
-		mineLevel = level;
-	}
 
 	public void updateEntity() {
 		super.updateEntity();
@@ -75,7 +68,7 @@ public class TileMiner extends BaseTileEntity {
 			checkForChanges();
 			checkInventory();
 
-			if ( (!isDone()) && (isBurning()) && (!invFull) ) {
+			if ( (!isDone()) && (isBurning()) ) {
 				//mine!
 				mine();
 			}
@@ -85,7 +78,7 @@ public class TileMiner extends BaseTileEntity {
 	public void scanBlocks() {
 		totalMineBlocks = currentMineBlocks = 0;
 		for (int i = 1; i <= getRange(); i++) {
-			Point currentPoint = spiral(i, xCoord, zCoord);
+			Point2I currentPoint = spiral(i, xCoord, zCoord);
 			boolean bedrock = false;
 			int newY = this.yCoord - 1;
 			while (!bedrock) {
@@ -143,7 +136,7 @@ public class TileMiner extends BaseTileEntity {
 			if (miningTime<=0) {
 				miningTime = 0;
 				//clock is done, lets mine it
-				Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+				Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
 
 
 				//get the inventory of anything under it
@@ -208,7 +201,7 @@ public class TileMiner extends BaseTileEntity {
 			if (!isDone()) {
 				currentBlock = getNextBlock();
 				if (currentBlock != null) {
-					Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+					Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
 					miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 * 20 ) ;
 					
 					Item tool = (Item)slots[miningWith].getItem();
@@ -243,7 +236,7 @@ public class TileMiner extends BaseTileEntity {
 	}
 
 	public Block getNextBlock() {
-		Point currentPoint = spiral(currentColumn, xCoord, zCoord);
+		Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
 		miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
 		while ( (miningWith<=0) && (currentYLevel>=0) ) {
 			if (miningWith>0) {
@@ -270,15 +263,12 @@ public class TileMiner extends BaseTileEntity {
 		return null;
 	}
 
-	public int getRange() {
-		return (numUpgrades * PAConfig.upgradeRange) + 1;
-	}
-
 	protected int getCurrentUpgrades() {
-		if (this.getStackInSlot(4)==null) {
+		if (SLOT_UPGRADE==-1) return 0;
+		if (this.getStackInSlot(SLOT_UPGRADE)==null) {
 			return 0;
 		} else {
-			return this.getStackInSlot(4).stackSize;
+			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
 		}
 	}
 
@@ -305,28 +295,8 @@ public class TileMiner extends BaseTileEntity {
 		totalMineBlocks = value;
 	}
 
-	public boolean isInventoryFull() {
-		return invFull;
-	}
-
 	public boolean isDone() {
 		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
-	}
-
-	public boolean isSearching() {
-		return (currentBlock!=null);
-	}
-
-	public int getUpgrades() {
-		return numUpgrades;
-	}
-
-	public void setUpgrades(int value) {
-		numUpgrades = value;
-	}
-
-	public void addUpgrades(int addValue) {
-		numUpgrades += addValue;
 	}
 
 	/* Check for changes to tools and upgrades */
@@ -361,7 +331,7 @@ public class TileMiner extends BaseTileEntity {
 		//check upgrades
 		if (getCurrentUpgrades() != lastUpgrades) {
 			//remove the upgrade and add it to the upgrades var
-			if (slots[4].isItemEqual(ToolHelper.getUpgradeType(mineLevel))) {
+			if (slots[4].isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
 				addUpgrades(getCurrentUpgrades());
 				slots[4] = null;
 				lastUpgrades = getCurrentUpgrades();
@@ -380,36 +350,6 @@ public class TileMiner extends BaseTileEntity {
 		}
 	}
 
-	public static Point spiral(int n, int x, int y) {
-		int dx, dy;
-
-		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
-		int t = 2*k + 1;
-		int m = t*t;
-		t = t-1;
-
-		if (n>=(m-t)) {
-			dx = k-(m-n);
-			dy = -k;
-		} else {
-			m = m-t;
-			if (n>=(m-t)) {
-				dx = -k;
-				dy = -k + (m-n);
-			} else {
-				m = m-t;
-				if (n>=(m-t)) {
-					dx = -k + (m-n);
-					dy = k;
-				} else {
-					dx = k;
-					dy = k - (m-n-t);
-				}
-			}
-		}
-
-		return new Point(x + dx, y + dy);
-	}
 
 	/* Check if we are ready to go */
 	public boolean readyToBurn() {
@@ -421,154 +361,20 @@ public class TileMiner extends BaseTileEntity {
 		return false;
 	}
 
-
-	/* Check the inventory, move any useful items to their correct slots */
-	public void checkInventory() {
-		for (int i = 5; i <= 13; i++) {
-			if (slots[i]!=null) {
-				int moveTo = -1;
-				if (slots[i].isItemEqual(new ItemStack(Blocks.cobblestone))) {
-					moveTo = 1;
-				} else if (getBurnTime(slots[i])>0) {
-					if (slots[0]==null) {
-						moveTo = 0;
-					} else if (slots[i].isItemEqual(slots[0])) {
-						moveTo = 0;
-					}
-				}
-
-				if (moveTo>=0) {
-					if (slots[moveTo]==null) {
-						slots[moveTo] = slots[i];
-						slots[i] = null;
-					} else if (slots[moveTo].stackSize < slots[moveTo].getMaxStackSize()) {
-						int avail = slots[moveTo].getMaxStackSize() - slots[moveTo].stackSize;
-						if (avail >= slots[i].stackSize) {
-							slots[moveTo].stackSize += slots[i].stackSize;
-							slots[i] = null;
-						} else {
-							slots[i].stackSize -= avail;
-							slots[moveTo].stackSize += avail;
-						}
-					}
-				}
-			} else {
-				invFull = false;
-			}
+	public int extraSlotCheck(int slot) {
+		if (slots[slot].isItemEqual(new ItemStack(Blocks.cobblestone))) {
+			return 1;
 		}
-		//then check if there is any inventories on top of this block that we can output to
-		if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof IInventory) {
-			IInventory externalInv = (IInventory) worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
-			for (int i = 5; i <= 13; i++) {
-				if (slots[i]!=null) {
-					addtoExtInventory(externalInv, i);
-				}
-			}
-		}
+		return -1;
 	}
 
-	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
-		for (int i = 0; i < inv.getSizeInventory(); i++) {
-			if (inv.getStackInSlot(i)!=null) {
-				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot])) && (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize()) ) {
-					int avail = inv.getStackInSlot(i).getMaxStackSize() - inv.getStackInSlot(i).stackSize;
-					if (avail >= slots[fromSlot].stackSize) {
-						inv.getStackInSlot(i).stackSize += slots[fromSlot].stackSize;
-						slots[fromSlot] = null;
-						return true;
-					} else {
-						slots[fromSlot].stackSize -= avail;
-						inv.getStackInSlot(i).stackSize += avail;
-					}
-				}
-			}
-		}
-		if ( (slots[fromSlot] != null) && (slots[fromSlot].stackSize>0) ) {
-			for (int i = 0; i < inv.getSizeInventory(); i++) {
-				if (inv.getStackInSlot(i)==null) {
-					inv.setInventorySlotContents(i, slots[fromSlot]);
-					slots[fromSlot] = null;
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	public boolean addToInventory(ItemStack item) {
-		for (int i = 5; i <= 13; i++) {
-			if (slots[i]!=null) {
-				if (item!=null) {
-					if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
-						int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
-						if (avail >= item.stackSize) {
-							slots[i].stackSize += item.stackSize;
-							item = null;
-							return true;
-						} else {
-							item.stackSize -= avail;
-							slots[i].stackSize += avail;
-						}
-					}
-				}
-			}
-		}
-		if ( (item != null) && (item.stackSize>0) ) {
-			for (int i = 5; i <= 13; i++) {
-				if (slots[i]==null) {
-					slots[i] = item;
-					item = null;
-					return true;
-				}
-			}
-		}
-		if ( (item != null) && (item.stackSize==0) ) {
-			item = null;
-		}
-		//if we still have an item, drop in on the ground
-		if (item!=null) {
-			EntityItem entItem = new EntityItem(worldObj, xCoord + 0.5f, yCoord + 1.5f, zCoord + 0.5f, item);
-			entItem.delayBeforeCanPickup = 1;
-			float f3 = 0.05F;
-			entItem.motionX = (double)((float)worldObj.rand.nextGaussian() * f3);
-			entItem.motionY = (double)((float)worldObj.rand.nextGaussian() * f3 + 0.2F);
-			entItem.motionZ = (double)((float)worldObj.rand.nextGaussian() * f3);
-			worldObj.spawnEntityInWorld(entItem);
-		}
-
-		return false;
-	}
 
 	/* ISided Stuff */
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if ( (slot==1) && (stack.isItemEqual(new ItemStack(Blocks.cobblestone))) ) {
     		return true;
-    	} else if ( (slot==2) && ( ToolHelper.getType(stack.getItem()) == ToolHelper.TYPE_PICKAXE ) ) {
-    		if (ToolHelper.getLevel(stack) <= getMiningLevel()) {
-    			return true;
-    		}
-    	} else if ( (slot==3) && ( ToolHelper.getType(stack.getItem()) == ToolHelper.TYPE_SHOVEL ) ) {
-    		if (ToolHelper.getLevel(stack) <= getMiningLevel()) {
-    			return true;
-    		}
-     	} else if ( (slot==0) && (TileEntityFurnace.getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
-     		return true;
-    	} else if ( (slot==4) && (stack.isItemEqual(ToolHelper.getUpgradeType(getMiningLevel()))) ) {
-    		return true;
-     	}
-		return false;
-	}
-
-	public int[] getAccessibleSlotsFromSide(int var1) {
-		int[] output = {0,1,2,3,4,5,6,7,8,9,10,11,12,13};
-		return output;
-	}
-
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
-		if (slot>=5) {
-			return true;
-		}
-		return false;
+    	}
+		return super.isItemValidForSlot(slot, stack);
 	}
 
 }
