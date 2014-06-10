@@ -298,7 +298,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 		//then check if there is any inventories on top of this block that we can output to
 		if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof IInventory) {
 			IInventory externalInv = (IInventory) worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
-			for (int i = 5; i <= 13; i++) {
+			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 				if (slots[i]!=null) {
 					addtoExtInventory(externalInv, i);
 				}

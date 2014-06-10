@@ -8,7 +8,6 @@ public class PAConfig {
 	//config options
 	public static int upgradeRange;
 	public static int fuelCost;
-	public static int leafTime;
 	
 	//blocks
 	public static boolean minerEnabled;
