@@ -24,6 +24,7 @@ public class PAConfig {
 		config = handle;
 		upgradeRange = config.get("upgrades", "UpdateRange", 1, "How many blocks does each upgrade add (default is 1)");
 		fuelCost = config.get("general", "fuelCost", 2, "Number to divide the normal burn time by for all machines.");
+		if (fuelCost==0) fuelCost = 1;
 		
 		minerEnabled = config.get("blocks", "miner", true, "Miner Block is enabled");
 		chopperEnabled = config.get("blocks", "chopper", true, "Tree Chopper Block is enabled");
