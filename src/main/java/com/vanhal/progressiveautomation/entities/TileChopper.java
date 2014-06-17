@@ -266,7 +266,11 @@ public class TileChopper extends UpgradeableTileEntity {
 		int metaData = worldObj.getBlockMetadata(x, y, z);
 		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), metaData);
 		int ordID = OreDictionary.getOreID(testItem);
-		return OreDictionary.getOreName(ordID);
+		if (ordID>=0) {
+			return OreDictionary.getOreName(ordID);
+		} else {
+			return "Unknown";
+		}
 	}
 	
 	public boolean readyToBurn() {
