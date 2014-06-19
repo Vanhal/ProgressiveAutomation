@@ -13,10 +13,11 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.entities.TileMiner;
+import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.gui.slots.SlotItem;
 import com.vanhal.progressiveautomation.gui.slots.SlotTool;
+import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
@@ -87,7 +88,7 @@ public class ContainerMiner extends BaseContainer {
             		} else {
             			return null;
             		}
-             	} else if (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) {
+            	} else if ( (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) || (stackInSlot.getItem() instanceof ItemRFEngine) ) {
             		if (!this.mergeItemStack(stackInSlot, entity.SLOT_FUEL, 1, false)) {
             			return null;
             		}

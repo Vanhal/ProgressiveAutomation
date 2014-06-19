@@ -1,14 +1,14 @@
 package com.vanhal.progressiveautomation.blocks;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.entities.TileChopper;
-import com.vanhal.progressiveautomation.entities.TileChopperDiamond;
-import com.vanhal.progressiveautomation.entities.TileChopperIron;
-import com.vanhal.progressiveautomation.entities.TileChopperStone;
-import com.vanhal.progressiveautomation.entities.TileMiner;
-import com.vanhal.progressiveautomation.entities.TileMinerDiamond;
-import com.vanhal.progressiveautomation.entities.TileMinerIron;
-import com.vanhal.progressiveautomation.entities.TileMinerStone;
+import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
+import com.vanhal.progressiveautomation.entities.chopper.TileChopperDiamond;
+import com.vanhal.progressiveautomation.entities.chopper.TileChopperIron;
+import com.vanhal.progressiveautomation.entities.chopper.TileChopperStone;
+import com.vanhal.progressiveautomation.entities.miner.TileMiner;
+import com.vanhal.progressiveautomation.entities.miner.TileMinerDiamond;
+import com.vanhal.progressiveautomation.entities.miner.TileMinerIron;
+import com.vanhal.progressiveautomation.entities.miner.TileMinerStone;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;

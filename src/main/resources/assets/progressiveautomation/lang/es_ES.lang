@@ -1,9 +1,0 @@
-tile.Miner.name=Minero de Madera
-tile.MinerStone.name=Minero la Piedra
-tile.MinerIron.name=Minero el Hierro
-tile.MinerDiamond.name=Minero el Diamante
-item.WoodUpgrade.name=Mejorar de Madera
-item.StoneUpgrade.name=Mejorar la Piedra
-item.IronUpgrade.name=Mejorar el Hierro
-item.DiamondUpgrade.name=Mejorar el Diamante
-itemGroup.PATab=Progressive Automation

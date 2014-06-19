@@ -18,6 +18,8 @@ public class BaseGUI extends GuiContainer {
 	public static int RED = 0xCC3333;
 	public static int BLUE = 0x4C8BFF;
 	
+	protected int guiHeight = 166;
+	protected int guiWidth = 176;
 	
 	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 	public static final ResourceLocation flame = new ResourceLocation(Ref.MODID, "textures/gui/flame.png");
@@ -31,7 +33,15 @@ public class BaseGUI extends GuiContainer {
 	
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
 		drawText();
-		drawString("Inventory", 8, 74, GRAY);
+		drawString("Inventory", 8, guiHeight - 92, GRAY);
+	}
+	
+	public void setHeight(int height) {
+		guiHeight = height;
+	}
+	
+	public void setWidth(int width) {
+		guiWidth = width;
 	}
 	
 	protected void drawText() {	}
@@ -41,7 +51,7 @@ public class BaseGUI extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float f, int x, int y) {
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 		mc.renderEngine.bindTexture(background);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, 176, 166);
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, guiWidth, guiHeight);
 		drawElements();
 	}
 	

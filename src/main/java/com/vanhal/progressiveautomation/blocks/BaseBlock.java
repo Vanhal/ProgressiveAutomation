@@ -5,7 +5,7 @@ import java.util.Random;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.IUpgradeable;
-import com.vanhal.progressiveautomation.entities.TileMiner;
+import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
@@ -20,12 +20,14 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.IIcon;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -47,9 +49,25 @@ public class BaseBlock extends BlockContainer {
 		return "";
 	}
 	
+	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+		if (blockLevel==ToolHelper.LEVEL_WOOD) {
+			return 5;
+		} else {
+			return 0;
+		}
+    }
+	
 	public BaseBlock(String baseName, int level) {
 		this(baseName+returnLevelName(level));
 		blockLevel = level;
+	}
+	
+	public String getLevelName() {
+		String thisName = returnLevelName(blockLevel);
+		if (thisName=="") {
+			thisName = "Wooden";
+		}
+		return thisName;
 	}
 	
 	public BaseBlock(String blockName) {

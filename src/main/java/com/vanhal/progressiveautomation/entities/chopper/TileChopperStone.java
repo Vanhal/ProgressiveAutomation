@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation.entities;
+package com.vanhal.progressiveautomation.entities.chopper;
 
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 

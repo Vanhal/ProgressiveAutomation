@@ -11,11 +11,15 @@ public class PAItems {
 		if (PAConfig.allowIronLevel) ironUpgrade = new ItemIronUpgrade();
 		if (PAConfig.allowDiamondLevel) diamondUpgrade = new ItemDiamondUpgrade();
 		
+		if (PAConfig.rfSupport) rfEngine = new ItemRFEngine();
+		
 		//preInit them
 		if (woodUpgrade!=null) woodUpgrade.preInit();
 		if (stoneUpgrade!=null) stoneUpgrade.preInit();
 		if (ironUpgrade!=null) ironUpgrade.preInit();
 		if (diamondUpgrade!=null) diamondUpgrade.preInit();
+		
+		if (PAConfig.rfSupport) rfEngine.preInit();
 	}
 	
 	public static void init() {
@@ -31,6 +35,8 @@ public class PAItems {
 	public static ItemStoneUpgrade stoneUpgrade = null;
 	public static ItemIronUpgrade ironUpgrade = null;
 	public static ItemDiamondUpgrade diamondUpgrade = null;
+	
+	public static ItemRFEngine rfEngine = null;
 	
 	
 }

@@ -5,7 +5,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-import com.vanhal.progressiveautomation.entities.TileChopper;
+import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.gui.container.ContainerChopper;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.util.StringHelper;
@@ -31,8 +31,10 @@ public class GUIChopper extends BaseGUI {
 		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(chopper.getRange()), infoScreenX, infoScreenW, infroScreenY3, WHITE);
 		
 		boolean readyToChop = false;
-		if ( (chopper.getStackInSlot(chopper.SLOT_FUEL) == null) && (!chopper.isBurning()) ) {
-			drawString(StringHelper.localize("gui.need.fuel"), infoScreenX, infoScreenW, infroScreenY2, RED);
+		if ( (!chopper.hasFuel()) && (!chopper.isBurning()) ) {
+			String fuelString = "gui.need.fuel";
+			if (chopper.hasEngine()) fuelString = "gui.need.energy";
+			drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else if ( (chopper.getStackInSlot(chopper.SLOT_SAPLINGS) == null) && (!chopper.isBurning()) ) {
 			drawString(StringHelper.localize("gui.need.sapling"), infoScreenX, infoScreenW, infroScreenY2, RED);
 		} else if (chopper.getStackInSlot(chopper.SLOT_AXE) == null) {

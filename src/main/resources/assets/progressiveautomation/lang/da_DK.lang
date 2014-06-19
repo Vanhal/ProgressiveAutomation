@@ -1,9 +1,0 @@
-tile.Miner.name=Trä Minearbejder
-tile.MinerStone.name=Sten Minearbejder
-tile.MinerIron.name=Jern Minearbejder
-tile.MinerDiamond.name=Diamant Minearbejder
-item.WoodUpgrade.name=Trä Opgradering
-item.StoneUpgrade.name=Sten Opgradering
-item.IronUpgrade.name=Jern Opgradering
-item.DiamondUpgrade.name=Diamant Opgradering
-itemGroup.PATab=Progressive Automation

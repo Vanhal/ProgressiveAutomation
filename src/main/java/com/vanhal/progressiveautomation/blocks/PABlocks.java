@@ -19,6 +19,17 @@ public class PABlocks {
 		if (PAConfig.chopperEnabled && PAConfig.allowIronLevel) ironChopper = new BlockChopper(ToolHelper.LEVEL_IRON);
 		if (PAConfig.chopperEnabled && PAConfig.allowDiamondLevel) diamondChopper = new BlockChopper(ToolHelper.LEVEL_DIAMOND);
 		
+		//generators
+		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowWoodenLevel)
+			woodenGenerator = new BlockGenerator(ToolHelper.LEVEL_WOOD);
+		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowStoneLevel)
+			stoneGenerator = new BlockGenerator(ToolHelper.LEVEL_STONE);
+		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowIronLevel)
+			ironGenerator = new BlockGenerator(ToolHelper.LEVEL_IRON);
+		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowDiamondLevel)
+			diamondGenerator = new BlockGenerator(ToolHelper.LEVEL_DIAMOND);
+		
+		//preInit
 		if (woodenMiner!=null) woodenMiner.preInit();
 		if (stoneMiner!=null) stoneMiner.preInit();
 		if (ironMiner!=null) ironMiner.preInit();
@@ -29,6 +40,10 @@ public class PABlocks {
 		if (ironChopper!=null) ironChopper.preInit();
 		if (diamondChopper!=null) diamondChopper.preInit();
 		
+		if (woodenGenerator!=null) woodenGenerator.preInit();
+		if (stoneGenerator!=null) stoneGenerator.preInit();
+		if (ironGenerator!=null) ironGenerator.preInit();
+		if (diamondGenerator!=null) diamondGenerator.preInit();
 	}
 	
 	public static void init() {
@@ -42,6 +57,11 @@ public class PABlocks {
 		if (stoneChopper!=null) stoneChopper.init();
 		if (ironChopper!=null) ironChopper.init();
 		if (diamondChopper!=null) diamondChopper.init();
+		
+		if (woodenGenerator!=null) woodenGenerator.init();
+		if (stoneGenerator!=null) stoneGenerator.init();
+		if (ironGenerator!=null) ironGenerator.init();
+		if (diamondGenerator!=null) diamondGenerator.init();
 	}
 	
 	public static void postInit() {
@@ -55,6 +75,11 @@ public class PABlocks {
 		if (stoneChopper!=null) stoneChopper.postInit();
 		if (ironChopper!=null) ironChopper.postInit();
 		if (diamondChopper!=null) diamondChopper.postInit();
+		
+		if (woodenGenerator!=null) woodenGenerator.postInit();
+		if (stoneGenerator!=null) stoneGenerator.postInit();
+		if (ironGenerator!=null) ironGenerator.postInit();
+		if (diamondGenerator!=null) diamondGenerator.postInit();
 	}
 	
 	//blocks
@@ -71,4 +96,9 @@ public class PABlocks {
 	public static BlockChopper ironChopper = null;
 	public static BlockChopper diamondChopper = null;
 	
+	//generators
+	public static BlockGenerator woodenGenerator = null;
+	public static BlockGenerator stoneGenerator = null;
+	public static BlockGenerator ironGenerator = null;
+	public static BlockGenerator diamondGenerator = null;
 }

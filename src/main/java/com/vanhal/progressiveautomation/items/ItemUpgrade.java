@@ -5,8 +5,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 
-public class ItemUpgrade extends Item {
-	public String itemName;
+public class ItemUpgrade extends BaseItem {
 	public int level;
 	
 	public ItemUpgrade() {
@@ -14,9 +13,8 @@ public class ItemUpgrade extends Item {
 	}
 	
 	public ItemUpgrade(String name, int setLevel) {
-		setName(name);
+		super(name);
 		setLevel(setLevel);
-		setCreativeTab(ProgressiveAutomation.PATab);
 	}
 	
 	public void setLevel(int useLevel) {
@@ -25,25 +23,6 @@ public class ItemUpgrade extends Item {
 	
 	public int getLevel() {
 		return level;
-	}
-	
-	public void setName(String newName) {
-		itemName = newName;
-		this.setUnlocalizedName(itemName);
-	}
-	
-	public void preInit() {
-		GameRegistry.registerItem(this, itemName);
-		//addNormalRecipe();
-		addUpgradeRecipe();
-	}
-
-	protected void addUpgradeRecipe() {
-		
-	}
-
-	protected void addNormalRecipe() {
-		
 	}
 	
 }

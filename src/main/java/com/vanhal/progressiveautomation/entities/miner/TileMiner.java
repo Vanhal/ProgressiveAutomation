@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation.entities;
+package com.vanhal.progressiveautomation.entities.miner;
 
 import java.util.ArrayList;
 
@@ -6,6 +6,7 @@ import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.PABlocks;
+import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;

@@ -1,9 +1,0 @@
-tile.Miner.name=Hölzern Bergarbeiter
-tile.MinerStone.name=Stein Bergarbeiter
-tile.MinerIron.name=Eisen Bergarbeiter
-tile.MinerDiamond.name=Diamant Bergarbeiter
-item.WoodUpgrade.name=Hölzern Verbessern
-item.StoneUpgrade.name=Stein Verbessern
-item.IronUpgrade.name=Eisen Verbessern
-item.DiamondUpgrade.name=Diamant Verbessern
-itemGroup.PATab=Progressive Automation

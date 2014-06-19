@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation.entities;
+package com.vanhal.progressiveautomation.entities.chopper;
 
 import java.util.ArrayList;
 
@@ -15,6 +15,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.CoordList;
 import com.vanhal.progressiveautomation.util.Point2I;

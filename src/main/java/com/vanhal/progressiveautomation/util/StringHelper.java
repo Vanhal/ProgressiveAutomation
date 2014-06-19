@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.util;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import net.minecraft.client.gui.FontRenderer;
@@ -17,6 +18,8 @@ import net.minecraftforge.fluids.FluidStack;
  * 
  */
 public final class StringHelper {
+	
+	private static DecimalFormat decimalFormat = new DecimalFormat("###,###,###,###,###");
 
 	private StringHelper() {
 
@@ -91,11 +94,11 @@ public final class StringHelper {
 		int numMod = 10 * minDigits;
 
 		if (number > 100000 * numMod) {
-			numString += number / 1000000 + "M";
+			numString += decimalFormat.format(number / 1000000) + "M";
 		} else if (number > 100 * numMod) {
-			numString += number / 1000 + "k";
+			numString += decimalFormat.format(number / 1000) + "k";
 		} else {
-			numString += number;
+			numString += decimalFormat.format(number);
 		}
 		return numString;
 	}

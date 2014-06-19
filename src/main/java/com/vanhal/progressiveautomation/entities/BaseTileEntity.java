@@ -1,7 +1,11 @@
 package com.vanhal.progressiveautomation.entities;
 
+import cofh.api.energy.IEnergyHandler;
+
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.items.ItemRFEngine;
+import com.vanhal.progressiveautomation.util.BlockHelper;
 
 import java.util.Random;
 
@@ -17,11 +21,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraftforge.common.util.ForgeDirection;
 
-public class BaseTileEntity extends TileEntity implements ISidedInventory {
+public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyHandler {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
+	
+	public ForgeDirection extDirection = ForgeDirection.UP;
 	
 	protected Random RND = new Random();
 	
@@ -89,13 +96,19 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 					if (slots[SLOT_FUEL]!=null) {
 						if (isFuel()) {
 							burnLevel = progress = getBurnTime();
-							if (slots[SLOT_FUEL].getItem() instanceof ItemBucket) {
-								slots[SLOT_FUEL] = new ItemStack(Items.bucket);
+							
+							if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
+								slots[SLOT_FUEL] = new ItemStack(slots[SLOT_FUEL].getItem().getContainerItem());
 							} else {
 								slots[SLOT_FUEL].stackSize--;
 								if (slots[SLOT_FUEL].stackSize==0) {
 									slots[SLOT_FUEL] = null;
 								}
+							}
+						} else if (hasEngine()) {
+							if (useEnergy(PAConfig.rfCost, false) > 0) {
+								//consumed a tick worth of energy
+								burnLevel = progress = 1;
 							}
 						}
 					}
@@ -105,6 +118,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 				progress--;
 				if (progress<=0) {
 					burnLevel = progress = 0;
+					if ( (readyToBurn()) && (hasEngine()) ) {
+						if (useEnergy(PAConfig.rfCost, false) > 0) {
+							//consumed a tick worth of energy
+							burnLevel = progress = 1;
+						}
+					}
 				}
 			}
 			
@@ -222,7 +241,6 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 	
 	public boolean readyToBurn() {
-		
 		return true;
 	}
 	
@@ -249,11 +267,24 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 	}
 	
 	public int getBurnTime(ItemStack item) {
-		return TileEntityFurnace.getItemBurnTime(item)/PAConfig.fuelCost;
+		return TileEntityFurnace.getItemBurnTime(item) / PAConfig.fuelCost;
 	}
 	
 	public boolean isFuel() {
 		return (getBurnTime()>0);
+	}
+	
+	public boolean hasFuel() {
+		if (slots[SLOT_FUEL]!=null) {
+			if (hasEngine()) {
+				if (useEnergy(PAConfig.rfCost, true) > 0) {
+					return true;
+				}
+			} else {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/* do some checks for block specific items, must return -1 on failure */
@@ -296,8 +327,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 			}
 		}
 		//then check if there is any inventories on top of this block that we can output to
-		if (worldObj.getTileEntity(xCoord, yCoord + 1, zCoord) instanceof IInventory) {
-			IInventory externalInv = (IInventory) worldObj.getTileEntity(xCoord, yCoord + 1, zCoord);
+		if (BlockHelper.getAdjacentTileEntity(this, extDirection) instanceof IInventory) {
+			IInventory externalInv = (IInventory) BlockHelper.getAdjacentTileEntity(this, extDirection);
 			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 				if (slots[i]!=null) {
 					addtoExtInventory(externalInv, i);
@@ -377,5 +408,79 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory {
 		}
 
 		return false;
+	}
+	
+	
+	//the following are for handling energy
+	public boolean hasEngine() {
+		if (slots[SLOT_FUEL]==null) return false;
+		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
+			return true;
+		}
+		return false;
+	}
+	
+	protected ItemRFEngine getEngine() {
+		if (hasEngine()) {
+			return (ItemRFEngine) slots[SLOT_FUEL].getItem();
+		}
+		return null;
+	}
+	
+	public boolean canConnectEnergy(ForgeDirection from) {
+		if (worldObj.isRemote) return false;
+		if (getEngine()==null) return false;
+		else return true;
+	}
+
+	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+		if (worldObj.isRemote) return 0;
+		return addEnergy(maxReceive, simulate);
+	}
+
+	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+		return 0;
+	}
+	
+	protected int useEnergy(int amount, boolean simulate) {
+		ItemRFEngine engine = getEngine();
+		if (getEngine()==null) return 0;
+		
+		int energyExtracted = Math.min(engine.getCharge(slots[SLOT_FUEL]), amount);
+
+		if (energyExtracted!=amount) return 0;
+		
+		if (!simulate) {
+			engine.addCharge(slots[SLOT_FUEL], (energyExtracted * -1));
+		}
+		return energyExtracted;
+	}
+	
+	protected int addEnergy(int amount, boolean simulate) {
+		ItemRFEngine engine = getEngine();
+		if (getEngine()==null) return 0;
+		
+		int energyReceived = Math.min(engine.getMaxCharge() - engine.getCharge(slots[SLOT_FUEL]), Math.min(amount, PAConfig.rfRate));
+
+		if (!simulate) {
+			engine.addCharge(slots[SLOT_FUEL], energyReceived);
+		}
+		return energyReceived;
+	}
+
+	public int getEnergyStored(ForgeDirection from) {
+		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
+			return getEngine().getCharge(slots[SLOT_FUEL]);
+		} else {
+			return 0;
+		}
+	}
+
+	public int getMaxEnergyStored(ForgeDirection from) {
+		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
+			return getEngine().getMaxCharge();
+		} else {
+			return 0;
+		}
 	}
 }
