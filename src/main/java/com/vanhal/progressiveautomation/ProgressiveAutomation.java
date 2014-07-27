@@ -12,8 +12,9 @@ import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.util.ConfigHandler;
 
+import cpw.mods.fml.client.event.ConfigChangedEvent;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -21,9 +22,10 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 
-@Mod(modid = Ref.MODID, name = Ref.MODNAME, version = Ref.Version)
+@Mod(modid = Ref.MODID, name = Ref.MODNAME, version = Ref.Version, guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory")
 public class ProgressiveAutomation {
 	@Instance(Ref.MODID)
 	public static ProgressiveAutomation instance;
@@ -41,12 +43,10 @@ public class ProgressiveAutomation {
 	public static CreativeTabs PATab = new CreativeTabs("PATab") {
 		@Override
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(PABlocks.stoneMiner);
+			return Item.getItemFromBlock(PABlocks.miner[1]);
 		}
 	};
 	
-	//config handler
-	public static final ConfigHandler config = new ConfigHandler(Ref.Version);
 	
 	
 	public ProgressiveAutomation() {
@@ -56,13 +56,12 @@ public class ProgressiveAutomation {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		config.setConfiguration(new Configuration(event.getSuggestedConfigurationFile()));
-		PAConfig.init(config);
+		PAConfig.init(new Configuration(event.getSuggestedConfigurationFile()));
 		
 		PAItems.preInit();
 		PABlocks.preInit();
 		
-		config.save();
+		PAConfig.save();
 	}
 	
 	@EventHandler
@@ -71,6 +70,7 @@ public class ProgressiveAutomation {
 		PABlocks.init();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+		FMLCommonHandler.instance().bus().register(instance);
 	}
 	
 	@EventHandler
@@ -80,7 +80,13 @@ public class ProgressiveAutomation {
 		
 		proxy.registerEntities();
 		
-		config.cleanUp(false, true);
+		PAConfig.postInit();
 	}
+	
+	@SubscribeEvent
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+        if(eventArgs.modID.equals(Ref.MODID))
+            PAConfig.syncConfig();
+    }
 	
 }

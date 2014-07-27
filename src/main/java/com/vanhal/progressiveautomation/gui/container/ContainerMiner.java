@@ -42,15 +42,7 @@ public class ContainerMiner extends BaseContainer {
 		this.addSlotToContainer(new SlotItem(updateType, miner, miner.SLOT_UPGRADE, 89, 52)); //upgrades
 
 		//output slots
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START, 112, 16));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 1, 130, 16));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 2, 148, 16));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 3, 112, 34));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 4, 130, 34));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 5, 148, 34));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 6, 112, 52));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 7, 130, 52));
-		this.addSlotToContainer(new Slot(miner, miner.SLOT_INVENTORY_START + 8, 148, 52));
+		addInventory(miner, miner.SLOT_INVENTORY_START, 112, 16, 3, 3);
 
 		addPlayerInventory(inv);
 	}

@@ -38,13 +38,13 @@ public class BlockChopper extends BaseBlock {
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.stone, 'c', PABlocks.woodenChopper, 'p', Items.stone_axe});
+				"sss", "scs", "sps", 's', Blocks.stone, 'c', PABlocks.chopper[ToolHelper.LEVEL_WOOD], 'p', Items.stone_axe});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.stoneChopper, 'p', Items.iron_axe, 'b', Blocks.iron_block});
+				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.chopper[ToolHelper.LEVEL_STONE], 'p', Items.iron_axe, 'b', Blocks.iron_block});
 		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.ironChopper, 'p', Items.diamond_axe});
+				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.chopper[ToolHelper.LEVEL_IRON], 'p', Items.diamond_axe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 				"scs", "srs", "sps", 's', Blocks.log, 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_axe});

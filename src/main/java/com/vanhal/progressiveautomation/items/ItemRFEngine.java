@@ -33,6 +33,10 @@ public class ItemRFEngine extends BaseItem {
 		setMaxCharge(PAConfig.rfStored);
 	}
 	
+	public ItemRFEngine(String name) {
+		super(name);
+	}
+	
 	public void setMaxCharge(int amount) {
 		maxCharge = amount;
 	}

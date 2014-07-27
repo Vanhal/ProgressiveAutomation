@@ -13,6 +13,10 @@ import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerDiamond;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerIron;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerStone;
+import com.vanhal.progressiveautomation.entities.planter.TilePlanter;
+import com.vanhal.progressiveautomation.entities.planter.TilePlanterDiamond;
+import com.vanhal.progressiveautomation.entities.planter.TilePlanterIron;
+import com.vanhal.progressiveautomation.entities.planter.TilePlanterStone;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -30,6 +34,12 @@ public class Proxy {
 		GameRegistry.registerTileEntity(TileChopperStone.class, "TileChopperStone");
 		GameRegistry.registerTileEntity(TileChopperIron.class, "TileChopperIron");
 		GameRegistry.registerTileEntity(TileChopperDiamond.class, "TileChopperDiamond");
+		
+		//planter
+		GameRegistry.registerTileEntity(TilePlanter.class, "TilePlanter");
+		GameRegistry.registerTileEntity(TilePlanterStone.class, "TilePlanterStone");
+		GameRegistry.registerTileEntity(TilePlanterIron.class, "TilePlanterIron");
+		GameRegistry.registerTileEntity(TilePlanterDiamond.class, "TilePlanterDiamond");
 		
 		//generator
 		GameRegistry.registerTileEntity(TileGenerator.class, "TileGenerator");

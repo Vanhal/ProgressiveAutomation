@@ -1,9 +1,11 @@
 package com.vanhal.progressiveautomation.util;
 
 
-import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.common.FMLCommonHandler;
+import java.util.UUID;
 
+import com.mojang.authlib.GameProfile;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -28,7 +30,8 @@ import net.minecraft.world.WorldServer;
 
 public class PlayerFake extends EntityPlayerMP {
 
-	private static GameProfile NAME = new GameProfile("08B9E87C-A9F9-5161-AEC6-B671C8F4FCB9", "[VANHAL]");
+	private static GameProfile NAME = new GameProfile(UUID.fromString("08B9E87C-A9F9-5161-AEC6-B671C8F4FCB9"), "[VANHAL]");
+	//private static GameProfile NAME = new GameProfile("08B9E87C-A9F9-5161-AEC6-B671C8F4FCB9", "[VANHAL]");
 
 	public boolean isSneaking = false;
 	public ItemStack previousItem = null;

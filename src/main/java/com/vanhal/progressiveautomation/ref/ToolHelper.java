@@ -158,7 +158,7 @@ public class ToolHelper {
 	}
 	
 	public static boolean damageTool(ItemStack tool, World world, int x, int y, int z) {
-		if (tool.getItem() instanceof ItemTool) {
+		if ( (tool.getItem() instanceof ItemTool) || (tool.getItem() instanceof ItemHoe) ) {
 			if (tool.attemptDamageItem(1, RND)) {
 				return true;
 			}

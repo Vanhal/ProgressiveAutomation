@@ -46,6 +46,8 @@ public class ContainerGenerator extends BaseContainer {
             		if (!this.mergeItemStack(stackInSlot, entity.SLOT_FUEL, entity.SLOT_FUEL + 1, false)) {
             			return null;
             		}
+            	} else {
+            		return null;
             	}
             }
 

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -54,6 +55,16 @@ public class BaseContainer extends Container {
 		}
 		for (int i = 0; i < 9; i++) {
 			this.addSlotToContainer(new Slot(inv, i, 8 + i*18, y+58));
+		}
+	}
+	
+	/* Adds another inventory to the container */
+	public void addInventory(IInventory inventory, int startSlot, int x, int y, int width, int height) {
+		int i = 0;
+		for(int h = 0; h < height; h++) {
+			for(int w = 0; w < width; w++) {
+				this.addSlotToContainer(new Slot(inventory, startSlot + i++, x + (w*18), y + (h*18)));
+			}
 		}
 	}
 	

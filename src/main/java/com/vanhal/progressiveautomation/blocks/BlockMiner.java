@@ -37,13 +37,13 @@ public class BlockMiner extends BaseBlock {
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.stone, 'c', PABlocks.woodenMiner, 'p', Items.stone_pickaxe});
+				"sss", "scs", "sps", 's', Blocks.stone, 'c', PABlocks.miner[ToolHelper.LEVEL_WOOD], 'p', Items.stone_pickaxe});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.stoneMiner, 'p', Items.iron_pickaxe, 'b', Blocks.iron_block});
+				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.miner[ToolHelper.LEVEL_STONE], 'p', Items.iron_pickaxe, 'b', Blocks.iron_block});
 		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.ironMiner, 'p', Items.diamond_pickaxe});
+				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.miner[ToolHelper.LEVEL_IRON], 'p', Items.diamond_pickaxe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 				"scs", "srs", "sps", 's', Blocks.log, 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_pickaxe});

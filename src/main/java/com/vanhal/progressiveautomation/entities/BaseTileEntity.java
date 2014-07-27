@@ -98,7 +98,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 							burnLevel = progress = getBurnTime();
 							
 							if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
-								slots[SLOT_FUEL] = new ItemStack(slots[SLOT_FUEL].getItem().getContainerItem());
+								
+								slots[SLOT_FUEL] = slots[SLOT_FUEL].getItem().getContainerItem(slots[SLOT_FUEL]);
 							} else {
 								slots[SLOT_FUEL].stackSize--;
 								if (slots[SLOT_FUEL].stackSize==0) {
@@ -222,7 +223,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
-		if (slots[slot] != null) {
+		if ( (slots[slot] != null) && (slots[slot].isItemEqual(stack)) ) {
 			int availSpace = this.getInventoryStackLimit() - slots[slot].stackSize;
 			if (availSpace>0) {
 				return true;
@@ -234,7 +235,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
-		if ( (SLOT_INVENTORY_START>=0) && (slot>=SLOT_INVENTORY_START) ) {
+		if ( (SLOT_INVENTORY_START>=0) && (slot<=SLOT_INVENTORY_END) ) {
 			return true;
 		}
 		return false;
@@ -313,7 +314,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 					if (slots[moveTo]==null) {
 						slots[moveTo] = slots[i];
 						slots[i] = null;
-					} else if (slots[moveTo].stackSize < slots[moveTo].getMaxStackSize()) {
+					} else if ( (slots[moveTo].stackSize < slots[moveTo].getMaxStackSize()) && (slots[moveTo].isItemEqual(slots[i])) ) {
 						int avail = slots[moveTo].getMaxStackSize() - slots[moveTo].stackSize;
 						if (avail >= slots[i].stackSize) {
 							slots[moveTo].stackSize += slots[i].stackSize;

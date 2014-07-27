@@ -1,9 +1,11 @@
 package com.vanhal.progressiveautomation;
 
-import com.vanhal.progressiveautomation.util.ConfigHandler;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
+
+import net.minecraftforge.common.config.Configuration;
 
 public class PAConfig {
-	public static ConfigHandler config;
+	public static Configuration config;
 	
 	//config options
 	public static int upgradeRange;
@@ -12,6 +14,7 @@ public class PAConfig {
 	//blocks
 	public static boolean minerEnabled;
 	public static boolean chopperEnabled;
+	public static boolean planterEnabled;
 	public static boolean generatorEnabled;
 	
 	//allow levels
@@ -25,37 +28,60 @@ public class PAConfig {
 	public static int rfCost;
 	public static int rfStored;
 	public static int rfRate;
-	public static boolean enableGenerator;
 	
 	
-	public static void init(ConfigHandler handle) {
+	public static void init(Configuration handle) {
 		config = handle;
-		upgradeRange = config.get("upgrades", "UpdateRange", 1, "How many blocks does each upgrade add (default is 1)");
-		fuelCost = config.get("general", "fuelCost", 2, "Number to divide the normal burn time by for all machines.");
+		config.load();
+		
+		syncConfig();
+	}
+	
+	public static void syncConfig() {
+		upgradeRange = config.getInt("UpdateRange", "upgrades", 1, 1, 1000, "How many blocks does each upgrade add (default is 1)");
+		fuelCost = config.getInt("fuelCost", "general", 2, 1, 300, "Number to divide the normal burn time by for all machines.");
 		if (fuelCost<=0) fuelCost = 1;
 		
 		//rf options
-		rfSupport = config.get("rfoptions", "enableRF", true, "Set to false to disable RF support in this mod");
+		rfSupport = config.getBoolean("enableRF", "general", true, "Set to false to disable RF support in this mod");
 		
-		rfCost = config.get("rfoptions", "rfCost", 40, "RF per tick that the machines use");
+		rfCost = config.getInt("rfCost", "rfoptions", 40, 1, 50000, "RF per tick that the machines use");
 		if (rfCost<=0) rfCost = 1000; //Cheater! Take that! :P
 		
-		rfStored = config.get("rfoptions", "rfStored", 40000, "Amount of RF that the Engines store, needs to be at least the same as the cost");
+		rfStored = config.getInt("rfStored", "rfoptions", 40000, rfCost, 100000, "Amount of RF that the Engines store, needs to be at least the same as the cost");
 		if (rfStored<rfCost) rfStored = rfCost;
 		
-		rfRate = config.get("rfoptions", "rfRate", 1000, "The max rate at which RF can flow into the machines");
+		rfRate = config.getInt("rfRate", "rfoptions", 1000, 1, 100000, "The max rate at which RF can flow into the machines");
 		if (rfRate<=0) rfRate = 1000;
 		
-		enableGenerator = config.get("rfoptions", "generator", true, "Allows the PA generator to be made");
+		//enable blocks		
+		minerEnabled = config.getBoolean("miner", "blocks", true, "Miner Block is enabled (requires restart)");
+		chopperEnabled = config.getBoolean("chopper", "blocks", true, "Tree Chopper Block is enabled (requires restart)");
+		planterEnabled = config.getBoolean("planter", "blocks", true, "Planter/Harvester Block is enabled (requires restart)");
+		generatorEnabled = config.getBoolean("generator", "blocks", true, "Generator Block is enabled (requires restart)");
 		
-		//enable blocks
-		minerEnabled = config.get("blocks", "miner", true, "Miner Block is enabled");
-		chopperEnabled = config.get("blocks", "chopper", true, "Tree Chopper Block is enabled");
-		generatorEnabled = config.get("blocks", "chopper", true, "Generator Block is enabled");
+		allowWoodenLevel = config.getBoolean("wooden", "upgrades", true, "Allow wooden level blocks (requires restart)");
+		allowStoneLevel = config.getBoolean("stone", "upgrades", true, "Allow stone level blocks (requires restart)");
+		allowIronLevel = config.getBoolean("iron", "upgrades", true, "Allow iron level blocks (requires restart)");
+		allowDiamondLevel = config.getBoolean("diamond", "upgrades", true, "Allow diamond level blocks (requires restart)");
 		
-		allowWoodenLevel = config.get("upgrades", "wooden", true, "Allow wooden level blocks");
-		allowStoneLevel = config.get("upgrades", "stone", true, "Allow stone level blocks");
-		allowIronLevel = config.get("upgrades", "iron", true, "Allow iron level blocks");
-		allowDiamondLevel = config.get("upgrades", "diamond", true, "Allow diamond level blocks");
+		//save if changed
+		if (config.hasChanged()) save();
+	}
+	
+	public static boolean allowLevel(int level) {
+		if (level == ToolHelper.LEVEL_WOOD) return allowWoodenLevel;
+		else if (level == ToolHelper.LEVEL_STONE) return allowStoneLevel;
+		else if (level == ToolHelper.LEVEL_IRON) return allowIronLevel;
+		else if (level == ToolHelper.LEVEL_DIAMOND) return allowDiamondLevel;
+		return false;
+	}
+	
+	public static void save() {
+		config.save();
+	}
+	
+	public static void postInit() {
+		save();
 	}
 }

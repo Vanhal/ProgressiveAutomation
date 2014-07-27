@@ -7,98 +7,61 @@ import com.vanhal.progressiveautomation.ref.ToolHelper;
 public class PABlocks {
 
 	public static void preInit() {
-		//miners
-		if (PAConfig.minerEnabled && PAConfig.allowWoodenLevel) woodenMiner = new BlockMiner(ToolHelper.LEVEL_WOOD);
-		if (PAConfig.minerEnabled && PAConfig.allowStoneLevel) stoneMiner = new BlockMiner(ToolHelper.LEVEL_STONE);
-		if (PAConfig.minerEnabled && PAConfig.allowIronLevel) ironMiner = new BlockMiner(ToolHelper.LEVEL_IRON);
-		if (PAConfig.minerEnabled && PAConfig.allowDiamondLevel) diamondMiner = new BlockMiner(ToolHelper.LEVEL_DIAMOND);
-		
-		//choppers
-		if (PAConfig.chopperEnabled && PAConfig.allowWoodenLevel) woodenChopper = new BlockChopper(ToolHelper.LEVEL_WOOD);
-		if (PAConfig.chopperEnabled && PAConfig.allowStoneLevel) stoneChopper = new BlockChopper(ToolHelper.LEVEL_STONE);
-		if (PAConfig.chopperEnabled && PAConfig.allowIronLevel) ironChopper = new BlockChopper(ToolHelper.LEVEL_IRON);
-		if (PAConfig.chopperEnabled && PAConfig.allowDiamondLevel) diamondChopper = new BlockChopper(ToolHelper.LEVEL_DIAMOND);
-		
-		//generators
-		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowWoodenLevel)
-			woodenGenerator = new BlockGenerator(ToolHelper.LEVEL_WOOD);
-		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowStoneLevel)
-			stoneGenerator = new BlockGenerator(ToolHelper.LEVEL_STONE);
-		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowIronLevel)
-			ironGenerator = new BlockGenerator(ToolHelper.LEVEL_IRON);
-		if (PAConfig.generatorEnabled && PAConfig.rfSupport && PAConfig.allowDiamondLevel)
-			diamondGenerator = new BlockGenerator(ToolHelper.LEVEL_DIAMOND);
+		//create the blocks
+		for (int i = 0; i <= 3; i++) {
+			if (PAConfig.allowLevel(i)) {
+				if (PAConfig.minerEnabled) miner[i] = new BlockMiner(i);
+				if (PAConfig.chopperEnabled) chopper[i] = new BlockChopper(i);
+				if (PAConfig.planterEnabled) planter[i] = new BlockPlanter(i);
+				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator[i] = new BlockGenerator(i);
+			}
+		}
 		
 		//preInit
-		if (woodenMiner!=null) woodenMiner.preInit();
-		if (stoneMiner!=null) stoneMiner.preInit();
-		if (ironMiner!=null) ironMiner.preInit();
-		if (diamondMiner!=null) diamondMiner.preInit();
-		
-		if (woodenChopper!=null) woodenChopper.preInit();
-		if (stoneChopper!=null) stoneChopper.preInit();
-		if (ironChopper!=null) ironChopper.preInit();
-		if (diamondChopper!=null) diamondChopper.preInit();
-		
-		if (woodenGenerator!=null) woodenGenerator.preInit();
-		if (stoneGenerator!=null) stoneGenerator.preInit();
-		if (ironGenerator!=null) ironGenerator.preInit();
-		if (diamondGenerator!=null) diamondGenerator.preInit();
+		for (int i = 0; i <= 3; i++) {
+			if (PAConfig.allowLevel(i)) {
+				miner[i].preInit();
+				chopper[i].preInit();
+				planter[i].preInit();
+				generator[i].preInit();
+			}
+		}
 	}
 	
 	public static void init() {
-		
-		if (woodenMiner!=null) woodenMiner.init();
-		if (stoneMiner!=null) stoneMiner.init();
-		if (ironMiner!=null) ironMiner.init();
-		if (diamondMiner!=null) diamondMiner.init();
-		
-		if (woodenChopper!=null) woodenChopper.init();
-		if (stoneChopper!=null) stoneChopper.init();
-		if (ironChopper!=null) ironChopper.init();
-		if (diamondChopper!=null) diamondChopper.init();
-		
-		if (woodenGenerator!=null) woodenGenerator.init();
-		if (stoneGenerator!=null) stoneGenerator.init();
-		if (ironGenerator!=null) ironGenerator.init();
-		if (diamondGenerator!=null) diamondGenerator.init();
+		for (int i = 0; i <= 3; i++) {
+			if (PAConfig.allowLevel(i)) {
+				miner[i].init();
+				chopper[i].init();
+				planter[i].init();
+				generator[i].init();
+			}
+		}
 	}
 	
 	public static void postInit() {
-		
-		if (woodenMiner!=null) woodenMiner.postInit();
-		if (stoneMiner!=null) stoneMiner.postInit();
-		if (ironMiner!=null) ironMiner.postInit();
-		if (diamondMiner!=null) diamondMiner.postInit();
-		
-		if (woodenChopper!=null) woodenChopper.postInit();
-		if (stoneChopper!=null) stoneChopper.postInit();
-		if (ironChopper!=null) ironChopper.postInit();
-		if (diamondChopper!=null) diamondChopper.postInit();
-		
-		if (woodenGenerator!=null) woodenGenerator.postInit();
-		if (stoneGenerator!=null) stoneGenerator.postInit();
-		if (ironGenerator!=null) ironGenerator.postInit();
-		if (diamondGenerator!=null) diamondGenerator.postInit();
+		for (int i = 0; i <= 3; i++) {
+			if (PAConfig.allowLevel(i)) {
+				miner[i].postInit();
+				chopper[i].postInit();
+				planter[i].postInit();
+				generator[i].postInit();
+			}
+		}
 	}
 	
 	//blocks
 	
 	//miners
-	public static BlockMiner woodenMiner = null;
-	public static BlockMiner stoneMiner = null;
-	public static BlockMiner ironMiner = null;
-	public static BlockMiner diamondMiner = null;
+	public static BlockMiner[] miner = new BlockMiner[4];
 	
 	//choppers
-	public static BlockChopper woodenChopper = null;
-	public static BlockChopper stoneChopper = null;
-	public static BlockChopper ironChopper = null;
-	public static BlockChopper diamondChopper = null;
+	public static BlockChopper[] chopper = new BlockChopper[4];
+	
+	//planters
+	public static BlockPlanter[] planter = new BlockPlanter[4];
 	
 	//generators
-	public static BlockGenerator woodenGenerator = null;
-	public static BlockGenerator stoneGenerator = null;
-	public static BlockGenerator ironGenerator = null;
-	public static BlockGenerator diamondGenerator = null;
+	public static BlockGenerator[] generator = new BlockGenerator[4];
+
 }
