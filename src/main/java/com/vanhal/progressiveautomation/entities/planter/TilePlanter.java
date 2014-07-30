@@ -109,7 +109,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 	
 	
-	private void harvestPlant(int n) {
+	protected void harvestPlant(int n) {
 		Point3I currentBlock = getPoint(n);
 		
 		Block actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
@@ -125,7 +125,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 		hoeGround(n, true);
 	}
 	
-	private boolean plantSeed(int n, boolean doAction) {
+	protected boolean plantSeed(int n, boolean doAction) {
 		if (slots[SLOT_SEEDS]!=null) {
 			if (slots[SLOT_SEEDS].stackSize>0) {
 				Point3I point = getPoint(n);
@@ -155,7 +155,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 		return false;
 	}
 
-	private boolean checkPlant(int n) {
+	protected boolean checkPlant(int n) {
 		Point3I plantPoint = getPoint(n);
 		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
 		if (plantBlock instanceof IGrowable) {
@@ -165,12 +165,12 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 	
 	
-	private Point3I getPoint(int n) {
+	protected Point3I getPoint(int n) {
 		Point2I p1 = spiral(n+1, xCoord, zCoord);
 		return new Point3I(p1.getX(), yCoord + 2, p1.getY());
 	}
 	
-	private void hoeGround(int n, boolean reverse) {
+	protected void hoeGround(int n, boolean reverse) {
 		Point3I plantPoint = getPoint(n);
 		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
 		Point3I dirtPoint = new Point3I(plantPoint.getX(), plantPoint.getY() - 1, plantPoint.getZ());
@@ -196,7 +196,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	 * This gives the current status of the Planter
 	 * @return int 0 for waiting, 1 for harvesting, 2 for planting
 	 */
-	private int statusSet = 0;
+	protected int statusSet = 0;
 	
 	public int getStatus() {
 		if (worldObj.isRemote) {

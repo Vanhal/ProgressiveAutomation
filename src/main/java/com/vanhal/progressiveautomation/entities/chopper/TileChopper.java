@@ -274,6 +274,14 @@ public class TileChopper extends UpgradeableTileEntity {
 		}
 	}
 	
+	protected boolean testOre(int OreID, int x, int y, int z) {
+		Block _block = worldObj.getBlock(x, y, z);
+		int metaData = worldObj.getBlockMetadata(x, y, z);
+		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), metaData);
+		int[] ordIDs = OreDictionary.getOreIDs(testItem);
+		return false;
+	}
+	
 	public boolean readyToBurn() {
 		if (slots[SLOT_AXE]!=null) {
 			if (scanBlocks()) {

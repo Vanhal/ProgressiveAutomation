@@ -57,7 +57,7 @@ public class BlockPlanter extends BaseBlock {
 				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.planter[ToolHelper.LEVEL_IRON], 'p', Items.diamond_hoe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', Blocks.log, 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_hoe});
+				"scs", "srs", "sps", 's', "logWood", 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_hoe});
 		}
 		
 		

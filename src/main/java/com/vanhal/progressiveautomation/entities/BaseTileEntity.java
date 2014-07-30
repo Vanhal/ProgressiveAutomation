@@ -223,6 +223,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		if ( (slot<0) || (slot>SLOT_INVENTORY_END) ) return false;
 		if ( (slots[slot] != null) && (slots[slot].isItemEqual(stack)) ) {
 			int availSpace = this.getInventoryStackLimit() - slots[slot].stackSize;
 			if (availSpace>0) {
@@ -235,7 +236,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
-		if ( (SLOT_INVENTORY_START>=0) && (slot<=SLOT_INVENTORY_END) ) {
+		if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
 			return true;
 		}
 		return false;

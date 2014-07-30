@@ -46,7 +46,7 @@ public class BlockMiner extends BaseBlock {
 				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.miner[ToolHelper.LEVEL_IRON], 'p', Items.diamond_pickaxe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', Blocks.log, 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_pickaxe});
+				"scs", "srs", "sps", 's', "logWood", 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_pickaxe});
 		}
 		
 		

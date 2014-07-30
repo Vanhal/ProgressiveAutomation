@@ -60,7 +60,7 @@ public class BlockGenerator extends BaseBlock {
 				"ses", "scs", "sss", 's', Items.diamond, 'c', PABlocks.generator[ToolHelper.LEVEL_IRON], 'e', PAItems.rfEngine});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sps", "ses", "srs", 's', Blocks.log, 'r', Blocks.furnace, 'p', Blocks.redstone_block, 'e', PAItems.rfEngine});
+				"sps", "ses", "srs", 's', "logWood", 'r', Blocks.furnace, 'p', Blocks.redstone_block, 'e', PAItems.rfEngine});
 		}
 		
 		

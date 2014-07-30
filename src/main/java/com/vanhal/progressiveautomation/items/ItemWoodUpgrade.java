@@ -20,7 +20,7 @@ public class ItemWoodUpgrade extends ItemUpgrade {
 	
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Blocks.log, 'r', Items.redstone});
+			"ppp", "prp", "ppp", 'p', "logWood", 'r', Items.redstone});
 		GameRegistry.addRecipe(recipe);
 	}
 	

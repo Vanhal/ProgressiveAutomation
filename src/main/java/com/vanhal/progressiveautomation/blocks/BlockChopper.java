@@ -47,7 +47,7 @@ public class BlockChopper extends BaseBlock {
 				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.chopper[ToolHelper.LEVEL_IRON], 'p', Items.diamond_axe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', Blocks.log, 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_axe});
+				"scs", "srs", "sps", 's', "logWood", 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_axe});
 		}
 		
 		
