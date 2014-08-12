@@ -49,6 +49,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			SLOT_INVENTORY_START = numSlots - 8;
 			SLOT_INVENTORY_END = numSlots;
 			//ProgressiveAutomation.logger.info("Start: "+SLOT_INVENTORY_START+" End: "+SLOT_INVENTORY_END);
+		} else {
+			SLOT_INVENTORY_START = SLOT_INVENTORY_END = numSlots;
 		}
 	}
 	

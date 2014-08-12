@@ -112,7 +112,7 @@ public class TileMiner extends UpgradeableTileEntity {
 				//ProgressiveAutomation.logger.info("Tool: "+tryBlock.getHarvestTool(meta)+", Level: "+tryBlock.getHarvestLevel(meta)+", Can use Pick: "+tryBlock.isToolEffective("pickaxe", meta));
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
-				} if (tryBlock.getHarvestTool(meta)=="pickaxe") {
+				} if ( (tryBlock.getHarvestTool(meta)=="pickaxe") || (tryBlock.getHarvestTool(meta)=="chisel") ) {
 					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(meta)) {
 						return 2;
 					}

@@ -171,4 +171,9 @@ public class TileGenerator extends UpgradeableTileEntity {
 			}
 		}
 	}
+	
+	/* ISided Stuff */
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		return super.isItemValidForSlot(slot, stack);
+	}
 }
