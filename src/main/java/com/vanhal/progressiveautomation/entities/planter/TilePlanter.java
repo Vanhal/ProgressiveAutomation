@@ -185,7 +185,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 				if (plantBlock.isAir(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ())) {
 					if ((dirtBlock == Blocks.grass || dirtBlock == Blocks.dirt)) {
 						worldObj.setBlock(dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ(), Blocks.farmland);
-						ToolHelper.damageTool(slots[SLOT_HOE], worldObj, dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ());
+						if (ToolHelper.damageTool(slots[SLOT_HOE], worldObj, dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ())) {
+							slots[SLOT_HOE] = null;
+						}
 					}
 				}
 			}
