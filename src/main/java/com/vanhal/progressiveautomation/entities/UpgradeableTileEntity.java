@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.items.ItemCobbleGenUpgrade;
+import com.vanhal.progressiveautomation.items.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 
@@ -28,8 +29,8 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		numberUpgrades = nbt.getInteger("NumUpgrades");
-		hasCobbleUpgrade = nbt.getBoolean("hasWitherUpgrade");
-		hasWitherUpgrade = nbt.getBoolean("hasCobbleUpgrade");
+		hasWitherUpgrade = nbt.getBoolean("hasWitherUpgrade");
+		hasCobbleUpgrade = nbt.getBoolean("hasCobbleUpgrade");
 	}
 	
 	/* IUpgradeable methods */
@@ -46,7 +47,9 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	}
 
 	public int getRange() {
-		return (getUpgrades() * PAConfig.upgradeRange) + 1;
+		int range = (getUpgrades() * PAConfig.upgradeRange) + 1;
+		if (hasWitherUpgrade) range = range * PAConfig.witherMultiplier;
+		return range;
 	}
 
 	public int getUpgradeLevel() {
@@ -83,6 +86,13 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 				if (!hasCobbleUpgrade) {
 					slots[SLOT_UPGRADE] = null;
 					hasCobbleUpgrade = true;
+					return true;
+				}
+			}
+			if (slots[SLOT_UPGRADE].getItem() instanceof ItemWitherUpgrade) {
+				if (!hasWitherUpgrade) {
+					slots[SLOT_UPGRADE] = null;
+					hasWitherUpgrade = true;
 					return true;
 				}
 			}

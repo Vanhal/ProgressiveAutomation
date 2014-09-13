@@ -2,6 +2,8 @@ package com.vanhal.progressiveautomation.gui.container;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
+import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.gui.slots.SlotPower;
 
@@ -20,6 +22,8 @@ public class BaseContainer extends Container {
 	
 	protected int lastProgress = -1;
 	protected int lastBurnLevel = -1;
+	protected int lastUpgrades = -1;
+	protected boolean lastWitherUpgrade = false;
 	
 	public BaseContainer(BaseTileEntity inEntity, int x, int y) {
 		this(inEntity, x, y, true);
@@ -85,6 +89,17 @@ public class BaseContainer extends Container {
 				i.sendProgressBarUpdate(this, 1, entity.getProgress());
 			}
 			
+			if (entity instanceof UpgradeableTileEntity) {
+				UpgradeableTileEntity upEntity = (UpgradeableTileEntity) entity;
+				if (lastUpgrades != upEntity.getUpgrades()) {
+					lastUpgrades = upEntity.getUpgrades();
+					i.sendProgressBarUpdate(this, 2, lastUpgrades);
+				} else if (lastWitherUpgrade != upEntity.hasWitherUpgrade) {
+					lastWitherUpgrade = upEntity.hasWitherUpgrade;
+					i.sendProgressBarUpdate(this, 3, (lastWitherUpgrade)?1:0);
+				}
+			}
+			
 			sendUpdates(i);
 		}
 	}
@@ -97,6 +112,14 @@ public class BaseContainer extends Container {
 		} else if (i==1) {
 			//ProgressiveAutomation.logger.info("Progress Level: "+value);
 			entity.setProgress(value);
+		}
+		if (entity instanceof UpgradeableTileEntity) {
+			UpgradeableTileEntity upEntity = (UpgradeableTileEntity) entity;
+			if (i==2) {
+				upEntity.setUpgrades(value);
+			} else if (i==3) {
+				upEntity.hasWitherUpgrade = (value==1);
+			}
 		}
 	}
 

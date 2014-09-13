@@ -28,7 +28,7 @@ public class GUIChopper extends BaseGUI {
 	
 	protected void drawText() {
 		drawString(StringHelper.localize("gui.chopper"), 5, GRAY);
-		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(chopper.getRange()), infoScreenX, infoScreenW, infroScreenY3, WHITE);
+		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(chopper.getRange()), infoScreenX, infoScreenW, infroScreenY3, (chopper.hasWitherUpgrade)?GREEN:WHITE);
 		
 		boolean readyToChop = false;
 		if ( (!chopper.hasFuel()) && (!chopper.isBurning()) ) {

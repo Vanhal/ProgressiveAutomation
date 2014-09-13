@@ -121,6 +121,21 @@ public class BaseBlock extends BlockContainer {
                 }
             }
             
+            //drop the other types of upgrades first
+            if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
+            	UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
+            	if (tileMachine.hasCobbleUpgrade) {
+            		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
+            		dumpItems(world, x, y, z, cobbleGen);
+            		tileMachine.hasCobbleUpgrade = false;
+            	}
+            	if (tileMachine.hasWitherUpgrade) {
+            		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
+            		dumpItems(world, x, y, z, wither);
+            		tileMachine.hasWitherUpgrade = false;
+            	}
+            }
+            
             //if entity is IUpgradeable, drop the upgrades
             if (world.getTileEntity(x, y, z) instanceof IUpgradeable) {
             	IUpgradeable tileMachine = (IUpgradeable)world.getTileEntity(x, y, z);
@@ -138,17 +153,7 @@ public class BaseBlock extends BlockContainer {
     	    	}
     	    }
             
-            if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-            	UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
-            	if (tileMachine.hasCobbleUpgrade) {
-            		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
-            		dumpItems(world, x, y, z, cobbleGen);
-            	}
-            	/*if (tileMachine.hasWitherUpgrade) {
-            		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
-            		dumpItems(world, x, y, z, wither);
-            	}*/
-            }
+            
 
             world.func_147453_f(x, y, z, block);
         }

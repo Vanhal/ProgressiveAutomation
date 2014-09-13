@@ -27,7 +27,7 @@ public class GUIPlanter extends BaseGUI {
 	
 	protected void drawText() {
 		drawString(StringHelper.localize("gui.planter"), 5, GRAY);
-		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(planter.getRange()), infoScreenX, infoScreenW, infroScreenY3, WHITE);
+		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(planter.getRange()), infoScreenX, infoScreenW, infroScreenY3, (planter.hasWitherUpgrade)?GREEN:WHITE);
 		
 		boolean readyToPlant = false;
 		if ( (!planter.hasFuel()) && (!planter.isBurning()) ) {

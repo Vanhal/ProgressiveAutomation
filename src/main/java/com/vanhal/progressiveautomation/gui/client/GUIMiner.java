@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.gui.client;
 
+import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
@@ -28,7 +29,7 @@ public class GUIMiner extends BaseGUI {
 	
 	protected void drawText() {
 		drawString(StringHelper.localize("gui.miner"), 5, GRAY);
-		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(miner.getRange()), infoScreenX, infoScreenW, infroScreenY3, WHITE);
+		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(miner.getRange()), infoScreenX, infoScreenW, infroScreenY3, (miner.hasWitherUpgrade)?GREEN:WHITE);
 		boolean readyToMine = true;
 		if ( (!miner.hasFuel()) && (!miner.isBurning()) ) {
 			String fuelString = "gui.need.fuel";

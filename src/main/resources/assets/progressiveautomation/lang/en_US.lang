@@ -21,6 +21,7 @@ item.StoneUpgrade.name=Stone Upgrade
 item.IronUpgrade.name=Iron Upgrade
 item.DiamondUpgrade.name=Diamond Upgrade
 item.CobbleUpgrade.name=Cobble Gen Upgrade
+item.WitherUpgrade.name=Wither Upgrade
 itemGroup.PATab=Progressive Automation
 
 
