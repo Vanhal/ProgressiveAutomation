@@ -5,7 +5,9 @@ import java.util.Random;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.IUpgradeable;
+import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
+import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
@@ -135,6 +137,18 @@ public class BaseBlock extends BlockContainer {
     	    		dumpItems(world, x, y, z, upgrades);
     	    	}
     	    }
+            
+            if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
+            	UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
+            	if (tileMachine.hasCobbleUpgrade) {
+            		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
+            		dumpItems(world, x, y, z, cobbleGen);
+            	}
+            	/*if (tileMachine.hasWitherUpgrade) {
+            		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
+            		dumpItems(world, x, y, z, wither);
+            	}*/
+            }
 
             world.func_147453_f(x, y, z, block);
         }

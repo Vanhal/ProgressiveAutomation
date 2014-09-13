@@ -220,30 +220,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	public void setStatus(int status) {
 		statusSet = status;
 	}
-	
 
-	protected int lastUpgrades = 0;
-	
-	protected int getCurrentUpgrades() {
-		if (SLOT_UPGRADE==-1) return 0;
-		if (this.getStackInSlot(SLOT_UPGRADE)==null) {
-			return 0;
-		} else {
-			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
-		}
-	}
-	
-	public void checkForChanges() {
-		//check upgrades
-		if (getCurrentUpgrades() != lastUpgrades) {
-			//remove the upgrade and add it to the upgrades var
-			if (slots[SLOT_UPGRADE].isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
-				addUpgrades(getCurrentUpgrades());
-				slots[SLOT_UPGRADE] = null;
-				lastUpgrades = getCurrentUpgrades();
-			}
-		}
-	}
 
 	public boolean readyToBurn() {
 		if (slots[SLOT_HOE]!=null) {

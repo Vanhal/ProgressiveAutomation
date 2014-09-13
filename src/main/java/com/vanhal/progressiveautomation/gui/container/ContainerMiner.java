@@ -17,7 +17,9 @@ import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.gui.slots.SlotItem;
 import com.vanhal.progressiveautomation.gui.slots.SlotTool;
+import com.vanhal.progressiveautomation.gui.slots.SlotUpgrades;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
+import com.vanhal.progressiveautomation.items.ItemUpgrade;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
@@ -39,7 +41,7 @@ public class ContainerMiner extends BaseContainer {
 		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
 		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_PICKAXE,  miner.getUpgradeLevel(), miner, miner.SLOT_PICKAXE, 37, 52)); //pickaxe
 		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_SHOVEL, miner.getUpgradeLevel(), miner, miner.SLOT_SHOVEL, 63, 52)); //shovel
-		this.addSlotToContainer(new SlotItem(updateType, miner, miner.SLOT_UPGRADE, 89, 52)); //upgrades
+		this.addSlotToContainer(new SlotUpgrades(miner.getUpgradeLevel(), miner, miner.SLOT_UPGRADE, 89, 52)); //upgrades
 
 		//output slots
 		addInventory(miner, miner.SLOT_INVENTORY_START, 112, 16, 3, 3);
@@ -88,6 +90,10 @@ public class ContainerMiner extends BaseContainer {
              		if (!this.mergeItemStack(stackInSlot, 4, 5, false)) {
              			return null;
              		}
+             	} else if ( (stackInSlot.getItem() instanceof ItemUpgrade) && (((ItemUpgrade)stackInSlot.getItem()).getLevel()==-1) ) {
+             		if (!this.mergeItemStack(stackInSlot, 4, 5, false)) {
+             			return null;
+             		}
              	} else if (!this.mergeItemStack(stackInSlot, 5, 14, false)) {
              		return null;
              	}
@@ -108,6 +114,7 @@ public class ContainerMiner extends BaseContainer {
 	protected int lastMinedBlocks = -1;
 	protected int lastMineBlocks = -1;
 	protected int lastUpgrades = -1;
+	protected boolean lastHasCobble = false;
 	
 	public void sendUpdates(ICrafting i) {
 		TileMiner miner = (TileMiner) entity;
@@ -125,6 +132,11 @@ public class ContainerMiner extends BaseContainer {
 			lastUpgrades = miner.getUpgrades();
 			i.sendProgressBarUpdate(this, 4, lastUpgrades);
 		}
+		
+		if (lastHasCobble != miner.hasCobbleUpgrade) {
+			lastHasCobble = miner.hasCobbleUpgrade;
+			i.sendProgressBarUpdate(this, 5, (lastHasCobble)?1:0);
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -136,6 +148,8 @@ public class ContainerMiner extends BaseContainer {
 			((TileMiner) entity).setMinedBlocks(value);
 		} else if (i==4) {
 			((TileMiner) entity).setUpgrades(value);
+		} else if (i==5) {
+			((TileMiner) entity).hasCobbleUpgrade = (value==1);
 		}
 	}
 

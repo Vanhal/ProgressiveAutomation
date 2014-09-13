@@ -68,6 +68,7 @@ public class TileMiner extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			checkInventory();
+			useCobbleGen();
 
 			if ( (!isDone()) && (isBurning()) ) {
 				//mine!
@@ -299,11 +300,24 @@ public class TileMiner extends UpgradeableTileEntity {
 	public boolean isDone() {
 		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
 	}
+	
+	//if we have a cobblegen upgrade then this function will deal with adding cobble that is generated
+	public void useCobbleGen() {
+		if (this.hasCobbleUpgrade) {
+			if ( (slots[1] == null) || (slots[1].stackSize==0) ) {
+				if (slots[SLOT_PICKAXE]!=null) {
+					if (ToolHelper.damageTool(slots[SLOT_PICKAXE], worldObj, this.xCoord, this.yCoord, this.zCoord)) {
+						slots[SLOT_PICKAXE] = null;
+					}
+					slots[1] = new ItemStack(Blocks.cobblestone);
+				}
+			}
+		}
+	}
 
 	/* Check for changes to tools and upgrades */
 	protected int lastPick = -1;
 	protected int lastShovel = -1;
-	protected int lastUpgrades = 0;
 
 	public void checkForChanges() {
 		boolean update = false;
@@ -330,14 +344,8 @@ public class TileMiner extends UpgradeableTileEntity {
 		}
 
 		//check upgrades
-		if (getCurrentUpgrades() != lastUpgrades) {
-			//remove the upgrade and add it to the upgrades var
-			if (slots[4].isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
-				addUpgrades(getCurrentUpgrades());
-				slots[4] = null;
-				lastUpgrades = getCurrentUpgrades();
-				update = true;
-			}
+		if (upgradeChanges()) {
+			update = true;
 		}
 
 		//update

@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.items.ItemCobbleGenUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 
@@ -20,11 +21,15 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("NumUpgrades", numberUpgrades);
+		nbt.setBoolean("hasWitherUpgrade", hasWitherUpgrade);
+		nbt.setBoolean("hasCobbleUpgrade", hasCobbleUpgrade);
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		numberUpgrades = nbt.getInteger("NumUpgrades");
+		hasCobbleUpgrade = nbt.getBoolean("hasWitherUpgrade");
+		hasWitherUpgrade = nbt.getBoolean("hasCobbleUpgrade");
 	}
 	
 	/* IUpgradeable methods */
@@ -50,6 +55,48 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 
 	public void setUpgradeLevel(int level) {
 		toolLevel = level;
+	}
+	
+	//check for changes to upgrades
+	protected int lastUpgrades = 0;
+	
+	public boolean hasWitherUpgrade = false;
+	public boolean hasCobbleUpgrade = false;
+	
+	public void checkForChanges() {
+		this.upgradeChanges();
+	}
+	
+	public boolean upgradeChanges() {
+		//check upgrades
+		if (getCurrentUpgrades() != lastUpgrades) {
+			//remove the upgrade and add it to the upgrades var
+			if (slots[SLOT_UPGRADE].isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
+				addUpgrades(getCurrentUpgrades());
+				slots[SLOT_UPGRADE] = null;
+				lastUpgrades = getCurrentUpgrades();
+				return true;
+			}
+		}
+		if ( (slots[SLOT_UPGRADE] != null) && (slots[SLOT_UPGRADE].stackSize>0) ) {
+			if (slots[SLOT_UPGRADE].getItem() instanceof ItemCobbleGenUpgrade) {
+				if (!hasCobbleUpgrade) {
+					slots[SLOT_UPGRADE] = null;
+					hasCobbleUpgrade = true;
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	protected int getCurrentUpgrades() {
+		if (SLOT_UPGRADE==-1) return 0;
+		if (this.getStackInSlot(SLOT_UPGRADE)==null) {
+			return 0;
+		} else {
+			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
+		}
 	}
 	
 	//override isided stuff

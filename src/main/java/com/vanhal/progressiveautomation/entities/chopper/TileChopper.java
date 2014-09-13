@@ -319,14 +319,6 @@ public class TileChopper extends UpgradeableTileEntity {
 		return false;
 	}
 
-	protected int getCurrentUpgrades() {
-		if (SLOT_UPGRADE==-1) return 0;
-		if (this.getStackInSlot(SLOT_UPGRADE)==null) {
-			return 0;
-		} else {
-			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
-		}
-	}
 	
 	//gui methods
 	public boolean isPlanting() {
@@ -342,7 +334,6 @@ public class TileChopper extends UpgradeableTileEntity {
 	
 
 	protected int lastAxe = -1;
-	protected int lastUpgrades = 0;
 	
 	public void checkForChanges() {
 		boolean update = false;
@@ -359,16 +350,10 @@ public class TileChopper extends UpgradeableTileEntity {
 		}
 
 		//check upgrades
-		if (getCurrentUpgrades() != lastUpgrades) {
-			//remove the upgrade and add it to the upgrades var
-			if (slots[SLOT_UPGRADE].isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
-				addUpgrades(getCurrentUpgrades());
-				slots[SLOT_UPGRADE] = null;
-				lastUpgrades = getCurrentUpgrades();
-				update = true;
-			}
+		if (upgradeChanges()) {
+			update = true;
 		}
-
+		
 		//update
 		if (update) {
 			//ProgressiveAutomation.logger.info("Inventory Changed Update");

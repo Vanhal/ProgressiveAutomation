@@ -23,6 +23,11 @@ public class PAConfig {
 	public static boolean allowIronLevel;
 	public static boolean allowDiamondLevel;
 	
+	//special upgrades
+	public static boolean allowCobbleUpgrade;
+	public static boolean allowWitherUpgrade;
+	public static int witherMultiplier;
+	
 	//rf options
 	public static boolean rfSupport;
 	public static int rfCost;
@@ -64,6 +69,10 @@ public class PAConfig {
 		allowStoneLevel = config.getBoolean("stone", "upgrades", true, "Allow stone level blocks (requires restart)");
 		allowIronLevel = config.getBoolean("iron", "upgrades", true, "Allow iron level blocks (requires restart)");
 		allowDiamondLevel = config.getBoolean("diamond", "upgrades", true, "Allow diamond level blocks (requires restart)");
+		
+		allowCobbleUpgrade = config.getBoolean("cobblegen", "upgrades", true, "Allow cobble gen upgrade for the miner (requires restart)");
+		allowWitherUpgrade = config.getBoolean("wither", "upgrades", true, "Allow the wither upgrade (requires restart)");
+		witherMultiplier = config.getInt("witherMultiplier", "upgrades", 2, 2, 10, "How much the wither upgrade extends the machines. (How much multiplies the upgrades by)");
 		
 		//save if changed
 		if (config.hasChanged()) save();

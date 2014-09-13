@@ -59,6 +59,10 @@ public class GUIMiner extends BaseGUI {
 	
 	protected void drawElements() {
 		drawFlame(miner.getPercentDone(), 10, 34);
+		if (miner.hasCobbleUpgrade) {
+			drawTexturedModalRect(guiLeft - 25, guiTop + 10, 231, 0, 25, 64);
+			
+		}
 	}
 	
 	

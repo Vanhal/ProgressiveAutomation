@@ -10,6 +10,7 @@ public class PAItems {
 		if (PAConfig.allowStoneLevel) stoneUpgrade = new ItemStoneUpgrade();
 		if (PAConfig.allowIronLevel) ironUpgrade = new ItemIronUpgrade();
 		if (PAConfig.allowDiamondLevel) diamondUpgrade = new ItemDiamondUpgrade();
+		if (PAConfig.allowCobbleUpgrade) cobbleUpgrade = new ItemCobbleGenUpgrade();
 		
 		if (PAConfig.rfSupport) {
 			rfEngine = new ItemRFEngine();
@@ -29,7 +30,7 @@ public class PAItems {
 	}
 	
 	public static void init() {
-		
+		if (cobbleUpgrade!=null) cobbleUpgrade.preInit();
 	}
 	
 	public static void postInit() {
@@ -41,6 +42,8 @@ public class PAItems {
 	public static ItemStoneUpgrade stoneUpgrade = null;
 	public static ItemIronUpgrade ironUpgrade = null;
 	public static ItemDiamondUpgrade diamondUpgrade = null;
+	
+	public static ItemCobbleGenUpgrade cobbleUpgrade = null;
 	
 	public static ItemRFEngine rfEngine = null;
 	public static ItemRFEngine CheatRFEngine = null;
