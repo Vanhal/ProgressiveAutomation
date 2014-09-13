@@ -34,6 +34,9 @@ public class PAConfig {
 	public static int rfStored;
 	public static int rfRate;
 	
+	//misc options
+	public static boolean allowCoalPellets;
+	
 	
 	public static void init(Configuration handle) {
 		config = handle;
@@ -58,6 +61,9 @@ public class PAConfig {
 		
 		rfRate = config.getInt("rfRate", "rfoptions", 1000, 1, 100000, "The max rate at which RF can flow into the machines");
 		if (rfRate<=0) rfRate = 1000;
+		
+		//misc options 
+		allowCoalPellets = config.getBoolean("coalPellets", "general", true, "Allow coal pellets (requires restart)");
 		
 		//enable blocks		
 		minerEnabled = config.getBoolean("miner", "blocks", true, "Miner Block is enabled (requires restart)");

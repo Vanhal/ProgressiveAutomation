@@ -13,6 +13,8 @@ public class PAItems {
 		if (PAConfig.allowCobbleUpgrade) cobbleUpgrade = new ItemCobbleGenUpgrade();
 		if (PAConfig.allowWitherUpgrade) witherUpgrade = new ItemWitherUpgrade();
 		
+		if (PAConfig.allowCoalPellets) coalPellet = new ItemCoalPellet();
+		
 		if (PAConfig.rfSupport) {
 			rfEngine = new ItemRFEngine();
 			CheatRFEngine = new ItemCreativeRFEngine();
@@ -29,6 +31,8 @@ public class PAItems {
 			rfEngine.preInit();
 			CheatRFEngine.preInit();
 		}
+		
+		if (coalPellet!=null) coalPellet.preInit();
 	}
 	
 	public static void init() {
@@ -51,5 +55,6 @@ public class PAItems {
 	public static ItemRFEngine rfEngine = null;
 	public static ItemRFEngine CheatRFEngine = null;
 	
+	public static ItemCoalPellet coalPellet = null;
 	
 }
