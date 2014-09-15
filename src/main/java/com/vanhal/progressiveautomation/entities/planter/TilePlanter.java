@@ -67,6 +67,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 							currentTime = harvestTime;
 						}
 					}
+					
+				} else {
+					doSearch();
 				}
 				
 			}
