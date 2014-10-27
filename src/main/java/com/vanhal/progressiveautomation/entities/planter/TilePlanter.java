@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -30,6 +31,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 		super(12);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
 		setHarvestTime(80);
+		
+		// #36 Planter can't eject items to bottom
+		extDirection = ForgeDirection.DOWN;
 		
 		//slots
 		SLOT_HOE = 2;
