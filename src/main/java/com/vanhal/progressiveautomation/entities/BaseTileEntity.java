@@ -28,6 +28,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	protected int progress = 0;
 	protected int burnLevel = 0;
 	
+	/**
+	 * Direction to auto output items to
+	 */
 	public ForgeDirection extDirection = ForgeDirection.UP;
 	
 	protected Random RND = new Random();
