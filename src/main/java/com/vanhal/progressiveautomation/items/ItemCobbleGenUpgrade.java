@@ -25,7 +25,7 @@ public class ItemCobbleGenUpgrade extends ItemUpgrade {
 	
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "lrw", "ppp", 'p', Blocks.stone, 'r', PABlocks.miner[1], 'l', Items.lava_bucket, 'w', Items.water_bucket});
+			"ppp", "lrw", "ppp", 'p', Blocks.stone, 'r', PABlocks.miner[0], 'l', Items.lava_bucket, 'w', Items.water_bucket});
 		GameRegistry.addRecipe(recipe);
 	}
 	
