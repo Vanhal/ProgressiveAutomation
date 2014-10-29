@@ -1,5 +1,8 @@
 package com.vanhal.progressiveautomation.items;
 
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+
 import com.vanhal.progressiveautomation.PAConfig;
 
 public class PAItems {
@@ -22,11 +25,23 @@ public class PAItems {
 		}
 
 		//preInit them
-		if (woodUpgrade!=null) woodUpgrade.preInit();
-		if (stoneUpgrade!=null) stoneUpgrade.preInit();
-		if (ironUpgrade!=null) ironUpgrade.preInit();
-		if (diamondUpgrade!=null) diamondUpgrade.preInit();
-		if (witherUpgrade!=null) witherUpgrade.preInit();
+		Item previousTier = Items.redstone;
+		if (woodUpgrade!=null){
+			woodUpgrade.preInit(previousTier);
+			previousTier = woodUpgrade;
+		}
+		if (stoneUpgrade!=null) {
+			stoneUpgrade.preInit(previousTier);
+			previousTier = stoneUpgrade;
+		}
+		if (ironUpgrade!=null) {
+			ironUpgrade.preInit(previousTier);
+			previousTier = ironUpgrade;
+		}
+		if (diamondUpgrade!=null) {
+			diamondUpgrade.preInit(previousTier);
+		}
+		if (witherUpgrade!=null) witherUpgrade.preInit(null);
 
 		if (PAConfig.rfSupport) {
 			rfEngine.preInit();
@@ -37,7 +52,7 @@ public class PAItems {
 	}
 
 	public static void init() {
-		if (cobbleUpgrade!=null) cobbleUpgrade.preInit();
+		if (cobbleUpgrade!=null) cobbleUpgrade.preInit(null);
 	}
 
 	public static void postInit() {
