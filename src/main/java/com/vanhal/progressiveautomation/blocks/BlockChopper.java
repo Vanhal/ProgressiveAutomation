@@ -12,6 +12,7 @@ import com.vanhal.progressiveautomation.entities.miner.TileMinerStone;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -33,21 +34,23 @@ public class BlockChopper extends BaseBlock {
 		else return new TileChopper();
 	}
 	
-	public void addRecipe() {
+	public static final Block firstMiddleBlock = Blocks.furnace;
+	
+	public void addRecipe(Block middleBlock) {
 		ShapedOreRecipe recipe = null;
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.stone, 'c', PABlocks.chopper[ToolHelper.LEVEL_WOOD], 'p', Items.stone_axe});
+				"sss", "scs", "sps", 's', Blocks.stone, 'c', middleBlock, 'p', Items.stone_axe});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.chopper[ToolHelper.LEVEL_STONE], 'p', Items.iron_axe, 'b', Blocks.iron_block});
+				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', middleBlock, 'p', Items.iron_axe, 'b', Blocks.iron_block});
 		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.chopper[ToolHelper.LEVEL_IRON], 'p', Items.diamond_axe});
+				"sss", "scs", "sps", 's', Items.diamond, 'c', middleBlock, 'p', Items.diamond_axe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_axe});
+				"scs", "srs", "sps", 's', "logWood", 'r', middleBlock, 'c', Blocks.chest, 'p', Items.wooden_axe});
 		}
 		
 		

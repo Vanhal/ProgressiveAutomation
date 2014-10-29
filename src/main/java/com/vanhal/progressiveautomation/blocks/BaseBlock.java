@@ -174,13 +174,13 @@ public class BaseBlock extends BlockContainer {
 		world.spawnEntityInWorld(entItem);
 	}
 	
-	public void addRecipe() {
+	public void addRecipe(Block middleBlock) {
 		
 	}
 	
-	public void preInit() {
+	public void preInit(Block recipeMiddleBlock) {
 		GameRegistry.registerBlock(this, name);
-		addRecipe();
+		addRecipe(recipeMiddleBlock);
 	}
 	
 	public void init() {
