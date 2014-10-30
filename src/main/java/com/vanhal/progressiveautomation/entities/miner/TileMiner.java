@@ -23,6 +23,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileMiner extends UpgradeableTileEntity {
@@ -114,11 +115,11 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
 				} if ( (tryBlock.getHarvestTool(meta)=="pickaxe") || (tryBlock.getHarvestTool(meta)=="chisel") ) {
-					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(meta)) {
+					if (ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(2))) {
 						return 2;
 					}
 				} else if (tryBlock.getHarvestTool(meta)=="shovel") {
-					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(meta)) {
+					if (ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(3))) {
 						return 3;
 					}
 				} else {
@@ -272,13 +273,6 @@ public class TileMiner extends UpgradeableTileEntity {
 		} else {
 			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
 		}
-	}
-
-	public int getToolMineLevel(int slot) {
-		if (getStackInSlot(slot) != null) {
-			return ToolHelper.getHarvestLevel(getStackInSlot(slot));
-		}
-		return -1;
 	}
 
 	public int getMinedBlocks() {
