@@ -245,7 +245,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	protected boolean isTree(int x, int y, int z) { return isTree(testBlock(x,y,z)); }
 	
 	protected boolean isTree(String type) {
-		if (type.equalsIgnoreCase("logWood")) {
+		if ( (type.equalsIgnoreCase("logWood")) || (type.equalsIgnoreCase("woodRubber")) ) {
 			return true;
 		}
 		return false;
@@ -256,7 +256,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	protected boolean isLeaf(int x, int y, int z) { return isLeaf(testBlock(x,y,z)); }
 	
 	protected boolean isLeaf(String type) {
-		if (type.equalsIgnoreCase("treeLeaves")) {
+		if ( (type.equalsIgnoreCase("treeLeaves")) || (type.equalsIgnoreCase("leavesRubber")) ) {
 			return true;
 		}
 		return false;
@@ -362,7 +362,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	public int extraSlotCheck(int slot) {
-		if (OreDictionary.getOreID(slots[slot]) == OreDictionary.getOreID("treeSapling")) {
+		if (checkSapling(slots[slot])) {
 			return SLOT_SAPLINGS;
 		}
 		return -1;
@@ -371,10 +371,21 @@ public class TileChopper extends UpgradeableTileEntity {
 
 	/* ISided Stuff */
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot == SLOT_SAPLINGS) && (OreDictionary.getOreID(stack) == OreDictionary.getOreID("treeSapling")) ) {
+		if ( (slot == SLOT_SAPLINGS) && (checkSapling(stack)) ) {
     		return true;
     	}
 		return super.isItemValidForSlot(slot, stack);
+	}
+	
+	public static boolean checkSapling(ItemStack stack) {
+		if (
+			(OreDictionary.getOreID(stack) == OreDictionary.getOreID("treeSapling")) ||
+			(stack.getUnlocalizedName().compareToIgnoreCase("tile.mfr.rubberwood.sapling")==0)
+		) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 }

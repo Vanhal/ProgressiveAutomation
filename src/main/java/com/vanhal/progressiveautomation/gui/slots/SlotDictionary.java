@@ -1,5 +1,7 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -14,6 +16,8 @@ public class SlotDictionary extends Slot {
 	}
 
 	public boolean isItemValid(ItemStack itemStack) {
+		ProgressiveAutomation.logger.info("Name: "+itemStack.getUnlocalizedName());
+		ProgressiveAutomation.logger.info("Dic: "+OreDictionary.getOreName(OreDictionary.getOreID(itemStack)));
 		return (id == OreDictionary.getOreID(itemStack));
 	}
 }
