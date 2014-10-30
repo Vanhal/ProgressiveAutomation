@@ -3,6 +3,10 @@ package com.vanhal.progressiveautomation.entities.planter;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+<<<<<<< HEAD
+import net.minecraft.block.BlockNetherWart;
+=======
+>>>>>>> 172bf6c9f7d00399dfbdf03bc30e13d1fa3c78e0
 import net.minecraft.block.IGrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -165,8 +169,17 @@ public class TilePlanter extends UpgradeableTileEntity {
 	protected boolean checkPlant(int n) {
 		Point3I plantPoint = getPoint(n);
 		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+<<<<<<< HEAD
+		int metadata = worldObj.getBlockMetadata(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+		//for crops and anything that is IGrowable
 		if (plantBlock instanceof IGrowable) {
 			return !((IGrowable)plantBlock).func_149851_a(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), true);
+		} else if (plantBlock instanceof BlockNetherWart) { //nether wart
+			return (metadata >= 3);
+=======
+		if (plantBlock instanceof IGrowable) {
+			return !((IGrowable)plantBlock).func_149851_a(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), true);
+>>>>>>> 172bf6c9f7d00399dfbdf03bc30e13d1fa3c78e0
 		}
 		return false;
 	}
