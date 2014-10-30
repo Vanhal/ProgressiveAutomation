@@ -14,7 +14,7 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
-//ENV = System.getenv()
+ENV = System.getenv()
 
 ext.configFile = file "build.properties"
 
@@ -25,13 +25,13 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-//y = config.droneAlter as Integer
-//x = y
+y = config.droneAlter as Integer
+x = y
 
-//if(ENV.DRONE_BUILD_NUMBER)
-//x = ENV.DRONE_BUILD_NUMBER as Integer
+if(ENV.DRONE_BUILD_NUMBER)
+x = ENV.DRONE_BUILD_NUMBER as Integer
 
-//config.buildNum = x - y
+config.buildNum = x - y
 
 apply plugin: 'forge'
 
