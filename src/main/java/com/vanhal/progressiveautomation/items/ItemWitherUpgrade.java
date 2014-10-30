@@ -38,4 +38,9 @@ public class ItemWitherUpgrade extends ItemUpgrade {
 		list.add(EnumChatFormatting.GRAY + "Multiplies the range of a machine by "+PAConfig.witherMultiplier);
        
     }
+	
+	@SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack itemStack) {
+        return true;
+    }
 }

@@ -16,8 +16,6 @@ public class SlotDictionary extends Slot {
 	}
 
 	public boolean isItemValid(ItemStack itemStack) {
-		ProgressiveAutomation.logger.info("Name: "+itemStack.getUnlocalizedName());
-		ProgressiveAutomation.logger.info("Dic: "+OreDictionary.getOreName(OreDictionary.getOreID(itemStack)));
 		return (id == OreDictionary.getOreID(itemStack));
 	}
 }

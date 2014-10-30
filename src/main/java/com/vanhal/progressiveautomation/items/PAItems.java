@@ -1,6 +1,10 @@
 package com.vanhal.progressiveautomation.items;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.items.tools.ItemWitherDiamond;
+import com.vanhal.progressiveautomation.items.tools.ItemWitherIron;
+import com.vanhal.progressiveautomation.items.tools.ItemWitherStone;
+import com.vanhal.progressiveautomation.items.tools.ItemWitherWood;
 
 public class PAItems {
 
@@ -34,6 +38,20 @@ public class PAItems {
 		}
 
 		if (coalPellet!=null) coalPellet.preInit();
+		
+		//deal with the various tools
+		//wither resources
+		if (PAConfig.enableWitherTools) {
+			witherWood = new ItemWitherWood();
+			witherStone = new ItemWitherStone();
+			witherIron = new ItemWitherIron();
+			witherDiamond = new ItemWitherDiamond();
+			
+			witherWood.preInit();
+			witherStone.preInit();
+			witherIron.preInit();
+			witherDiamond.preInit();
+		}
 	}
 
 	public static void init() {
@@ -57,5 +75,11 @@ public class PAItems {
 	public static ItemRFEngine CheatRFEngine = null;
 
 	public static ItemCoalPellet coalPellet = null;
+	
+	//wither tools and resources
+	public static ItemWitherWood witherWood = null;
+	public static ItemWitherStone witherStone = null;
+	public static ItemWitherIron witherIron = null;
+	public static ItemWitherDiamond witherDiamond = null;
 
 }
