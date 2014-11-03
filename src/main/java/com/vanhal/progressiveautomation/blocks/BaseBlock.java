@@ -130,6 +130,11 @@ public class BaseBlock extends BlockContainer {
             		dumpItems(world, x, y, z, cobbleGen);
             		tileMachine.hasCobbleUpgrade = false;
             	}
+            	if (tileMachine.hasFillerUpgrade) {
+            		ItemStack cobbleGen = new ItemStack(PAItems.fillerUpgrade);
+            		dumpItems(world, x, y, z, cobbleGen);
+            		tileMachine.hasFillerUpgrade = false;
+            	}
             	if (tileMachine.hasWitherUpgrade) {
             		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
             		dumpItems(world, x, y, z, wither);

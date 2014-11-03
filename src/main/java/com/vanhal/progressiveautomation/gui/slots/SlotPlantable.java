@@ -1,5 +1,8 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.planter.TilePlanter;
+
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -13,6 +16,7 @@ public class SlotPlantable  extends Slot {
 	}
 
 	public boolean isItemValid(ItemStack itemStack) {
-		return ( (itemStack.getItem() instanceof IPlantable) && (OreDictionary.getOreID(itemStack) != OreDictionary.getOreID("treeSapling")) );
+		ProgressiveAutomation.logger.info("Planter: "+OreDictionary.getOreName(OreDictionary.getOreID(itemStack)));
+		return TilePlanter.isPlantable(itemStack);
 	}
 }

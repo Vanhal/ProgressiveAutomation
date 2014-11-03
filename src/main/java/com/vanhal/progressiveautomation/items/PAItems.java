@@ -15,6 +15,7 @@ public class PAItems {
 		if (PAConfig.allowIronLevel) ironUpgrade = new ItemIronUpgrade();
 		if (PAConfig.allowDiamondLevel) diamondUpgrade = new ItemDiamondUpgrade();
 		if ((PAConfig.allowCobbleUpgrade) && (PAConfig.minerEnabled)) cobbleUpgrade = new ItemCobbleGenUpgrade();
+		if ((PAConfig.allowFillerUpgrade) && (PAConfig.minerEnabled)) fillerUpgrade = new ItemFillerUpgrade();
 		if (PAConfig.allowWitherUpgrade) witherUpgrade = new ItemWitherUpgrade();
 
 
@@ -31,6 +32,7 @@ public class PAItems {
 		if (ironUpgrade!=null) ironUpgrade.preInit();
 		if (diamondUpgrade!=null) diamondUpgrade.preInit();
 		if (witherUpgrade!=null) witherUpgrade.preInit();
+		if (fillerUpgrade!=null) fillerUpgrade.preInit();
 
 		if (PAConfig.rfSupport) {
 			rfEngine.preInit();
@@ -70,6 +72,7 @@ public class PAItems {
 
 	public static ItemCobbleGenUpgrade cobbleUpgrade = null;
 	public static ItemWitherUpgrade witherUpgrade = null;
+	public static ItemFillerUpgrade fillerUpgrade = null;
 
 	public static ItemRFEngine rfEngine = null;
 	public static ItemRFEngine CheatRFEngine = null;

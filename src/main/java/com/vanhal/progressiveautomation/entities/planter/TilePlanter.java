@@ -243,8 +243,12 @@ public class TilePlanter extends UpgradeableTileEntity {
 		return false;
 	}
 	
-	public boolean isPlantable(ItemStack item) {
-		if ( (item.getItem() instanceof IPlantable) && (OreDictionary.getOreID(item) != OreDictionary.getOreID("treeSapling")) ) {
+	public static boolean isPlantable(ItemStack item) {
+		if ( (
+					(item.getItem() instanceof IPlantable)
+					
+				) && (OreDictionary.getOreID(item) != OreDictionary.getOreID("treeSapling")) 
+			) {
 			return true;
 		}
 		return false;

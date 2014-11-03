@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.items.ItemCobbleGenUpgrade;
+import com.vanhal.progressiveautomation.items.ItemFillerUpgrade;
 import com.vanhal.progressiveautomation.items.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
@@ -14,6 +15,11 @@ import com.vanhal.progressiveautomation.util.Point2I;
 public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeable {
 	protected int toolLevel = ToolHelper.LEVEL_WOOD;
 	protected int numberUpgrades = 0;
+	
+	//other types of upgrades
+	public boolean hasWitherUpgrade = false;
+	public boolean hasCobbleUpgrade = false;
+	public boolean hasFillerUpgrade = false;
 
 	public UpgradeableTileEntity(int numSlots) {
 		super(numSlots);
@@ -24,6 +30,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		nbt.setInteger("NumUpgrades", numberUpgrades);
 		nbt.setBoolean("hasWitherUpgrade", hasWitherUpgrade);
 		nbt.setBoolean("hasCobbleUpgrade", hasCobbleUpgrade);
+		nbt.setBoolean("hasFillerUpgrade", hasFillerUpgrade);
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -31,6 +38,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		numberUpgrades = nbt.getInteger("NumUpgrades");
 		hasWitherUpgrade = nbt.getBoolean("hasWitherUpgrade");
 		hasCobbleUpgrade = nbt.getBoolean("hasCobbleUpgrade");
+		hasFillerUpgrade = nbt.getBoolean("hasFillerUpgrade");
 	}
 	
 	/* IUpgradeable methods */
@@ -63,9 +71,6 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	//check for changes to upgrades
 	protected int lastUpgrades = 0;
 	
-	public boolean hasWitherUpgrade = false;
-	public boolean hasCobbleUpgrade = false;
-	
 	public void checkForChanges() {
 		this.upgradeChanges();
 	}
@@ -86,6 +91,13 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 				if (!hasCobbleUpgrade) {
 					slots[SLOT_UPGRADE] = null;
 					hasCobbleUpgrade = true;
+					return true;
+				}
+			}
+			if (slots[SLOT_UPGRADE].getItem() instanceof ItemFillerUpgrade) {
+				if (!hasFillerUpgrade) {
+					slots[SLOT_UPGRADE] = null;
+					hasFillerUpgrade = true;
 					return true;
 				}
 			}
