@@ -62,7 +62,7 @@ public class BlockGenerator extends BaseBlock {
 				"ses", "scs", "sss", 's', Items.diamond, 'c', previousTier, 'e', PAItems.rfEngine});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "sps", "srs", 's', "logWood", 'p', previousTier, 'e', PAItems.rfEngine, 'r', Blocks.furnace});
+				"sps", "ses", "srs", 's', "logWood", 'r', Blocks.furnace, 'p', previousTier, 'e', PAItems.rfEngine});
 		}
 		
 		
