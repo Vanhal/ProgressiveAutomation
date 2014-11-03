@@ -82,12 +82,12 @@ public class TileGenerator extends UpgradeableTileEntity {
 	protected void checkForFire() {
 		if (fireRisk > worldObj.rand.nextFloat()) {
 			//start a fire on a block nearby
-			int n = (int)Math.floor(8*worldObj.rand.nextFloat()) + 2;
+			int n = (int)Math.floor(8*worldObj.rand.nextFloat()) + 1;
 			Point2I p2 = spiral(n, xCoord, zCoord);
 			Block supportBlock = worldObj.getBlock(p2.getX(), yCoord - 1, p2.getY());
 			Block fireBlock = worldObj.getBlock(p2.getX(), yCoord, p2.getY());
 			if ( ((fireBlock.isAir(worldObj, p2.getX(), yCoord, p2.getY())) 
-				&& (supportBlock.isFlammable(worldObj, p2.getX(), yCoord, p2.getY() - 1, ForgeDirection.UP))) ){
+				&& (supportBlock.isFlammable(worldObj, p2.getX(), yCoord -1, p2.getY(), ForgeDirection.UP))) ){
 				worldObj.setBlock(p2.getX(), yCoord, p2.getY(), Blocks.fire);
 			}
 		}
