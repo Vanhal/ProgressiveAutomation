@@ -1,0 +1,39 @@
+package com.vanhal.progressiveautomation.items.tools;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
+
+import com.vanhal.progressiveautomation.items.BaseItem;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+public class ItemWitherIron extends BaseItem {
+	public ItemWitherIron() {
+		super("WitherIron");
+		setTextureName("Minecraft:iron_ingot");
+	}
+	
+	@SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack itemStack) {
+        return true;
+    }
+
+    protected void addNormalRecipe() {
+		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 2), 
+				Items.nether_star, 
+				Items.iron_ingot, 
+				Items.iron_ingot
+			);
+		GameRegistry.addRecipe(recipe);
+	}
+
+	protected void addUpgradeRecipe() {
+		addNormalRecipe();
+	}
+}

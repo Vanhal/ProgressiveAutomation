@@ -46,23 +46,23 @@ public class BlockGenerator extends BaseBlock {
 		else return new TileGenerator();
 	}
 	
-	public static final Block firstMiddleBlock = Blocks.redstone_block;
+	public static final Block firstTier = Blocks.redstone_block;
 	
-	public void addRecipe(Block middleBlock) {
+	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sss", 's', Blocks.stone, 'c', middleBlock, 'e', PAItems.rfEngine});
+				"ses", "scs", "sss", 's', Blocks.stone, 'c', previousTier, 'e', PAItems.rfEngine});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sbs", 's', Items.iron_ingot, 'c', middleBlock, 'b', Blocks.iron_block, 'e', PAItems.rfEngine});
+				"ses", "scs", "sbs", 's', Items.iron_ingot, 'c', previousTier, 'b', Blocks.iron_block, 'e', PAItems.rfEngine});
 		} else if (blockLevel >= ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sss", 's', Items.diamond, 'c', middleBlock, 'e', PAItems.rfEngine});
+				"ses", "scs", "sss", 's', Items.diamond, 'c', previousTier, 'e', PAItems.rfEngine});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "sps", "srs", 's', "logWood", 'p', middleBlock, 'e', PAItems.rfEngine, 'r', Blocks.furnace});
+				"ses", "sps", "srs", 's', "logWood", 'p', previousTier, 'e', PAItems.rfEngine, 'r', Blocks.furnace});
 		}
 		
 		
@@ -71,10 +71,11 @@ public class BlockGenerator extends BaseBlock {
 	
 	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-		iconTop =  register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_Top");
-		iconSide = register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_Side");
-		inactiveGenerator = register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_Front");
-		activeGenerator= register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_FrontActive");
+		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
+		iconTop =  register.registerIcon(iconPrefix + "_Top");
+		iconSide = register.registerIcon(iconPrefix + "_Side");
+		inactiveGenerator = register.registerIcon(iconPrefix + "_Front");
+		activeGenerator= register.registerIcon(iconPrefix + "_FrontActive");
     }
 	
     @SideOnly(Side.CLIENT)

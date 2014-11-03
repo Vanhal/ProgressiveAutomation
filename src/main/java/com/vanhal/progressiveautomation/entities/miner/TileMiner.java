@@ -23,6 +23,7 @@ import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileMiner extends UpgradeableTileEntity {
@@ -100,7 +101,8 @@ public class TileMiner extends UpgradeableTileEntity {
 
 	/* Tests a block to see if it can be mined with the current equipment
 	 * Returns 0 if it can't, -1 if it is cobble
-	 * Will return 2 if mined with pick, 3 if shovel, 1 if none */
+	 * Will return 2 if mined with pick, 3 if shovel, 1 if none
+	 * return 4 if just need to fill using the filler upgrade  */
 	public int canMineBlock(int x, int y, int z) {
 		Block tryBlock = worldObj.getBlock(x, y, z);
 		if (tryBlock != null) {
@@ -114,17 +116,24 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
 				} if ( (tryBlock.getHarvestTool(meta)=="pickaxe") || (tryBlock.getHarvestTool(meta)=="chisel") ) {
-					if (getToolMineLevel(2)>=tryBlock.getHarvestLevel(meta)) {
+					if (ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(2))) {
 						return 2;
 					}
 				} else if (tryBlock.getHarvestTool(meta)=="shovel") {
-					if (getToolMineLevel(3)>=tryBlock.getHarvestLevel(meta)) {
+					if (ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(3))) {
 						return 3;
 					}
 				} else {
 					if (!tryBlock.getMaterial().isLiquid()) {
-						return 1;
+						return 4;
 					}
+				}
+			}
+			
+			//see if the filler upgrade is active, if it is then the block will need to be filled.
+			if (this.hasFillerUpgrade) {
+				if ( (tryBlock.isAir(worldObj, x, y, z)) || (tryBlock.getMaterial().isLiquid()) ) {
+					return 4;
 				}
 			}
 		}
@@ -140,48 +149,50 @@ public class TileMiner extends UpgradeableTileEntity {
 				//clock is done, lets mine it
 				Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
 
-
-				//get the inventory of anything under it
-				if (worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY()) instanceof IInventory) {
-					IInventory inv = (IInventory) worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY());
-					for (int i = 0; i < inv.getSizeInventory(); i++) {
-						if (inv.getStackInSlot(i)!=null) {
-							addToInventory(inv.getStackInSlot(i));
-							inv.setInventorySlotContents(i, null);
+				//don't harvest anything if the block is air or liquid
+				if (miningWith!=4) {
+					//get the inventory of anything under it
+					if (worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY()) instanceof IInventory) {
+						IInventory inv = (IInventory) worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY());
+						for (int i = 0; i < inv.getSizeInventory(); i++) {
+							if (inv.getStackInSlot(i)!=null) {
+								addToInventory(inv.getStackInSlot(i));
+								inv.setInventorySlotContents(i, null);
+							}
 						}
 					}
-				}
 
-				//silk touch the block if we have it
-				int silkTouch = 0;
-				if (miningWith!=1) {
-					silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch.effectId, slots[miningWith]);
-				}
-
-				if (silkTouch>0) {
-					ItemStack item = new ItemStack(currentBlock);
-					addToInventory(item);
-
-				} else {
-					//mine the block
-					int fortuneLevel = 0;
+					//silk touch the block if we have it
+					int silkTouch = 0;
 					if (miningWith!=1) {
-						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
+						silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch.effectId, slots[miningWith]);
 					}
-
-					//then break the block
-					ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(),
-							worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel);
-					//get the drops
-					for (ItemStack item : items) {
+	
+					if (silkTouch>0) {
+						ItemStack item = new ItemStack(currentBlock);
 						addToInventory(item);
+	
+					} else {
+						//mine the block
+						int fortuneLevel = 0;
+						if (miningWith!=1) {
+							fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
+						}
+	
+						//then break the block
+						ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(),
+								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel);
+						//get the drops
+						for (ItemStack item : items) {
+							addToInventory(item);
+						}
 					}
-				}
+					
 				
-			
-				if (miningWith!=1) {
-					if (ToolHelper.damageTool(slots[miningWith], worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY())) {
-						slots[miningWith] = null;
+					if (miningWith!=1) {
+						if (ToolHelper.damageTool(slots[miningWith], worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY())) {
+							slots[miningWith] = null;
+						}
 					}
 				}
 
@@ -204,24 +215,26 @@ public class TileMiner extends UpgradeableTileEntity {
 				currentBlock = getNextBlock();
 				if (currentBlock != null) {
 					Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
-					miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 * 20 ) ;
-					
-					Item tool = (Item)slots[miningWith].getItem();
-					
-					if (miningWith!=1) {
-						/*Item tool = (Item)slots[miningWith].getItem();*/
-						float miningSpeed = tool.getDigSpeed( slots[miningWith], currentBlock,
-								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) );
-
-						//check for efficiency on the tool
-						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
-						if (eff>0) {
-							for (int i = 0; i<eff; i++) {
-								miningSpeed = miningSpeed * 1.3f;
+					if (miningWith==4) {
+						miningTime = 1;
+					} else {
+						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 * 20 ) ;
+						
+						if (miningWith!=1) {
+							Item tool = (Item)slots[miningWith].getItem();
+							float miningSpeed = tool.getDigSpeed( slots[miningWith], currentBlock,
+									worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) );
+	
+							//check for efficiency on the tool
+							int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
+							if (eff>0) {
+								for (int i = 0; i<eff; i++) {
+									miningSpeed = miningSpeed * 1.3f;
+								}
 							}
+	
+							miningTime = (int) Math.ceil(miningTime / miningSpeed);
 						}
-
-						miningTime = (int) Math.ceil(miningTime / miningSpeed);
 					}
 
 					//ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
@@ -272,13 +285,6 @@ public class TileMiner extends UpgradeableTileEntity {
 		} else {
 			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
 		}
-	}
-
-	public int getToolMineLevel(int slot) {
-		if (getStackInSlot(slot) != null) {
-			return ToolHelper.getHarvestLevel(getStackInSlot(slot));
-		}
-		return -1;
 	}
 
 	public int getMinedBlocks() {

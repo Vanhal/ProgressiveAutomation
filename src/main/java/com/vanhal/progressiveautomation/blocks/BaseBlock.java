@@ -35,6 +35,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseBlock extends BlockContainer {
 	public String name;
+	public String machineType;
 	public int GUIid = -1;
 	
 	protected int blockLevel = ToolHelper.LEVEL_WOOD;
@@ -59,8 +60,15 @@ public class BaseBlock extends BlockContainer {
 		}
     }
 	
-	public BaseBlock(String baseName, int level) {
-		this(baseName+returnLevelName(level));
+	public BaseBlock(String machineType, int level) {
+		super(Material.iron);
+		
+		this.machineType = machineType;
+		name = machineType+returnLevelName(level);
+		setBlockName(name);
+		
+		setHardness(1.0f);
+		setCreativeTab(ProgressiveAutomation.PATab);
 		blockLevel = level;
 	}
 	
@@ -71,15 +79,7 @@ public class BaseBlock extends BlockContainer {
 		}
 		return thisName;
 	}
-	
-	public BaseBlock(String blockName) {
-		super(Material.iron);
-		name = blockName;
-		setBlockName(name);
-		setHardness(1.0f);
-		setCreativeTab(ProgressiveAutomation.PATab);
-	}
-	
+
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			if (GUIid>=0) {
@@ -95,12 +95,13 @@ public class BaseBlock extends BlockContainer {
 	
 	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-		blockIcons[0] = register.registerIcon(Ref.MODID+":"+name+"_Bottom");
-		blockIcons[1] = register.registerIcon(Ref.MODID+":"+name+"_Top");
-		blockIcons[2]= register.registerIcon(Ref.MODID+":"+name+"_Side");
-		blockIcons[3]= register.registerIcon(Ref.MODID+":"+name+"_Side");
-		blockIcons[4]= register.registerIcon(Ref.MODID+":"+name+"_Side");
-		blockIcons[5]= register.registerIcon(Ref.MODID+":"+name+"_Side");
+		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
+		blockIcons[0] = register.registerIcon(iconPrefix + "_Bottom");
+		blockIcons[1] = register.registerIcon(iconPrefix + "_Top");
+		blockIcons[2] = register.registerIcon(iconPrefix + "_Side");
+		blockIcons[3] = register.registerIcon(iconPrefix + "_Side");
+		blockIcons[4] = register.registerIcon(iconPrefix + "_Side");
+		blockIcons[5] = register.registerIcon(iconPrefix + "_Side");
     }
 	
 	@SideOnly(Side.CLIENT)
@@ -128,6 +129,11 @@ public class BaseBlock extends BlockContainer {
             		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
             		dumpItems(world, x, y, z, cobbleGen);
             		tileMachine.hasCobbleUpgrade = false;
+            	}
+            	if (tileMachine.hasFillerUpgrade) {
+            		ItemStack cobbleGen = new ItemStack(PAItems.fillerUpgrade);
+            		dumpItems(world, x, y, z, cobbleGen);
+            		tileMachine.hasFillerUpgrade = false;
             	}
             	if (tileMachine.hasWitherUpgrade) {
             		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
@@ -174,13 +180,13 @@ public class BaseBlock extends BlockContainer {
 		world.spawnEntityInWorld(entItem);
 	}
 	
-	public void addRecipe(Block middleBlock) {
+	public void addRecipe(Block previousTier) {
 		
 	}
 	
-	public void preInit(Block recipeMiddleBlock) {
+	public void preInit(Block previousTier) {
 		GameRegistry.registerBlock(this, name);
-		addRecipe(recipeMiddleBlock);
+		addRecipe(previousTier);
 	}
 	
 	public void init() {

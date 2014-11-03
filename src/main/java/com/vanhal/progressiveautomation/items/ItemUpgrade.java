@@ -28,11 +28,6 @@ public class ItemUpgrade extends BaseItem {
 		return level;
 	}
 	
-	@Override
-	public void preInit() {
-		throw new IllegalStateException("Use parametrized preInit");
-	}
-	
 	public void preInit(Item previousTier) {
 		GameRegistry.registerItem(this, itemName);
 		addTieredRecipe(previousTier);

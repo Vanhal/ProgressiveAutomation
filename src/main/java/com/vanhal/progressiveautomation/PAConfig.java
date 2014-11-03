@@ -25,6 +25,7 @@ public class PAConfig {
 	
 	//special upgrades
 	public static boolean allowCobbleUpgrade;
+	public static boolean allowFillerUpgrade;
 	public static boolean allowWitherUpgrade;
 	public static int witherMultiplier;
 	
@@ -36,6 +37,7 @@ public class PAConfig {
 	
 	//misc options
 	public static boolean allowCoalPellets;
+	public static boolean enableWitherTools;
 	
 	
 	public static void init(Configuration handle) {
@@ -64,6 +66,8 @@ public class PAConfig {
 		
 		//misc options 
 		allowCoalPellets = config.getBoolean("coalPellets", "general", true, "Allow coal pellets (requires restart)");
+		enableWitherTools = config.getBoolean("witherTools", "general", true, "Allow Wither tools and resources to create them");
+		
 		
 		//enable blocks		
 		minerEnabled = config.getBoolean("miner", "blocks", true, "Miner Block is enabled (requires restart)");
@@ -77,8 +81,9 @@ public class PAConfig {
 		allowDiamondLevel = config.getBoolean("diamond", "upgrades", true, "Allow diamond level blocks (requires restart)");
 		
 		allowCobbleUpgrade = config.getBoolean("cobblegen", "upgrades", true, "Allow cobble gen upgrade for the miner (requires restart)");
+		allowFillerUpgrade = config.getBoolean("filler", "upgrades", true, "Allow filler upgrade for the miner (requires restart)");
 		allowWitherUpgrade = config.getBoolean("wither", "upgrades", true, "Allow the wither upgrade (requires restart)");
-		witherMultiplier = config.getInt("witherMultiplier", "upgrades", 2, 2, 10, "How much the wither upgrade extends the machines. (How much multiplies the upgrades by)");
+		witherMultiplier = config.getInt("witherMultiplier", "upgrades", 4, 2, 10, "How much the wither upgrade extends the machines. (How much multiplies the upgrades by)");
 		
 		//save if changed
 		if (config.hasChanged()) save();

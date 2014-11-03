@@ -23,28 +23,28 @@ public class PABlocks {
 		}
 
 		//preInit
-		Block middleBlock = BlockMiner.firstMiddleBlock;
+		Block previousTier = BlockMiner.firstTier;
 		for (BlockMiner blockMiner : miner) {
-			blockMiner.preInit(middleBlock);
-			middleBlock = blockMiner;
+			blockMiner.preInit(previousTier);
+			previousTier = blockMiner;
 		}
 		
-		middleBlock = BlockChopper.firstMiddleBlock;
+		previousTier = BlockChopper.firstTier;
 		for (BlockChopper blockChopper : chopper) {
-			blockChopper.preInit(middleBlock);
-			middleBlock = blockChopper;
+			blockChopper.preInit(previousTier);
+			previousTier = blockChopper;
 		}
 		
-		middleBlock = BlockPlanter.firstMiddleBlock;
+		previousTier = BlockPlanter.firstTier;
 		for (BlockPlanter blockPlanter : planter) {
-			blockPlanter.preInit(middleBlock);
-			middleBlock = blockPlanter;
+			blockPlanter.preInit(previousTier);
+			previousTier = blockPlanter;
 		}
 		
-		middleBlock = BlockGenerator.firstMiddleBlock;
+		previousTier = BlockGenerator.firstTier;
 		for (BlockGenerator blockGenerator : generator) {
-			blockGenerator.preInit(middleBlock);
-			middleBlock = blockGenerator;
+			blockGenerator.preInit(previousTier);
+			previousTier = blockGenerator;
 		}
 	}
 

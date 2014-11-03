@@ -31,23 +31,23 @@ public class BlockMiner extends BaseBlock {
 		else return new TileMiner();
 	}
 	
-	public static final Block firstMiddleBlock = Blocks.furnace;
+	public static final Block firstTier = Blocks.furnace;
 	
-	public void addRecipe(Block middleBlock) {
+	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.stone, 'c', middleBlock, 'p', Items.stone_pickaxe});
+				"sss", "scs", "sps", 's', Blocks.stone, 'c', previousTier, 'p', Items.stone_pickaxe});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', middleBlock, 'p', Items.iron_pickaxe, 'b', Blocks.iron_block});
+				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', previousTier, 'p', Items.iron_pickaxe, 'b', Blocks.iron_block});
 		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.diamond, 'c', middleBlock, 'p', Items.diamond_pickaxe});
+				"sss", "scs", "sps", 's', Items.diamond, 'c', previousTier, 'p', Items.diamond_pickaxe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', middleBlock, 'c', Blocks.chest, 'p', Items.wooden_pickaxe});
+				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', Blocks.chest, 'p', Items.wooden_pickaxe});
 		}
 		
 		

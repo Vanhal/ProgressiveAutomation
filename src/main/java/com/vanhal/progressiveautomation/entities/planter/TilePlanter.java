@@ -3,17 +3,23 @@ package com.vanhal.progressiveautomation.entities.planter;
 import java.util.ArrayList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.IGrowable;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.world.WorldServer;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
 
@@ -30,6 +36,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 		super(12);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
 		setHarvestTime(80);
+		
+		// #36 Planter can't eject items to bottom
+		extDirection = ForgeDirection.DOWN;
 		
 		//slots
 		SLOT_HOE = 2;
@@ -116,16 +125,34 @@ public class TilePlanter extends UpgradeableTileEntity {
 		Point3I currentBlock = getPoint(n);
 		
 		Block actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
-		int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
-		ArrayList<ItemStack> items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), metaData, 0);
-		//get the drops
-		for (ItemStack item : items) {
-			addToInventory(item);
+		if ( (actualBlock == Blocks.reeds) || (actualBlock == Blocks.cactus) ) {
+			currentBlock.setY(currentBlock.getY() + 1);
+			actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
 		}
-
-		worldObj.removeTileEntity( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
-		worldObj.setBlockToAir(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
-		hoeGround(n, true);
+		
+		int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
+		
+		PlayerFake faker = new PlayerFake((WorldServer)worldObj);
+		//try and right click it first, if not then break the block
+		if (actualBlock.onBlockActivated(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), faker, metaData, 0, 0, 0)) {
+			IInventory inv = faker.inventory;
+			for (int i = 0; i < inv.getSizeInventory(); i++){
+				if (inv.getStackInSlot(i)!=null) {
+					addToInventory(inv.getStackInSlot(i));
+				}
+			}
+		} else {
+			
+			ArrayList<ItemStack> items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), metaData, 0);
+			//get the drops
+			for (ItemStack item : items) {
+				addToInventory(item);
+			}
+	
+			worldObj.removeTileEntity( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
+			worldObj.setBlockToAir(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
+			hoeGround(n, true);
+		}
 	}
 	
 	protected boolean plantSeed(int n, boolean doAction) {
@@ -135,21 +162,38 @@ public class TilePlanter extends UpgradeableTileEntity {
 				//ProgressiveAutomation.logger.info("Plant: "+n+" "+point.getX()+", "+point.getY()+", "+point.getZ());
 				
 				if (isPlantable(slots[SLOT_SEEDS])) {
-					Block plant = ((IPlantable)slots[SLOT_SEEDS].getItem()).getPlant(worldObj,  point.getX(), point.getY(), point.getZ());
-					if (!plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) {
-						//hoe the ground if we can
-						hoeGround(n, false);
+					Block plant = null;
+					if (slots[SLOT_SEEDS].getItem() instanceof IPlantable) {
+						//normal crops
+						plant = ((IPlantable)slots[SLOT_SEEDS].getItem()).getPlant(worldObj,  point.getX(), point.getY(), point.getZ());
+					} else if (slots[SLOT_SEEDS].getItem() == Items.reeds) {
+						//sugarcane
+						plant = Blocks.reeds;
+					} else if (Block.getBlockFromItem(slots[SLOT_SEEDS].getItem()) == Blocks.cactus) {
+						//cactus
+						plant = Blocks.cactus;
 					}
-					if (plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) {
-						if (doAction) {
-							worldObj.setBlock(point.getX(), point.getY(), point.getZ(), plant, slots[SLOT_SEEDS].getItem().getDamage(slots[SLOT_SEEDS]), 7);
-							slots[SLOT_SEEDS].stackSize--;
-							if (slots[SLOT_SEEDS].stackSize==0) {
-								slots[SLOT_SEEDS] = null;
-							}
+					
+					//place the block
+					if (plant != null) {
+						if (!plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) {
+							//hoe the ground if we can
+							hoeGround(n, false);
 						}
-						
-						return true;
+						if (
+							(plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) &&
+							(worldObj.getBlock(point.getX(), point.getY(), point.getZ()) != plant)
+						) {
+							if (doAction) {
+								worldObj.setBlock(point.getX(), point.getY(), point.getZ(), plant, slots[SLOT_SEEDS].getItem().getDamage(slots[SLOT_SEEDS]), 7);
+								slots[SLOT_SEEDS].stackSize--;
+								if (slots[SLOT_SEEDS].stackSize==0) {
+									slots[SLOT_SEEDS] = null;
+								}
+							}
+							
+							return true;
+						}
 					}
 					
 				}
@@ -161,8 +205,17 @@ public class TilePlanter extends UpgradeableTileEntity {
 	protected boolean checkPlant(int n) {
 		Point3I plantPoint = getPoint(n);
 		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+		int metadata = worldObj.getBlockMetadata(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+		
+		//for crops and anything that is IGrowable
 		if (plantBlock instanceof IGrowable) {
 			return !((IGrowable)plantBlock).func_149851_a(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), true);
+		} else if (plantBlock instanceof BlockNetherWart) { //nether wart
+			return (metadata >= 3);
+		} else if (plantBlock == Blocks.reeds) { // sugar cane
+			return (worldObj.getBlock(plantPoint.getX(), plantPoint.getY() + 1, plantPoint.getZ()) == Blocks.reeds);
+		} else if (plantBlock == Blocks.cactus) { //cactus
+			return (worldObj.getBlock(plantPoint.getX(), plantPoint.getY() + 1, plantPoint.getZ()) == Blocks.cactus);
 		}
 		return false;
 	}
@@ -234,8 +287,13 @@ public class TilePlanter extends UpgradeableTileEntity {
 		return false;
 	}
 	
-	public boolean isPlantable(ItemStack item) {
-		if ( (item.getItem() instanceof IPlantable) && (OreDictionary.getOreID(item) != OreDictionary.getOreID("treeSapling")) ) {
+	public static boolean isPlantable(ItemStack item) {
+		if ( (
+					(item.getItem() instanceof IPlantable) //normal crops
+					|| (item.getItem() == Items.reeds) // sugar cane
+					|| (Block.getBlockFromItem(item.getItem()) == Blocks.cactus)  // cactus
+				) && (OreDictionary.getOreID(item) != OreDictionary.getOreID("treeSapling")) 
+			) {
 			return true;
 		}
 		return false;
