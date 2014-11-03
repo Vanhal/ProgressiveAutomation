@@ -69,10 +69,11 @@ public class BlockGenerator extends BaseBlock {
 	
 	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
-		iconTop =  register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_Top");
-		iconSide = register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_Side");
-		inactiveGenerator = register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_Front");
-		activeGenerator= register.registerIcon(Ref.MODID+":generator/"+getLevelName()+"_FrontActive");
+		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
+		iconTop =  register.registerIcon(iconPrefix + "_Top");
+		iconSide = register.registerIcon(iconPrefix + "_Side");
+		inactiveGenerator = register.registerIcon(iconPrefix + "_Front");
+		activeGenerator= register.registerIcon(iconPrefix + "_FrontActive");
     }
 	
     @SideOnly(Side.CLIENT)
