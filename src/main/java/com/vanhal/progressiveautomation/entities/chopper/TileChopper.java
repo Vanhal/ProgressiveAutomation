@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,8 +12,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.oredict.OreDictionary;
 
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.CoordList;
@@ -23,6 +20,18 @@ import com.vanhal.progressiveautomation.util.Point3I;
 
 
 public class TileChopper extends UpgradeableTileEntity {
+	
+	/**
+	 * This is the extra range above planting range used during tree cutting
+	 */
+	protected final int CUTTING_EXTRA_RANGE = 6;
+	
+	
+	protected int maxCuttingX;
+	protected int minCuttingX;
+	protected int maxCuttingZ;
+	protected int minCuttingZ;
+	
 	
 	protected int searchBlock = -1;
 	protected boolean plantSapling = false;
@@ -215,7 +224,7 @@ public class TileChopper extends UpgradeableTileEntity {
 				Point2I spiralPoint = spiral(2 + i, newPoint.getX(), newPoint.getZ());
 				newPoint.setX(spiralPoint.getX());
 				newPoint.setZ(spiralPoint.getY());
-				if (!blockList.inList(newPoint)) {
+				if (isWithinCuttingRange(spiralPoint.getX(), spiralPoint.getY()) && !blockList.inList(newPoint)) {
 					searchTree(newPoint);
 				}
 			}
@@ -351,6 +360,7 @@ public class TileChopper extends UpgradeableTileEntity {
 
 		//check upgrades
 		if (upgradeChanges()) {
+			recalculateChoppingRange();
 			update = true;
 		}
 		
@@ -386,6 +396,20 @@ public class TileChopper extends UpgradeableTileEntity {
 		} else {
 			return false;
 		}
+	}
+	
+	private void recalculateChoppingRange() {
+		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(lastUpgrades + 1)-1)/2);
+		maxCuttingX = this.xCoord + cuttingSideSize;
+		minCuttingX = this.xCoord - cuttingSideSize;
+		maxCuttingZ = this.zCoord + cuttingSideSize;
+		minCuttingZ = this.zCoord - cuttingSideSize;
+	}
+	
+	private boolean isWithinCuttingRange(int x, int z) {
+		if (x >= minCuttingX && x <= maxCuttingX && z >= minCuttingZ && z <= maxCuttingZ) 
+			return true;
+		return false;
 	}
 
 }
