@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -30,6 +31,10 @@ public class ItemWitherUpgrade extends ItemUpgrade {
 	}
 	
 	protected void addUpgradeRecipe() {
+		this.addNormalRecipe();
+	}
+	
+	protected void addTieredRecipe(Item previousTier) {
 		this.addNormalRecipe();
 	}
 	

@@ -46,21 +46,23 @@ public class BlockGenerator extends BaseBlock {
 		else return new TileGenerator();
 	}
 	
-	public void addRecipe() {
+	public static final Block firstTier = Blocks.redstone_block;
+	
+	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sss", 's', Blocks.stone, 'c', PABlocks.generator[ToolHelper.LEVEL_WOOD], 'e', PAItems.rfEngine});
+				"ses", "scs", "sss", 's', Blocks.stone, 'c', previousTier, 'e', PAItems.rfEngine});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sbs", 's', Items.iron_ingot, 'c', PABlocks.generator[ToolHelper.LEVEL_STONE], 'b', Blocks.iron_block, 'e', PAItems.rfEngine});
+				"ses", "scs", "sbs", 's', Items.iron_ingot, 'c', previousTier, 'b', Blocks.iron_block, 'e', PAItems.rfEngine});
 		} else if (blockLevel >= ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sss", 's', Items.diamond, 'c', PABlocks.generator[ToolHelper.LEVEL_IRON], 'e', PAItems.rfEngine});
+				"ses", "scs", "sss", 's', Items.diamond, 'c', previousTier, 'e', PAItems.rfEngine});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sps", "ses", "srs", 's', "logWood", 'r', Blocks.furnace, 'p', Blocks.redstone_block, 'e', PAItems.rfEngine});
+				"sps", "ses", "srs", 's', "logWood", 'r', Blocks.furnace, 'p', previousTier, 'e', PAItems.rfEngine});
 		}
 		
 		

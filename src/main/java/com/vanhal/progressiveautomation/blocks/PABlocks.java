@@ -1,5 +1,10 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.block.Block;
+
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -10,58 +15,87 @@ public class PABlocks {
 		//create the blocks
 		for (int i = 0; i <= 3; i++) {
 			if (PAConfig.allowLevel(i)) {
-				if (PAConfig.minerEnabled) miner[i] = new BlockMiner(i);
-				if (PAConfig.chopperEnabled) chopper[i] = new BlockChopper(i);
-				if (PAConfig.planterEnabled) planter[i] = new BlockPlanter(i);
-				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator[i] = new BlockGenerator(i);
+				if (PAConfig.minerEnabled) miner.add(new BlockMiner(i));
+				if (PAConfig.chopperEnabled) chopper.add(new BlockChopper(i));
+				if (PAConfig.planterEnabled) planter.add(new BlockPlanter(i));
+				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator.add(new BlockGenerator(i));
 			}
 		}
 
 		//preInit
-		for (int i = 0; i <= 3; i++) {
-			if (PAConfig.allowLevel(i)) {
-				if (PAConfig.minerEnabled) miner[i].preInit();
-				if (PAConfig.chopperEnabled)chopper[i].preInit();
-				if (PAConfig.planterEnabled) planter[i].preInit();
-				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator[i].preInit();
-			}
+		Block previousTier = BlockMiner.firstTier;
+		for (BlockMiner blockMiner : miner) {
+			blockMiner.preInit(previousTier);
+			previousTier = blockMiner;
+		}
+		
+		previousTier = BlockChopper.firstTier;
+		for (BlockChopper blockChopper : chopper) {
+			blockChopper.preInit(previousTier);
+			previousTier = blockChopper;
+		}
+		
+		previousTier = BlockPlanter.firstTier;
+		for (BlockPlanter blockPlanter : planter) {
+			blockPlanter.preInit(previousTier);
+			previousTier = blockPlanter;
+		}
+		
+		previousTier = BlockGenerator.firstTier;
+		for (BlockGenerator blockGenerator : generator) {
+			blockGenerator.preInit(previousTier);
+			previousTier = blockGenerator;
 		}
 	}
 
 	public static void init() {
-		for (int i = 0; i <= 3; i++) {
-			if (PAConfig.allowLevel(i)) {
-				if (PAConfig.minerEnabled) miner[i].init();
-				if (PAConfig.chopperEnabled)chopper[i].init();
-				if (PAConfig.planterEnabled) planter[i].init();
-				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator[i].init();
-			}
+		for (BlockMiner blockMiner : miner) {
+			blockMiner.init();
+		}
+		
+		for (BlockChopper blockChopper : chopper) {
+			blockChopper.init();
+		}
+		
+		for (BlockPlanter blockPlanter : planter) {
+			blockPlanter.init();
+		}
+		
+		for (BlockGenerator blockGenerator : generator) {
+			blockGenerator.init();
 		}
 	}
 
 	public static void postInit() {
-		for (int i = 0; i <= 3; i++) {
-			if (PAConfig.allowLevel(i)) {
-				if (PAConfig.minerEnabled) miner[i].postInit();
-				if (PAConfig.chopperEnabled)chopper[i].postInit();
-				if (PAConfig.planterEnabled) planter[i].postInit();
-				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator[i].postInit();
-			}
+		for (BlockMiner blockMiner : miner) {
+			blockMiner.postInit();
+		}
+		
+		for (BlockChopper blockChopper : chopper) {
+			blockChopper.postInit();
+		}
+		
+		for (BlockPlanter blockPlanter : planter) {
+			blockPlanter.postInit();
+		}
+		
+		for (BlockGenerator blockGenerator : generator) {
+			blockGenerator.postInit();
 		}
 	}
 
 	//blocks
 
 	//miners
-	public static BlockMiner[] miner = new BlockMiner[4];
+	public static List<BlockMiner> miner = new ArrayList<BlockMiner>(4);
 
 	//choppers
-	public static BlockChopper[] chopper = new BlockChopper[4];
+	public static List<BlockChopper> chopper = new ArrayList<BlockChopper>(4);
 
 	//planters
-	public static BlockPlanter[] planter = new BlockPlanter[4];
+	public static List<BlockPlanter> planter = new ArrayList<BlockPlanter>(4);
 
 	//generators
-	public static BlockGenerator[] generator = new BlockGenerator[4];
+	public static List<BlockGenerator> generator = new ArrayList<BlockGenerator>(4);
 
 }

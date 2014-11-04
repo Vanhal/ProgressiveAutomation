@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.items;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -16,15 +17,24 @@ public class ItemStoneUpgrade extends ItemUpgrade {
 		this.setTextureName(Ref.MODID+":Stone_Upgrade");
 	}
 	
+	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 			"ppp", "prp", "ppp", 'p', Blocks.stone, 'r', Items.redstone});
 		GameRegistry.addRecipe(recipe);
 	}
 	
+	@Override
 	protected void addUpgradeRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 			"ppp", "prp", "ppp", 'p', Blocks.stone, 'r', PAItems.woodUpgrade});
+		GameRegistry.addRecipe(recipe);
+	}
+	
+	@Override
+	protected void addTieredRecipe(Item previousTier) {
+		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
+			"ppp", "prp", "ppp", 'p', Blocks.stone, 'r', previousTier});
 		GameRegistry.addRecipe(recipe);
 	}
 }

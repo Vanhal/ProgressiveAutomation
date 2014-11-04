@@ -180,13 +180,13 @@ public class BaseBlock extends BlockContainer {
 		world.spawnEntityInWorld(entItem);
 	}
 	
-	public void addRecipe() {
+	public void addRecipe(Block previousTier) {
 		
 	}
 	
-	public void preInit() {
+	public void preInit(Block previousTier) {
 		GameRegistry.registerBlock(this, name);
-		addRecipe();
+		addRecipe(previousTier);
 	}
 	
 	public void init() {

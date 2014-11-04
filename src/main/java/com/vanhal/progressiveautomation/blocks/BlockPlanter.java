@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -33,21 +34,25 @@ public class BlockPlanter extends BaseBlock {
 		else return new TilePlanter();
 	}
 	
-	public void addRecipe() {
+
+	
+	public static final Block firstTier = Blocks.furnace;
+	
+	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.stone, 'c', PABlocks.planter[ToolHelper.LEVEL_WOOD], 'p', Items.stone_hoe});
+				"sss", "scs", "sps", 's', Blocks.stone, 'c', previousTier, 'p', Items.stone_hoe});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', PABlocks.planter[ToolHelper.LEVEL_STONE], 'p', Items.iron_hoe, 'b', Blocks.iron_block});
+				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', previousTier, 'p', Items.iron_hoe, 'b', Blocks.iron_block});
 		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.diamond, 'c', PABlocks.planter[ToolHelper.LEVEL_IRON], 'p', Items.diamond_hoe});
+				"sss", "scs", "sps", 's', Items.diamond, 'c', previousTier, 'p', Items.diamond_hoe});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', Blocks.furnace, 'c', Blocks.chest, 'p', Items.wooden_hoe});
+				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', Blocks.chest, 'p', Items.wooden_hoe});
 		}
 		
 		
