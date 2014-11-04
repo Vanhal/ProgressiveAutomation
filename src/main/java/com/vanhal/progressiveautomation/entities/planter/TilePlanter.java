@@ -18,6 +18,7 @@ import net.minecraft.world.WorldServer;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
+import com.vanhal.progressiveautomation.ref.Pneumaticcraft;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point2I;
@@ -161,7 +162,24 @@ public class TilePlanter extends UpgradeableTileEntity {
 				Point3I point = getPoint(n);
 				//ProgressiveAutomation.logger.info("Plant: "+n+" "+point.getX()+", "+point.getY()+", "+point.getZ());
 				
-				if (isPlantable(slots[SLOT_SEEDS])) {
+				//if the seed is from pnematiccraft
+				 if (Pneumaticcraft.isSeed(slots[SLOT_SEEDS])) {
+					 if (Pneumaticcraft.validBlock(worldObj, slots[SLOT_SEEDS], point)) {
+						 if (Pneumaticcraft.checkClear(worldObj, point)) {
+							 if (doAction) {
+								 if (Pneumaticcraft.placeSeed(worldObj, slots[SLOT_SEEDS], point)) {
+									 //placed
+	
+									 slots[SLOT_SEEDS].stackSize--;
+									 if (slots[SLOT_SEEDS].stackSize==0) {
+										 slots[SLOT_SEEDS] = null;
+									 }
+								 }
+							 }
+						 }
+						 return true;
+					 }
+				} else if (isPlantable(slots[SLOT_SEEDS])) {
 					Block plant = null;
 					if (slots[SLOT_SEEDS].getItem() instanceof IPlantable) {
 						//normal crops
@@ -195,7 +213,6 @@ public class TilePlanter extends UpgradeableTileEntity {
 							return true;
 						}
 					}
-					
 				}
 			}
 		}
@@ -216,6 +233,8 @@ public class TilePlanter extends UpgradeableTileEntity {
 			return (worldObj.getBlock(plantPoint.getX(), plantPoint.getY() + 1, plantPoint.getZ()) == Blocks.reeds);
 		} else if (plantBlock == Blocks.cactus) { //cactus
 			return (worldObj.getBlock(plantPoint.getX(), plantPoint.getY() + 1, plantPoint.getZ()) == Blocks.cactus);
+		} else if (Pneumaticcraft.isPlant(plantBlock)) { //Pneumaticcraft
+			return Pneumaticcraft.isGrown(worldObj, plantPoint);
 		}
 		return false;
 	}
@@ -292,6 +311,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 					(item.getItem() instanceof IPlantable) //normal crops
 					|| (item.getItem() == Items.reeds) // sugar cane
 					|| (Block.getBlockFromItem(item.getItem()) == Blocks.cactus)  // cactus
+					|| (Pneumaticcraft.isSeed(item)) //pnumaticraft plants
 				) && (OreDictionary.getOreID(item) != OreDictionary.getOreID("treeSapling")) 
 			) {
 			return true;
