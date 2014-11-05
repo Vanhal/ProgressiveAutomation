@@ -49,66 +49,6 @@ public class ContainerMiner extends BaseContainer {
 		addPlayerInventory(inv);
 	}
 	
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		ItemStack stack = null;
-		Slot slotObject = (Slot) inventorySlots.get(slot);
-		
-		if (slotObject!=null && slotObject.getHasStack()) {
-			ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
-
-            if (slot < entity.getSizeInventory()) {
-                if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
-                	return null;
-                }
-            } else {
-            	if (stackInSlot.isItemEqual(new ItemStack(Blocks.cobblestone))) {
-            		if (!this.mergeItemStack(stackInSlot, 1, 2, false)) {
-            			return null;
-            		}
-            	} else if ( ToolHelper.getType(stackInSlot.getItem()) == ToolHelper.TYPE_PICKAXE ) {
-            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getUpgradeLevel()) {
-	            		if (!this.mergeItemStack(stackInSlot, 2, 3, false)) {
-	            			return null;
-	            		}
-            		} else {
-            			return null;
-            		}
-            	} else if ( ToolHelper.getType(stackInSlot.getItem()) == ToolHelper.TYPE_SHOVEL ) {
-            		if (ToolHelper.getLevel(stackInSlot) <= ((TileMiner) entity).getUpgradeLevel()) {
-	             		if (!this.mergeItemStack(stackInSlot, 3, 4, false)) {
-	             			return null;
-	             		}
-            		} else {
-            			return null;
-            		}
-            	} else if ( (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) || (stackInSlot.getItem() instanceof ItemRFEngine) ) {
-            		if (!this.mergeItemStack(stackInSlot, entity.SLOT_FUEL, 1, false)) {
-            			return null;
-            		}
-            	} else if (stackInSlot.isItemEqual(updateType)) {
-             		if (!this.mergeItemStack(stackInSlot, 4, 5, false)) {
-             			return null;
-             		}
-             	} else if ( (stackInSlot.getItem() instanceof ItemUpgrade) && (((ItemUpgrade)stackInSlot.getItem()).getLevel()==-1) ) {
-             		if (!this.mergeItemStack(stackInSlot, 4, 5, false)) {
-             			return null;
-             		}
-             	} else if (!this.mergeItemStack(stackInSlot, 5, 14, false)) {
-             		return null;
-             	}
-            }
-
-            if (stackInSlot.stackSize == 0) {
-                    slotObject.putStack(null);
-            } else {
-                    slotObject.onSlotChanged();
-            }
-		}
-		
-		return stack;
-	}
-	
 	
 	/* deal with updates */
 	protected int lastMinedBlocks = -1;

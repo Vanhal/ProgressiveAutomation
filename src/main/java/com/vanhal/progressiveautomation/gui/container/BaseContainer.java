@@ -42,6 +42,53 @@ public class BaseContainer extends Container {
 		return true;
 	}
 	
+	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+		ItemStack stack = null;
+		Slot slotObject = (Slot) inventorySlots.get(slot);
+		
+		if (slotObject!=null && slotObject.getHasStack()) {
+			ItemStack stackInSlot = slotObject.getStack();
+            stack = stackInSlot.copy();
+
+            if (slot < entity.getSizeInventory()) {
+                if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
+                	return null;
+                }
+            } else {
+            	boolean foundSlot = false;
+            	for (Object targetSlot: inventorySlots) {
+            		if (targetSlot instanceof Slot) {
+            			int slotNum = ((Slot) targetSlot).slotNumber;
+            			if ( (slotNum >= entity.SLOT_INVENTORY_START) && (entity.SLOT_INVENTORY_START != entity.SLOT_INVENTORY_END) ) {
+            				if (!this.mergeItemStack(stackInSlot, entity.SLOT_INVENTORY_START, entity.SLOT_INVENTORY_END + 1, false)) {
+                         		return null;
+                         	}
+            				foundSlot = true;
+            				break;
+            			} else if ( ((Slot) targetSlot).isItemValid(stackInSlot) ) {
+            				if (!this.mergeItemStack(stackInSlot, slotNum, slotNum+1, false)) {
+                    			return null;
+                    		}
+            				foundSlot = true;
+                    		break;
+            			}
+            		}
+            	}
+            	if (!foundSlot) return null;
+            }
+            
+            
+
+            if (stackInSlot.stackSize == 0) {
+                    slotObject.putStack(null);
+            } else {
+                    slotObject.onSlotChanged();
+            }
+		}
+		
+		return stack;
+	}
+	
 	/* Add the players Inventory */
 	public void addPlayerInventory(InventoryPlayer inv) {
 		addPlayerInventory(inv, 8, 84);

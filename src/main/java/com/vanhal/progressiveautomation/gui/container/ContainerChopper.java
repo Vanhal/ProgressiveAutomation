@@ -43,54 +43,6 @@ public class ContainerChopper extends BaseContainer {
 
 		addPlayerInventory(inv);
 	}
-
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		ItemStack stack = null;
-		Slot slotObject = (Slot) inventorySlots.get(slot);
-		
-		if (slotObject!=null && slotObject.getHasStack()) {
-			ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
-
-            if (slot < entity.getSizeInventory()) {
-                if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
-                	return null;
-                }
-            } else {
-            	if (TileChopper.checkSapling(stackInSlot)) {
-            		if (!this.mergeItemStack(stackInSlot, ((TileChopper) entity).SLOT_SAPLINGS, ((TileChopper) entity).SLOT_SAPLINGS + 1, false)) {
-            			return null;
-            		}
-            	} else if ( ToolHelper.getType(stackInSlot.getItem()) == ToolHelper.TYPE_AXE ) {
-            		if (ToolHelper.getLevel(stackInSlot) <= ((TileChopper) entity).getUpgradeLevel()) {
-	            		if (!this.mergeItemStack(stackInSlot, entity.SLOT_AXE, entity.SLOT_AXE + 1, false)) {
-	            			return null;
-	            		}
-            		} else {
-            			return null;
-            		}
-            	} else if ( (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) || (stackInSlot.getItem() instanceof ItemRFEngine) ) {
-            		if (!this.mergeItemStack(stackInSlot, entity.SLOT_FUEL, entity.SLOT_FUEL + 1, false)) {
-            			return null;
-            		}
-            	} else if (stackInSlot.isItemEqual(updateType)) {
-             		if (!this.mergeItemStack(stackInSlot, entity.SLOT_UPGRADE, entity.SLOT_UPGRADE + 1, false)) {
-             			return null;
-             		}
-             	} else if (!this.mergeItemStack(stackInSlot, entity.SLOT_INVENTORY_START, entity.SLOT_INVENTORY_END + 1, false)) {
-             		return null;
-             	}
-            }
-
-            if (stackInSlot.stackSize == 0) {
-                    slotObject.putStack(null);
-            } else {
-                    slotObject.onSlotChanged();
-            }
-		}
-		
-		return stack;
-	}
 	
 	/* deal with updates */
 	protected int lastUpgrades = -1;

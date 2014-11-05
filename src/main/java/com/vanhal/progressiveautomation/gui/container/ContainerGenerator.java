@@ -29,39 +29,6 @@ public class ContainerGenerator extends BaseContainer {
 	}
 	
 	
-	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
-		ItemStack stack = null;
-		Slot slotObject = (Slot) inventorySlots.get(slot);
-		
-		if (slotObject!=null && slotObject.getHasStack()) {
-			ItemStack stackInSlot = slotObject.getStack();
-            stack = stackInSlot.copy();
-
-            if (slot < entity.getSizeInventory()) {
-                if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
-                	return null;
-                }
-            } else {
-            	if (TileEntityFurnace.getItemBurnTime(stackInSlot)>0) {
-            		if (!this.mergeItemStack(stackInSlot, entity.SLOT_FUEL, entity.SLOT_FUEL + 1, false)) {
-            			return null;
-            		}
-            	} else {
-            		return null;
-            	}
-            }
-
-            if (stackInSlot.stackSize == 0) {
-                    slotObject.putStack(null);
-            } else {
-                    slotObject.onSlotChanged();
-            }
-		}
-		
-		return stack;
-	}
-	
-	
 	//send updates
 	int lastEnergy = -1;
 	
