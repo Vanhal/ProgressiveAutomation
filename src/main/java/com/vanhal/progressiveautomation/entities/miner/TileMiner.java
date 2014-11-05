@@ -96,6 +96,7 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (newY<0) bedrock = true;
 			}
 		}
+		notifyUpdate();
 		//ProgressiveAutomation.logger.info("Update Finished: "+currentMineBlocks+"/"+totalMineBlocks);
 	}
 
@@ -125,7 +126,7 @@ public class TileMiner extends UpgradeableTileEntity {
 					}
 				} else {
 					if (!tryBlock.getMaterial().isLiquid()) {
-						return 4;
+						return 1;
 					}
 				}
 			}
@@ -148,6 +149,8 @@ public class TileMiner extends UpgradeableTileEntity {
 				miningTime = 0;
 				//clock is done, lets mine it
 				Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
+				
+				//ProgressiveAutomation.logger.info("Point: "+miningWith+" "+currentPoint.getX()+","+currentYLevel+","+currentPoint.getY());
 
 				//don't harvest anything if the block is air or liquid
 				if (miningWith!=4) {
@@ -258,7 +261,8 @@ public class TileMiner extends UpgradeableTileEntity {
 				return worldObj.getBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
 			} else {
 				currentYLevel--;
-				miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
+				if (currentYLevel>=0)
+					miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
 			}
 		}
 		if (miningWith>0) {

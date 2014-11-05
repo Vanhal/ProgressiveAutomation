@@ -9,6 +9,7 @@ import com.vanhal.progressiveautomation.util.BlockHelper;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -132,7 +133,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 					}
 				}
 			}
-			
+			checkForPowerChange();
 		}
 	}
 	
@@ -489,5 +490,20 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		} else {
 			return 0;
 		}
+	}
+	
+	//this will just update the blocks around if the rfengine is added to a machine
+	protected boolean lastEngine = false;
+	protected void checkForPowerChange() {
+		if ( ( (!lastEngine) && (hasEngine()) ) ||
+				( (lastEngine) && (!hasEngine()) ) ) {
+			lastEngine = hasEngine();
+			notifyUpdate();
+		}
+	}
+	
+	protected void notifyUpdate() {
+		Block minerBlock = worldObj.getBlock(xCoord, yCoord, zCoord);
+		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, minerBlock);
 	}
 }

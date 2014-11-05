@@ -14,6 +14,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
@@ -53,4 +54,23 @@ public class BlockMiner extends BaseBlock {
 		
 		GameRegistry.addRecipe(recipe);
 	}
+	
+	@Override
+	public int isProvidingWeakPower(IBlockAccess block, int x, int y, int z, int side) {
+		TileEntity tile = block.getTileEntity(x, y, z);
+		if (tile instanceof TileMiner) {
+			return (((TileMiner)tile).isDone())?15:0;
+		}
+		return 0;
+    }
+	
+	@Override
+	public int isProvidingStrongPower(IBlockAccess block, int x, int y, int z, int side) {
+        return side == 0 ? this.isProvidingWeakPower(block, x, y, z, side) : 0;
+    }
+	
+	@Override
+	public boolean canProvidePower() {
+        return true;
+    }
 }
