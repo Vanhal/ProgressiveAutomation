@@ -67,9 +67,12 @@ public class BaseBlock extends BlockContainer {
 		name = machineType+returnLevelName(level);
 		setBlockName(name);
 		
+		
 		setHardness(1.0f);
 		setCreativeTab(ProgressiveAutomation.PATab);
 		blockLevel = level;
+		
+		GUIid = ProgressiveAutomation.proxy.registerGui(machineType);
 	}
 	
 	public String getLevelName() {

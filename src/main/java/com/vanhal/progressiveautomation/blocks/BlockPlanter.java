@@ -24,7 +24,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 public class BlockPlanter extends BaseBlock {
 	public BlockPlanter(int level) {
 		super("Planter", level);
-		GUIid = ProgressiveAutomation.guiHandler.PlanterGUI;
 	}
 
 	public TileEntity createNewTileEntity(World world, int var2) {

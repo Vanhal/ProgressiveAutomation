@@ -1,5 +1,11 @@
 package com.vanhal.progressiveautomation.gui;
 
+import java.lang.reflect.Constructor;
+
+import gnu.trove.map.TMap;
+import gnu.trove.map.hash.THashMap;
+
+import com.sun.xml.internal.ws.api.server.Container;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
@@ -14,65 +20,66 @@ import com.vanhal.progressiveautomation.gui.container.ContainerGenerator;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerPlanter;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 
+/*
+ * Contains some code from cofh Core
+ */
+
 public class SimpleGuiHandler implements IGuiHandler {
-	public static int MinerGUI = 1;
-	public static int ChopperGUI = 2;
-	public static int GeneratorGUI = 3;
-	public static int PlanterGUI = 4;
+	private int guiIdCounter = 0;
+	
+	private final TMap containerMap = new THashMap();
+	private final TMap guiMap = new THashMap();
+	
+	public int registerGui(Class gui, Class container) {
+		guiIdCounter++;
+		guiMap.put(guiIdCounter, gui);
+		containerMap.put(guiIdCounter, container);
+		return guiIdCounter;
+	}
 
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if (ID==MinerGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TileMiner) {
-				TileMiner tile = (TileMiner)world.getTileEntity(x, y, z);
-				return new ContainerMiner(player.inventory, tile);
+		if (containerMap.containsKey(ID)) {
+			if (!world.blockExists(x, y, z)) {
+				return null;
 			}
-		} else if (ID==ChopperGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TileChopper) {
-				TileChopper tile = (TileChopper)world.getTileEntity(x, y, z);
-				return new ContainerChopper(player.inventory, tile);
+			TileEntity tile = world.getTileEntity(x, y, z);
+			try {
+				Class<? extends Container> containerClass = (Class<? extends Container>) containerMap.get(ID);
+				Constructor containerConstructor = containerClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
+				return containerConstructor.newInstance(player.inventory, tile);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} else if (ID==GeneratorGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TileGenerator) {
-				TileGenerator tile = (TileGenerator)world.getTileEntity(x, y, z);
-				return new ContainerGenerator(player.inventory, tile);
-			}
-		} else if (ID==PlanterGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TilePlanter) {
-				TilePlanter tile = (TilePlanter)world.getTileEntity(x, y, z);
-				return new ContainerPlanter(player.inventory, tile);
-			}
+			return null;
 		}
 		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if (ID==MinerGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TileMiner) {
-				TileMiner tile = (TileMiner)world.getTileEntity(x, y, z);
-				return new GUIMiner(player.inventory, tile);
+		if (guiMap.containsKey(ID)) {
+			if (!world.blockExists(x, y, z)) {
+				return null;
 			}
-		} else if (ID==ChopperGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TileChopper) {
-				TileChopper tile = (TileChopper)world.getTileEntity(x, y, z);
-				return new GUIChopper(player.inventory, tile);
+			TileEntity tile = world.getTileEntity(x, y, z);
+			try {
+				Class<? extends GuiScreen> guiClass = (Class<? extends GuiScreen>) guiMap.get(ID);
+				Constructor guiConstructor = guiClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
+				return guiConstructor.newInstance(player.inventory, tile);
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} else if (ID==GeneratorGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TileGenerator) {
-				TileGenerator tile = (TileGenerator)world.getTileEntity(x, y, z);
-				return new GUIGenerator(player.inventory, tile);
-			}
-		} else if (ID==PlanterGUI) {
-			if (world.getTileEntity(x, y, z) instanceof TilePlanter) {
-				TilePlanter tile = (TilePlanter)world.getTileEntity(x, y, z);
-				return new GUIPlanter(player.inventory, tile);
-			}
+			return null;
 		}
+
 		return null;
 	}
 

@@ -36,7 +36,6 @@ public class BlockGenerator extends BaseBlock {
 
 	public BlockGenerator(int level) {
 		super("Generator", level);
-		GUIid = ProgressiveAutomation.guiHandler.GeneratorGUI;
 	}
 	
 	public TileEntity createNewTileEntity(World world, int var2) {

@@ -23,9 +23,9 @@ public class GUIGenerator extends BaseGUI {
 	
 	TileGenerator generator;
 
-	public GUIGenerator(InventoryPlayer inv, TileGenerator entity) {
+	public GUIGenerator(InventoryPlayer inv, TileEntity entity) {
 		super(new ContainerGenerator(inv, entity), texture);
-		generator = entity;
+		generator = (TileGenerator)entity;
 		this.setHeight(135);
 	}
 

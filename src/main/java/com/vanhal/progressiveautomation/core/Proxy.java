@@ -48,4 +48,25 @@ public class Proxy {
 		GameRegistry.registerTileEntity(TileGeneratorDiamond.class, "TileGeneratorDiamond");
 	}
 	
+	public int registerGui(String guiName) {
+		return registerGui(guiName, guiName);
+	}
+	
+	public int registerGui(String guiName, String containerName) {
+
+		Class<?> gui = null;
+		Class<?> container = null;
+		try {
+			gui = Proxy.class.getClassLoader().loadClass("com.vanhal.progressiveautomation.gui.client.GUI" + guiName);
+		} catch (ClassNotFoundException e) {
+			ProgressiveAutomation.logger.info("gui not found");
+			return -1;
+		}
+		try {
+			container = Proxy.class.getClassLoader().loadClass("com.vanhal.progressiveautomation.gui.container.Container" + containerName);
+		} catch (ClassNotFoundException e) {
+			return -1;
+		}
+		return ProgressiveAutomation.guiHandler.registerGui(gui, container);
+	}
 }

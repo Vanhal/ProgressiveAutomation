@@ -22,7 +22,6 @@ public class BlockMiner extends BaseBlock {
 	
 	public BlockMiner(int level) {
 		super("Miner", level);
-		GUIid = ProgressiveAutomation.guiHandler.MinerGUI;
 	}
 	
 	public TileEntity createNewTileEntity(World world, int var2) {

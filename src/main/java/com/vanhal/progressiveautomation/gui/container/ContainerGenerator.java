@@ -21,9 +21,9 @@ public class ContainerGenerator extends BaseContainer {
 	
 	TileGenerator generator;
 
-	public ContainerGenerator(InventoryPlayer inv, TileGenerator entity) {
+	public ContainerGenerator(InventoryPlayer inv, TileEntity entity) {
 		super((BaseTileEntity)entity, 23, 24, false);
-		generator = entity;
+		generator = (TileGenerator)entity;
 		
 		addPlayerInventory(inv, 53);
 	}

@@ -24,7 +24,6 @@ public class BlockChopper extends BaseBlock {
 
 	public BlockChopper(int level) {
 		super("Chopper", level);
-		GUIid = ProgressiveAutomation.guiHandler.ChopperGUI;
 	}
 
 	public TileEntity createNewTileEntity(World world, int var2) {
