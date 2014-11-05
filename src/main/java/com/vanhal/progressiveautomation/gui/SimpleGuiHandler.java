@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 
-import com.sun.xml.internal.ws.api.server.Container;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
@@ -20,6 +19,7 @@ import com.vanhal.progressiveautomation.gui.container.ContainerGenerator;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerPlanter;
 
+import net.minecraft.inventory.Container;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
