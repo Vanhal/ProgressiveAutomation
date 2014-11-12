@@ -16,6 +16,7 @@ public class PAConfig {
 	public static boolean chopperEnabled;
 	public static boolean planterEnabled;
 	public static boolean generatorEnabled;
+	public static boolean crafterEnabled;
 	
 	//allow levels
 	public static boolean allowWoodenLevel;
@@ -74,7 +75,8 @@ public class PAConfig {
 		chopperEnabled = config.getBoolean("chopper", "blocks", true, "Tree Chopper Block is enabled (requires restart)");
 		planterEnabled = config.getBoolean("planter", "blocks", true, "Planter/Harvester Block is enabled (requires restart)");
 		generatorEnabled = config.getBoolean("generator", "blocks", true, "Generator Block is enabled (requires restart)");
-		
+		crafterEnabled = config.getBoolean("crafter", "blocks", true, "Crafter Block is enabled (requires restart)");
+
 		allowWoodenLevel = config.getBoolean("wooden", "upgrades", true, "Allow wooden level blocks (requires restart)");
 		allowStoneLevel = config.getBoolean("stone", "upgrades", true, "Allow stone level blocks (requires restart)");
 		allowIronLevel = config.getBoolean("iron", "upgrades", true, "Allow iron level blocks (requires restart)");

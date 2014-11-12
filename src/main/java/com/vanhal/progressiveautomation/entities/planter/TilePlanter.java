@@ -89,15 +89,15 @@ public class TilePlanter extends UpgradeableTileEntity {
 
 	public void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		//save the current chopping time
+		//save the current planting time
 		nbt.setInteger("currentTime", currentTime);
 		nbt.setInteger("currentBlock", searchBlock);
 	}
 
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		//load the current chopping time
-		currentTime = nbt.getInteger("choppingTime");
+		//load the current planting time
+		currentTime = nbt.getInteger("currentTime");
 		searchBlock = nbt.getInteger("currentBlock");
 	}
 	

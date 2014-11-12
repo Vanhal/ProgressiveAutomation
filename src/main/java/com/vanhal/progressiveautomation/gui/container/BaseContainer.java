@@ -58,14 +58,17 @@ public class BaseContainer extends Container {
             	boolean foundSlot = false;
             	for (Object targetSlot: inventorySlots) {
             		if (targetSlot instanceof Slot) {
-            			int slotNum = ((Slot) targetSlot).slotNumber;
+            			Slot theTargetSlot = (Slot) targetSlot;
+            			int slotNum = theTargetSlot.slotNumber;
             			if ( (slotNum >= entity.SLOT_INVENTORY_START) && (entity.SLOT_INVENTORY_START != entity.SLOT_INVENTORY_END) ) {
             				if (!this.mergeItemStack(stackInSlot, entity.SLOT_INVENTORY_START, entity.SLOT_INVENTORY_END + 1, false)) {
                          		return null;
                          	}
             				foundSlot = true;
             				break;
-            			} else if ( ((Slot) targetSlot).isItemValid(stackInSlot) ) {
+            			} else if ( (theTargetSlot.isItemValid(stackInSlot) ) 
+            					&& (theTargetSlot.getSlotStackLimit()>1) 
+            					&& ( (!theTargetSlot.getHasStack()) || (theTargetSlot.getStack().stackSize < theTargetSlot.getSlotStackLimit()) ) ){
             				if (!this.mergeItemStack(stackInSlot, slotNum, slotNum+1, false)) {
                     			return null;
                     		}

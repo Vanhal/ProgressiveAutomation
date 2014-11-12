@@ -5,6 +5,10 @@ import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopperDiamond;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopperIron;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopperStone;
+import com.vanhal.progressiveautomation.entities.crafter.TileCrafter;
+import com.vanhal.progressiveautomation.entities.crafter.TileCrafterDiamond;
+import com.vanhal.progressiveautomation.entities.crafter.TileCrafterIron;
+import com.vanhal.progressiveautomation.entities.crafter.TileCrafterStone;
 import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorDiamond;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorIron;
@@ -46,6 +50,12 @@ public class Proxy {
 		GameRegistry.registerTileEntity(TileGeneratorStone.class, "TileGeneratorStone");
 		GameRegistry.registerTileEntity(TileGeneratorIron.class, "TileGeneratorIron");
 		GameRegistry.registerTileEntity(TileGeneratorDiamond.class, "TileGeneratorDiamond");
+		
+		//generator
+		GameRegistry.registerTileEntity(TileCrafter.class, "TileCrafter");
+		GameRegistry.registerTileEntity(TileCrafterStone.class, "TileCrafterStone");
+		GameRegistry.registerTileEntity(TileCrafterIron.class, "TileCrafterIron");
+		GameRegistry.registerTileEntity(TileCrafterDiamond.class, "TileCrafterDiamond");
 	}
 	
 	public int registerGui(String guiName) {

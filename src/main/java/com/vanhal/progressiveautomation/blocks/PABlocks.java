@@ -18,6 +18,7 @@ public class PABlocks {
 				if (PAConfig.minerEnabled) miner.add(new BlockMiner(i));
 				if (PAConfig.chopperEnabled) chopper.add(new BlockChopper(i));
 				if (PAConfig.planterEnabled) planter.add(new BlockPlanter(i));
+				if (PAConfig.crafterEnabled) crafter.add(new BlockCrafter(i));
 				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator.add(new BlockGenerator(i));
 			}
 		}
@@ -46,6 +47,12 @@ public class PABlocks {
 			blockGenerator.preInit(previousTier);
 			previousTier = blockGenerator;
 		}
+		
+		previousTier = BlockCrafter.firstTier;
+		for (BlockCrafter blockCrafter : crafter) {
+			blockCrafter.preInit(previousTier);
+			previousTier = blockCrafter;
+		}
 	}
 
 	public static void init() {
@@ -63,6 +70,10 @@ public class PABlocks {
 		
 		for (BlockGenerator blockGenerator : generator) {
 			blockGenerator.init();
+		}
+		
+		for (BlockCrafter blockCrafter : crafter) {
+			blockCrafter.init();
 		}
 	}
 
@@ -82,6 +93,10 @@ public class PABlocks {
 		for (BlockGenerator blockGenerator : generator) {
 			blockGenerator.postInit();
 		}
+		
+		for (BlockCrafter blockCrafter : crafter) {
+			blockCrafter.postInit();
+		}
 	}
 
 	//blocks
@@ -97,5 +112,8 @@ public class PABlocks {
 
 	//generators
 	public static List<BlockGenerator> generator = new ArrayList<BlockGenerator>(4);
+	
+	//crafters
+	public static List<BlockCrafter> crafter = new ArrayList<BlockCrafter>(4);
 
 }
