@@ -114,4 +114,12 @@ public class BlockGenerator extends BaseBlock {
             ((TileEntityFurnace)world.getTileEntity(x, y, z)).func_145951_a(itemStack.getDisplayName());
         }
     }
+    
+    @Override
+    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis){
+    	int metadata = worldObj.getBlockMetadata(x, y, z) + 1;
+    	if (metadata>5) metadata = 2;
+    	worldObj.setBlockMetadataWithNotify(x, y, z, metadata, 2);
+        return true;
+    }
 }

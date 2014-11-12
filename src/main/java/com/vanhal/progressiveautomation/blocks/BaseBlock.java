@@ -1,6 +1,9 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import java.util.ArrayList;
 import java.util.Random;
+
+import cofh.api.block.IDismantleable;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
@@ -33,7 +36,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class BaseBlock extends BlockContainer {
+public class BaseBlock extends BlockContainer implements IDismantleable {
 	public String name;
 	public String machineType;
 	public int GUIid = -1;
@@ -116,52 +119,11 @@ public class BaseBlock extends BlockContainer {
 		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
 
         if (tileEntity != null) {
-        	//dump out the inventory
-            for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
-                ItemStack itemstack = tileEntity.getStackInSlot(i);
-
-                if (itemstack != null) {
-                	dumpItems(world, x, y, z, itemstack);
-                }
+            ArrayList<ItemStack> items = getInsides(world, x, y, z);
+            
+            for (ItemStack item: items) {
+            	dumpItems(world, x, y, z, item);
             }
-            
-            //drop the other types of upgrades first
-            if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-            	UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
-            	if (tileMachine.hasCobbleUpgrade) {
-            		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
-            		dumpItems(world, x, y, z, cobbleGen);
-            		tileMachine.hasCobbleUpgrade = false;
-            	}
-            	if (tileMachine.hasFillerUpgrade) {
-            		ItemStack cobbleGen = new ItemStack(PAItems.fillerUpgrade);
-            		dumpItems(world, x, y, z, cobbleGen);
-            		tileMachine.hasFillerUpgrade = false;
-            	}
-            	if (tileMachine.hasWitherUpgrade) {
-            		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
-            		dumpItems(world, x, y, z, wither);
-            		tileMachine.hasWitherUpgrade = false;
-            	}
-            }
-            
-            //if entity is IUpgradeable, drop the upgrades
-            if (world.getTileEntity(x, y, z) instanceof IUpgradeable) {
-            	IUpgradeable tileMachine = (IUpgradeable)world.getTileEntity(x, y, z);
-    	    	int numUpgrades = tileMachine.getUpgrades();
-    	    	while (numUpgrades>0) {
-    	    		ItemStack upgrades = ToolHelper.getUpgradeType(tileMachine.getUpgradeLevel());
-    	    		if (numUpgrades<=64) {
-    	    			upgrades.stackSize = numUpgrades;
-    	    			numUpgrades = 0;
-    	    		} else {
-    	    			upgrades.stackSize = 64;
-    	    			numUpgrades -= 64;
-    	    		}
-    	    		dumpItems(world, x, y, z, upgrades);
-    	    	}
-    	    }
-            
             
 
             world.func_147453_f(x, y, z, block);
@@ -198,5 +160,85 @@ public class BaseBlock extends BlockContainer {
 	
 	public void postInit() {
 		
+	}
+	
+	protected ArrayList<ItemStack> getInsides(World world, int x, int y, int z) {
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		
+		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
+		if (tileEntity != null) {
+        	//get the inventory
+            for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
+                ItemStack itemstack = tileEntity.getStackInSlot(i);
+                if (itemstack != null) {
+                	items.add(itemstack);
+                }
+            }
+            
+            //drop the other types of upgrades first
+            if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
+            	UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
+            	if (tileMachine.hasCobbleUpgrade) {
+            		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
+            		items.add(cobbleGen);
+            		tileMachine.hasCobbleUpgrade = false;
+            	}
+            	if (tileMachine.hasFillerUpgrade) {
+            		ItemStack fillerUpgrade = new ItemStack(PAItems.fillerUpgrade);
+            		items.add(fillerUpgrade);
+            		tileMachine.hasFillerUpgrade = false;
+            	}
+            	if (tileMachine.hasWitherUpgrade) {
+            		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
+            		items.add(wither);
+            		tileMachine.hasWitherUpgrade = false;
+            	}
+            }
+            
+            //if entity is IUpgradeable, drop the upgrades
+            if (world.getTileEntity(x, y, z) instanceof IUpgradeable) {
+            	IUpgradeable tileMachine = (IUpgradeable)world.getTileEntity(x, y, z);
+    	    	int numUpgrades = tileMachine.getUpgrades();
+    	    	while (numUpgrades>0) {
+    	    		ItemStack upgrades = ToolHelper.getUpgradeType(tileMachine.getUpgradeLevel());
+    	    		if (numUpgrades<=64) {
+    	    			upgrades.stackSize = numUpgrades;
+    	    			numUpgrades = 0;
+    	    		} else {
+    	    			upgrades.stackSize = 64;
+    	    			numUpgrades -= 64;
+    	    		}
+    	    		items.add(upgrades);
+    	    	}
+    	    }
+		}
+		
+		return items;
+	}
+	
+	//IDismantleable stuff
+
+	@Override
+	public ArrayList<ItemStack> dismantleBlock(EntityPlayer player,
+			World world, int x, int y, int z, boolean returnDrops) {
+		
+		int meta = world.getBlockMetadata(x, y, z);
+		
+		ArrayList<ItemStack> items = getInsides(world, x, y, z);
+		items.addAll(getDrops(world, x, y, z, meta, 0));
+		
+		if (!returnDrops) {
+			for (ItemStack item: items) {
+	        	dumpItems(world, x, y, z, item);
+	        }
+		}
+		
+		world.setBlockToAir(x, y, z);
+		return items;
+	}
+
+	@Override
+	public boolean canDismantle(EntityPlayer player, World world, int x, int y, int z) {
+		return true;
 	}
 }
