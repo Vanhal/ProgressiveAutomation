@@ -43,6 +43,13 @@ public class SimpleGuiHandler implements IGuiHandler {
 		containerMap.put(guiIdCounter, container);
 		return guiIdCounter;
 	}
+	
+
+	public int registerServerGui(Class container) {
+		guiIdCounter++;
+		containerMap.put(guiIdCounter, container);
+		return guiIdCounter;
+	}
 
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (containerMap.containsKey(ID)) {
@@ -82,5 +89,6 @@ public class SimpleGuiHandler implements IGuiHandler {
 
 		return null;
 	}
+
 
 }

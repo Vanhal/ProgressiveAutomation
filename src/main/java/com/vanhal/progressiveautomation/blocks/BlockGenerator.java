@@ -20,6 +20,7 @@ import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorDiamond;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorIron;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorStone;
+import com.vanhal.progressiveautomation.items.ItemBlockMachine;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;

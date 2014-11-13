@@ -64,8 +64,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		
 		NBTTagList contents = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
-			ItemStack stack = slots[i];
-			if (stack != null) {
+			if (slots[i] != null) {
+				ItemStack stack = slots[i];
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setByte("Slot", (byte)i);
 				stack.writeToNBT(tag);

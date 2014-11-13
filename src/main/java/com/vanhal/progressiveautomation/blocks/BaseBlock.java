@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.blocks;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import cofh.api.block.IDismantleable;
@@ -10,6 +11,7 @@ import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.IUpgradeable;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
+import com.vanhal.progressiveautomation.items.ItemBlockMachine;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -31,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -116,6 +119,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
     }
 	
 	public void breakBlock(World world, int x, int y, int z, Block block, int p_149749_6_) {
+		ProgressiveAutomation.logger.info("Break Called");
 		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
 
         if (tileEntity != null) {
@@ -150,7 +154,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	public void preInit(Block previousTier) {
-		GameRegistry.registerBlock(this, name);
+		GameRegistry.registerBlock(this, ItemBlockMachine.class, name);
 		addRecipe(previousTier);
 	}
 	
@@ -210,6 +214,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
     	    		}
     	    		items.add(upgrades);
     	    	}
+    	    	tileMachine.setUpgrades(numUpgrades);
     	    }
 		}
 		
@@ -221,17 +226,38 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	@Override
 	public ArrayList<ItemStack> dismantleBlock(EntityPlayer player,
 			World world, int x, int y, int z, boolean returnDrops) {
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		
+		//ProgressiveAutomation.logger.info("Dismatle Called");
+		
+		Block targetBlock = world.getBlock(x, y, z);
 		int meta = world.getBlockMetadata(x, y, z);
 		
-		ArrayList<ItemStack> items = getInsides(world, x, y, z);
-		items.addAll(getDrops(world, x, y, z, meta, 0));
+		//this should be able to save the state of the machine and put it back when placed again
+		//but it doesn't seem to persist after restarting the world. I don't know why?!?
+		/*BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
+		NBTTagCompound blockNBT = new NBTTagCompound();
+		tileEntity.writeToNBT(blockNBT);*/
+		
+		ItemStack block = new ItemStack(targetBlock);
+		if (block.stackTagCompound == null) {
+			//block.setTagCompound(blockNBT);
+		}
+		
+		items.add(block);
 		
 		if (!returnDrops) {
 			for (ItemStack item: items) {
 	        	dumpItems(world, x, y, z, item);
 	        }
 		}
+		
+		
+		//delete the inventory so it doesn't drop
+		/*for (int i = 0; i < tileEntity.getSizeInventory(); i++) {
+			tileEntity.setInventorySlotContents(i, null);
+		}
+		getInsides(world, x, y, z);*/
 		
 		world.setBlockToAir(x, y, z);
 		return items;
