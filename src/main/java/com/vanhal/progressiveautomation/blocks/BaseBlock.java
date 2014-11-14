@@ -31,6 +31,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumChatFormatting;
@@ -119,7 +120,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
     }
 	
 	public void breakBlock(World world, int x, int y, int z, Block block, int p_149749_6_) {
-		ProgressiveAutomation.logger.info("Break Called");
 		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
 
         if (tileEntity != null) {
@@ -241,7 +241,41 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		
 		ItemStack block = new ItemStack(targetBlock);
 		if (block.stackTagCompound == null) {
-			//block.setTagCompound(blockNBT);
+			NBTTagCompound blockNBT = new NBTTagCompound();
+			
+			//get the current upgrades
+			if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
+				UpgradeableTileEntity upgradable = ((UpgradeableTileEntity) world.getTileEntity(x, y, z));
+				//upgrades
+				blockNBT.setInteger("upgrades", upgradable.getUpgrades());
+				upgradable.setUpgrades(0);
+				//cobbleUpgrade
+				blockNBT.setBoolean("hasCobbleUpgrade", upgradable.hasCobbleUpgrade);
+				upgradable.hasCobbleUpgrade = false;
+				//witherUpgrade
+				blockNBT.setBoolean("hasWitherUpgrade", upgradable.hasWitherUpgrade);
+				upgradable.hasWitherUpgrade = false;
+				//fillerUpgrade
+				blockNBT.setBoolean("hasFillerUpgrade", upgradable.hasFillerUpgrade);
+				upgradable.hasFillerUpgrade = false;
+			}
+			if (world.getTileEntity(x, y, z) instanceof BaseTileEntity) {
+				BaseTileEntity tileEntity = ((BaseTileEntity) world.getTileEntity(x, y, z));
+				//grab the inventory and save it to NBT
+				NBTTagList contents = new NBTTagList();
+				for (int i = 0; i < tileEntity.getSizeInventory(); i++) {
+					ItemStack stack = tileEntity.getStackInSlot(i);
+					if (stack!=null) {
+						NBTTagCompound tag = new NBTTagCompound();
+						tag.setByte("Slot", (byte)i);
+						stack.writeToNBT(tag);
+						contents.appendTag(tag);
+						tileEntity.setInventorySlotContents(i, null);
+					}
+				}
+				blockNBT.setTag("Contents", contents);
+			}
+			block.setTagCompound(blockNBT);
 		}
 		
 		items.add(block);
