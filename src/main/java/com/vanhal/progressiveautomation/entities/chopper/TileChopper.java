@@ -26,7 +26,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	 */
 	protected final int CUTTING_EXTRA_RANGE = 6;
 	
-	
+	private boolean forceRecalculate;
 	protected int maxCuttingX;
 	protected int minCuttingX;
 	protected int maxCuttingZ;
@@ -44,6 +44,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	public TileChopper() {
 		super(12);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
+		forceRecalculate = true;
 		
 		//slots
 		SLOT_AXE = 2;
@@ -82,6 +83,8 @@ public class TileChopper extends UpgradeableTileEntity {
 		//get the current tag list
 		NBTTagList contents = nbt.getTagList("BlockList", 10);
 		blockList.loadFromNBT(contents);
+
+		forceRecalculate = true;
 	}
 
 	public void updateEntity() {
@@ -359,7 +362,8 @@ public class TileChopper extends UpgradeableTileEntity {
 		}
 
 		//check upgrades
-		if (upgradeChanges()) {
+		if (forceRecalculate || upgradeChanges()) {
+			forceRecalculate = false;
 			recalculateChoppingRange();
 			update = true;
 		}
@@ -399,7 +403,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	private void recalculateChoppingRange() {
-		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(lastUpgrades + 1)-1)/2);
+		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(getCurrentUpgrades() + 1)-1)/2);
 		maxCuttingX = this.xCoord + cuttingSideSize;
 		minCuttingX = this.xCoord - cuttingSideSize;
 		maxCuttingZ = this.zCoord + cuttingSideSize;
