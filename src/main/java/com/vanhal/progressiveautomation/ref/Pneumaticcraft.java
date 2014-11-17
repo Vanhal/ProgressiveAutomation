@@ -109,7 +109,7 @@ public class Pneumaticcraft {
 	}
 	
 	public static boolean checkClear(World world, Point3I point) {
-		AxisAlignedBB block = AxisAlignedBB.getBoundingBox(point.getX(), point.getY() - 1, point.getZ(), point.getX()+1, point.getY()+2, point.getZ()+1);
+		AxisAlignedBB block = AxisAlignedBB.getBoundingBox(point.getX(), point.getY() - 1, point.getZ(), point.getX()+1, point.getY()+1, point.getZ()+1);
 		
 		List entities = world.getEntitiesWithinAABB(EntityItem.class, block);
 		if (entities.isEmpty()) {

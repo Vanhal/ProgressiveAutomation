@@ -176,8 +176,8 @@ public class TilePlanter extends UpgradeableTileEntity {
 									 }
 								 }
 							 }
+							 return true;
 						 }
-						 return true;
 					 }
 				} else if (isPlantable(slots[SLOT_SEEDS])) {
 					Block plant = null;
