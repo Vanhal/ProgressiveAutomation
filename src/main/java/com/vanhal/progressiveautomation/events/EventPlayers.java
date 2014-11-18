@@ -19,7 +19,7 @@ import java.net.URL;
 
 public class EventPlayers {
 	
-	private List<String> names = Arrays.asList();
+	private ArrayList<String> names = new ArrayList<String>();
 	private final String url = "https://raw.githubusercontent.com/Vanhal/PAData/master/names.txt";
 	
 	public EventPlayers() {
@@ -32,7 +32,7 @@ public class EventPlayers {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(listFile.openStream()));
 			String temp = reader.readLine();
 			while (temp!=null) {
-				names.add(temp);
+				names.add(temp.trim());
 				temp = reader.readLine();
 			}
 		} catch (Exception e) {
