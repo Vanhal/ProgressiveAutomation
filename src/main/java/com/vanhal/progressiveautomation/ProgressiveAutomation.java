@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.core.Proxy;
+import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
@@ -62,6 +64,7 @@ public class ProgressiveAutomation {
 		PABlocks.preInit();
 		
 		PAConfig.save();
+		MinecraftForge.EVENT_BUS.register(new EventPlayers());
 	}
 	
 	@EventHandler

@@ -69,6 +69,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 							}
 						} else {
 							currentTime = 0;
+							searchBlock = -1;
 						}
 					} else if (plantSeed(searchBlock, true)) {
 						searchBlock = -1;
