@@ -75,23 +75,5 @@ public class ContainerCrafter extends BaseContainer {
 				this.addSlotToContainer(new SlotFalseCopy(inventory, startSlot + i++, x + (w*18), y + (h*18)));
 			}
 		}
-	}
-	
-	protected int lastProgressUpdate = 0;
-	public void sendUpdates(ICrafting i) {
-		if (lastProgressUpdate != crafter.currentTime) {
-			lastProgressUpdate = crafter.currentTime;
-			i.sendProgressBarUpdate(this, 4, lastProgressUpdate);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int i, int value) {
-		super.updateProgressBar(i, value);
-		if (i==4) {
-			crafter.currentTime = value;
-		}
-	}
-	
-	
+	}	
 }
