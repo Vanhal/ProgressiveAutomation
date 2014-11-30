@@ -48,43 +48,4 @@ public class ContainerMiner extends BaseContainer {
 
 		addPlayerInventory(inv);
 	}
-	
-	
-	/* deal with updates */
-	protected int lastMinedBlocks = -1;
-	protected int lastMineBlocks = -1;
-	
-	protected boolean lastHasCobble = false;
-	
-	public void sendUpdates(ICrafting i) {
-		TileMiner miner = (TileMiner) entity;
-		if (lastMineBlocks != miner.getMineBlocks()) {
-			lastMineBlocks = miner.getMineBlocks();
-			i.sendProgressBarUpdate(this, 4, lastMineBlocks);
-		}
-		
-		if (lastMinedBlocks != miner.getMinedBlocks()) {
-			lastMinedBlocks = miner.getMinedBlocks();
-			i.sendProgressBarUpdate(this, 5, lastMinedBlocks);
-		}
-		
-		if (lastHasCobble != miner.hasCobbleUpgrade) {
-			lastHasCobble = miner.hasCobbleUpgrade;
-			i.sendProgressBarUpdate(this, 6, (lastHasCobble)?1:0);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int i, int value) {
-		super.updateProgressBar(i, value);
-		if (i==4) {
-			((TileMiner) entity).setMineBlocks(value);
-		} else if (i==5) {
-			((TileMiner) entity).setMinedBlocks(value);
-		} else if (i==6) {
-			((TileMiner) entity).hasCobbleUpgrade = (value==1);
-		}
-	}
-
-
 }
