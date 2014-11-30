@@ -4,6 +4,7 @@ import cofh.api.energy.IEnergyHandler;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 
@@ -20,6 +21,9 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -33,6 +37,15 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	 * Direction to auto output items to
 	 */
 	public ForgeDirection extDirection = ForgeDirection.UP;
+	
+	/**
+	 * Sygnalises whether the TileEntity needs to be synced with clients
+	 */
+	private boolean dirty;
+	/**
+	 * Tag holding partial updates that will be sent to players upon synchronisation
+	 */
+	protected NBTTagCompound partialUpdateTag = new NBTTagCompound();
 	
 	protected Random RND = new Random();
 	
@@ -58,9 +71,58 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		}
 	}
 	
-	//deal with NBT
-	public void writeToNBT(NBTTagCompound nbt) {
+	/**
+	 * Do not extend this method, use writeSyncOnlyNBT, writeCommonNBT or writeNonSyncableNBT as needed.
+	 */
+	@Override
+	public final void writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+		
+		writeCommonNBT(nbt);
+		writeNonSyncableNBT(nbt);
+	}
+	
+	/**
+	 * Do not extend this method, use readSyncOnlyNBT, readCommonNBT or readNonSyncableNBT as needed.
+	 */
+	@Override
+	public final void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		
+		readCommonNBT(nbt);
+		readNonSyncableNBT(nbt);
+	}
+	
+	/**
+	 * This overridable method is intended for writing to NBT all data that is used only at runtime
+	 * and never saved to hdd.
+	 * @param nbt
+	 */
+	protected void writeSyncOnlyNBT(NBTTagCompound nbt) {
+	}
+	
+	/**
+	 * This overridable method is intended for writing to NBT all data that is both saved to hdd
+	 * and can be sent to the client TileEntity through S35PacketUpdateTileEntity.
+	 * 
+	 * WARNING: Do not include slot contents here. 
+	 * They are automagically synced when a GUI is opened using S30PacketWindowItems 
+	 * @param nbt
+	 */
+	protected void writeCommonNBT(NBTTagCompound nbt) {
+		nbt.setInteger("Progress", progress);
+		nbt.setInteger("BurnLevel", burnLevel);
+	}
+	
+	/**
+	 * This overridable method is intended for writing to NBT all data that will 
+	 * NOT be synced using S35PacketUpdateTileEntity packets.
+	 * 
+	 * This includes, but is not limited to, slot contents. 
+	 * See writeSyncableNBT for more info.
+	 * @param nbt
+	 */
+	protected void writeNonSyncableNBT(NBTTagCompound nbt) {
 		
 		NBTTagList contents = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
@@ -73,13 +135,41 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 		}
 		nbt.setTag("Contents", contents);
-		
-		nbt.setInteger("Progress", progress);
-		nbt.setInteger("BurnLevel", burnLevel);
 	}
 	
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	/**
+	 * This overridable method is intended for reading from NBT all data that is used only at runtime
+	 * and never saved to hdd.
+	 * @param nbt
+	 */
+	public void readSyncOnlyNBT(NBTTagCompound nbt) {
+	}
+	
+	/**
+	 * This overridable method is intended for reading from NBT all data that is both saved to hdd
+	 * and can be sent to the client TileEntity through S35PacketUpdateTileEntity and PartialTileNBTUpdateMessage.
+	 * 
+	 * WARNING: Please check if the tag exists before reading it. Due to the nature of 
+	 * PartialTileNBTUpdateMessage properties that didn't change since the last message
+	 * will not be included.
+	 * 
+	 * WARNING: Do not include slot contents here. 
+	 * They are automagically synced when a GUI is opened using S30PacketWindowItems 
+	 * @param nbt
+	 */
+	public void readCommonNBT(NBTTagCompound nbt) {
+		
+		if (nbt.hasKey("Progress")) progress = nbt.getInteger("Progress");
+		if (nbt.hasKey("BurnLevel")) burnLevel = nbt.getInteger("BurnLevel");
+	}
+	
+	/**
+	 * This overridable method is intended for reading from NBT all data that is only saved to hdd 
+	 * and never synced between client and server, or is synced using a different method (e.g. inventory 
+	 * contents and S30PacketWindowItems)
+	 * @param nbt
+	 */
+	protected void readNonSyncableNBT(NBTTagCompound nbt) {
 		
 		NBTTagList contents = nbt.getTagList("Contents", 10);
 		for (int i = 0; i < contents.tagCount(); i++) {
@@ -89,9 +179,51 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 				slots[slot] = ItemStack.loadItemStackFromNBT(tag);
 			}
 		}
+	}
+	
+    /**
+     * This method is used to sync data when a GUI is opened. the packet will contain
+     * all syncable data.
+     */
+		@Override
+    public Packet getDescriptionPacket()
+    {
+        NBTTagCompound nbttagcompound = new NBTTagCompound();
+        this.writeCommonNBT(nbttagcompound);
+        this.writeSyncOnlyNBT(nbttagcompound);
+        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, -1, nbttagcompound);
+    }
+	
+	/**
+	 * This method is used to load syncable data when a GUI is opened.
+	 */
+		@Override    
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    	this.readCommonNBT(pkt.func_148857_g());
+    	this.readSyncOnlyNBT(pkt.func_148857_g());
+    }
+	
+	/**
+	 * This method will generate a message with partial updates for this TileEntity.
+	 * 
+	 * WARNING: Using this method resets the dirty flag and clears all pending updates up to this point.
+	 * @return
+	 */
+	public PartialTileNBTUpdateMessage getPartialUpdateMessage() {
 		
-		progress = nbt.getInteger("Progress");
-		burnLevel = nbt.getInteger("BurnLevel");
+		PartialTileNBTUpdateMessage message = new PartialTileNBTUpdateMessage(this.xCoord, this.yCoord, this.zCoord, partialUpdateTag);
+		dirty = false;
+		partialUpdateTag = new NBTTagCompound();
+		
+		return message;
+	}
+	
+	/**
+	 * Whether the TileEntity needs syncing.
+	 * @return
+	 */
+	public boolean isDirty() {
+		return dirty;
 	}
 	
 	public void updateEntity() {
@@ -102,6 +234,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 					if (slots[SLOT_FUEL]!=null) {
 						if (isFuel()) {
 							burnLevel = progress = getBurnTime();
+							partialUpdateTag.setInteger("Progress", progress);
+							partialUpdateTag.setInteger("BurnLevel", burnLevel);
+							dirty = true;
 							
 							if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
 								
@@ -114,8 +249,13 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 							}
 						} else if (hasEngine()) {
 							if (useEnergy(PAConfig.rfCost, false) > 0) {
-								//consumed a tick worth of energy
-								burnLevel = progress = 1;
+								if (burnLevel != 1 || progress != 1) {
+									//consumed a tick worth of energy
+									burnLevel = progress = 1;
+									partialUpdateTag.setInteger("Progress", progress);
+									partialUpdateTag.setInteger("BurnLevel", burnLevel);
+									dirty = true;
+								}
 							}
 						}
 					}
@@ -125,6 +265,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 				progress--;
 				if (progress<=0) {
 					burnLevel = progress = 0;
+					partialUpdateTag.setInteger("BurnLevel", burnLevel);
 					if ( (readyToBurn()) && (hasEngine()) ) {
 						if (useEnergy(PAConfig.rfCost, false) > 0) {
 							//consumed a tick worth of energy
@@ -132,6 +273,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 						}
 					}
 				}
+				partialUpdateTag.setInteger("Progress", progress);
+				dirty = true;
 			}
 			checkForPowerChange();
 		}
