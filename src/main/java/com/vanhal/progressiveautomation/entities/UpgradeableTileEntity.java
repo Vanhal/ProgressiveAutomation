@@ -147,37 +147,4 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
      	}
 		return false;
 	}
-	
-	//my function to get a point on a spiral around the block
-	public static Point2I spiral(int n, int x, int y) {
-		int dx, dy;
-
-		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
-		int t = 2*k + 1;
-		int m = t*t;
-		t = t-1;
-
-		if (n>=(m-t)) {
-			dx = k-(m-n);
-			dy = -k;
-		} else {
-			m = m-t;
-			if (n>=(m-t)) {
-				dx = -k;
-				dy = -k + (m-n);
-			} else {
-				m = m-t;
-				if (n>=(m-t)) {
-					dx = -k + (m-n);
-					dy = k;
-				} else {
-					dx = k;
-					dy = k - (m-n-t);
-				}
-			}
-		}
-
-		return new Point2I(x + dx, y + dy);
-	}
-
 }

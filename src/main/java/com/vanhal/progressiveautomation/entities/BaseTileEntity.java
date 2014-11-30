@@ -7,6 +7,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.util.BlockHelper;
+import com.vanhal.progressiveautomation.util.Point2I;
 
 import java.util.Random;
 
@@ -675,5 +676,37 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	protected void notifyUpdate() {
 		Block minerBlock = worldObj.getBlock(xCoord, yCoord, zCoord);
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, minerBlock);
+	}
+	
+	//my function to get a point on a spiral around the block
+	public static Point2I spiral(int n, int x, int y) {
+		int dx, dy;
+
+		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
+		int t = 2*k + 1;
+		int m = t*t;
+		t = t-1;
+
+		if (n>=(m-t)) {
+			dx = k-(m-n);
+			dy = -k;
+		} else {
+			m = m-t;
+			if (n>=(m-t)) {
+				dx = -k;
+				dy = -k + (m-n);
+			} else {
+				m = m-t;
+				if (n>=(m-t)) {
+					dx = -k + (m-n);
+					dy = k;
+				} else {
+					dx = k;
+					dy = k - (m-n-t);
+				}
+			}
+		}
+
+		return new Point2I(x + dx, y + dy);
 	}
 }

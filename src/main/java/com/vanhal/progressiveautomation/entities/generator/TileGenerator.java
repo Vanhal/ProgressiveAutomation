@@ -12,6 +12,7 @@ import cofh.api.energy.IEnergyHandler;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -19,7 +20,7 @@ import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
 
-public class TileGenerator extends UpgradeableTileEntity {
+public class TileGenerator extends BaseTileEntity {
 	protected float fireRisk = 0.02f;
 	protected int maxStorage = 10000;
 	protected int currentStorage = 0;
@@ -30,7 +31,6 @@ public class TileGenerator extends UpgradeableTileEntity {
 
 	public TileGenerator() {
 		super(0);
-		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
 		setEnergyStorage(20000, 0.5f);
 	}
 
