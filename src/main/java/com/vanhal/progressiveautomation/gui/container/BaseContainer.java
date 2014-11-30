@@ -25,11 +25,6 @@ public class BaseContainer extends Container {
 	
 	protected BaseTileEntity entity;
 	
-	protected int lastProgress = -1;
-	protected int lastBurnLevel = -1;
-	protected int lastUpgrades = -1;
-	protected boolean lastWitherUpgrade = false;
-	
 	public BaseContainer(BaseTileEntity inEntity, int x, int y) {
 		this(inEntity, x, y, true);
 	}
