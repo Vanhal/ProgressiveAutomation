@@ -403,7 +403,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	private void recalculateChoppingRange() {
-		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(getCurrentUpgrades() + 1)-1)/2);
+		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(getUpgrades() + 1)-1)/2);
 		maxCuttingX = this.xCoord + cuttingSideSize;
 		minCuttingX = this.xCoord - cuttingSideSize;
 		maxCuttingZ = this.zCoord + cuttingSideSize;
