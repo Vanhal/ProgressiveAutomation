@@ -34,17 +34,17 @@ public class TileGenerator extends UpgradeableTileEntity {
 		setEnergyStorage(20000, 0.5f);
 	}
 
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeCommonNBT(NBTTagCompound nbt) {
+		super.writeCommonNBT(nbt);
 		//save the current energy stored
 		nbt.setInteger("energy", currentStorage);
 
 	}
 
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void readCommonNBT(NBTTagCompound nbt) {
+		super.readCommonNBT(nbt);
 		//load the current energy stored
-		currentStorage = nbt.getInteger("energy");
+		if (nbt.hasKey("energy")) currentStorage = nbt.getInteger("energy");
 	}
 
 	public void setFireChance(float chance) {
@@ -127,13 +127,13 @@ public class TileGenerator extends UpgradeableTileEntity {
 	}
 
 	public void changeCharge(int amount) {
+		int prevAmount = currentStorage;
+		
 		currentStorage += amount;
-		if (currentStorage>=maxStorage) currentStorage = maxStorage;
-		if (currentStorage<0) currentStorage = 0;
-	}
-
-	public void setEnergyStored(int amount) {
-		currentStorage = amount;
+		if (currentStorage >= maxStorage) currentStorage = maxStorage;
+		if (currentStorage < 0) currentStorage = 0;
+		
+		if (currentStorage != prevAmount) addPartialUpdate("energy", currentStorage);
 	}
 
 	public int getEnergyStored(ForgeDirection from) {

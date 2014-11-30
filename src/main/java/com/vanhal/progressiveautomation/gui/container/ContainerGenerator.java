@@ -27,24 +27,4 @@ public class ContainerGenerator extends BaseContainer {
 		
 		addPlayerInventory(inv, 53);
 	}
-	
-	
-	//send updates
-	int lastEnergy = -1;
-	
-	public void sendUpdates(ICrafting i) {
-		if (lastEnergy != generator.getEnergyStored()) {
-			lastEnergy = generator.getEnergyStored();
-			i.sendProgressBarUpdate(this, 4, lastEnergy);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int i, int value) {
-		super.updateProgressBar(i, value);
-		if (i==4) {
-			generator.setEnergyStored(value);
-		}
-	}
-
 }

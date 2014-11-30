@@ -75,7 +75,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			ItemStack upgrade = getStackInSlot(SLOT_UPGRADE);
+			ItemStack upgrade = SLOT_UPGRADE != -1 ? getStackInSlot(SLOT_UPGRADE) : null;
 			
 			// Something inside the upgrade slot
 			if (upgrade != null && upgrade.stackSize > 0) {
