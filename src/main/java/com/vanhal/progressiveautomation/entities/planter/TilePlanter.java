@@ -66,16 +66,21 @@ public class TilePlanter extends UpgradeableTileEntity {
 								//break Plant, unhoe the earth, collect seeds etc
 								harvestPlant(searchBlock);
 								searchBlock = -1;
+								addPartialUpdate("currentBlock", searchBlock);
 							}
 						} else {
 							currentTime = 0;
 							searchBlock = -1;
+							addPartialUpdate("currentBlock", searchBlock);
 						}
+						addPartialUpdate("currentTime", currentTime);
 					} else if (plantSeed(searchBlock, true)) {
 						searchBlock = -1;
+						addPartialUpdate("currentBlock", searchBlock);
 					} else {
 						if (checkPlant(searchBlock)) {
 							currentTime = harvestTime;
+							addPartialUpdate("currentTime", currentTime);
 						}
 					}
 					
@@ -88,18 +93,18 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 
 
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeCommonNBT(NBTTagCompound nbt) {
+		super.writeCommonNBT(nbt);
 		//save the current planting time
 		nbt.setInteger("currentTime", currentTime);
 		nbt.setInteger("currentBlock", searchBlock);
 	}
 
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void readCommonNBT(NBTTagCompound nbt) {
+		super.readCommonNBT(nbt);
 		//load the current planting time
-		currentTime = nbt.getInteger("currentTime");
-		searchBlock = nbt.getInteger("currentBlock");
+		if (nbt.hasKey("currentTime")) currentTime = nbt.getInteger("currentTime");
+		if (nbt.hasKey("currentBlock")) searchBlock = nbt.getInteger("currentBlock");
 	}
 	
 	public boolean doSearch() {
@@ -108,6 +113,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 		for (int i = 0; i < this.getRange(); i++) {
 			if (checkPlant(i)) {
 				searchBlock = i;
+				addPartialUpdate("currentBlock", searchBlock);
 				return true;
 			}
 		}
@@ -116,6 +122,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 		for (int i = 0; i < this.getRange(); i++) {
 			if (plantSeed(i, false)) {
 				searchBlock = i;
+				addPartialUpdate("currentBlock", searchBlock);
 				return true;
 			}
 		}
