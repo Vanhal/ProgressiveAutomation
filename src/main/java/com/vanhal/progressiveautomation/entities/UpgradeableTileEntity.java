@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.ItemCobbleGenUpgrade;
 import com.vanhal.progressiveautomation.items.ItemFillerUpgrade;
 import com.vanhal.progressiveautomation.items.ItemWitherUpgrade;
@@ -25,20 +26,20 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		super(numSlots);
 	}
 	
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeCommonNBT(NBTTagCompound nbt) {
+		super.writeCommonNBT(nbt);
 		nbt.setInteger("NumUpgrades", numberUpgrades);
 		nbt.setBoolean("hasWitherUpgrade", hasWitherUpgrade);
 		nbt.setBoolean("hasCobbleUpgrade", hasCobbleUpgrade);
 		nbt.setBoolean("hasFillerUpgrade", hasFillerUpgrade);
 	}
 
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		numberUpgrades = nbt.getInteger("NumUpgrades");
-		hasWitherUpgrade = nbt.getBoolean("hasWitherUpgrade");
-		hasCobbleUpgrade = nbt.getBoolean("hasCobbleUpgrade");
-		hasFillerUpgrade = nbt.getBoolean("hasFillerUpgrade");
+	public void readCommonNBT(NBTTagCompound nbt) {
+		super.readCommonNBT(nbt);
+		if (nbt.hasKey("NumUpgrades")) numberUpgrades = nbt.getInteger("NumUpgrades");
+		if (nbt.hasKey("hasWitherUpgrade")) hasWitherUpgrade = nbt.getBoolean("hasWitherUpgrade");
+		if (nbt.hasKey("hasCobbleUpgrade")) hasCobbleUpgrade = nbt.getBoolean("hasCobbleUpgrade");
+		if (nbt.hasKey("hasFillerUpgrade")) hasFillerUpgrade = nbt.getBoolean("hasFillerUpgrade");
 	}
 	
 	/* IUpgradeable methods */
@@ -71,45 +72,41 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	//check for changes to upgrades
 	protected int lastUpgrades = 0;
 	
-	public void checkForChanges() {
-		this.upgradeChanges();
+	public void updateEntity() {
+		super.updateEntity();
+		if (!worldObj.isRemote) {
+			ItemStack upgrade = getStackInSlot(SLOT_UPGRADE);
+			
+			// Something inside the upgrade slot
+			if (upgrade != null && upgrade.stackSize > 0) {
+				
+				if (upgrade.isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
+					addUpgrades(upgrade.stackSize);
+					slots[SLOT_UPGRADE] = null;
+					addPartialUpdate("NumUpgrades", getUpgrades());
+				} else if (upgrade.getItem() instanceof ItemCobbleGenUpgrade && !hasCobbleUpgrade) {
+					hasCobbleUpgrade = true;
+					slots[SLOT_UPGRADE] = null;
+					addPartialUpdate("hasCobbleUpgrade", hasCobbleUpgrade);
+				} else if (upgrade.getItem() instanceof ItemFillerUpgrade && !hasFillerUpgrade) {
+					hasFillerUpgrade = true;
+					slots[SLOT_UPGRADE] = null;
+					addPartialUpdate("hasFillerUpgrade", hasFillerUpgrade);
+				} else if (upgrade.getItem() instanceof ItemWitherUpgrade && !hasWitherUpgrade) {
+					hasWitherUpgrade = true;
+					slots[SLOT_UPGRADE] = null;
+					addPartialUpdate("hasWitherUpgrade", hasWitherUpgrade);
+				}
+			} else if (upgrade != null) {
+				// Malformed itemstack? Better delete it
+				ProgressiveAutomation.logger.warn("Inserted ItemStack with stacksize <= 0. Deleting");
+				slots[SLOT_UPGRADE] = null;
+			}
+		}
 	}
 	
-	public boolean upgradeChanges() {
-		//check upgrades
-		if (getCurrentUpgrades() != lastUpgrades) {
-			//remove the upgrade and add it to the upgrades var
-			if (slots[SLOT_UPGRADE].isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
-				addUpgrades(getCurrentUpgrades());
-				slots[SLOT_UPGRADE] = null;
-				lastUpgrades = getCurrentUpgrades();
-				return true;
-			}
-		}
-		if ( (slots[SLOT_UPGRADE] != null) && (slots[SLOT_UPGRADE].stackSize>0) ) {
-			if (slots[SLOT_UPGRADE].getItem() instanceof ItemCobbleGenUpgrade) {
-				if (!hasCobbleUpgrade) {
-					slots[SLOT_UPGRADE] = null;
-					hasCobbleUpgrade = true;
-					return true;
-				}
-			}
-			if (slots[SLOT_UPGRADE].getItem() instanceof ItemFillerUpgrade) {
-				if (!hasFillerUpgrade) {
-					slots[SLOT_UPGRADE] = null;
-					hasFillerUpgrade = true;
-					return true;
-				}
-			}
-			if (slots[SLOT_UPGRADE].getItem() instanceof ItemWitherUpgrade) {
-				if (!hasWitherUpgrade) {
-					slots[SLOT_UPGRADE] = null;
-					hasWitherUpgrade = true;
-					return true;
-				}
-			}
-		}
-		return false;
+	public void checkForChanges() {
+//		this.upgradeChanges();
 	}
 	
 	protected int getCurrentUpgrades() {
