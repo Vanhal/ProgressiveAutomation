@@ -19,6 +19,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
@@ -45,7 +46,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	/**
 	 * Tag holding partial updates that will be sent to players upon synchronisation
 	 */
-	protected NBTTagCompound partialUpdateTag = new NBTTagCompound();
+	private NBTTagCompound partialUpdateTag = new NBTTagCompound();
 	
 	protected Random RND = new Random();
 	
@@ -219,6 +220,35 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	/**
+	 * Utility method, so you don't have to remember to set dirty to true
+	 */
+	protected void addPartialUpdate(String fieldName, Integer value) {
+		partialUpdateTag.setInteger(fieldName, value);
+		dirty = true;
+	}
+	/**
+	 * Utility method, so you don't have to remember to set dirty to true
+	 */	
+	protected void addPartialUpdate(String fieldName, String value) {
+		partialUpdateTag.setString(fieldName, value);
+		dirty = true;
+	}
+	/**
+	 * Utility method, so you don't have to remember to set dirty to true
+	 */	
+	protected void addPartialUpdate(String fieldName, NBTBase value) {
+		partialUpdateTag.setTag(fieldName, value);
+		dirty = true;
+	}
+	/**
+	 * Utility method, so you don't have to remember to set dirty to true
+	 */	
+	protected void addPartialUpdate(String fieldName, Boolean value) {
+		partialUpdateTag.setBoolean(fieldName, value);
+		dirty = true;
+	}
+	
+	/**
 	 * Whether the TileEntity needs syncing.
 	 * @return
 	 */
@@ -234,9 +264,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 					if (slots[SLOT_FUEL]!=null) {
 						if (isFuel()) {
 							burnLevel = progress = getBurnTime();
-							partialUpdateTag.setInteger("Progress", progress);
-							partialUpdateTag.setInteger("BurnLevel", burnLevel);
-							dirty = true;
+							addPartialUpdate("Progress", progress);
+							addPartialUpdate("BurnLevel", burnLevel);
 							
 							if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
 								
@@ -252,9 +281,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 								if (burnLevel != 1 || progress != 1) {
 									//consumed a tick worth of energy
 									burnLevel = progress = 1;
-									partialUpdateTag.setInteger("Progress", progress);
-									partialUpdateTag.setInteger("BurnLevel", burnLevel);
-									dirty = true;
+									addPartialUpdate("Progress", progress);
+									addPartialUpdate("BurnLevel", burnLevel);
 								}
 							}
 						}
@@ -265,7 +293,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 				progress--;
 				if (progress<=0) {
 					burnLevel = progress = 0;
-					partialUpdateTag.setInteger("BurnLevel", burnLevel);
+					addPartialUpdate("BurnLevel", burnLevel);
 					if ( (readyToBurn()) && (hasEngine()) ) {
 						if (useEnergy(PAConfig.rfCost, false) > 0) {
 							//consumed a tick worth of energy
@@ -273,8 +301,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 						}
 					}
 				}
-				partialUpdateTag.setInteger("Progress", progress);
-				dirty = true;
+				addPartialUpdate("Progress", progress);
 			}
 			checkForPowerChange();
 		}

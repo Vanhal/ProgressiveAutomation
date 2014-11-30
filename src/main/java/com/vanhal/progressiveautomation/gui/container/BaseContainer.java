@@ -138,19 +138,6 @@ public class BaseContainer extends Container {
 				if (o instanceof EntityPlayerMP) {
 					EntityPlayerMP player = (EntityPlayerMP) o;
 					NetworkHandler.sendToPlayer(message, player);
-					
-					if (entity instanceof UpgradeableTileEntity) {
-						UpgradeableTileEntity upEntity = (UpgradeableTileEntity) entity;
-						if (lastUpgrades != upEntity.getUpgrades()) {
-							lastUpgrades = upEntity.getUpgrades();
-							player.sendProgressBarUpdate(this, 2, lastUpgrades);
-						} else if (lastWitherUpgrade != upEntity.hasWitherUpgrade) {
-							lastWitherUpgrade = upEntity.hasWitherUpgrade;
-							player.sendProgressBarUpdate(this, 3, (lastWitherUpgrade)?1:0);
-						}
-					}
-					
-					sendUpdates(player);
 				}
 			}
 		}		
