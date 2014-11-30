@@ -34,7 +34,10 @@ public class TileChopper extends UpgradeableTileEntity {
 	
 	
 	protected int searchBlock = -1;
-	protected boolean plantSapling = false;
+	
+	protected boolean plantSapling;
+	protected boolean chopping;
+	
 	protected CoordList blockList = new CoordList();
 	protected Point3I currentBlock = null;
 	protected int choppingTime = 0;
@@ -51,41 +54,76 @@ public class TileChopper extends UpgradeableTileEntity {
 		SLOT_UPGRADE = 3;
 	}
 	
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	@Override
+	public void writeNonSyncableNBT(NBTTagCompound nbt) {
+		super.writeNonSyncableNBT(nbt);
+		
 		//save the current block
 		if (currentBlock!=null) {
 			nbt.setTag("CurrentBlock", currentBlock.getNBT());
 		} else if (nbt.hasKey("CurrentBlock")) {
 			nbt.removeTag("CurrentBlock");
 		}
-		//save the current chopping time
-		nbt.setInteger("choppingTime", choppingTime);
 		
 		//save the block list
 		nbt.setTag("BlockList", blockList.saveToNBT());
-		
 	}
-
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	
+	@Override
+	public void writeCommonNBT(NBTTagCompound nbt) {
+		super.writeCommonNBT(nbt);
+		
+		//save the current chopping time
+		nbt.setInteger("choppingTime", choppingTime);
+	}
+	
+	@Override
+	public void writeSyncOnlyNBT(NBTTagCompound nbt) {
+		super.writeSyncOnlyNBT(nbt);
+		
+		nbt.setBoolean("chopping", chopping);
+		nbt.setBoolean("planting", plantSapling);
+	}
+	
+	@Override
+	public void readNonSyncableNBT(NBTTagCompound nbt) {
+		super.readNonSyncableNBT(nbt);
+		
 		//Load the current Block
-		NBTTagCompound point = (NBTTagCompound)nbt.getTag("CurrentBlock");
 		if (nbt.hasKey("CurrentBlock")) {
 			currentBlock = new Point3I();
 			currentBlock.setNBT((NBTTagCompound)nbt.getTag("CurrentBlock"));
 		} else {
 			currentBlock = null;
 		}
-		//load the current chopping time
-		choppingTime = nbt.getInteger("choppingTime");
 		
 		//get the current tag list
 		NBTTagList contents = nbt.getTagList("BlockList", 10);
 		blockList.loadFromNBT(contents);
-
+		
 		forceRecalculate = true;
+		
+		if (blockList.size() > 0) {
+			chopping = true;
+		}
 	}
+	
+	@Override
+	public void readCommonNBT(NBTTagCompound nbt) {
+		super.readCommonNBT(nbt);
+		
+		//load the current chopping time
+		choppingTime = nbt.getInteger("choppingTime");		
+	}
+	
+	@Override
+	public void readSyncOnlyNBT(NBTTagCompound nbt) {
+		super.readSyncOnlyNBT(nbt);
+		
+		if (nbt.hasKey("chopping")) chopping = nbt.getBoolean("chopping");
+		if (nbt.hasKey("planting")) plantSapling = nbt.getBoolean("planting");
+	}
+	
 
 	public void updateEntity() {
 		super.updateEntity();
@@ -94,6 +132,10 @@ public class TileChopper extends UpgradeableTileEntity {
 			checkInventory();
 
 			if (isBurning()) {
+				if (chopping && blockList.size() == 0) {
+					chopping = false;
+					addPartialUpdate("chopping", false);
+				}
 				//do tree stuff
 				if (blockList.size()>0) {
 					//cut tree
@@ -101,6 +143,7 @@ public class TileChopper extends UpgradeableTileEntity {
 				} else if (plantSapling) {
 					plantSaplings(searchBlock, true);
 					plantSapling = false;
+					addPartialUpdate("planting", false);
 				}
 				scanBlocks();
 			}
@@ -120,6 +163,7 @@ public class TileChopper extends UpgradeableTileEntity {
 			if (plantSaplings(i, false)) {
 				searchBlock = i;
 				plantSapling = true;
+				addPartialUpdate("planting", true);
 				return true;
 			}
 		}
@@ -210,6 +254,10 @@ public class TileChopper extends UpgradeableTileEntity {
 		if (!blockList.inList(point)) {
 			if (validBlock(point)) {
 				blockList.push(point);
+				if (!chopping) {
+					chopping = true;
+					addPartialUpdate("chopping", true);
+				}
 				point.stepUp();
 				searchTree(point);
 			}
@@ -331,21 +379,17 @@ public class TileChopper extends UpgradeableTileEntity {
 		return false;
 	}
 
-	
-	//gui methods
 	public boolean isPlanting() {
 		return plantSapling;
 	}
 	
 	public boolean isChopping() {
-		return (blockList.size()>0);
+		return chopping;
 	}
-	
-	public boolean planting = false;
-	public boolean chopping = false;
-	
 
 	protected int lastAxe = -1;
+	
+	private int previousUpgrades;
 	
 	public void checkForChanges() {
 		boolean update = false;
@@ -362,8 +406,9 @@ public class TileChopper extends UpgradeableTileEntity {
 		}
 
 		//check upgrades
-		if (forceRecalculate || upgradeChanges()) {
+		if (forceRecalculate || previousUpgrades != getUpgrades()) {
 			forceRecalculate = false;
+			previousUpgrades = getUpgrades();
 			recalculateChoppingRange();
 			update = true;
 		}
@@ -403,7 +448,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	private void recalculateChoppingRange() {
-		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(getCurrentUpgrades() + 1)-1)/2);
+		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(getUpgrades() + 1)-1)/2);
 		maxCuttingX = this.xCoord + cuttingSideSize;
 		minCuttingX = this.xCoord - cuttingSideSize;
 		maxCuttingZ = this.zCoord + cuttingSideSize;
