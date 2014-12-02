@@ -137,27 +137,4 @@ public class BaseContainer extends Container {
 			}
 		}		
 	}
-	
-	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int i, int value) {
-		super.updateProgressBar(i, value);
-		if (i==0) {
-			entity.setBurnLevel(value);
-		} else if (i==1) {
-			//ProgressiveAutomation.logger.info("Progress Level: "+value);
-			entity.setProgress(value);
-		}
-		if (entity instanceof UpgradeableTileEntity) {
-			UpgradeableTileEntity upEntity = (UpgradeableTileEntity) entity;
-			if (i==2) {
-				upEntity.setUpgrades(value);
-			} else if (i==3) {
-				upEntity.hasWitherUpgrade = (value==1);
-			}
-		}
-	}
-
-	public void sendUpdates(ICrafting i) {
-		
-	}
 }
