@@ -386,11 +386,11 @@ public class TileMiner extends UpgradeableTileEntity {
 		return false;
 	}
 
-	public int extraSlotCheck(int slot) {
-		if (slots[slot].isItemEqual(new ItemStack(Blocks.cobblestone))) {
+	public int extraSlotCheck(ItemStack item) {
+		if (item.isItemEqual(new ItemStack(Blocks.cobblestone))) {
 			return 1;
 		}
-		return -1;
+		return super.extraSlotCheck(item);
 	}
 
 

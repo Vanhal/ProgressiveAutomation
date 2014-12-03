@@ -467,8 +467,16 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	/* do some checks for block specific items, must return -1 on failure */
-	public int extraSlotCheck(int slot) {
-		return -1;
+	public int extraSlotCheck(ItemStack item) {
+		int targetSlot = -1;
+		if (getBurnTime(item)>0) {
+			if (slots[0]==null) {
+				targetSlot = 0;
+			} else if (item.isItemEqual(slots[0])) {
+				targetSlot = 0;
+			}
+		}
+		return targetSlot;
 	}
 	
 	/* Check the inventory, move any useful items to their correct slots */
@@ -476,32 +484,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return;
 		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 			if (slots[i]!=null) {
-				int moveTo = extraSlotCheck(i);
-				
-				if (moveTo == -1) {
-					if (getBurnTime(slots[i])>0) {
-						if (slots[0]==null) {
-							moveTo = 0;
-						} else if (slots[i].isItemEqual(slots[0])) {
-							moveTo = 0;
-						}
-					}
-				}
-
+				int moveTo = extraSlotCheck(slots[i]);
 				if (moveTo>=0) {
-					if (slots[moveTo]==null) {
-						slots[moveTo] = slots[i];
-						slots[i] = null;
-					} else if ( (slots[moveTo].stackSize < slots[moveTo].getMaxStackSize()) && (slots[moveTo].isItemEqual(slots[i])) ) {
-						int avail = slots[moveTo].getMaxStackSize() - slots[moveTo].stackSize;
-						if (avail >= slots[i].stackSize) {
-							slots[moveTo].stackSize += slots[i].stackSize;
-							slots[i] = null;
-						} else {
-							slots[i].stackSize -= avail;
-							slots[moveTo].stackSize += avail;
-						}
-					}
+					slots[i] = moveItemToSlot(slots[i], moveTo);
 				}
 			}
 		}
@@ -514,6 +499,23 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 				}
 			}
 		}
+	}
+
+	protected ItemStack moveItemToSlot(ItemStack item, int targetSlot) {
+		if (slots[targetSlot]==null) {
+			slots[targetSlot] = item;
+			item = null;
+		} else if ( (slots[targetSlot].stackSize < slots[targetSlot].getMaxStackSize()) && (slots[targetSlot].isItemEqual(item)) ) {
+			int avail = slots[targetSlot].getMaxStackSize() - slots[targetSlot].stackSize;
+			if (avail >= item.stackSize) {
+				slots[targetSlot].stackSize += item.stackSize;
+				item = null;
+			} else {
+				item.stackSize -= avail;
+				slots[targetSlot].stackSize += avail;
+			}
+		}
+		return item;
 	}
 
 	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
@@ -546,6 +548,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 	public boolean addToInventory(ItemStack item) {
 		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return false;
+		//check to see if this item is something that's used
+		int extraSlot = extraSlotCheck(item);
+		if (extraSlot>=0) {
+			item = moveItemToSlot(item, extraSlot);
+		}
+		//add it to the main inventory
 		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 			if (slots[i]!=null) {
 				if (item!=null) {

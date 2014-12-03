@@ -142,16 +142,24 @@ public class TilePlanter extends UpgradeableTileEntity {
 		int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
 		
 		PlayerFake faker = new PlayerFake((WorldServer)worldObj);
-		//try and right click it first, if not then break the block
-		if (actualBlock.onBlockActivated(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), faker, metaData, 0, 0, 0)) {
+		//try and right click it first, if not then break the block, unless it's pams harvestcraft
+		if (actualBlock.getClass().getName().startsWith("com.pam.harvestcraft")) {
+			ArrayList<ItemStack> items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), metaData, 0);
+			//get the drops
+			for (ItemStack item : items) {
+				addToInventory(item);
+			}
+			worldObj.setBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), actualBlock, 0, 2);
+		} else if (actualBlock.onBlockActivated(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), faker, metaData, 0, 0, 0)) {
 			IInventory inv = faker.inventory;
 			for (int i = 0; i < inv.getSizeInventory(); i++){
 				if (inv.getStackInSlot(i)!=null) {
 					addToInventory(inv.getStackInSlot(i));
 				}
 			}
-		} else {
-			
+		} 
+
+		if (checkPlant(n)) {
 			ArrayList<ItemStack> items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), metaData, 0);
 			//get the drops
 			for (ItemStack item : items) {
@@ -202,7 +210,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 					
 					//place the block
 					if (plant != null) {
-						if (!plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) {
+						if (plant.getClass().getName().startsWith("com.pam.harvestcraft")) {
+							hoeGround(n, false);
+						} else if (!plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) {
 							//hoe the ground if we can
 							hoeGround(n, false);
 						}
@@ -327,11 +337,11 @@ public class TilePlanter extends UpgradeableTileEntity {
 		return false;
 	}
 	
-	public int extraSlotCheck(int slot) {
-		if (isPlantable(slots[slot])) {
+	public int extraSlotCheck(ItemStack item) {
+		if (isPlantable(item)) {
 			return SLOT_SEEDS;
 		}
-		return -1;
+		return super.extraSlotCheck(item);
 	}
 
 

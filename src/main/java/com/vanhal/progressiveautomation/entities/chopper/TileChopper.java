@@ -420,11 +420,11 @@ public class TileChopper extends UpgradeableTileEntity {
 		}
 	}
 	
-	public int extraSlotCheck(int slot) {
-		if (checkSapling(slots[slot])) {
+	public int extraSlotCheck(ItemStack item) {
+		if (checkSapling(item)) {
 			return SLOT_SAPLINGS;
 		}
-		return -1;
+		return super.extraSlotCheck(item);
 	}
 
 
