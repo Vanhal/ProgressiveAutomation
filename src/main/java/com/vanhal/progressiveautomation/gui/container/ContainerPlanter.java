@@ -44,27 +44,4 @@ public class ContainerPlanter extends BaseContainer {
 		addPlayerInventory(inv);
 	}
 	
-	/* deal with updates */
-	protected int lastUpgrades = -1;
-	protected int lastStatus = -1;
-	
-	public void sendUpdates(ICrafting i) {
-		if (lastUpgrades != planter.getUpgrades()) {
-			lastUpgrades = planter.getUpgrades();
-			i.sendProgressBarUpdate(this, 4, lastUpgrades);
-		} else if (lastStatus != planter.getStatus()) {
-			lastStatus = planter.getStatus();
-			i.sendProgressBarUpdate(this, 5, lastStatus);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int i, int value) {
-		super.updateProgressBar(i, value);
-		if (i==4) {
-			planter.setUpgrades(value);
-		} else if (i==5) {
-			planter.setStatus(value);
-		}
-	}
 }

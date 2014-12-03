@@ -40,8 +40,10 @@ public class TileCrafter extends UpgradeableTileEntity {
 				if (readyToBurn()) {
 					if ( (currentTime > 0) && (currentTime<=craftTime) ) {
 						currentTime++;
+						addPartialUpdate("currentTime", currentTime);
 					} else if (currentTime>craftTime) {
 						currentTime = 0;
+						addPartialUpdate("currentTime", currentTime);
 						if (consumeIngredients()) {
 							//create an item, put it in the right slot
 							if (slots[OUTPUT_SLOT]!=null) {
@@ -52,11 +54,13 @@ public class TileCrafter extends UpgradeableTileEntity {
 								slots[OUTPUT_SLOT] = slots[CRAFT_RESULT].copy();
 							}
 						}
-					} else {
+					} else if (currentTime != 1){
 						currentTime = 1;
+						addPartialUpdate("currentTime", currentTime);
 					}
-				} else {
+				} else if (currentTime != 0){
 					currentTime = 0;
+					addPartialUpdate("currentTime", currentTime);
 				}
 			}
 		}
@@ -71,16 +75,16 @@ public class TileCrafter extends UpgradeableTileEntity {
 		return false;
 	}
 	
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeCommonNBT(NBTTagCompound nbt) {
+		super.writeCommonNBT(nbt);
 		//save the current chopping time
 		nbt.setInteger("currentTime", currentTime);
 	}
 
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void readCommonNBT(NBTTagCompound nbt) {
+		super.readCommonNBT(nbt);
 		//load the current chopping time
-		currentTime = nbt.getInteger("currentTime");
+		if (nbt.hasKey("currentTime")) currentTime = nbt.getInteger("currentTime");
 	}
 	
 	//test to see if the output slot can accept the resulting craft

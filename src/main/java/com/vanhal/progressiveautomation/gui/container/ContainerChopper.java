@@ -42,41 +42,5 @@ public class ContainerChopper extends BaseContainer {
 		addInventory(chopper, chopper.SLOT_INVENTORY_START, 112, 16, 3, 3);
 
 		addPlayerInventory(inv);
-	}
-	
-	/* deal with updates */
-	protected int lastUpgrades = -1;
-	
-	public void sendUpdates(ICrafting i) {
-		TileChopper chopper = (TileChopper) entity;
-		
-		if (lastUpgrades != chopper.getUpgrades()) {
-			lastUpgrades = chopper.getUpgrades();
-			i.sendProgressBarUpdate(this, 4, lastUpgrades);
-		}
-		
-		if (chopper.isChopping() != chopper.chopping) {
-			chopper.chopping = chopper.isChopping();
-			i.sendProgressBarUpdate(this, 5, (chopper.chopping)?1:0);
-		}
-
-		if (chopper.isPlanting() != chopper.planting) {
-			chopper.planting = chopper.isPlanting();
-			i.sendProgressBarUpdate(this, 6, (chopper.planting)?1:0);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int i, int value) {
-		super.updateProgressBar(i, value);
-		TileChopper chopper = (TileChopper) entity;
-		if (i==4) {
-			chopper.setUpgrades(value);
-		} else if (i==5) {
-			chopper.chopping = (value==1);
-		} else if (i==6) {
-			chopper.planting = (value==1);
-		}
-	}
-	
+	}	
 }

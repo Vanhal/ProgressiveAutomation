@@ -12,6 +12,7 @@ import cofh.api.energy.IEnergyHandler;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -19,7 +20,7 @@ import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
 
-public class TileGenerator extends UpgradeableTileEntity {
+public class TileGenerator extends BaseTileEntity {
 	protected float fireRisk = 0.02f;
 	protected int maxStorage = 10000;
 	protected int currentStorage = 0;
@@ -30,21 +31,20 @@ public class TileGenerator extends UpgradeableTileEntity {
 
 	public TileGenerator() {
 		super(0);
-		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
 		setEnergyStorage(20000, 0.5f);
 	}
 
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeCommonNBT(NBTTagCompound nbt) {
+		super.writeCommonNBT(nbt);
 		//save the current energy stored
 		nbt.setInteger("energy", currentStorage);
 
 	}
 
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void readCommonNBT(NBTTagCompound nbt) {
+		super.readCommonNBT(nbt);
 		//load the current energy stored
-		currentStorage = nbt.getInteger("energy");
+		if (nbt.hasKey("energy")) currentStorage = nbt.getInteger("energy");
 	}
 
 	public void setFireChance(float chance) {
@@ -127,13 +127,13 @@ public class TileGenerator extends UpgradeableTileEntity {
 	}
 
 	public void changeCharge(int amount) {
+		int prevAmount = currentStorage;
+		
 		currentStorage += amount;
-		if (currentStorage>=maxStorage) currentStorage = maxStorage;
-		if (currentStorage<0) currentStorage = 0;
-	}
-
-	public void setEnergyStored(int amount) {
-		currentStorage = amount;
+		if (currentStorage >= maxStorage) currentStorage = maxStorage;
+		if (currentStorage < 0) currentStorage = 0;
+		
+		if (currentStorage != prevAmount) addPartialUpdate("energy", currentStorage);
 	}
 
 	public int getEnergyStored(ForgeDirection from) {

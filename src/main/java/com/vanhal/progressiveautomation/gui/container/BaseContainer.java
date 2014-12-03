@@ -1,6 +1,8 @@
 package com.vanhal.progressiveautomation.gui.container;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.blocks.network.NetworkHandler;
+import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
@@ -10,6 +12,7 @@ import com.vanhal.progressiveautomation.gui.slots.SlotPower;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
@@ -18,12 +21,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class BaseContainer extends Container {
-	protected BaseTileEntity entity;
+	public static final byte TICKS_PER_MESSAGE = 5;
 	
-	protected int lastProgress = -1;
-	protected int lastBurnLevel = -1;
-	protected int lastUpgrades = -1;
-	protected boolean lastWitherUpgrade = false;
+	protected BaseTileEntity entity;
 	
 	public BaseContainer(BaseTileEntity inEntity, int x, int y) {
 		this(inEntity, x, y, true);
@@ -125,55 +125,16 @@ public class BaseContainer extends Container {
 	
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (Object o : this.crafters){
-			ICrafting i = (ICrafting) o;
+		
+		if (entity.isDirty() && entity.getWorldObj().getWorldTime() % TICKS_PER_MESSAGE == 0) {
+			PartialTileNBTUpdateMessage message = entity.getPartialUpdateMessage();
 			
-			if (entity.getBurnLevel() != lastBurnLevel) {
-				lastBurnLevel = entity.getBurnLevel();
-				i.sendProgressBarUpdate(this, 0, lastBurnLevel);
-			}
-			
-			if ( (entity.getScaledDone(16) != lastProgress) || ( (entity.getScaledDone(16)==0) && (entity.getProgress() != 0) ) ) {
-				lastProgress = entity.getScaledDone(16);
-				if (entity.getProgress()==1) lastProgress = 1;
-				i.sendProgressBarUpdate(this, 1, entity.getProgress());
-			}
-			
-			if (entity instanceof UpgradeableTileEntity) {
-				UpgradeableTileEntity upEntity = (UpgradeableTileEntity) entity;
-				if (lastUpgrades != upEntity.getUpgrades()) {
-					lastUpgrades = upEntity.getUpgrades();
-					i.sendProgressBarUpdate(this, 2, lastUpgrades);
-				} else if (lastWitherUpgrade != upEntity.hasWitherUpgrade) {
-					lastWitherUpgrade = upEntity.hasWitherUpgrade;
-					i.sendProgressBarUpdate(this, 3, (lastWitherUpgrade)?1:0);
+			for (Object o : this.crafters) {
+				if (o instanceof EntityPlayerMP) {
+					EntityPlayerMP player = (EntityPlayerMP) o;
+					NetworkHandler.sendToPlayer(message, player);
 				}
 			}
-			
-			sendUpdates(i);
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-    public void updateProgressBar(int i, int value) {
-		super.updateProgressBar(i, value);
-		if (i==0) {
-			entity.setBurnLevel(value);
-		} else if (i==1) {
-			//ProgressiveAutomation.logger.info("Progress Level: "+value);
-			entity.setProgress(value);
-		}
-		if (entity instanceof UpgradeableTileEntity) {
-			UpgradeableTileEntity upEntity = (UpgradeableTileEntity) entity;
-			if (i==2) {
-				upEntity.setUpgrades(value);
-			} else if (i==3) {
-				upEntity.hasWitherUpgrade = (value==1);
-			}
-		}
-	}
-
-	public void sendUpdates(ICrafting i) {
-		
+		}		
 	}
 }

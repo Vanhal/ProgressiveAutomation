@@ -42,9 +42,9 @@ public class GUIChopper extends BaseGUI {
 		} else {
 			readyToChop = true;
 			String status = "gui.waiting";
-			if (chopper.chopping) {
+			if (chopper.isChopping()) {
 				status = "gui.chopping";
-			} else if (chopper.planting) {
+			} else if (chopper.isPlanting()) {
 				status = "gui.planting";
 			}
 			drawString(StringHelper.localize(status), infoScreenX, infoScreenW, infroScreenY2, BLUE);

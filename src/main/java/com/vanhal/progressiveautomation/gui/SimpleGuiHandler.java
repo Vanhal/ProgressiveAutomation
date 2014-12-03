@@ -20,8 +20,11 @@ import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerPlanter;
 
 import net.minecraft.inventory.Container;
+import net.minecraft.network.Packet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -58,6 +61,13 @@ public class SimpleGuiHandler implements IGuiHandler {
 			}
 			TileEntity tile = world.getTileEntity(x, y, z);
 			try {
+				if (!world.isRemote) {
+					Packet packet = tile.getDescriptionPacket();
+					if (packet != null) {
+						((EntityPlayerMP)player).playerNetServerHandler.sendPacket(packet);
+					}
+					
+				}
 				Class<? extends Container> containerClass = (Class<? extends Container>) containerMap.get(ID);
 				Constructor containerConstructor = containerClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
 				return containerConstructor.newInstance(player.inventory, tile);

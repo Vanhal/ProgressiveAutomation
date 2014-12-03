@@ -50,16 +50,16 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 
-	public void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeCommonNBT(NBTTagCompound nbt) {
+		super.writeCommonNBT(nbt);
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
 	}
 
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		totalMineBlocks = nbt.getInteger("MineBlocks");
-		currentMineBlocks = nbt.getInteger("MinedBlocks");
+	public void readCommonNBT(NBTTagCompound nbt) {
+		super.readCommonNBT(nbt);
+		if (nbt.hasKey("MineBlocks")) totalMineBlocks = nbt.getInteger("MineBlocks");
+		if (nbt.hasKey("MinedBlocks")) currentMineBlocks = nbt.getInteger("MinedBlocks");
 	}
 
 
@@ -79,7 +79,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 	public void scanBlocks() {
-		totalMineBlocks = currentMineBlocks = 0;
+		totalMineBlocks = currentMineBlocks = 0;	
 		for (int i = 1; i <= getRange(); i++) {
 			Point2I currentPoint = spiral(i, xCoord, zCoord);
 			boolean bedrock = false;
@@ -96,6 +96,8 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (newY<0) bedrock = true;
 			}
 		}
+		addPartialUpdate("MineBlocks", totalMineBlocks);
+		addPartialUpdate("MinedBlocks", currentMineBlocks);
 		notifyUpdate();
 		//ProgressiveAutomation.logger.info("Update Finished: "+currentMineBlocks+"/"+totalMineBlocks);
 	}
@@ -207,6 +209,7 @@ public class TileMiner extends UpgradeableTileEntity {
 					slots[1] = null;
 				}
 				currentMineBlocks++;
+				addPartialUpdate("MinedBlocks", currentMineBlocks);
 				currentBlock = null;
 				
 
@@ -328,6 +331,8 @@ public class TileMiner extends UpgradeableTileEntity {
 	/* Check for changes to tools and upgrades */
 	protected int lastPick = -1;
 	protected int lastShovel = -1;
+	
+	private int previousUpgrades;
 
 	public void checkForChanges() {
 		boolean update = false;
@@ -354,7 +359,8 @@ public class TileMiner extends UpgradeableTileEntity {
 		}
 
 		//check upgrades
-		if (upgradeChanges()) {
+		if (previousUpgrades != getUpgrades()) {
+			previousUpgrades = getUpgrades();
 			update = true;
 		}
 

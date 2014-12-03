@@ -9,6 +9,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.vanhal.progressiveautomation.blocks.PABlocks;
+import com.vanhal.progressiveautomation.blocks.network.NetworkHandler;
+import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
+import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessageHandler;
 import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
@@ -26,6 +29,7 @@ import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = Ref.MODID, name = Ref.MODNAME, version = Ref.Version, guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory")
 public class ProgressiveAutomation {
@@ -58,6 +62,9 @@ public class ProgressiveAutomation {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
+		NetworkHandler.registerMessageHandler(PartialTileNBTUpdateMessageHandler.class,
+				PartialTileNBTUpdateMessage.class, Side.CLIENT);
+		
 		PAConfig.init(new Configuration(event.getSuggestedConfigurationFile()));
 		
 		PAItems.preInit();
