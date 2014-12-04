@@ -82,22 +82,28 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 				
 				if (upgrade.isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) {
 					addUpgrades(upgrade.stackSize);
-					slots[SLOT_UPGRADE] = null;
+					upgrade.stackSize = 0;
 					addPartialUpdate("NumUpgrades", getUpgrades());
 				} else if (upgrade.getItem() instanceof ItemCobbleGenUpgrade && !hasCobbleUpgrade) {
 					hasCobbleUpgrade = true;
-					slots[SLOT_UPGRADE] = null;
+					upgrade.stackSize--;
 					addPartialUpdate("hasCobbleUpgrade", hasCobbleUpgrade);
 				} else if (upgrade.getItem() instanceof ItemFillerUpgrade && !hasFillerUpgrade) {
 					hasFillerUpgrade = true;
-					slots[SLOT_UPGRADE] = null;
+					upgrade.stackSize--;
 					addPartialUpdate("hasFillerUpgrade", hasFillerUpgrade);
 				} else if (upgrade.getItem() instanceof ItemWitherUpgrade && !hasWitherUpgrade) {
 					hasWitherUpgrade = true;
-					slots[SLOT_UPGRADE] = null;
+					upgrade.stackSize--;
 					addPartialUpdate("hasWitherUpgrade", hasWitherUpgrade);
 				}
-			} else if (upgrade != null) {
+				
+				// We've eaten all items in this stack, it should be disposed of
+				if (upgrade.stackSize <= 0) {
+					slots[SLOT_UPGRADE] = null;
+				}
+			}
+			else if (upgrade != null) {
 				// Malformed itemstack? Better delete it
 				ProgressiveAutomation.logger.warn("Inserted ItemStack with stacksize <= 0. Deleting");
 				slots[SLOT_UPGRADE] = null;
