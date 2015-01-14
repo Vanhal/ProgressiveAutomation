@@ -7,9 +7,9 @@ import net.minecraft.tileentity.TileEntityFurnace;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.items.ItemCobbleGenUpgrade;
-import com.vanhal.progressiveautomation.items.ItemFillerUpgrade;
-import com.vanhal.progressiveautomation.items.ItemWitherUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemCobbleGenUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemFillerUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 

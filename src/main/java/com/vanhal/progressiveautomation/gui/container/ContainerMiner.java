@@ -19,8 +19,8 @@ import com.vanhal.progressiveautomation.gui.slots.SlotItem;
 import com.vanhal.progressiveautomation.gui.slots.SlotTool;
 import com.vanhal.progressiveautomation.gui.slots.SlotUpgrades;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
-import com.vanhal.progressiveautomation.items.ItemUpgrade;
 import com.vanhal.progressiveautomation.items.PAItems;
+import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import cpw.mods.fml.relauncher.Side;

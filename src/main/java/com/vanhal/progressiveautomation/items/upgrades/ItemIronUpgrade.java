@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation.items;
+package com.vanhal.progressiveautomation.items.upgrades;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -6,6 +6,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 

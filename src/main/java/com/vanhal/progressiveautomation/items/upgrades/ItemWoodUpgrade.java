@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation.items;
+package com.vanhal.progressiveautomation.items.upgrades;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

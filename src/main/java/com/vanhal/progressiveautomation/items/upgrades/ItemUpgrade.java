@@ -1,6 +1,7 @@
-package com.vanhal.progressiveautomation.items;
+package com.vanhal.progressiveautomation.items.upgrades;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.items.BaseItem;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;

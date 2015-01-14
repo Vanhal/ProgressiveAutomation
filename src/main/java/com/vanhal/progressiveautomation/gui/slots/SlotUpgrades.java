@@ -1,6 +1,6 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
-import com.vanhal.progressiveautomation.items.ItemUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.inventory.IInventory;
