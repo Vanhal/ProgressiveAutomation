@@ -8,13 +8,14 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ItemWoodUpgrade extends ItemUpgrade {
+public class ItemWoodUpgrade extends ItemTieredUpgrade {
 	
 	public ItemWoodUpgrade() {
-		super("WoodUpgrade", ToolHelper.LEVEL_WOOD);
+		super("WoodUpgrade", UpgradeType.WOODEN, ToolHelper.LEVEL_WOOD);
 		this.setTextureName(Ref.MODID+":Wood_Upgrade");
 	}
 	

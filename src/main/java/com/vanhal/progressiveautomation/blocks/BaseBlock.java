@@ -16,6 +16,8 @@ import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
+import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -174,44 +176,20 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
                 	items.add(itemstack);
                 }
             }
-            
-            //drop the other types of upgrades first
-            if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-            	UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
-            	if (tileMachine.hasCobbleUpgrade) {
-            		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
-            		items.add(cobbleGen);
-            		tileMachine.hasCobbleUpgrade = false;
-            	}
-            	if (tileMachine.hasFillerUpgrade) {
-            		ItemStack fillerUpgrade = new ItemStack(PAItems.fillerUpgrade);
-            		items.add(fillerUpgrade);
-            		tileMachine.hasFillerUpgrade = false;
-            	}
-            	if (tileMachine.hasWitherUpgrade) {
-            		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
-            		items.add(wither);
-            		tileMachine.hasWitherUpgrade = false;
-            	}
-            }
-            
-            //if entity is IUpgradeable, drop the upgrades
-            if (world.getTileEntity(x, y, z) instanceof IUpgradeable) {
-            	IUpgradeable tileMachine = (IUpgradeable)world.getTileEntity(x, y, z);
-    	    	int numUpgrades = tileMachine.getUpgrades();
-    	    	while (numUpgrades>0) {
-    	    		ItemStack upgrades = ToolHelper.getUpgradeType(tileMachine.getUpgradeLevel());
-    	    		if (numUpgrades<=64) {
-    	    			upgrades.stackSize = numUpgrades;
-    	    			numUpgrades = 0;
-    	    		} else {
-    	    			upgrades.stackSize = 64;
-    	    			numUpgrades -= 64;
-    	    		}
-    	    		items.add(upgrades);
-    	    	}
-    	    	tileMachine.setUpgrades(numUpgrades);
-    	    }
+
+			if (tileEntity instanceof UpgradeableTileEntity) {
+				UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)tileEntity;
+				for (UpgradeType upgradeType : tileMachine.getInstalledUpgradeTypes()) {
+					int amount = tileMachine.getUpgradeAmount(upgradeType);
+					while (amount > 0) {
+						ItemStack upgradeItemStack = new ItemStack(UpgradeRegistry.getUpgradeItem(upgradeType));
+						int stackSize = amount > 64 ? 64 : amount;
+						upgradeItemStack.stackSize = stackSize;
+						amount -= stackSize;
+						items.add(upgradeItemStack);
+					}
+				}
+			}
 		}
 		
 		return items;

@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.entities.planter;
 
 import java.util.ArrayList;
 
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.IGrowable;
@@ -36,6 +37,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	public TilePlanter() {
 		super(12);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
+		setAllowedUpgrades(UpgradeType.WOODEN, UpgradeType.WITHER);
 		setHarvestTime(80);
 		
 		// #36 Planter can't eject items to bottom
@@ -54,7 +56,6 @@ public class TilePlanter extends UpgradeableTileEntity {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 			checkInventory();
-			checkForChanges();
 
 			if (isBurning()) {
 				if (searchBlock > -1) {

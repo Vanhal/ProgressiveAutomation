@@ -72,7 +72,7 @@ public class PAItems {
 	}
 
 	public static void init() {
-		if (cobbleUpgrade!=null) cobbleUpgrade.preInit(null);
+		if (cobbleUpgrade!=null) cobbleUpgrade.preInit();
 	}
 
 	public static void postInit() {

@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.gui.client;
 
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +28,7 @@ public class GUIPlanter extends BaseGUI {
 	
 	protected void drawText() {
 		drawString(StringHelper.localize("gui.planter"), 5, GRAY);
-		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(planter.getRange()), infoScreenX, infoScreenW, infroScreenY3, (planter.hasWitherUpgrade)?GREEN:WHITE);
+		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(planter.getRange()), infoScreenX, infoScreenW, infroScreenY3, (planter.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		
 		boolean readyToPlant = false;
 		if ( (!planter.hasFuel()) && (!planter.isBurning()) ) {

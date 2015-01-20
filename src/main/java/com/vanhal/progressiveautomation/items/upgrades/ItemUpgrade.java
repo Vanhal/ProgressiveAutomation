@@ -2,6 +2,8 @@ package com.vanhal.progressiveautomation.items.upgrades;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.BaseItem;
+import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.init.Items;
@@ -9,32 +11,23 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-public class ItemUpgrade extends BaseItem {
-	public int level;
+public abstract class ItemUpgrade extends BaseItem {
+	private UpgradeType type;
 	
-	public ItemUpgrade() {
-		
-	}
-	
-	public ItemUpgrade(String name, int setLevel) {
+	public ItemUpgrade(String name, UpgradeType type) {
 		super(name);
-		setLevel(setLevel);
+		this.type = type;
 	}
 	
-	public void setLevel(int useLevel) {
-		level = useLevel;
+	public UpgradeType getType() {
+		return type;
 	}
-	
-	public int getLevel() {
-		return level;
+
+	public int allowedAmount() { return 1; }
+
+	@Override
+	public void preInit() {
+		super.preInit();
+		UpgradeRegistry.registerUpgradeItem(this.getType(), this);
 	}
-	
-	public void preInit(Item previousTier) {
-		GameRegistry.registerItem(this, itemName);
-		addTieredRecipe(previousTier);
-	}
-	
-	protected void addTieredRecipe(Item previousTier) {
-	}
-	
 }

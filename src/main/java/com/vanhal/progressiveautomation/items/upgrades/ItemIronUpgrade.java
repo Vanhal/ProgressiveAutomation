@@ -9,12 +9,13 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ItemIronUpgrade extends ItemUpgrade {
+public class ItemIronUpgrade extends ItemTieredUpgrade {
 	public ItemIronUpgrade() {
-		super("IronUpgrade", ToolHelper.LEVEL_IRON);
+		super("IronUpgrade", UpgradeType.IRON, ToolHelper.LEVEL_IRON);
 		this.setTextureName(Ref.MODID+":Iron_Upgrade");
 	}
 	

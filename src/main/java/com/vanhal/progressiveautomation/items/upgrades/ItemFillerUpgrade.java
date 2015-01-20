@@ -12,6 +12,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -19,7 +20,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemFillerUpgrade extends ItemUpgrade {
 	public ItemFillerUpgrade() {
-		super("FillerUpgrade", -1);
+		super("FillerUpgrade", UpgradeType.FILLER);
 		this.setTextureName(Ref.MODID+":Filler_Upgrade");
 	}
 	

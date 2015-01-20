@@ -5,6 +5,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.StringHelper;
 
 import net.minecraft.entity.player.InventoryPlayer;
@@ -29,7 +30,7 @@ public class GUIMiner extends BaseGUI {
 	
 	protected void drawText() {
 		drawString(StringHelper.localize("gui.miner"), 5, GRAY);
-		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(miner.getRange()), infoScreenX, infoScreenW, infroScreenY3, (miner.hasWitherUpgrade)?GREEN:WHITE);
+		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(miner.getRange()), infoScreenX, infoScreenW, infroScreenY3, (miner.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		boolean readyToMine = true;
 		if ( (!miner.hasFuel()) && (!miner.isBurning()) ) {
 			String fuelString = "gui.need.fuel";
@@ -60,7 +61,7 @@ public class GUIMiner extends BaseGUI {
 	
 	protected void drawElements() {
 		drawFlame(miner.getPercentDone(), 10, 34);
-		if (miner.hasCobbleUpgrade) {
+		if (miner.hasUpgrade(UpgradeType.COBBLE_GEN)) {
 			drawTexturedModalRect(guiLeft - 25, guiTop + 10, 231, 0, 25, 64);
 			
 		}
