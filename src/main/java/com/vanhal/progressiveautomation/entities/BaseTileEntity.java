@@ -94,6 +94,25 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		readCommonNBT(nbt);
 		readNonSyncableNBT(nbt);
 	}
+
+	public void readFromItemStack(ItemStack itemStack) {
+		if (itemStack == null || itemStack.stackTagCompound == null) {
+			return;
+		}
+		readCommonNBT(itemStack.stackTagCompound);
+		readNonSyncableNBT(itemStack.stackTagCompound);
+	}
+
+	public void writeToItemStack(ItemStack itemStack) {
+		if (itemStack == null ) {
+			return;
+		}
+		if (itemStack.stackTagCompound == null) {
+			itemStack.stackTagCompound = new NBTTagCompound();
+		}
+		writeCommonNBT(itemStack.stackTagCompound);
+		writeNonSyncableNBT(itemStack.stackTagCompound);
+	}
 	
 	/**
 	 * This overridable method is intended for writing to NBT all data that is used only at runtime
