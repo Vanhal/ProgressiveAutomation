@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.entities.chopper;
 
 import java.util.ArrayList;
 
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -47,6 +48,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	public TileChopper() {
 		super(12);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
+		setAllowedUpgrades(UpgradeType.WOODEN, UpgradeType.WITHER);
 		forceRecalculate = true;
 		
 		//slots

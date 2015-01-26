@@ -36,25 +36,9 @@ public class ItemBlockMachine extends ItemBlock {
 		boolean result = super.placeBlockAt(itemStack, player, world, x, y, z, side, hitX, hitY, hitZ, metadata);
 		if (result) {
 			if (!world.isRemote) {
-				if ( (itemStack != null) && (itemStack.stackTagCompound != null) ) {
-					if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-						UpgradeableTileEntity upgradable = ((UpgradeableTileEntity) world.getTileEntity(x, y, z));
-						upgradable.setUpgrades(itemStack.stackTagCompound.getInteger("upgrades"));
-						upgradable.hasCobbleUpgrade = itemStack.stackTagCompound.getBoolean("hasCobbleUpgrade");
-						upgradable.hasWitherUpgrade = itemStack.stackTagCompound.getBoolean("hasWitherUpgrade");
-						upgradable.hasFillerUpgrade = itemStack.stackTagCompound.getBoolean("hasFillerUpgrade");
-					}
-					if (world.getTileEntity(x, y, z) instanceof BaseTileEntity) {
-						BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
-						NBTTagList contents = itemStack.stackTagCompound.getTagList("Contents", 10);
-						for (int i = 0; i < contents.tagCount(); i++) {
-							NBTTagCompound tag = (NBTTagCompound) contents.getCompoundTagAt(i);
-							byte slot = tag.getByte("Slot");
-							if (slot < tileEntity.getSizeInventory()) {
-								tileEntity.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(tag));
-							}
-						}
-					}
+				if (world.getTileEntity(x, y, z) instanceof BaseTileEntity) {
+					BaseTileEntity tileEntity = (BaseTileEntity) world.getTileEntity(x, y, z);
+					tileEntity.readFromItemStack(itemStack);
 				}
 			}
 		}

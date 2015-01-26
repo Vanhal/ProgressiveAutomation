@@ -94,6 +94,25 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		readCommonNBT(nbt);
 		readNonSyncableNBT(nbt);
 	}
+
+	public void readFromItemStack(ItemStack itemStack) {
+		if (itemStack == null || itemStack.stackTagCompound == null) {
+			return;
+		}
+		readCommonNBT(itemStack.stackTagCompound);
+		readNonSyncableNBT(itemStack.stackTagCompound);
+	}
+
+	public void writeToItemStack(ItemStack itemStack) {
+		if (itemStack == null ) {
+			return;
+		}
+		if (itemStack.stackTagCompound == null) {
+			itemStack.stackTagCompound = new NBTTagCompound();
+		}
+		writeCommonNBT(itemStack.stackTagCompound);
+		writeNonSyncableNBT(itemStack.stackTagCompound);
+	}
 	
 	/**
 	 * This overridable method is intended for writing to NBT all data that is used only at runtime
@@ -111,7 +130,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	 * They are automagically synced when a GUI is opened using S30PacketWindowItems 
 	 * @param nbt
 	 */
-	protected void writeCommonNBT(NBTTagCompound nbt) {
+	public void writeCommonNBT(NBTTagCompound nbt) {
 		nbt.setInteger("Progress", progress);
 		nbt.setInteger("BurnLevel", burnLevel);
 	}
@@ -124,7 +143,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	 * See writeSyncableNBT for more info.
 	 * @param nbt
 	 */
-	protected void writeNonSyncableNBT(NBTTagCompound nbt) {
+	public void writeNonSyncableNBT(NBTTagCompound nbt) {
 		
 		NBTTagList contents = new NBTTagList();
 		for (int i = 0; i < slots.length; i++) {
@@ -247,6 +266,15 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	protected void addPartialUpdate(String fieldName, Boolean value) {
 		partialUpdateTag.setBoolean(fieldName, value);
 		dirty = true;
+	}
+
+	protected void addPartialUpdate(String fieldName, NBTTagCompound value) {
+		partialUpdateTag.setTag(fieldName, value);
+		dirty = true;
+	}
+
+	protected NBTTagCompound getCompoundTagFromPartialUpdate(String fieldName) {
+		return partialUpdateTag.getCompoundTag(fieldName);
 	}
 	
 	/**

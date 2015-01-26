@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation.items;
+package com.vanhal.progressiveautomation.items.upgrades;
 
 import java.util.List;
 
@@ -16,6 +16,7 @@ import com.vanhal.progressiveautomation.blocks.BlockMiner;
 import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -23,7 +24,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCobbleGenUpgrade extends ItemUpgrade {
 	public ItemCobbleGenUpgrade() {
-		super("CobbleUpgrade", -1);
+		super("CobbleUpgrade", UpgradeType.COBBLE_GEN);
 		this.setTextureName(Ref.MODID+":Cobble_Upgrade");
 	}
 	

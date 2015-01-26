@@ -9,6 +9,13 @@ import com.vanhal.progressiveautomation.items.tools.ItemWitherIron;
 import com.vanhal.progressiveautomation.items.tools.ItemWitherStone;
 import com.vanhal.progressiveautomation.items.tools.ItemWitherWood;
 import com.vanhal.progressiveautomation.items.tools.WitherTools;
+import com.vanhal.progressiveautomation.items.upgrades.ItemCobbleGenUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemDiamondUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemFillerUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemIronUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemStoneUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemWitherUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemWoodUpgrade;
 
 public class PAItems {
 
@@ -65,7 +72,7 @@ public class PAItems {
 	}
 
 	public static void init() {
-		if (cobbleUpgrade!=null) cobbleUpgrade.preInit(null);
+		if (cobbleUpgrade!=null) cobbleUpgrade.preInit();
 	}
 
 	public static void postInit() {

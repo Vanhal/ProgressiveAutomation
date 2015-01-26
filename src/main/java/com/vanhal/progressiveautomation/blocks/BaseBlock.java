@@ -16,6 +16,8 @@ import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
+import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -142,10 +144,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		entItem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
 		entItem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
 		
-		if (items.hasTagCompound()) {
-			entItem.getEntityItem().setTagCompound((NBTTagCompound)items.getTagCompound().copy());
-        }
-		
 		world.spawnEntityInWorld(entItem);
 	}
 	
@@ -178,44 +176,20 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
                 	items.add(itemstack);
                 }
             }
-            
-            //drop the other types of upgrades first
-            if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-            	UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
-            	if (tileMachine.hasCobbleUpgrade) {
-            		ItemStack cobbleGen = new ItemStack(PAItems.cobbleUpgrade);
-            		items.add(cobbleGen);
-            		tileMachine.hasCobbleUpgrade = false;
-            	}
-            	if (tileMachine.hasFillerUpgrade) {
-            		ItemStack fillerUpgrade = new ItemStack(PAItems.fillerUpgrade);
-            		items.add(fillerUpgrade);
-            		tileMachine.hasFillerUpgrade = false;
-            	}
-            	if (tileMachine.hasWitherUpgrade) {
-            		ItemStack wither = new ItemStack(PAItems.witherUpgrade);
-            		items.add(wither);
-            		tileMachine.hasWitherUpgrade = false;
-            	}
-            }
-            
-            //if entity is IUpgradeable, drop the upgrades
-            if (world.getTileEntity(x, y, z) instanceof IUpgradeable) {
-            	IUpgradeable tileMachine = (IUpgradeable)world.getTileEntity(x, y, z);
-    	    	int numUpgrades = tileMachine.getUpgrades();
-    	    	while (numUpgrades>0) {
-    	    		ItemStack upgrades = ToolHelper.getUpgradeType(tileMachine.getUpgradeLevel());
-    	    		if (numUpgrades<=64) {
-    	    			upgrades.stackSize = numUpgrades;
-    	    			numUpgrades = 0;
-    	    		} else {
-    	    			upgrades.stackSize = 64;
-    	    			numUpgrades -= 64;
-    	    		}
-    	    		items.add(upgrades);
-    	    	}
-    	    	tileMachine.setUpgrades(numUpgrades);
-    	    }
+
+			if (tileEntity instanceof UpgradeableTileEntity) {
+				UpgradeableTileEntity tileMachine = (UpgradeableTileEntity)tileEntity;
+				for (UpgradeType upgradeType : tileMachine.getInstalledUpgradeTypes()) {
+					int amount = tileMachine.getUpgradeAmount(upgradeType);
+					while (amount > 0) {
+						ItemStack upgradeItemStack = new ItemStack(UpgradeRegistry.getUpgradeItem(upgradeType));
+						int stackSize = amount > 64 ? 64 : amount;
+						upgradeItemStack.stackSize = stackSize;
+						amount -= stackSize;
+						items.add(upgradeItemStack);
+					}
+				}
+			}
 		}
 		
 		return items;
@@ -226,74 +200,26 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	@Override
 	public ArrayList<ItemStack> dismantleBlock(EntityPlayer player,
 			World world, int x, int y, int z, boolean returnDrops) {
-		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-		
-		//ProgressiveAutomation.logger.info("Dismatle Called");
 		
 		Block targetBlock = world.getBlock(x, y, z);
-		int meta = world.getBlockMetadata(x, y, z);
-		
-		//this should be able to save the state of the machine and put it back when placed again
-		//but it doesn't seem to persist after restarting the world. I don't know why?!?
-		/*BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
-		NBTTagCompound blockNBT = new NBTTagCompound();
-		tileEntity.writeToNBT(blockNBT);*/
-		
 		ItemStack block = new ItemStack(targetBlock);
-		if (block.stackTagCompound == null) {
-			NBTTagCompound blockNBT = new NBTTagCompound();
-			
-			//get the current upgrades
-			if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-				UpgradeableTileEntity upgradable = ((UpgradeableTileEntity) world.getTileEntity(x, y, z));
-				//upgrades
-				blockNBT.setInteger("upgrades", upgradable.getUpgrades());
-				upgradable.setUpgrades(0);
-				//cobbleUpgrade
-				blockNBT.setBoolean("hasCobbleUpgrade", upgradable.hasCobbleUpgrade);
-				upgradable.hasCobbleUpgrade = false;
-				//witherUpgrade
-				blockNBT.setBoolean("hasWitherUpgrade", upgradable.hasWitherUpgrade);
-				upgradable.hasWitherUpgrade = false;
-				//fillerUpgrade
-				blockNBT.setBoolean("hasFillerUpgrade", upgradable.hasFillerUpgrade);
-				upgradable.hasFillerUpgrade = false;
-			}
-			if (world.getTileEntity(x, y, z) instanceof BaseTileEntity) {
-				BaseTileEntity tileEntity = ((BaseTileEntity) world.getTileEntity(x, y, z));
-				//grab the inventory and save it to NBT
-				NBTTagList contents = new NBTTagList();
-				for (int i = 0; i < tileEntity.getSizeInventory(); i++) {
-					ItemStack stack = tileEntity.getStackInSlot(i);
-					if (stack!=null) {
-						NBTTagCompound tag = new NBTTagCompound();
-						tag.setByte("Slot", (byte)i);
-						stack.writeToNBT(tag);
-						contents.appendTag(tag);
-						tileEntity.setInventorySlotContents(i, null);
-					}
-				}
-				blockNBT.setTag("Contents", contents);
-			}
-			block.setTagCompound(blockNBT);
+
+		// Get the NBT tag contents
+		if (world.getTileEntity(x, y, z) instanceof BaseTileEntity) {
+			BaseTileEntity tileEntity = ((BaseTileEntity) world.getTileEntity(x, y, z));
+			tileEntity.writeToItemStack(block);
 		}
-		
-		items.add(block);
+
 		
 		if (!returnDrops) {
-			for (ItemStack item: items) {
-	        	dumpItems(world, x, y, z, item);
-	        }
+	        dumpItems(world, x, y, z, block);
+			// Remove the tile entity first, so inventory/upgrades doesn't get dumped
+			world.removeTileEntity(x, y, z);
+			world.setBlockToAir(x, y, z);
 		}
-		
-		
-		//delete the inventory so it doesn't drop
-		/*for (int i = 0; i < tileEntity.getSizeInventory(); i++) {
-			tileEntity.setInventorySlotContents(i, null);
-		}
-		getInsides(world, x, y, z);*/
-		
-		world.setBlockToAir(x, y, z);
+
+		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+		items.add(block);
 		return items;
 	}
 

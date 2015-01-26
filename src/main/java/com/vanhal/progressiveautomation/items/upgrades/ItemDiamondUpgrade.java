@@ -1,4 +1,4 @@
-package com.vanhal.progressiveautomation.items;
+package com.vanhal.progressiveautomation.items.upgrades;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -6,14 +6,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ItemDiamondUpgrade extends ItemUpgrade {
+public class ItemDiamondUpgrade extends ItemTieredUpgrade {
 	public ItemDiamondUpgrade() {
-		super("DiamondUpgrade", ToolHelper.LEVEL_DIAMOND);
+		super("DiamondUpgrade", UpgradeType.DIAMOND, ToolHelper.LEVEL_DIAMOND);
 		this.setTextureName(Ref.MODID+":Diamond_Upgrade");
 	}
 	

@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.gui.client;
 
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +29,7 @@ public class GUIChopper extends BaseGUI {
 	
 	protected void drawText() {
 		drawString(StringHelper.localize("gui.chopper"), 5, GRAY);
-		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(chopper.getRange()), infoScreenX, infoScreenW, infroScreenY3, (chopper.hasWitherUpgrade)?GREEN:WHITE);
+		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(chopper.getRange()), infoScreenX, infoScreenW, infroScreenY3, (chopper.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		
 		boolean readyToChop = false;
 		if ( (!chopper.hasFuel()) && (!chopper.isBurning()) ) {

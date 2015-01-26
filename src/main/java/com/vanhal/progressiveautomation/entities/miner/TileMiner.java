@@ -1,7 +1,9 @@
 package com.vanhal.progressiveautomation.entities.miner;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -42,6 +44,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	public TileMiner() {
 		super(13);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
+		setAllowedUpgrades(UpgradeType.WOODEN, UpgradeType.WITHER, UpgradeType.COBBLE_GEN, UpgradeType.FILLER);
 		
 		//set the slots
 		SLOT_PICKAXE = 2;
@@ -134,7 +137,7 @@ public class TileMiner extends UpgradeableTileEntity {
 			}
 			
 			//see if the filler upgrade is active, if it is then the block will need to be filled.
-			if (this.hasFillerUpgrade) {
+			if (hasUpgrade(UpgradeType.FILLER)) {
 				if ( (tryBlock.isAir(worldObj, x, y, z)) || (tryBlock.getMaterial().isLiquid()) ) {
 					return 4;
 				}
@@ -316,7 +319,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	
 	//if we have a cobblegen upgrade then this function will deal with adding cobble that is generated
 	public void useCobbleGen() {
-		if (this.hasCobbleUpgrade) {
+		if (hasUpgrade(UpgradeType.COBBLE_GEN)) {
 			if ( (slots[1] == null) || (slots[1].stackSize==0) ) {
 				if (slots[SLOT_PICKAXE]!=null) {
 					if (ToolHelper.damageTool(slots[SLOT_PICKAXE], worldObj, this.xCoord, this.yCoord, this.zCoord)) {

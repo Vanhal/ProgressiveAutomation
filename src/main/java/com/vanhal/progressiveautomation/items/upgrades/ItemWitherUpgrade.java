@@ -1,31 +1,34 @@
-package com.vanhal.progressiveautomation.items;
+package com.vanhal.progressiveautomation.items.upgrades;
 
 import java.util.List;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.blocks.PABlocks;
+import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemFillerUpgrade extends ItemUpgrade {
-	public ItemFillerUpgrade() {
-		super("FillerUpgrade", -1);
-		this.setTextureName(Ref.MODID+":Filler_Upgrade");
+public class ItemWitherUpgrade extends ItemUpgrade {
+	public ItemWitherUpgrade() {
+		super("WitherUpgrade", UpgradeType.WITHER);
+		this.setTextureName(Ref.MODID+":Wither_Upgrade");
 	}
 	
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "brb", "ppp", 'p', Blocks.stone, 'r', Blocks.furnace, 'b', Items.bucket});
+			"dgd", "gng", "dgd", 'd', PAItems.diamondUpgrade, 'g', Items.gold_ingot, 'n', Items.nether_star});
 		GameRegistry.addRecipe(recipe);
 	}
 	
@@ -33,9 +36,18 @@ public class ItemFillerUpgrade extends ItemUpgrade {
 		this.addNormalRecipe();
 	}
 	
+	protected void addTieredRecipe(Item previousTier) {
+		this.addNormalRecipe();
+	}
+	
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
-		list.add(EnumChatFormatting.GRAY + "Will make the miner fill in any air and fluid blocks while mining");
+		list.add(EnumChatFormatting.GRAY + "Multiplies the range of a machine by "+PAConfig.witherMultiplier);
        
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack itemStack) {
+        return true;
     }
 }
