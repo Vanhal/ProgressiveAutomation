@@ -519,7 +519,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 		}
 		//then check if there is any inventories on top of this block that we can output to
-		if (BlockHelper.getAdjacentTileEntity(this, extDirection) instanceof IInventory) {
+		if (BlockHelper.getAdjacentTileEntity(this, extDirection) instanceof ISidedInventory) {
+			ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, extDirection);
+			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+				if (slots[i]!=null) {
+					addtoSidedExtInventory(externalInv, i);
+				}
+			}
+		} else if (BlockHelper.getAdjacentTileEntity(this, extDirection) instanceof IInventory) {
 			IInventory externalInv = (IInventory) BlockHelper.getAdjacentTileEntity(this, extDirection);
 			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 				if (slots[i]!=null) {
@@ -545,7 +552,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		}
 		return item;
 	}
-
+	
 	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			if (inv.getStackInSlot(i)!=null) {
@@ -568,6 +575,42 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 					inv.setInventorySlotContents(i, slots[fromSlot]);
 					slots[fromSlot] = null;
 					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public boolean addtoSidedExtInventory(ISidedInventory inv, int fromSlot) {
+		int side = extDirection.getOpposite().ordinal();
+		int[] trySlots = inv.getAccessibleSlotsFromSide(side);
+		int i = 0;
+		
+		for (int j = 0; j < trySlots.length; j++) {
+			i = trySlots[j];
+			if (inv.getStackInSlot(i)!=null) {
+				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot])) && (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize()) ) {
+					int avail = inv.getStackInSlot(i).getMaxStackSize() - inv.getStackInSlot(i).stackSize;
+					if (avail >= slots[fromSlot].stackSize) {
+						inv.getStackInSlot(i).stackSize += slots[fromSlot].stackSize;
+						slots[fromSlot] = null;
+						return true;
+					} else {
+						slots[fromSlot].stackSize -= avail;
+						inv.getStackInSlot(i).stackSize += avail;
+					}
+				}
+			}
+		}
+		if ( (slots[fromSlot] != null) && (slots[fromSlot].stackSize>0) ) {
+			for (int j = 0; j < trySlots.length; j++) {
+				i = trySlots[j];
+				if (inv.canInsertItem(i, slots[fromSlot], side)) {
+					if ( (inv.getStackInSlot(i)==null) && (inv.isItemValidForSlot(i, slots[fromSlot])) ) {
+						inv.setInventorySlotContents(i, slots[fromSlot]);
+						slots[fromSlot] = null;
+						return true;
+					}
 				}
 			}
 		}
