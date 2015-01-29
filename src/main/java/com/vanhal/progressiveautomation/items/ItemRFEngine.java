@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import cofh.api.energy.IEnergyContainerItem;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -21,7 +22,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 import java.text.DecimalFormat;
 
-public class ItemRFEngine extends BaseItem {
+public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	protected int maxCharge = 100000;
 	
 	private static DecimalFormat rfDecimalFormat = new DecimalFormat("###,###,###,###,###");
@@ -56,12 +57,16 @@ public class ItemRFEngine extends BaseItem {
 		itemStack.stackTagCompound.setInteger("charge", charge);
 	}
 	
-	public void addCharge(ItemStack itemStack, int amount) {
+	public int addCharge(ItemStack itemStack, int amount) {
+		int amountUsed = amount;
 		int current = getCharge(itemStack);
+		if ((current + amount)>maxCharge) amountUsed = (maxCharge-current);
+		if ((current + amount)<0) amountUsed = (current);
 		current += amount;
 		if (current>=maxCharge) current = maxCharge;
 		if (current<0) current = 0;
 		setCharge(itemStack, current);
+		return amountUsed;
 	}
 	
 	protected void initNBT(ItemStack itemStack) {
@@ -108,5 +113,27 @@ public class ItemRFEngine extends BaseItem {
 	
 	protected void addUpgradeRecipe() {
 		addNormalRecipe();
+	}
+
+	@Override
+	public int receiveEnergy(ItemStack itemStack, int maxReceive, boolean simulate) {
+		if (simulate) return maxReceive;
+		return addCharge(itemStack, maxReceive);
+	}
+
+	@Override
+	public int extractEnergy(ItemStack itemStack, int maxExtract, boolean simulate) {
+		if (simulate) return maxExtract;
+		return addCharge(itemStack, maxExtract * -1);
+	}
+
+	@Override
+	public int getEnergyStored(ItemStack container) {
+		return getCharge(container);
+	}
+
+	@Override
+	public int getMaxEnergyStored(ItemStack container) {
+		return getMaxCharge();
 	}
 }
