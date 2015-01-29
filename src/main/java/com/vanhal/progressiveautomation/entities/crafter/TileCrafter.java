@@ -192,5 +192,15 @@ public class TileCrafter extends UpgradeableTileEntity {
 		}
 		return false;
 	}
+	
+	@Override
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		int[] output = new int[slots.length-9];
+		output[0] = 0;
+		for (int i=1; i<(slots.length-9); i++) {
+			output[i] = i+9;
+		}
+		return output;
+	}
 
 }
