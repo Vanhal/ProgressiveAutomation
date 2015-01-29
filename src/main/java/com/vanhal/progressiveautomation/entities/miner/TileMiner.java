@@ -119,10 +119,15 @@ public class TileMiner extends UpgradeableTileEntity {
 			) {
 				boolean mine = false;
 				//ProgressiveAutomation.logger.info("Tool: "+tryBlock.getHarvestTool(meta)+", Level: "+tryBlock.getHarvestLevel(meta)+", Can use Pick: "+tryBlock.isToolEffective("pickaxe", meta));
+				//ProgressiveAutomation.logger.info("Harvestable: "+ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(2)));
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
-				} if ( (tryBlock.getHarvestTool(meta)=="pickaxe") || (tryBlock.getHarvestTool(meta)=="chisel") ) {
+				}
+				if (tryBlock.getHarvestTool(meta)=="chisel") { //this is compatibility for chisel 1
+					return 2;
+				} else if (tryBlock.getHarvestTool(meta)=="pickaxe") {
 					if (ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(2))) {
+						//ProgressiveAutomation.logger.info("Tool can harvest");
 						return 2;
 					}
 				} else if (tryBlock.getHarvestTool(meta)=="shovel") {
