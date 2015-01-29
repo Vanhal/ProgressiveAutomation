@@ -32,6 +32,8 @@ public class GUICrafter extends BaseGUI {
 	
 	public void drawProgress(float progress, int x, int y) {
 		int level = (int)Math.ceil(16*progress);
+		if (level>16) level = 16;
+		if (level<0) level = 0;
 		drawTexturedModalRect(guiLeft + x, guiTop + y + 16 - level, 240, 0 + (16-level), 16, level);
 	}
 	
