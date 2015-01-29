@@ -49,7 +49,7 @@ public class ProgressiveAutomation {
 	public static CreativeTabs PATab = new CreativeTabs("PATab") {
 		@Override
 		public Item getTabIconItem() {
-			return Item.getItemFromBlock(PABlocks.miner.get(0));
+			return PAItems.CheatRFEngine;
 		}
 	};
 	

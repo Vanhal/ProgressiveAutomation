@@ -34,8 +34,8 @@ public class PAItems {
 
 		if (PAConfig.rfSupport) {
 			rfEngine = new ItemRFEngine();
-			CheatRFEngine = new ItemCreativeRFEngine();
 		}
+		CheatRFEngine = new ItemCreativeRFEngine();
 
 		//preInit them
 		Item previousTier = Items.redstone;
@@ -60,8 +60,8 @@ public class PAItems {
 
 		if (PAConfig.rfSupport) {
 			rfEngine.preInit();
-			CheatRFEngine.preInit();
 		}
+		CheatRFEngine.preInit();
 
 		if (coalPellet!=null) coalPellet.preInit();
 		
