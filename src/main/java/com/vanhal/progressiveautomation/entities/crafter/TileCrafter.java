@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -33,8 +34,8 @@ public class TileCrafter extends UpgradeableTileEntity {
 		this.craftTime = time;
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			if (isBurning()) {
 				if (readyToBurn()) {
@@ -184,17 +185,17 @@ public class TileCrafter extends UpgradeableTileEntity {
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
 		if (slot==OUTPUT_SLOT) {
 			return true;
-		} else if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) && (side!=0) ) {
+		} else if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) && (side!=EnumFacing.DOWN) ) {
 			return true;
 		}
 		return false;
 	}
 	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int var1) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		int[] output = new int[slots.length-9];
 		output[0] = 0;
 		for (int i=1; i<(slots.length-9); i++) {

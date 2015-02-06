@@ -1,18 +1,15 @@
 package com.vanhal.progressiveautomation.blocks;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -30,10 +27,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockGenerator extends BaseBlock {
-	public IIcon iconTop;
+	/*public IIcon iconTop;
 	public IIcon iconSide;
 	public IIcon inactiveGenerator;
-	public IIcon activeGenerator;
+	public IIcon activeGenerator;*/
 
 	public BlockGenerator(int level) {
 		super("Generator", level);
@@ -69,7 +66,7 @@ public class BlockGenerator extends BaseBlock {
 		GameRegistry.addRecipe(recipe);
 	}
 	
-	@SideOnly(Side.CLIENT)
+/*	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
 		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
 		iconTop =  register.registerIcon(iconPrefix + "_Top");
@@ -90,9 +87,9 @@ public class BlockGenerator extends BaseBlock {
 		TileGenerator entity = (TileGenerator) block.getTileEntity(x, y, z);
 		if ( (side==metadata) && (entity.isBurning()) ) return activeGenerator;
         return this.getIcon(side, metadata);
-    }
+    }*/
     
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
+    /*public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
         int l = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
         if (l == 0) {
@@ -122,5 +119,5 @@ public class BlockGenerator extends BaseBlock {
     	if (metadata>5) metadata = 2;
     	worldObj.setBlockMetadataWithNotify(x, y, z, metadata, 2);
         return true;
-    }
+    }*/
 }

@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C15PacketClientSettings;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.stats.StatBase;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -43,7 +42,7 @@ public class PlayerFake extends EntityPlayerMP {
 		this.addedToChunk = false;
 	}
 
-	public static boolean isBlockBreakable(PlayerFake myFakePlayer, World worldObj, int x, int y, int z) {
+	/*public static boolean isBlockBreakable(PlayerFake myFakePlayer, World worldObj, int x, int y, int z) {
 
 		Block block = worldObj.getBlock(x, y, z);
 		if (myFakePlayer == null) {
@@ -51,7 +50,7 @@ public class PlayerFake extends EntityPlayerMP {
 		} else {
 			return block.getPlayerRelativeBlockHardness(myFakePlayer, worldObj, x, y, z) > -1;
 		}
-	}
+	}*/
 
 	@Override
 	public boolean canCommandSenderUseCommand(int var1, String var2) {
@@ -59,11 +58,11 @@ public class PlayerFake extends EntityPlayerMP {
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public ChunkCoordinates getPlayerCoordinates() {
 
 		return null;
-	}
+	}*/
 
 	public void setItemInHand(ItemStack m_item) {
 
@@ -113,7 +112,7 @@ public class PlayerFake extends EntityPlayerMP {
 		theItemInWorldManager.updateBlockRemoving();
 	}
 
-	@Override
+	/*@Override
 	protected void updateItemUse(ItemStack par1ItemStack, int par2) {
 
 		if (par1ItemStack.getItemUseAction() == EnumAction.drink) {
@@ -129,7 +128,7 @@ public class PlayerFake extends EntityPlayerMP {
 	public String getDisplayName() {
 
 		return getCommandSenderName();
-	}
+	}*/
 
 	@Override
 	public float getEyeHeight() {
@@ -163,11 +162,11 @@ public class PlayerFake extends EntityPlayerMP {
 
 	}
 
-	@Override
+	/*@Override
 	public boolean isEntityInvulnerable() {
 
 		return true;
-	}
+	}*/
 
 	@Override
 	public void onDeath(DamageSource source) {
@@ -181,9 +180,9 @@ public class PlayerFake extends EntityPlayerMP {
 		return;
 	}
 
-	@Override
+	/*@Override
 	public void func_147100_a(C15PacketClientSettings pkt) {
 
 		return;
-	}
+	}*/
 }

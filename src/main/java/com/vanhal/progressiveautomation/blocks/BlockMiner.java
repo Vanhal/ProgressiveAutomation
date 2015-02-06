@@ -9,11 +9,14 @@ import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -55,8 +58,8 @@ public class BlockMiner extends BaseBlock {
 	}
 	
 	@Override
-	public int isProvidingWeakPower(IBlockAccess block, int x, int y, int z, int side) {
-		TileEntity tile = block.getTileEntity(x, y, z);
+	public int isProvidingWeakPower(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileMiner) {
 			return (((TileMiner)tile).isDone())?15:0;
 		}
@@ -64,8 +67,8 @@ public class BlockMiner extends BaseBlock {
     }
 	
 	@Override
-	public int isProvidingStrongPower(IBlockAccess block, int x, int y, int z, int side) {
-        return side == 0 ? this.isProvidingWeakPower(block, x, y, z, side) : 0;
+	public int isProvidingStrongPower(IBlockAccess world, BlockPos pos, IBlockState state, EnumFacing side) {
+        return side == EnumFacing.DOWN ? this.isProvidingWeakPower(world, pos, state, side) : 0;
     }
 	
 	@Override

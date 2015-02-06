@@ -66,9 +66,10 @@ public class PartialTileNBTUpdateMessage implements IMessage {
         }
         else
         {
-            byte[] abyte = CompressedStreamTools.compress(tag);
-            buf.writeShort((short)abyte.length);
-            buf.writeBytes(abyte);
+        	//compress doesn't seem to exist any more....
+            //byte[] abyte = CompressedStreamTools.compress(tag);
+            //buf.writeShort((short)abyte.length);
+            //buf.writeBytes(abyte);
         }
     }
 
@@ -88,7 +89,9 @@ public class PartialTileNBTUpdateMessage implements IMessage {
         {
             byte[] abyte = new byte[short1];
             buf.readBytes(abyte);
-            return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+            //I'm not really sure what this function does/did?
+            //return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+            return null;
         }
     }
 
