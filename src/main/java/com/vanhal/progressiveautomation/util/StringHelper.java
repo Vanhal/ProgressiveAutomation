@@ -55,11 +55,11 @@ public final class StringHelper {
 	public static String getFluidName(Fluid fluid) {
 
 		String name = "" + END;
-		if (fluid.getRarity() == EnumRarity.uncommon) {
+		if (fluid.getRarity() == EnumRarity.UNCOMMON) {
 			name += YELLOW;
-		} else if (fluid.getRarity() == EnumRarity.rare) {
+		} else if (fluid.getRarity() == EnumRarity.RARE) {
 			name += BRIGHT_BLUE;
-		} else if (fluid.getRarity() == EnumRarity.epic) {
+		} else if (fluid.getRarity() == EnumRarity.EPIC) {
 			name += PINK;
 		}
 		name += fluid.getLocalizedName() + END;
@@ -70,11 +70,11 @@ public final class StringHelper {
 	public static String getItemName(ItemStack item) {
 
 		String name = "" + END;
-		if (item.getRarity() == EnumRarity.uncommon) {
+		if (item.getRarity() == EnumRarity.UNCOMMON) {
 			name += YELLOW;
-		} else if (item.getRarity() == EnumRarity.rare) {
+		} else if (item.getRarity() == EnumRarity.RARE) {
 			name += BRIGHT_BLUE;
-		} else if (item.getRarity() == EnumRarity.epic) {
+		} else if (item.getRarity() == EnumRarity.EPIC) {
 			name += PINK;
 		}
 		name += item.getDisplayName() + END;

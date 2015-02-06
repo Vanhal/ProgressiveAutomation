@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.gui.slots;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.ItemStack;
 
@@ -14,8 +15,7 @@ import net.minecraft.item.ItemStack;
 public class SlotCraftingLocked extends SlotCrafting {
 
 	public SlotCraftingLocked(EntityPlayer player, IInventory craftMatrix, IInventory inventory, int index, int x, int y) {
-
-		super(player, craftMatrix, inventory, index, x, y);
+		super(player, (InventoryCrafting)craftMatrix, inventory, index, x, y);
 	}
 
 	@Override

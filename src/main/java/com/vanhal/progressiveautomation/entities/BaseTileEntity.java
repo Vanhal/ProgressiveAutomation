@@ -27,11 +27,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 
-public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyHandler {
+public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyHandler, IUpdatePlayerListBox {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
@@ -39,7 +41,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	/**
 	 * Direction to auto output items to
 	 */
-	public ForgeDirection extDirection = ForgeDirection.UP;
+	public EnumFacing extDirection = EnumFacing.UP;
 	
 	/**
 	 * Sygnalises whether the TileEntity needs to be synced with clients
@@ -97,22 +99,22 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public void readFromItemStack(ItemStack itemStack) {
-		if (itemStack == null || itemStack.stackTagCompound == null) {
+		if (itemStack == null || itemStack.getTagCompound() == null) {
 			return;
 		}
-		readCommonNBT(itemStack.stackTagCompound);
-		readNonSyncableNBT(itemStack.stackTagCompound);
+		readCommonNBT(itemStack.getTagCompound());
+		readNonSyncableNBT(itemStack.getTagCompound());
 	}
 
 	public void writeToItemStack(ItemStack itemStack) {
 		if (itemStack == null ) {
 			return;
 		}
-		if (itemStack.stackTagCompound == null) {
-			itemStack.stackTagCompound = new NBTTagCompound();
+		if (itemStack.getTagCompound() == null) {
+			itemStack.setTagCompound(new NBTTagCompound());
 		}
-		writeCommonNBT(itemStack.stackTagCompound);
-		writeNonSyncableNBT(itemStack.stackTagCompound);
+		writeCommonNBT(itemStack.getTagCompound());
+		writeNonSyncableNBT(itemStack.getTagCompound());
 	}
 	
 	/**
@@ -213,7 +215,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeCommonNBT(nbttagcompound);
         this.writeSyncOnlyNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, -1, nbttagcompound);
+        return new S35PacketUpdateTileEntity(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()), -1, nbttagcompound);
     }
 	
 	/**
@@ -233,7 +235,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	 */
 	public PartialTileNBTUpdateMessage getPartialUpdateMessage() {
 		
-		PartialTileNBTUpdateMessage message = new PartialTileNBTUpdateMessage(this.xCoord, this.yCoord, this.zCoord, partialUpdateTag);
+		PartialTileNBTUpdateMessage message = new PartialTileNBTUpdateMessage(getPos().getX(), getPos().getY(), getPos().getZ(), partialUpdateTag);
 		dirty = false;
 		partialUpdateTag = new NBTTagCompound();
 		
@@ -286,8 +288,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return dirty;
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if (!worldObj.isRemote) {
 			if (!isBurning()) {
 				if (readyToBurn()) {
@@ -408,8 +409,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this &&
-		 player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
+		return worldObj.getTileEntity(getPos()) == this &&
+		 player.getDistanceSq(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5) < 64;
 	}
 
 	public void openInventory() { }
@@ -586,8 +587,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean addtoSidedExtInventory(ISidedInventory inv, int fromSlot) {
-		int side = extDirection.getOpposite().ordinal();
-		int[] trySlots = inv.getAccessibleSlotsFromSide(side);
+		int[] trySlots = inv.getSlotsForFace(extDirection.getOpposite());
 		int i = 0;
 		
 		for (int j = 0; j < trySlots.length; j++) {
@@ -609,7 +609,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if ( (slots[fromSlot] != null) && (slots[fromSlot].stackSize>0) ) {
 			for (int j = 0; j < trySlots.length; j++) {
 				i = trySlots[j];
-				if (inv.canInsertItem(i, slots[fromSlot], side)) {
+				if (inv.canInsertItem(i, slots[fromSlot], extDirection.getOpposite())) {
 					if ( (inv.getStackInSlot(i)==null) && (inv.isItemValidForSlot(i, slots[fromSlot])) ) {
 						inv.setInventorySlotContents(i, slots[fromSlot]);
 						slots[fromSlot] = null;
@@ -660,8 +660,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		}
 		//if we still have an item, drop in on the ground
 		if (item!=null) {
-			EntityItem entItem = new EntityItem(worldObj, xCoord + 0.5f, yCoord + 1.5f, zCoord + 0.5f, item);
-			entItem.delayBeforeCanPickup = 1;
+			EntityItem entItem = new EntityItem(worldObj, getPos().getX() + 0.5f, getPos().getY() + 1.5f, getPos().getZ() + 0.5f, item);
+			entItem.setNoPickupDelay();
 			float f3 = 0.05F;
 			entItem.motionX = (double)((float)worldObj.rand.nextGaussian() * f3);
 			entItem.motionY = (double)((float)worldObj.rand.nextGaussian() * f3 + 0.2F);
@@ -689,18 +689,18 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return null;
 	}
 	
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		if (worldObj.isRemote) return false;
 		if (getEngine()==null) return false;
 		else return true;
 	}
 
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		if (worldObj.isRemote) return 0;
 		return addEnergy(maxReceive, simulate);
 	}
 
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		return 0;
 	}
 	
@@ -730,7 +730,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return energyReceived;
 	}
 
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
 			return getEngine().getCharge(slots[SLOT_FUEL]);
 		} else {
@@ -738,7 +738,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		}
 	}
 
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
 			return getEngine().getMaxCharge();
 		} else {
@@ -757,8 +757,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	protected void notifyUpdate() {
-		Block minerBlock = worldObj.getBlock(xCoord, yCoord, zCoord);
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, minerBlock);
+		Block minerBlock = worldObj.getBlockState(pos).getBlock();
+		worldObj.notifyNeighborsOfStateChange(getPos(), minerBlock);
 	}
 	
 	//my function to get a point on a spiral around the block

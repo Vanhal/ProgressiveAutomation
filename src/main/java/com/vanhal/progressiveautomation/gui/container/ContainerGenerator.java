@@ -14,8 +14,8 @@ import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerGenerator extends BaseContainer {
 	

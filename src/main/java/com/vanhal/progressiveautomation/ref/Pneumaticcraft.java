@@ -36,7 +36,7 @@ import net.minecraft.world.World;
  */
 
 public class Pneumaticcraft {
-	private ItemStack seed = null;
+/*	private ItemStack seed = null;
 	private int seedID = -1;
 	
 	public static boolean isSeed(ItemStack item) {
@@ -128,5 +128,5 @@ public class Pneumaticcraft {
 		int meta = world.getBlockMetadata(point.getX(), point.getY(), point.getZ());
 		
 		return (testBlock.getDrops(world, point.getX(), point.getY(), point.getZ(), meta, 0).size()>=2);
-	}
+	}*/
 }

@@ -16,9 +16,9 @@ import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.text.DecimalFormat;
 
@@ -29,7 +29,7 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	
 	public ItemRFEngine() {
 		super("RFEngine");
-		setTextureName(Ref.MODID+":RFEngine");
+		//setTextureName(Ref.MODID+":RFEngine");
 		setMaxStackSize(1);
 		setMaxCharge(PAConfig.rfStored);
 	}
@@ -49,12 +49,12 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	
 	public int getCharge(ItemStack itemStack) {
 		initNBT(itemStack);
-		return itemStack.stackTagCompound.getInteger("charge");
+		return itemStack.getTagCompound().getInteger("charge");
 	}
 	
 	public void setCharge(ItemStack itemStack, int charge) {
 		initNBT(itemStack);
-		itemStack.stackTagCompound.setInteger("charge", charge);
+		itemStack.getTagCompound().setInteger("charge", charge);
 	}
 	
 	public int addCharge(ItemStack itemStack, int amount) {
@@ -70,14 +70,14 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	}
 	
 	protected void initNBT(ItemStack itemStack) {
-		if (itemStack.stackTagCompound == null) {
-			itemStack.stackTagCompound = new NBTTagCompound();
-			itemStack.stackTagCompound.setInteger("charge", 0);
+		if (itemStack.getTagCompound() == null) {
+			itemStack.setTagCompound(new NBTTagCompound());
+			itemStack.getTagCompound().setInteger("charge", 0);
 		}
 	}
 	
 	protected boolean isInit(ItemStack itemStack) {
-		return (itemStack.stackTagCompound != null);
+		return (itemStack.getTagCompound() != null);
 	}
 	
 	

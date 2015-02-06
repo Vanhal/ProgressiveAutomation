@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;

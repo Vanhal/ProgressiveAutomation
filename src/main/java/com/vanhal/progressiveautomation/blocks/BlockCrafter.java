@@ -14,7 +14,7 @@ import com.vanhal.progressiveautomation.entities.crafter.TileCrafterIron;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafterStone;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BlockCrafter extends BaseBlock {
 

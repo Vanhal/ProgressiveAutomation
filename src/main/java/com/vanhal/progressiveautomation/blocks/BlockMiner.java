@@ -7,7 +7,7 @@ import com.vanhal.progressiveautomation.entities.miner.TileMinerIron;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerStone;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;

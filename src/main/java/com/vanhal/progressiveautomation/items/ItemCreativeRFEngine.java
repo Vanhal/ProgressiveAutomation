@@ -9,13 +9,13 @@ import net.minecraft.util.EnumChatFormatting;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCreativeRFEngine extends ItemRFEngine {
 	public ItemCreativeRFEngine() {
 		super("CreativeRFEngine");
-		setTextureName(Ref.MODID+":CreativeRFEngine");
+		//setTextureName(Ref.MODID+":CreativeRFEngine");
 		setMaxStackSize(1);
 		setMaxCharge(PAConfig.rfStored);
 	}

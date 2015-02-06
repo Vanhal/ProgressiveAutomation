@@ -1,11 +1,15 @@
 package com.vanhal.progressiveautomation.entities.planter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -13,8 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.WorldServer;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -41,7 +46,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 		setHarvestTime(80);
 		
 		// #36 Planter can't eject items to bottom
-		extDirection = ForgeDirection.DOWN;
+		extDirection = EnumFacing.DOWN;
 		
 		//slots
 		SLOT_HOE = 2;
@@ -52,8 +57,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 		harvestTime = time;
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	@Override
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			checkInventory();
 
@@ -133,19 +139,21 @@ public class TilePlanter extends UpgradeableTileEntity {
 	
 	protected void harvestPlant(int n) {
 		Point3I currentBlock = getPoint(n);
+		BlockPos currentPosition = new BlockPos(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
 		
-		Block actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
+		Block actualBlock = worldObj.getBlockState(currentPosition).getBlock();
 		if ( (actualBlock == Blocks.reeds) || (actualBlock == Blocks.cactus) ) {
 			currentBlock.setY(currentBlock.getY() + 1);
-			actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
+			actualBlock = worldObj.getBlockState(currentPosition).getBlock();
 		}
 		
-		int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
+		IBlockState currentState = worldObj.getBlockState(currentPosition);
+		int metaData = actualBlock.getMetaFromState(currentState);
 		
 		PlayerFake faker = new PlayerFake((WorldServer)worldObj);
 		//try and right click it first, if not then break the block, unless it's pams harvestcraft
 		if (actualBlock.getClass().getName().startsWith("com.pam.harvestcraft")) {
-			ArrayList<ItemStack> items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), metaData, 0);
+			List<ItemStack> items = actualBlock.getDrops(worldObj, currentPosition, currentState, 0);
 			//get the drops
 			for (ItemStack item : items) {
 				addToInventory(item);

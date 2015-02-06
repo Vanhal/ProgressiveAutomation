@@ -38,35 +38,17 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 
 	public void readCommonNBT(NBTTagCompound nbt) {
 		super.readCommonNBT(nbt);
-		readLegacyNBT(nbt);
 
 		// Load upgrades
 		NBTTagCompound tag = nbt.getCompoundTag("installedUpgrades");
 		if (tag != null) {
 			// func_150296_c() returns a set of all tag names inside the NBTTagCompound
-			for (Object key : tag.func_150296_c()) {
+			// This is called getKeySet now?
+			for (Object key : tag.getKeySet()) {
 				String upgradeName = (String) key;
 				installedUpgrades.put(UpgradeType.valueOf(upgradeName), tag.getInteger(upgradeName));
 			}
 		}
-	}
-
-	/**
-	 * Method kept for compatibility reasons. Needs to be removed at a later date.
-	 * Minecraft must load chunks with placed machines (and afterwards, save the world)
-	 * for legacy NBT to convert into the new map.
-	 * @param nbt NBTTagCompound
-	 */
-	@Deprecated
-	private void readLegacyNBT(NBTTagCompound nbt) {
-		if (nbt.hasKey("NumUpgrades") && nbt.getInteger("NumUpgrades") > 0)
-			installedUpgrades.put(UpgradeType.getRangeUpgrade(toolLevel), nbt.getInteger("NumUpgrades"));
-		if (nbt.hasKey("hasWitherUpgrade") && nbt.getInteger("hasWitherUpgrade") > 0)
-			installedUpgrades.put(UpgradeType.WITHER, nbt.getInteger("hasWitherUpgrade"));
-		if (nbt.hasKey("hasCobbleUpgrade") && nbt.getInteger("hasCobbleUpgrade") > 0)
-			installedUpgrades.put(UpgradeType.COBBLE_GEN, nbt.getInteger("hasCobbleUpgrade"));
-		if (nbt.hasKey("hasFillerUpgrade") && nbt.getInteger("hasFillerUpgrade") > 0)
-			installedUpgrades.put(UpgradeType.FILLER, nbt.getInteger("hasFillerUpgrade"));
 	}
 	
 	/* IUpgradeable methods */
@@ -148,8 +130,8 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	}
 
 
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			ItemStack upgrade = SLOT_UPGRADE != -1 ? getStackInSlot(SLOT_UPGRADE) : null;
 			

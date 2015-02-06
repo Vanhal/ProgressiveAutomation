@@ -5,12 +5,12 @@ import net.minecraft.tileentity.TileEntity;
 
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class NetworkHandler {
 	
@@ -34,7 +34,7 @@ public class NetworkHandler {
 	}
 	
 	public static void sendToAllAroundNearby(IMessage message, TileEntity entity) {
-		CHANNEL.sendToAllAround(message, new TargetPoint(entity.getWorldObj().provider.dimensionId, entity.xCoord, entity.yCoord, entity.zCoord, NEARBY));
+		CHANNEL.sendToAllAround(message, new TargetPoint(entity.getWorld().provider.getDimensionId(), entity.getPos().getX(), entity.getPos().getY(), entity.getPos().getZ(), NEARBY));
 	}
 	
 	public static void sendToPlayer(IMessage message, EntityPlayerMP player) {

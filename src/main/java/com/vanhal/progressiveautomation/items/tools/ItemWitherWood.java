@@ -14,14 +14,14 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import com.vanhal.progressiveautomation.items.BaseItem;
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemWitherWood extends BaseItem {
 	public ItemWitherWood() {
 		super("WitherWood");
-		setTextureName(Ref.MODID+":WitherWood");
+		//setTextureName(Ref.MODID+":WitherWood");
 	}
 	
 	@SideOnly(Side.CLIENT)

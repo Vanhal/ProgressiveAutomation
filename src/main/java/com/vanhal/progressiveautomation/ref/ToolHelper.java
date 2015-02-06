@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -68,11 +69,11 @@ public class ToolHelper {
 		if (itemStack.getItem() instanceof ItemTool) {
 			//Vanilla Tools
 			if (itemStack.getItem() instanceof ItemTool) {
-				return ((ItemTool)itemStack.getItem()).func_150913_i().getHarvestLevel();
+				return ((ItemTool)itemStack.getItem()).getToolMaterial().getHarvestLevel();
 			} else {
 				String material = "";
 				if (itemStack.getItem() instanceof ItemSword) material = ((ItemSword)itemStack.getItem()).getToolMaterialName();
-				else if (itemStack.getItem() instanceof ItemHoe) material = ((ItemHoe)itemStack.getItem()).getToolMaterialName();
+				else if (itemStack.getItem() instanceof ItemHoe) material = ((ItemHoe)itemStack.getItem()).getMaterialName();
 				if (material.equals("WOOD")) return LEVEL_WOOD;
 				else if (material.equals("STONE")) return LEVEL_STONE;
 				else if (material.equals("IRON")) return LEVEL_IRON;
@@ -163,9 +164,9 @@ public class ToolHelper {
 				return true;
 			}
 		} else {
-			Block mineBlock = world.getBlock(x, y, z);
+			Block mineBlock = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			PlayerFake fakePlayer = new PlayerFake((WorldServer)world);
-			tool.getItem().onBlockDestroyed(tool, world, mineBlock, x, y, z, fakePlayer);
+			tool.getItem().onBlockDestroyed(tool, world, mineBlock, new BlockPos(x, y, z), fakePlayer);
 		}
 		return false;
 	}

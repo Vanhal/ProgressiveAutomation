@@ -17,8 +17,8 @@ import com.vanhal.progressiveautomation.gui.slots.SlotFalseCopy;
 import com.vanhal.progressiveautomation.gui.slots.SlotRemoveOnly;
 import com.vanhal.progressiveautomation.gui.slots.SlotSaplings;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ContainerCrafter extends BaseContainer {
 	public TileCrafter crafter;
@@ -53,7 +53,7 @@ public class ContainerCrafter extends BaseContainer {
 	@Override
     public void onCraftMatrixChanged(IInventory inv) {
     	crafter.setInventorySlotContents(crafter.CRAFT_RESULT, 
-    			CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, crafter.getWorldObj()));
+    			CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, crafter.getWorld()));
     	if (init) updateTile();
     }
     

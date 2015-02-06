@@ -13,14 +13,14 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import com.vanhal.progressiveautomation.items.BaseItem;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemWitherIron extends BaseItem {
 	public ItemWitherIron() {
 		super("WitherIron");
-		setTextureName("Minecraft:iron_ingot");
+		//setTextureName("Minecraft:iron_ingot");
 	}
 	
 	@SideOnly(Side.CLIENT)

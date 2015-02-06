@@ -27,8 +27,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 /*
  * Contains some code from cofh Core
@@ -56,10 +57,7 @@ public class SimpleGuiHandler implements IGuiHandler {
 
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (containerMap.containsKey(ID)) {
-			if (!world.blockExists(x, y, z)) {
-				return null;
-			}
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			try {
 				if (!world.isRemote) {
 					Packet packet = tile.getDescriptionPacket();
@@ -82,10 +80,7 @@ public class SimpleGuiHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (guiMap.containsKey(ID)) {
-			if (!world.blockExists(x, y, z)) {
-				return null;
-			}
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			try {
 				Class<? extends GuiScreen> guiClass = (Class<? extends GuiScreen>) guiMap.get(ID);
 				Constructor guiConstructor = guiClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });

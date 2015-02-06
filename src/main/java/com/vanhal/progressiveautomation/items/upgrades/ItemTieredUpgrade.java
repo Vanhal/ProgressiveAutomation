@@ -3,7 +3,7 @@ package com.vanhal.progressiveautomation.items.upgrades;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
 
 public abstract class ItemTieredUpgrade extends ItemUpgrade {
