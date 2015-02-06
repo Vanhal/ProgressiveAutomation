@@ -22,12 +22,14 @@ public enum UpgradeType {
 	 * @return
 	 */
 	public static UpgradeType getRangeUpgrade(int machineLevel) {
-		switch (machineLevel) {
-			case ToolHelper.LEVEL_WOOD : return WOODEN;
-			case ToolHelper.LEVEL_STONE : return STONE;
-			case ToolHelper.LEVEL_IRON : return IRON;
-			case ToolHelper.LEVEL_DIAMOND : return DIAMOND;
-			default : return WOODEN;
+		if (machineLevel >= ToolHelper.LEVEL_DIAMOND) {
+			 return DIAMOND;
+		} else if (machineLevel == ToolHelper.LEVEL_IRON) {
+			return IRON;
+		} else if (machineLevel == ToolHelper.LEVEL_STONE) {
+			return STONE;
+		} else {
+			return WOODEN;
 		}
 	}
 }
