@@ -58,7 +58,7 @@ public class TileChopper extends UpgradeableTileEntity {
 		SLOT_UPGRADE = 3;
 	}
 	
-	@Override
+/*	@Override
 	public void writeNonSyncableNBT(NBTTagCompound nbt) {
 		super.writeNonSyncableNBT(nbt);
 		
@@ -128,9 +128,9 @@ public class TileChopper extends UpgradeableTileEntity {
 		if (nbt.hasKey("planting")) plantSapling = nbt.getBoolean("planting");
 	}
 	
-
-	public void updateEntity() {
-		super.updateEntity();
+	@Override
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			checkInventory();
@@ -381,7 +381,7 @@ public class TileChopper extends UpgradeableTileEntity {
 			}
 		}
 		return false;
-	}
+	}*/
 
 	public boolean isPlanting() {
 		return plantSapling;
@@ -391,7 +391,7 @@ public class TileChopper extends UpgradeableTileEntity {
 		return chopping;
 	}
 
-	protected int lastAxe = -1;
+	/*protected int lastAxe = -1;
 	
 	private int previousUpgrades;
 	
@@ -433,12 +433,12 @@ public class TileChopper extends UpgradeableTileEntity {
 
 
 	/* ISided Stuff */
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+	/*public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if ( (slot == SLOT_SAPLINGS) && (checkSapling(stack)) ) {
     		return true;
     	}
 		return super.isItemValidForSlot(slot, stack);
-	}
+	}*/
 	
 	public static boolean checkSapling(ItemStack stack) {
 		if (ModHelper.checkSapling(stack)) {
@@ -448,7 +448,7 @@ public class TileChopper extends UpgradeableTileEntity {
 		}
 	}
 	
-	private void recalculateChoppingRange() {
+	/*private void recalculateChoppingRange() {
 		int cuttingSideSize = CUTTING_EXTRA_RANGE +  (int)Math.ceil( (Math.sqrt(getUpgrades() + 1)-1)/2);
 		maxCuttingX = this.xCoord + cuttingSideSize;
 		minCuttingX = this.xCoord - cuttingSideSize;
@@ -460,6 +460,6 @@ public class TileChopper extends UpgradeableTileEntity {
 		if (x >= minCuttingX && x <= maxCuttingX && z >= minCuttingZ && z <= maxCuttingZ) 
 			return true;
 		return false;
-	}
+	}*/
 
 }

@@ -52,12 +52,12 @@ public class TilePlanter extends UpgradeableTileEntity {
 		SLOT_HOE = 2;
 		SLOT_UPGRADE = 3;
 	}
-	
+		
 	protected void setHarvestTime(int time) {
 		harvestTime = time;
 	}
 	
-	@Override
+/*	@Override
 	public void update() {
 		super.update();
 		if (!worldObj.isRemote) {
@@ -240,7 +240,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	protected int statusSet = 0;
 	
 	public int getStatus() {
-		if (worldObj.isRemote) {
+		/*if (worldObj.isRemote) {
 			return statusSet;
 		} else {
 			if (searchBlock > -1) {
@@ -252,7 +252,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 					return 2;
 				} 
 			}
-		}
+		}*/
 		return 0;
 	}
 	
@@ -261,7 +261,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 
 	@Override
-	public boolean readyToBurn() {
+	/*public boolean readyToBurn() {
 		if (slots[SLOT_HOE]!=null) {
 			if (doSearch()) {
 				return true;
@@ -285,11 +285,11 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 
 
-	/* ISided Stuff */
+	//ISided Stuff
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if ( (slot == SLOT_SEEDS) && (isPlantable(stack)) ) {
     		return true;
     	}
 		return super.isItemValidForSlot(slot, stack);
-	}
+	}*/
 }

@@ -12,10 +12,12 @@ public class SlotDictionary extends Slot {
 	
 	public SlotDictionary(ItemStack itemStack, IInventory par1iInventory, int par2, int par3, int par4) {
 		super(par1iInventory, par2, par3, par4);
-		id = OreDictionary.getOreID(itemStack);
+		//TODO: Rewrite
+		//id = OreDictionary.getOreID(itemStack);
 	}
 
 	public boolean isItemValid(ItemStack itemStack) {
-		return (id == OreDictionary.getOreID(itemStack));
+		return false;
+		//return (id == OreDictionary.getOreID(itemStack));
 	}
 }

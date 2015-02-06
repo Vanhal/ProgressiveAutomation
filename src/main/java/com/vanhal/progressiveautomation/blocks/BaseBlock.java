@@ -15,9 +15,9 @@ import com.vanhal.progressiveautomation.items.ItemBlockMachine;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
-
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -25,8 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -36,11 +36,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseBlock extends BlockContainer implements IDismantleable {
 	public String name;
@@ -48,7 +48,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public int GUIid = -1;
 	
 	protected int blockLevel = ToolHelper.LEVEL_WOOD;
-	protected IIcon[] blockIcons = new IIcon[6];
+	//protected IIcon[] blockIcons = new IIcon[6];
 	
 	public static String returnLevelName(int level) {
 		if (level==ToolHelper.LEVEL_STONE) {
@@ -61,7 +61,8 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		return "";
 	}
 	
-	public int getFlammability(IBlockAccess world, int x, int y, int z, ForgeDirection face) {
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		if (blockLevel==ToolHelper.LEVEL_WOOD) {
 			return 5;
 		} else {
@@ -74,7 +75,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		
 		this.machineType = machineType;
 		name = machineType+returnLevelName(level);
-		setBlockName(name);
+		setUnlocalizedName(name);
 		
 		
 		setHardness(1.0f);
@@ -92,20 +93,23 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		return thisName;
 	}
 
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			if (GUIid>=0) {
-				FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, x, y, z);
+				FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 		return true;
 	}
 
+	@Override
 	public TileEntity createNewTileEntity(World world, int var2) {
 		return null;
 	}
 	
-	@SideOnly(Side.CLIENT)
+/*	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
 		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
 		blockIcons[0] = register.registerIcon(iconPrefix + "_Bottom");
@@ -119,26 +123,27 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int side, int meta) {
         return blockIcons[side];
-    }
+    }*/
 	
-	public void breakBlock(World world, int x, int y, int z, Block block, int p_149749_6_) {
-		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(pos);
 
         if (tileEntity != null) {
-            ArrayList<ItemStack> items = getInsides(world, x, y, z);
+            ArrayList<ItemStack> items = getInsides(world, pos);
             
             for (ItemStack item: items) {
-            	dumpItems(world, x, y, z, item);
+            	dumpItems(world, pos, item);
             }
             
 
-            world.func_147453_f(x, y, z, block);
+            //world.func_147453_f(pos, state.getBlock()); //I have no idea what this method did....
         }
-        super.breakBlock(world, x, y, z, block, p_149749_6_);
+        super.breakBlock(world, pos, state);
     }
 	
-	public void dumpItems(World world, int x, int y, int z, ItemStack items) {
-		EntityItem entItem = new EntityItem(world, (float)x + 0.5f, (float)y + 0.5f, (float)z + 0.5f, items);
+	public void dumpItems(World world, BlockPos pos, ItemStack items) {
+		EntityItem entItem = new EntityItem(world, (float)pos.getX() + 0.5f, (float)pos.getY() + 0.5f, (float)pos.getZ() + 0.5f, items);
 		float f3 = 0.05F;
 		entItem.motionX = (double)((float)world.rand.nextGaussian() * f3);
 		entItem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
@@ -164,10 +169,10 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		
 	}
 	
-	protected ArrayList<ItemStack> getInsides(World world, int x, int y, int z) {
+	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		
-		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(x, y, z);
+		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(pos);
 		if (tileEntity != null) {
         	//get the inventory
             for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
@@ -200,22 +205,23 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	@Override
 	public ArrayList<ItemStack> dismantleBlock(EntityPlayer player,
 			World world, int x, int y, int z, boolean returnDrops) {
+		BlockPos pos = new BlockPos(x, y, z);
 		
-		Block targetBlock = world.getBlock(x, y, z);
+		Block targetBlock = world.getBlockState(pos).getBlock();
 		ItemStack block = new ItemStack(targetBlock);
 
 		// Get the NBT tag contents
-		if (world.getTileEntity(x, y, z) instanceof BaseTileEntity) {
-			BaseTileEntity tileEntity = ((BaseTileEntity) world.getTileEntity(x, y, z));
+		if (world.getTileEntity(pos) instanceof BaseTileEntity) {
+			BaseTileEntity tileEntity = ((BaseTileEntity) world.getTileEntity(pos));
 			tileEntity.writeToItemStack(block);
 		}
 
 		
 		if (!returnDrops) {
-	        dumpItems(world, x, y, z, block);
+	        dumpItems(world, pos, block);
 			// Remove the tile entity first, so inventory/upgrades doesn't get dumped
-			world.removeTileEntity(x, y, z);
-			world.setBlockToAir(x, y, z);
+			world.removeTileEntity(pos);
+			world.setBlockToAir(pos);
 		}
 
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();

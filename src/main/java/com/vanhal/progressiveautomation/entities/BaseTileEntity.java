@@ -32,6 +32,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IChatComponent;
 
 public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyHandler, IUpdatePlayerListBox {
 	protected ItemStack[] slots;
@@ -223,8 +224,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	 */
 		@Override    
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-    	this.readCommonNBT(pkt.func_148857_g());
-    	this.readSyncOnlyNBT(pkt.func_148857_g());
+    	//not sure what these did....
+		//this.readCommonNBT(pkt.func_148857_g());
+    	//this.readSyncOnlyNBT(pkt.func_148857_g());
     }
 	
 	/**
@@ -288,6 +290,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return dirty;
 	}
 	
+	@Override
 	public void update() {
 		if (!worldObj.isRemote) {
 			if (!isBurning()) {
@@ -355,14 +358,17 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	/* Inventory methods */
+	@Override
 	public int getSizeInventory() {
 		return slots.length;
 	}
 
+	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return slots[slot];
 	}
 
+	@Override
 	public ItemStack decrStackSize(int slot, int amt) {
 		if (slots[slot] != null) {
 			ItemStack newStack;
@@ -380,6 +386,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return null;
 	}
 
+	@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		if (slots[slot]!=null) {
 			ItemStack stack = slots[slot];
@@ -389,34 +396,47 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return null;
 	}
 
+	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		slots[slot] = stack;
 		if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
 			stack.stackSize = this.getInventoryStackLimit();
 		}
 	}
-
-	public String getInventoryName() {
+	
+	@Override
+	public String getName() {
 		return null;
 	}
 
-	public boolean hasCustomInventoryName() {
+	@Override
+	public boolean hasCustomName() {
 		return false;
 	}
 
+	@Override
+	public IChatComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
 
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 		return worldObj.getTileEntity(getPos()) == this &&
 		 player.getDistanceSq(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5) < 64;
 	}
 
-	public void openInventory() { }
+	@Override
+	public void openInventory(EntityPlayer playerIn) {}
 
-	public void closeInventory() { }
+	@Override
+	public void closeInventory(EntityPlayer playerIn) {}
 
+	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if ( (slot==SLOT_FUEL) && (TileEntityFurnace.getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
      		return true;
@@ -424,7 +444,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return false;
 	}
 
-	public int[] getAccessibleSlotsFromSide(int var1) {
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
 		int[] output = new int[slots.length];
 		for (int i=0; i<slots.length; i++) {
 			output[i] = i;
@@ -432,7 +453,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return output;
 	}
 
-	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing face) {
 		if ( (slot<0) || (slot>SLOT_INVENTORY_END) ) return false;
 		if ( (slots[slot] != null) && (slots[slot].isItemEqual(stack)) ) {
 			int availSpace = this.getInventoryStackLimit() - slots[slot].stackSize;
@@ -445,7 +467,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return false;
 	}
 
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing face) {
 		if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
 			return true;
 		}
@@ -792,4 +815,36 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 		return new Point2I(x + dx, y + dy);
 	}
+
+
+	//clear the internal inventory (I have a feeling this is used for pooling but I can't be sure)
+	@Override
+	public void clear() {
+		for (int i = 0; i < this.slots.length; ++i) {
+            this.slots[i] = null;
+        }
+	}
+
+	//WHAT THE HELL ARE THESE??????
+	//They look like they're possibly used for GUI stuff?
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	
+
+
+
+
 }

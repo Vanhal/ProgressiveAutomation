@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import cofh.api.energy.IEnergyHandler;
 
 import com.vanhal.progressiveautomation.PAConfig;
@@ -57,8 +57,9 @@ public class TileGenerator extends BaseTileEntity {
 		consumeRate = (int) ((float)PAConfig.fuelCost * rate);
 	}
 
-	public void updateEntity() {
-		super.updateEntity();
+	/*@Override
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			if (isBurning()) {
 				changeCharge(generationRate);
@@ -91,7 +92,7 @@ public class TileGenerator extends BaseTileEntity {
 				worldObj.setBlock(p2.getX(), yCoord, p2.getY(), Blocks.fire);
 			}
 		}
-	}
+	}*/
 
 	public boolean readyToBurn() {
 		if (currentStorage < maxStorage) {
@@ -110,15 +111,15 @@ public class TileGenerator extends BaseTileEntity {
 	}
 
 	//Energy stuff
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		return true;
 	}
 
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return 0;
 	}
 
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		int energyExtracted = Math.min(currentStorage, maxExtract);
 		if (!simulate) {
 			changeCharge((energyExtracted * -1));
@@ -136,7 +137,7 @@ public class TileGenerator extends BaseTileEntity {
 		if (currentStorage != prevAmount) addPartialUpdate("energy", currentStorage);
 	}
 
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing facing) {
 		return currentStorage;
 	}
 
@@ -144,7 +145,7 @@ public class TileGenerator extends BaseTileEntity {
 		return currentStorage;
 	}
 
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing facing) {
 		return maxStorage;
 	}
 
@@ -154,13 +155,14 @@ public class TileGenerator extends BaseTileEntity {
 
 	public void outputEnergy() {
 		//Lets go around the world and try and give it to someone!
-		for (int i = 0; i<6; i++) {
+		//TODO: Fix this
+		/*for (int i = 0; i<6; i++) {
 			//Do we have any energy up for grabs?
 			if (currentStorage>0) {
-				TileEntity entity = BlockHelper.getAdjacentTileEntity(worldObj, xCoord, yCoord, zCoord, i);
+				TileEntity entity = BlockHelper.getAdjacentTileEntity(worldObj, getPos().getX(), getPos().getY(), getPos().getZ(), i);
 				if (entity instanceof IEnergyHandler) {
 					IEnergyHandler energy = (IEnergyHandler) entity;
-					ForgeDirection fromDirection = ForgeDirection.values()[ForgeDirection.OPPOSITES[i]];
+					EnumFacing fromDirection = EnumFacing.values()[ForgeDirection.OPPOSITES[i]];
 					if (energy.canConnectEnergy(fromDirection)) {
 						int giveAmount = energy.receiveEnergy(fromDirection, currentStorage, false);
 						if (giveAmount>0) {
@@ -169,7 +171,7 @@ public class TileGenerator extends BaseTileEntity {
 					}
 				}
 			}
-		}
+		}*/
 	}
 	
 	/* ISided Stuff */

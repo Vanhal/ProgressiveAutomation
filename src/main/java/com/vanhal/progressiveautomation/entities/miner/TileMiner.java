@@ -26,7 +26,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileMiner extends UpgradeableTileEntity {
 	protected int totalMineBlocks = -1;
@@ -53,7 +52,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 
-	public void writeCommonNBT(NBTTagCompound nbt) {
+/*	public void writeCommonNBT(NBTTagCompound nbt) {
 		super.writeCommonNBT(nbt);
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
@@ -67,8 +66,8 @@ public class TileMiner extends UpgradeableTileEntity {
 
 
 
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			checkInventory();
@@ -109,7 +108,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	 * Returns 0 if it can't, -1 if it is cobble
 	 * Will return 2 if mined with pick, 3 if shovel, 1 if none
 	 * return 4 if just need to fill using the filler upgrade  */
-	public int canMineBlock(int x, int y, int z) {
+	/*public int canMineBlock(int x, int y, int z) {
 		Block tryBlock = worldObj.getBlock(x, y, z);
 		if (tryBlock != null) {
 			int meta = worldObj.getBlockMetadata(x, y, z);
@@ -300,7 +299,7 @@ public class TileMiner extends UpgradeableTileEntity {
 		} else {
 			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
 		}
-	}
+	}*/
 
 	public int getMinedBlocks() {
 		return currentMineBlocks;
@@ -321,7 +320,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	public boolean isDone() {
 		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
 	}
-	
+	/*
 	//if we have a cobblegen upgrade then this function will deal with adding cobble that is generated
 	public void useCobbleGen() {
 		if (hasUpgrade(UpgradeType.COBBLE_GEN)) {
@@ -337,7 +336,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 	/* Check for changes to tools and upgrades */
-	protected int lastPick = -1;
+	/*protected int lastPick = -1;
 	protected int lastShovel = -1;
 	
 	private int previousUpgrades;

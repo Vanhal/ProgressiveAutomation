@@ -21,7 +21,7 @@ public class BaseGUI extends GuiContainer {
 	protected int guiHeight = 166;
 	protected int guiWidth = 176;
 	
-	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRendererObj;
 	public static final ResourceLocation flame = new ResourceLocation(Ref.MODID, "textures/gui/flame.png");
 	
 	protected ResourceLocation background;
