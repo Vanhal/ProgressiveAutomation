@@ -11,12 +11,12 @@ import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ItemIronUpgrade extends ItemTieredUpgrade {
 	public ItemIronUpgrade() {
 		super("IronUpgrade", UpgradeType.IRON, ToolHelper.LEVEL_IRON);
-		this.setTextureName(Ref.MODID+":Iron_Upgrade");
+		//this.setTextureName(Ref.MODID+":Iron_Upgrade");
 	}
 	
 	@Override

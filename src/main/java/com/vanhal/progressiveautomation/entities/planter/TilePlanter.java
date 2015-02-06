@@ -1,12 +1,15 @@
 package com.vanhal.progressiveautomation.entities.planter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -14,8 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.WorldServer;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -42,7 +46,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 		setHarvestTime(80);
 		
 		// #36 Planter can't eject items to bottom
-		extDirection = ForgeDirection.DOWN;
+		extDirection = EnumFacing.DOWN;
 		
 		//slots
 		SLOT_HOE = 2;
@@ -53,8 +57,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 		harvestTime = time;
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	@Override
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			checkInventory();
 
@@ -134,6 +139,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	
 	protected void harvestPlant(int n) {
 		Point3I currentBlock = getPoint(n);
+		
 		Block actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
 		int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
 		

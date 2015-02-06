@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
