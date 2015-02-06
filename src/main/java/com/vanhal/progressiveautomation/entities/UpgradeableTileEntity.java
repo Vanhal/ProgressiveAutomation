@@ -201,12 +201,10 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
     		if (ToolHelper.getLevel(stack) <= getUpgradeLevel()) {
     			return true;
     		}
-     	} else if ( (slot==SLOT_FUEL) && (TileEntityFurnace.getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
-     		return true;
-    	} else if ( (slot==SLOT_UPGRADE) && (stack.isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) ) {
+     	} else if ( (slot==SLOT_UPGRADE) && (stack.isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) ) {
     		return true;
      	}
-		return false;
+		return super.isItemValidForSlot(slot, stack);
 	}
 
 	protected Set<UpgradeType> getAllowedUpgrades() {

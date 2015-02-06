@@ -6,6 +6,7 @@ import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 
@@ -416,6 +417,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public void closeInventory() { }
 
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if ( (slot==SLOT_FUEL) && (TileEntityFurnace.getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
+     		return true;
+    	}
 		return false;
 	}
 
