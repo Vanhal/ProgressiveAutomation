@@ -27,7 +27,10 @@ public class WitherTools {
 	}
 	
 	public static void init() {
-		
+		witherWood.init();
+		witherStone.init();
+		witherIron.init();
+		witherDiamond.init();
 	}
 
 	public static void postInit() {

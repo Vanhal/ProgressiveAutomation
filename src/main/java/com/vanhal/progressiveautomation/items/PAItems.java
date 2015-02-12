@@ -1,7 +1,12 @@
 package com.vanhal.progressiveautomation.items;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.items.tools.ItemWitherDiamond;
@@ -16,6 +21,7 @@ import com.vanhal.progressiveautomation.items.upgrades.ItemIronUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemStoneUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWoodUpgrade;
+import com.vanhal.progressiveautomation.ref.Ref;
 
 public class PAItems {
 
@@ -35,7 +41,7 @@ public class PAItems {
 		if (PAConfig.rfSupport) {
 			rfEngine = new ItemRFEngine();
 		}
-		CheatRFEngine = new ItemCreativeRFEngine();
+		cheatRFEngine = new ItemCreativeRFEngine();
 
 		//preInit them
 		Item previousTier = Items.redstone;
@@ -61,7 +67,7 @@ public class PAItems {
 		if (PAConfig.rfSupport) {
 			rfEngine.preInit();
 		}
-		CheatRFEngine.preInit();
+		cheatRFEngine.preInit();
 
 		if (coalPellet!=null) coalPellet.preInit();
 		
@@ -71,8 +77,27 @@ public class PAItems {
 		}
 	}
 
-	public static void init() {
+	public static void init(FMLInitializationEvent event) {
 		if (cobbleUpgrade!=null) cobbleUpgrade.preInit();
+		
+		if (event.getSide() == Side.CLIENT) {
+			if (woodUpgrade!=null) woodUpgrade.init();
+			if (stoneUpgrade!=null) stoneUpgrade.init();
+			if (ironUpgrade!=null) ironUpgrade.init();
+			if (diamondUpgrade!=null) diamondUpgrade.init();
+			if (witherUpgrade!=null) witherUpgrade.init();
+			if (cobbleUpgrade!=null) cobbleUpgrade.init();
+			if (fillerUpgrade!=null) fillerUpgrade.init();
+			
+			if (rfEngine!=null) rfEngine.init();
+			cheatRFEngine.init();
+			
+			if (coalPellet!=null) coalPellet.init();
+			
+			if (PAConfig.enableWitherTools) {
+				WitherTools.init();
+			}
+		}
 	}
 
 	public static void postInit() {
@@ -90,7 +115,7 @@ public class PAItems {
 	public static ItemFillerUpgrade fillerUpgrade = null;
 
 	public static ItemRFEngine rfEngine = null;
-	public static ItemRFEngine CheatRFEngine = null;
+	public static ItemRFEngine cheatRFEngine = null;
 
 	public static ItemCoalPellet coalPellet = null;
 	

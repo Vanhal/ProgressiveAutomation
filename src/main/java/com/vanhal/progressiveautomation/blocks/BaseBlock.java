@@ -27,6 +27,7 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -48,7 +49,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public int GUIid = -1;
 	
 	protected int blockLevel = ToolHelper.LEVEL_WOOD;
-	//protected IIcon[] blockIcons = new IIcon[6];
 	
 	public static String returnLevelName(int level) {
 		if (level==ToolHelper.LEVEL_STONE) {
@@ -109,22 +109,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		return null;
 	}
 	
-/*	@SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
-		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
-		blockIcons[0] = register.registerIcon(iconPrefix + "_Bottom");
-		blockIcons[1] = register.registerIcon(iconPrefix + "_Top");
-		blockIcons[2] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[3] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[4] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[5] = register.registerIcon(iconPrefix + "_Side");
-    }
-	
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-        return blockIcons[side];
-    }*/
-	
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		BaseTileEntity tileEntity = (BaseTileEntity)world.getTileEntity(pos);
@@ -166,7 +150,10 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	public void postInit() {
-		
+		if (ProgressiveAutomation.proxy.isClient()) {
+			Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
+				.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Ref.MODID + ":" + name, "inventory"));
+		}
 	}
 	
 	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
