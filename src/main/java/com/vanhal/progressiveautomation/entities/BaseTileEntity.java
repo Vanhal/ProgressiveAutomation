@@ -1,6 +1,8 @@
 package com.vanhal.progressiveautomation.entities;
 
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
@@ -34,7 +36,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 
-public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyHandler, IUpdatePlayerListBox {
+public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyProvider, IEnergyReceiver, IUpdatePlayerListBox {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
