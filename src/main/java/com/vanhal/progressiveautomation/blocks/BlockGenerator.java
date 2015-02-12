@@ -76,6 +76,11 @@ public class BlockGenerator extends BaseBlock {
 	}
 	
 	@Override
+    public int getMetaFromState(IBlockState state) {
+        return ((EnumFacing)state.getValue(FACING)).getIndex();
+    }
+	
+	@Override
     public IBlockState getStateFromMeta(int meta) {
     	EnumFacing enumfacing = EnumFacing.getFront(meta);
 
@@ -106,11 +111,6 @@ public class BlockGenerator extends BaseBlock {
     @SideOnly(Side.CLIENT)
     public IBlockState getStateForEntityRender(IBlockState state) {
         return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
-    }
-    
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing)state.getValue(FACING)).getIndex();
     }
     
     @Override

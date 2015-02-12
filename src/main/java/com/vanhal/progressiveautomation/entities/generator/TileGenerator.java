@@ -7,11 +7,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import cofh.api.energy.IEnergyHandler;
+import cofh.api.energy.IEnergyReceiver;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.blocks.BlockGenerator;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
@@ -57,11 +60,15 @@ public class TileGenerator extends BaseTileEntity {
 		consumeRate = (int) ((float)PAConfig.fuelCost * rate);
 	}
 
-	/*@Override
+	@Override
 	public void update() {
 		super.update();
 		if (!worldObj.isRemote) {
 			if (isBurning()) {
+				/*if (!(Boolean) worldObj.getBlockState(pos).getValue(BlockGenerator.ACTIVE)) {
+					worldObj.setBlockState(pos, worldObj.getBlockState(pos).withProperty(BlockGenerator.ACTIVE, true), 2);
+					ProgressiveAutomation.logger.info("Not Active");
+				}*/
 				changeCharge(generationRate);
 				checkForFire();
 			}
@@ -76,7 +83,7 @@ public class TileGenerator extends BaseTileEntity {
 	protected void checkUpdate() {
 		if (isBurning() != burnUpdate) {
 			burnUpdate = isBurning();
-			worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+			worldObj.markBlockForUpdate(this.pos);
 		}
 	}
 
@@ -84,16 +91,21 @@ public class TileGenerator extends BaseTileEntity {
 		if (fireRisk > worldObj.rand.nextFloat()) {
 			//start a fire on a block nearby
 			int n = (int)Math.floor(8*worldObj.rand.nextFloat()) + 1;
-			Point2I p2 = spiral(n, xCoord, zCoord);
-			Block supportBlock = worldObj.getBlock(p2.getX(), yCoord - 1, p2.getY());
-			Block fireBlock = worldObj.getBlock(p2.getX(), yCoord, p2.getY());
-			if ( ((fireBlock.isAir(worldObj, p2.getX(), yCoord, p2.getY())) 
-				&& (supportBlock.isFlammable(worldObj, p2.getX(), yCoord -1, p2.getY(), ForgeDirection.UP))) ){
-				worldObj.setBlock(p2.getX(), yCoord, p2.getY(), Blocks.fire);
+			Point2I p2 = spiral(n, pos.getX(), pos.getZ());
+			
+			BlockPos supportPos = new BlockPos(p2.getX(), pos.getY() - 1, p2.getY());
+			BlockPos firePos = new BlockPos(p2.getX(), pos.getY(), p2.getY());
+			
+			Block supportBlock = worldObj.getBlockState(supportPos).getBlock();
+			Block fireBlock = worldObj.getBlockState(firePos).getBlock();
+			if ( ((fireBlock.isAir(worldObj, firePos)) 
+				&& (supportBlock.isFlammable(worldObj, supportPos, EnumFacing.UP))) ){
+				worldObj.setBlockState(firePos, Blocks.fire.getDefaultState());
 			}
 		}
-	}*/
+	}
 
+	@Override
 	public boolean readyToBurn() {
 		if (currentStorage < maxStorage) {
 			return true;
@@ -111,14 +123,17 @@ public class TileGenerator extends BaseTileEntity {
 	}
 
 	//Energy stuff
+	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
 		return true;
 	}
 
+	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		return 0;
 	}
 
+	@Override
 	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		int energyExtracted = Math.min(currentStorage, maxExtract);
 		if (!simulate) {
@@ -137,32 +152,33 @@ public class TileGenerator extends BaseTileEntity {
 		if (currentStorage != prevAmount) addPartialUpdate("energy", currentStorage);
 	}
 
+	@Override
 	public int getEnergyStored(EnumFacing facing) {
-		return currentStorage;
+		return getEnergyStored();
 	}
-
+	
 	public int getEnergyStored() {
 		return currentStorage;
 	}
 
+	@Override
 	public int getMaxEnergyStored(EnumFacing facing) {
-		return maxStorage;
+		return getMaxEnergyStored();
 	}
-
+	
 	public int getMaxEnergyStored() {
 		return maxStorage;
 	}
 
 	public void outputEnergy() {
 		//Lets go around the world and try and give it to someone!
-		//TODO: Fix this
-		/*for (int i = 0; i<6; i++) {
+		for (int i = 0; i<6; i++) {
 			//Do we have any energy up for grabs?
 			if (currentStorage>0) {
 				TileEntity entity = BlockHelper.getAdjacentTileEntity(worldObj, getPos().getX(), getPos().getY(), getPos().getZ(), i);
-				if (entity instanceof IEnergyHandler) {
-					IEnergyHandler energy = (IEnergyHandler) entity;
-					EnumFacing fromDirection = EnumFacing.values()[ForgeDirection.OPPOSITES[i]];
+				if (entity instanceof IEnergyReceiver) {
+					IEnergyReceiver energy = (IEnergyReceiver) entity;
+					EnumFacing fromDirection = EnumFacing.getFront(i);
 					if (energy.canConnectEnergy(fromDirection)) {
 						int giveAmount = energy.receiveEnergy(fromDirection, currentStorage, false);
 						if (giveAmount>0) {
@@ -171,10 +187,11 @@ public class TileGenerator extends BaseTileEntity {
 					}
 				}
 			}
-		}*/
+		}
 	}
 	
 	/* ISided Stuff */
+	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return super.isItemValidForSlot(slot, stack);
 	}
