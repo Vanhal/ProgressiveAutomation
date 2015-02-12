@@ -92,6 +92,11 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		}
 		return thisName;
 	}
+	
+	@Override
+	public int getRenderType() {
+        return 3;
+    }
 
 
 	@Override

@@ -210,9 +210,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
      * This method is used to sync data when a GUI is opened. the packet will contain
      * all syncable data.
      */
-		@Override
-    public Packet getDescriptionPacket()
-    {
+	@Override
+    public Packet getDescriptionPacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeCommonNBT(nbttagcompound);
         this.writeSyncOnlyNBT(nbttagcompound);
@@ -222,11 +221,10 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	/**
 	 * This method is used to load syncable data when a GUI is opened.
 	 */
-		@Override    
+	@Override    
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-    	//not sure what these did....
-		//this.readCommonNBT(pkt.func_148857_g());
-    	//this.readSyncOnlyNBT(pkt.func_148857_g());
+		this.readCommonNBT(pkt.getNbtCompound());
+    	this.readSyncOnlyNBT(pkt.getNbtCompound());
     }
 	
 	/**
