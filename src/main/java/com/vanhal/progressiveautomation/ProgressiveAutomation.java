@@ -49,7 +49,7 @@ public class ProgressiveAutomation {
 	public static CreativeTabs PATab = new CreativeTabs("PATab") {
 		@Override
 		public Item getTabIconItem() {
-			return PAItems.CheatRFEngine;
+			return PAItems.cheatRFEngine;
 		}
 	};
 	
@@ -76,7 +76,7 @@ public class ProgressiveAutomation {
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		PAItems.init();
+		PAItems.init(event);
 		PABlocks.init();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);

@@ -82,4 +82,12 @@ public class Proxy {
 		}
 		
 	}
+	
+	public boolean isClient() {
+		return false;
+	}
+	
+	public boolean isServer() {
+		return true;
+	}
 }
