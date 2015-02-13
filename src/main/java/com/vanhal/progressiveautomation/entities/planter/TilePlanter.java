@@ -26,6 +26,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.Pneumaticcraft;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.util.OreHelper;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
@@ -57,7 +58,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 		harvestTime = time;
 	}
 	
-/*	@Override
+	@Override
 	public void update() {
 		super.update();
 		if (!worldObj.isRemote) {
@@ -139,13 +140,14 @@ public class TilePlanter extends UpgradeableTileEntity {
 	
 	protected void harvestPlant(int n) {
 		Point3I currentBlock = getPoint(n);
-		BlockPos currentPosition = new BlockPos(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
 		
-		Block actualBlock = worldObj.getBlockState(currentPosition).getBlock();
+		Block actualBlock = worldObj.getBlockState(currentBlock.toPosition()).getBlock();
 		if ( (actualBlock == Blocks.reeds) || (actualBlock == Blocks.cactus) ) {
 			currentBlock.setY(currentBlock.getY() + 1);
-			actualBlock = worldObj.getBlockState(currentPosition).getBlock();
+			actualBlock = worldObj.getBlockState(currentBlock.toPosition()).getBlock();
 		}
+		
+		BlockPos currentPosition = currentBlock.toPosition();;
 		
 		IBlockState currentState = worldObj.getBlockState(currentPosition);
 		int metaData = actualBlock.getMetaFromState(currentState);
@@ -158,8 +160,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 			for (ItemStack item : items) {
 				addToInventory(item);
 			}
-			worldObj.setBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), actualBlock, 0, 2);
-		} else if (actualBlock.onBlockActivated(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), faker, metaData, 0, 0, 0)) {
+			//this may be wrong...
+			worldObj.setBlockState(currentPosition, actualBlock.getDefaultState(), 2);
+		} else if (actualBlock.onBlockActivated(worldObj, currentPosition, currentState, faker, EnumFacing.DOWN, 0.0f, 0.0f, 0.0f)) {
 			IInventory inv = faker.inventory;
 			for (int i = 0; i < inv.getSizeInventory(); i++){
 				if (inv.getStackInSlot(i)!=null) {
@@ -169,14 +172,14 @@ public class TilePlanter extends UpgradeableTileEntity {
 		} 
 
 		if (checkPlant(n)) {
-			ArrayList<ItemStack> items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), metaData, 0);
+			List<ItemStack> items = actualBlock.getDrops(worldObj, currentPosition, currentState, 0);
 			//get the drops
 			for (ItemStack item : items) {
 				addToInventory(item);
 			}
 	
-			worldObj.removeTileEntity( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
-			worldObj.setBlockToAir(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
+			worldObj.removeTileEntity( currentPosition );
+			worldObj.setBlockToAir(currentPosition);
 			hoeGround(n, true);
 		}
 	}
@@ -188,7 +191,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 				//ProgressiveAutomation.logger.info("Plant: "+n+" "+point.getX()+", "+point.getY()+", "+point.getZ());
 				
 				//if the seed is from pnematiccraft
-				 if (Pneumaticcraft.isSeed(slots[SLOT_SEEDS])) {
+				 /*if (Pneumaticcraft.isSeed(slots[SLOT_SEEDS])) {
 					 if (Pneumaticcraft.validBlock(worldObj, slots[SLOT_SEEDS], point)) {
 						 if (Pneumaticcraft.checkClear(worldObj, point)) {
 							 if (doAction) {
@@ -204,33 +207,34 @@ public class TilePlanter extends UpgradeableTileEntity {
 							 return true;
 						 }
 					 }
-				} else if (isPlantable(slots[SLOT_SEEDS])) {
-					Block plant = null;
+				} else */if (isPlantable(slots[SLOT_SEEDS])) {
+					IBlockState plant = null;
 					if (slots[SLOT_SEEDS].getItem() instanceof IPlantable) {
 						//normal crops
-						plant = ((IPlantable)slots[SLOT_SEEDS].getItem()).getPlant(worldObj,  point.getX(), point.getY(), point.getZ());
+						plant = ((IPlantable)slots[SLOT_SEEDS].getItem()).getPlant(worldObj, point.toPosition());
 					} else if (slots[SLOT_SEEDS].getItem() == Items.reeds) {
 						//sugarcane
-						plant = Blocks.reeds;
+						plant = Blocks.reeds.getDefaultState();
 					} else if (Block.getBlockFromItem(slots[SLOT_SEEDS].getItem()) == Blocks.cactus) {
 						//cactus
-						plant = Blocks.cactus;
+						plant = Blocks.cactus.getDefaultState();
 					}
 					
 					//place the block
 					if (plant != null) {
 						if (plant.getClass().getName().startsWith("com.pam.harvestcraft")) {
 							hoeGround(n, false);
-						} else if (!plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) {
+						} else if (!plant.getBlock().canPlaceBlockAt(worldObj, point.toPosition())) {
 							//hoe the ground if we can
 							hoeGround(n, false);
 						}
 						if (
-							(plant.canPlaceBlockAt(worldObj, point.getX(), point.getY(), point.getZ())) &&
-							(worldObj.getBlock(point.getX(), point.getY(), point.getZ()) != plant)
+							(plant.getBlock().canPlaceBlockAt(worldObj, point.toPosition())) &&
+							(worldObj.getBlockState(point.toPosition()) != plant)
 						) {
 							if (doAction) {
-								worldObj.setBlock(point.getX(), point.getY(), point.getZ(), plant, slots[SLOT_SEEDS].getItem().getDamage(slots[SLOT_SEEDS]), 7);
+								worldObj.setBlockState(point.toPosition(), 
+										plant.getBlock().getStateFromMeta(slots[SLOT_SEEDS].getItem().getDamage(slots[SLOT_SEEDS])), 7);
 								slots[SLOT_SEEDS].stackSize--;
 								if (slots[SLOT_SEEDS].stackSize==0) {
 									slots[SLOT_SEEDS] = null;
@@ -248,45 +252,52 @@ public class TilePlanter extends UpgradeableTileEntity {
 
 	protected boolean checkPlant(int n) {
 		Point3I plantPoint = getPoint(n);
-		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
-		int metadata = worldObj.getBlockMetadata(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+		BlockPos plantPosition = plantPoint.toPosition();
+		IBlockState blockState = worldObj.getBlockState(plantPosition);
+		Block plantBlock = blockState.getBlock();
+		int metadata = plantBlock.getMetaFromState(blockState);
 		
 		//for crops and anything that is IGrowable
 		if (plantBlock instanceof IGrowable) {
-			return !((IGrowable)plantBlock).func_149851_a(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), true);
+			return !((IGrowable)plantBlock).isStillGrowing(worldObj, plantPosition, blockState, true);
 		} else if (plantBlock instanceof BlockNetherWart) { //nether wart
 			return (metadata >= 3);
 		} else if (plantBlock == Blocks.reeds) { // sugar cane
-			return (worldObj.getBlock(plantPoint.getX(), plantPoint.getY() + 1, plantPoint.getZ()) == Blocks.reeds);
+			return (worldObj.getBlockState(plantPosition.offsetUp()).getBlock() == Blocks.reeds);
 		} else if (plantBlock == Blocks.cactus) { //cactus
-			return (worldObj.getBlock(plantPoint.getX(), plantPoint.getY() + 1, plantPoint.getZ()) == Blocks.cactus);
-		} else if (Pneumaticcraft.isPlant(plantBlock)) { //Pneumaticcraft
+			return (worldObj.getBlockState(plantPosition.offsetUp()).getBlock() == Blocks.cactus);
+		} /*else if (Pneumaticcraft.isPlant(plantBlock)) { //Pneumaticcraft
 			return Pneumaticcraft.isGrown(worldObj, plantPoint);
-		}
+		}*/
 		return false;
 	}
 	
 	
 	protected Point3I getPoint(int n) {
-		Point2I p1 = spiral(n+1, xCoord, zCoord);
-		return new Point3I(p1.getX(), yCoord + 2, p1.getY());
+		Point2I p1 = spiral(n+1, getPos().getX(), getPos().getZ());
+		return new Point3I(p1.getX(), getPos().getY() + 2, p1.getY());
 	}
 	
 	protected void hoeGround(int n, boolean reverse) {
 		Point3I plantPoint = getPoint(n);
-		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+		BlockPos plantPosition = plantPoint.toPosition();
+		IBlockState plantState = worldObj.getBlockState(plantPosition);
+		Block plantBlock = plantState.getBlock();
+		
 		Point3I dirtPoint = new Point3I(plantPoint.getX(), plantPoint.getY() - 1, plantPoint.getZ());
-		Block dirtBlock = worldObj.getBlock(dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ());
+		BlockPos dirtPosition = dirtPoint.toPosition();
+		IBlockState dirtState = worldObj.getBlockState(dirtPosition);
+		Block dirtBlock = plantState.getBlock();
 		
 		if (reverse) {
 			if (dirtBlock == Blocks.farmland) {
-				worldObj.setBlock(dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ(), Blocks.dirt);
+				worldObj.setBlockState(dirtPosition, Blocks.dirt.getDefaultState());
 			}
 		} else {
 			if (slots[SLOT_HOE]!=null) {
-				if (plantBlock.isAir(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ())) {
+				if (plantBlock.isAir(worldObj, plantPosition)) {
 					if ((dirtBlock == Blocks.grass || dirtBlock == Blocks.dirt)) {
-						worldObj.setBlock(dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ(), Blocks.farmland);
+						worldObj.setBlockState(dirtPosition, Blocks.farmland.getDefaultState());
 						if (ToolHelper.damageTool(slots[SLOT_HOE], worldObj, dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ())) {
 							slots[SLOT_HOE] = null;
 						}
@@ -303,7 +314,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	protected int statusSet = 0;
 	
 	public int getStatus() {
-		/*if (worldObj.isRemote) {
+		if (worldObj.isRemote) {
 			return statusSet;
 		} else {
 			if (searchBlock > -1) {
@@ -315,7 +326,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 					return 2;
 				} 
 			}
-		}*/
+		}
 		return 0;
 	}
 	
@@ -324,7 +335,8 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 
 
-	/*public boolean readyToBurn() {
+	@Override
+	public boolean readyToBurn() {
 		if (slots[SLOT_HOE]!=null) {
 			if (doSearch()) {
 				return true;
@@ -338,8 +350,8 @@ public class TilePlanter extends UpgradeableTileEntity {
 					(item.getItem() instanceof IPlantable) //normal crops
 					|| (item.getItem() == Items.reeds) // sugar cane
 					|| (Block.getBlockFromItem(item.getItem()) == Blocks.cactus)  // cactus
-					|| (Pneumaticcraft.isSeed(item)) //pnumaticraft plants
-				) && (OreDictionary.getOreID(item) != OreDictionary.getOreID("treeSapling")) 
+//					|| (Pneumaticcraft.isSeed(item)) //pnumaticraft plants
+				) && (!OreHelper.testOre("treeSapling", item)) 
 			) {
 			return true;
 		}
@@ -360,5 +372,5 @@ public class TilePlanter extends UpgradeableTileEntity {
     		return true;
     	}
 		return super.isItemValidForSlot(slot, stack);
-	}*/
+	}
 }

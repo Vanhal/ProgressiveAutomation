@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.util;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 
 /* A Point case to allow for an x, y point */
 public class Point3I {
@@ -91,5 +92,15 @@ public class Point3I {
 		setX(nbt.getInteger("x"));
 		setY(nbt.getInteger("y"));
 		setZ(nbt.getInteger("z"));
+	}
+	
+	public BlockPos toPosition() {
+		return new BlockPos(getX(), getY(), getZ());
+	}
+	
+	public void fromPosition(BlockPos pos) {
+		setX(pos.getX());
+		setY(pos.getY());
+		setZ(pos.getZ());
 	}
 }

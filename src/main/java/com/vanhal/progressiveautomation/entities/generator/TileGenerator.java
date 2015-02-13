@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.entities.generator;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +16,7 @@ import cofh.api.energy.IEnergyReceiver;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.BlockGenerator;
+import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
@@ -65,10 +67,6 @@ public class TileGenerator extends BaseTileEntity {
 		super.update();
 		if (!worldObj.isRemote) {
 			if (isBurning()) {
-				/*if (!(Boolean) worldObj.getBlockState(pos).getValue(BlockGenerator.ACTIVE)) {
-					worldObj.setBlockState(pos, worldObj.getBlockState(pos).withProperty(BlockGenerator.ACTIVE, true), 2);
-					ProgressiveAutomation.logger.info("Not Active");
-				}*/
 				changeCharge(generationRate);
 				checkForFire();
 			}
@@ -83,6 +81,8 @@ public class TileGenerator extends BaseTileEntity {
 	protected void checkUpdate() {
 		if (isBurning() != burnUpdate) {
 			burnUpdate = isBurning();
+			
+			worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
 			worldObj.markBlockForUpdate(this.pos);
 		}
 	}

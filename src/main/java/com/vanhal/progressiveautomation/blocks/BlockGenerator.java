@@ -1,5 +1,7 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -120,7 +122,14 @@ public class BlockGenerator extends BaseBlock {
             world.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
         }
     }
-
+    
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    	boolean buring = false;
+    	if (world.getTileEntity(pos) instanceof TileGenerator) {
+    		buring = ((TileGenerator) world.getTileEntity(pos)).isBurning();
+    	}
+        return state.withProperty(FACING, state.getValue(FACING)).withProperty(BlockGenerator.ACTIVE, buring);
+    }
     
     /*@Override
     public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis){
