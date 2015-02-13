@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.entities.miner;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
 
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.Point2I;
@@ -12,6 +13,7 @@ import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -52,7 +55,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 
-/*	public void writeCommonNBT(NBTTagCompound nbt) {
+	public void writeCommonNBT(NBTTagCompound nbt) {
 		super.writeCommonNBT(nbt);
 		nbt.setInteger("MineBlocks", totalMineBlocks);
 		nbt.setInteger("MinedBlocks", currentMineBlocks);
@@ -83,9 +86,9 @@ public class TileMiner extends UpgradeableTileEntity {
 	public void scanBlocks() {
 		totalMineBlocks = currentMineBlocks = 0;	
 		for (int i = 1; i <= getRange(); i++) {
-			Point2I currentPoint = spiral(i, xCoord, zCoord);
+			Point2I currentPoint = spiral(i, pos.getX(), pos.getZ());
 			boolean bedrock = false;
-			int newY = this.yCoord - 1;
+			int newY = this.pos.getY() - 1;
 			while (!bedrock) {
 				int result = canMineBlock(currentPoint.getX(), newY, currentPoint.getY());
 				if (result >= 1) {
@@ -108,13 +111,16 @@ public class TileMiner extends UpgradeableTileEntity {
 	 * Returns 0 if it can't, -1 if it is cobble
 	 * Will return 2 if mined with pick, 3 if shovel, 1 if none
 	 * return 4 if just need to fill using the filler upgrade  */
-	/*public int canMineBlock(int x, int y, int z) {
-		Block tryBlock = worldObj.getBlock(x, y, z);
+	public int canMineBlock(int x, int y, int z) {
+		BlockPos minePos = new BlockPos(x, y, z);
+		IBlockState tryState = worldObj.getBlockState(minePos);
+		Block tryBlock = tryState.getBlock();
+		
 		if (tryBlock != null) {
-			int meta = worldObj.getBlockMetadata(x, y, z);
+			int meta = tryBlock.getMetaFromState(tryState);
 			if (
-				(tryBlock.getBlockHardness(worldObj, x, y, z)>=0) &&
-				(!tryBlock.isAir(worldObj, x, y, z)) 
+				(tryBlock.getBlockHardness(worldObj, minePos)>=0) &&
+				(!tryBlock.isAir(worldObj, minePos)) 
 			) {
 				boolean mine = false;
 				//ProgressiveAutomation.logger.info("Tool: "+tryBlock.getHarvestTool(meta)+", Level: "+tryBlock.getHarvestLevel(meta)+", Can use Pick: "+tryBlock.isToolEffective("pickaxe", meta));
@@ -122,15 +128,15 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (tryBlock == Blocks.cobblestone) {
 					return -1;
 				}
-				if (tryBlock.getHarvestTool(meta)=="chisel") { //this is compatibility for chisel 1
+				if (tryBlock.getHarvestTool(tryState)=="chisel") { //this is compatibility for chisel 1
 					return 2;
-				} else if (tryBlock.getHarvestTool(meta)=="pickaxe") {
-					if (ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(2))) {
+				} else if (tryBlock.getHarvestTool(tryState)=="pickaxe") {
+					if (ForgeHooks.canToolHarvestBlock(worldObj, minePos, getStackInSlot(2))) {
 						//ProgressiveAutomation.logger.info("Tool can harvest");
 						return 2;
 					}
-				} else if (tryBlock.getHarvestTool(meta)=="shovel") {
-					if (ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(3))) {
+				} else if (tryBlock.getHarvestTool(tryState)=="shovel") {
+					if (ForgeHooks.canToolHarvestBlock(worldObj, minePos, getStackInSlot(3))) {
 						return 3;
 					}
 				} else {
@@ -142,7 +148,7 @@ public class TileMiner extends UpgradeableTileEntity {
 			
 			//see if the filler upgrade is active, if it is then the block will need to be filled.
 			if (hasUpgrade(UpgradeType.FILLER)) {
-				if ( (tryBlock.isAir(worldObj, x, y, z)) || (tryBlock.getMaterial().isLiquid()) ) {
+				if ( (tryBlock.isAir(worldObj, minePos)) || (tryBlock.getMaterial().isLiquid()) ) {
 					return 4;
 				}
 			}
@@ -157,15 +163,15 @@ public class TileMiner extends UpgradeableTileEntity {
 			if (miningTime<=0) {
 				miningTime = 0;
 				//clock is done, lets mine it
-				Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
-				
+				Point2I currentPoint = spiral(currentColumn, pos.getX(), pos.getZ());
+				BlockPos currentPosition = new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY());
 				//ProgressiveAutomation.logger.info("Point: "+miningWith+" "+currentPoint.getX()+","+currentYLevel+","+currentPoint.getY());
 
 				//don't harvest anything if the block is air or liquid
 				if (miningWith!=4) {
 					//get the inventory of anything under it
-					if (worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY()) instanceof IInventory) {
-						IInventory inv = (IInventory) worldObj.getTileEntity(currentPoint.getX(), currentYLevel, currentPoint.getY());
+					if (worldObj.getTileEntity(currentPosition) instanceof IInventory) {
+						IInventory inv = (IInventory) worldObj.getTileEntity(currentPosition);
 						for (int i = 0; i < inv.getSizeInventory(); i++) {
 							if (inv.getStackInSlot(i)!=null) {
 								addToInventory(inv.getStackInSlot(i));
@@ -192,8 +198,8 @@ public class TileMiner extends UpgradeableTileEntity {
 						}
 	
 						//then break the block
-						ArrayList<ItemStack> items = currentBlock.getDrops(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY(),
-								worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ), fortuneLevel);
+						List<ItemStack> items = currentBlock.getDrops(worldObj, currentPosition,
+								worldObj.getBlockState(currentPosition), fortuneLevel);
 						//get the drops
 						for (ItemStack item : items) {
 							addToInventory(item);
@@ -209,8 +215,8 @@ public class TileMiner extends UpgradeableTileEntity {
 				}
 
 				//remove the block and entity if there is one
-				worldObj.removeTileEntity( currentPoint.getX(), currentYLevel, currentPoint.getY() );
-				worldObj.setBlock( currentPoint.getX(), currentYLevel, currentPoint.getY(), Blocks.cobblestone);
+				worldObj.removeTileEntity( currentPosition );
+				worldObj.setBlockState( currentPosition, Blocks.cobblestone.getDefaultState());
 				slots[1].stackSize--;
 				if (slots[1].stackSize == 0) {
 					slots[1] = null;
@@ -227,16 +233,17 @@ public class TileMiner extends UpgradeableTileEntity {
 			if (!isDone()) {
 				currentBlock = getNextBlock();
 				if (currentBlock != null) {
-					Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
+					Point2I currentPoint = spiral(currentColumn, pos.getX(), pos.getZ());
+					BlockPos currentPosition = new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY());
+					
 					if (miningWith==4) {
 						miningTime = 1;
 					} else {
-						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY()) * 1.5 * 20 ) ;
+						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPosition) * 1.5 * 20 ) ;
 						
 						if (miningWith!=1) {
 							Item tool = (Item)slots[miningWith].getItem();
-							float miningSpeed = tool.getDigSpeed( slots[miningWith], currentBlock,
-									worldObj.getBlockMetadata( currentPoint.getX(), currentYLevel, currentPoint.getY() ) );
+							float miningSpeed = tool.getDigSpeed( slots[miningWith], worldObj.getBlockState(currentPosition) );
 	
 							//check for efficiency on the tool
 							int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
@@ -264,11 +271,11 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 	public Block getNextBlock() {
-		Point2I currentPoint = spiral(currentColumn, xCoord, zCoord);
+		Point2I currentPoint = spiral(currentColumn, pos.getX(), pos.getZ());
 		miningWith = canMineBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
 		while ( (miningWith<=0) && (currentYLevel>=0) ) {
 			if (miningWith>0) {
-				return worldObj.getBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
+				return worldObj.getBlockState(new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY())).getBlock();
 			} else {
 				currentYLevel--;
 				if (currentYLevel>=0)
@@ -276,10 +283,10 @@ public class TileMiner extends UpgradeableTileEntity {
 			}
 		}
 		if (miningWith>0) {
-			return worldObj.getBlock(currentPoint.getX(), currentYLevel, currentPoint.getY());
+			return worldObj.getBlockState(new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY())).getBlock();
 		}
 		if (currentYLevel<0) {
-			currentYLevel = yCoord - 1;
+			currentYLevel = pos.getY() - 1;
 			currentColumn--;
 			if (currentColumn<0) {
 				//ProgressiveAutomation.logger.info("Last Column done Update");
@@ -299,8 +306,8 @@ public class TileMiner extends UpgradeableTileEntity {
 		} else {
 			return this.getStackInSlot(SLOT_UPGRADE).stackSize;
 		}
-	}*/
-
+	}
+	
 	public int getMinedBlocks() {
 		return currentMineBlocks;
 	}
@@ -320,13 +327,13 @@ public class TileMiner extends UpgradeableTileEntity {
 	public boolean isDone() {
 		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
 	}
-	/*
+	
 	//if we have a cobblegen upgrade then this function will deal with adding cobble that is generated
 	public void useCobbleGen() {
 		if (hasUpgrade(UpgradeType.COBBLE_GEN)) {
 			if ( (slots[1] == null) || (slots[1].stackSize==0) ) {
 				if (slots[SLOT_PICKAXE]!=null) {
-					if (ToolHelper.damageTool(slots[SLOT_PICKAXE], worldObj, this.xCoord, this.yCoord, this.zCoord)) {
+					if (ToolHelper.damageTool(slots[SLOT_PICKAXE], worldObj, this.pos.getX(), this.pos.getY(), this.pos.getZ())) {
 						slots[SLOT_PICKAXE] = null;
 					}
 					slots[1] = new ItemStack(Blocks.cobblestone);
@@ -336,7 +343,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 	/* Check for changes to tools and upgrades */
-	/*protected int lastPick = -1;
+	protected int lastPick = -1;
 	protected int lastShovel = -1;
 	
 	private int previousUpgrades;
@@ -378,7 +385,7 @@ public class TileMiner extends UpgradeableTileEntity {
 			currentColumn = getRange();
 			currentBlock = null;
 			miningTime = 0;
-			currentYLevel = yCoord - 1;
+			currentYLevel = pos.getY() - 1;
 		}
 	}
 

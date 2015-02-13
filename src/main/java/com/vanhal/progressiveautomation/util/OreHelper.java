@@ -1,8 +1,12 @@
 package com.vanhal.progressiveautomation.util;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -25,13 +29,14 @@ public class OreHelper {
 		return false;
 	}
 	
-	public static boolean testOreBlock(String testOre, int x, int y, int z, IBlockAccess worldObj) {
-		return testOreBlock(OreDictionary.getOreID(testOre), x, y, z, worldObj);
+	public static boolean testOreBlock(String testOre, BlockPos testPos, IBlockAccess worldObj) {
+		return testOreBlock(OreDictionary.getOreID(testOre), testPos, worldObj);
 	}
 	
-	public static boolean testOreBlock(int testOreID, int x, int y, int z, IBlockAccess worldObj) {
-		Block _block = worldObj.getBlock(x, y, z);
-		int metaData = worldObj.getBlockMetadata(x, y, z);
+	public static boolean testOreBlock(int testOreID, BlockPos testPos, IBlockAccess worldObj) {
+		IBlockState _blockState = worldObj.getBlockState(testPos);
+		Block _block = _blockState.getBlock();
+		int metaData = _block.getMetaFromState(_blockState);
 		
 		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), 1, metaData);
 		return testOre(testOreID, testItem);

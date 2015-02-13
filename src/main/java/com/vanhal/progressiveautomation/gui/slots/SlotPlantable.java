@@ -17,8 +17,6 @@ public class SlotPlantable  extends Slot {
 
 	public boolean isItemValid(ItemStack itemStack) {
 		//ProgressiveAutomation.logger.info("Planter: "+itemStack.getUnlocalizedName());
-		//return TilePlanter.isPlantable(itemStack);
-		//TODO: Fix
-		return false;
+		return TilePlanter.isPlantable(itemStack);
 	}
 }
