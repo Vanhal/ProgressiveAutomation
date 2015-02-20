@@ -140,7 +140,6 @@ public class TilePlanter extends UpgradeableTileEntity {
 	
 	protected void harvestPlant(int n) {
 		Point3I currentBlock = getPoint(n);
-		
 		BlockPos currentPosition = currentBlock.toPosition();;
 		
 		IBlockState currentState = worldObj.getBlockState(currentPosition);
