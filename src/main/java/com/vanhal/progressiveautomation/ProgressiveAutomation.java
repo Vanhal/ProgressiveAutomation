@@ -12,6 +12,7 @@ import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.blocks.network.NetworkHandler;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessageHandler;
+import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
@@ -66,6 +67,8 @@ public class ProgressiveAutomation {
 				PartialTileNBTUpdateMessage.class, Side.CLIENT);
 		
 		PAConfig.init(new Configuration(event.getSuggestedConfigurationFile()));
+		
+		ModHelper.init();
 		
 		PAItems.preInit();
 		PABlocks.preInit();

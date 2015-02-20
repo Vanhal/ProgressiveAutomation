@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.entities.chopper;
 import java.util.ArrayList;
 
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -13,6 +14,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.oredict.OreDictionary;
 
+import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.util.CoordList;
@@ -439,10 +441,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	public static boolean checkSapling(ItemStack stack) {
-		if (
-			(OreDictionary.getOreID(stack) == OreDictionary.getOreID("treeSapling")) ||
-			(stack.getUnlocalizedName().compareToIgnoreCase("tile.mfr.rubberwood.sapling")==0)
-		) {
+		if (ModHelper.checkSapling(stack)) {
 			return true;
 		} else {
 			return false;

@@ -45,6 +45,18 @@ public class PAConfig {
 		config = handle;
 		config.load();
 		
+		config.addCustomCategoryComment("general", "General Settings");
+		config.addCustomCategoryComment("blocks", "Enable or disable the blocks, will remove them from the game entirely");
+		config.addCustomCategoryComment("upgrades", "Change the settings of how the various machine upgrades work");
+		config.addCustomCategoryComment("rfoptions", "Change the settings of how PA interacts with RF devices");
+		
+		config.addCustomCategoryComment("modcompatibility", 
+				"This section allows you to customise which mods will be compatible with the various machines\n"
+				+ "Please note however that disabling compatibilty does not mean the mod will not work with PA,\n"
+				+ "just that it will not work 100% as expected");
+		
+		
+		
 		syncConfig();
 	}
 	

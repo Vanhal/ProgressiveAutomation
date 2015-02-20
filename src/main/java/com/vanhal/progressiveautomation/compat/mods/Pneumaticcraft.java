@@ -1,18 +1,23 @@
-package com.vanhal.progressiveautomation.ref;
+package com.vanhal.progressiveautomation.compat.mods;
 
 import java.util.List;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
+
+import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.compat.BaseMod;
+import com.vanhal.progressiveautomation.util.Point3I;
+
+import cpw.mods.fml.common.Loader;
 
 /*
  * Seed Mapping:
@@ -35,26 +40,29 @@ import net.minecraft.world.World;
  *
  */
 
-public class Pneumaticcraft {
-	private ItemStack seed = null;
-	private int seedID = -1;
+public class Pneumaticcraft extends BaseMod {
 	
-	public static boolean isSeed(ItemStack item) {
+	public Pneumaticcraft() {
+		modID = "PneumaticCraft";
+	}
+	
+	@Override
+	public boolean isPlantible(ItemStack item) {
 		return (item.getUnlocalizedName().startsWith("item.plasticPlant"));
 	}
 	
-	public Pneumaticcraft(ItemStack itemStack) {
-		if (isSeed(itemStack)) {
-			seed = itemStack;
-			seedID = itemStack.getItemDamage();
-		}
+	@Override
+	public boolean isPlant(Block plantBlock, int metadata) {
+		return (plantBlock.getClass().getName().startsWith("pneumaticCraft.common.block.pneumaticPlants"));
 	}
 	
-	public boolean validBlock(World worldObj, Point3I point) {
-		return validBlock(worldObj, seed, point);
+	@Override
+	public boolean isGrown(Point3I plantPoint, Block plantBlock, int metadata, World worldObj) {
+		return (plantBlock.getDrops(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), metadata, 0).size()>=2);
 	}
 	
-	public static boolean validBlock(World worldObj, ItemStack itemStack, Point3I testPoint) {
+	@Override
+	public boolean validBlock(World worldObj, ItemStack itemStack, Point3I testPoint) {
 		Point3I point = new Point3I(testPoint);
 		
 		int seedMeta = itemStack.getItemDamage();
@@ -86,29 +94,32 @@ public class Pneumaticcraft {
 		return false;
 	}
 	
-	public static boolean placeSeed(World world, ItemStack itemStack, Point3I point) {
-		if (itemStack != null) {
-			int seedMeta = itemStack.getItemDamage();
-			ItemStack items = new ItemStack(itemStack.getItem(), 1, seedMeta);
-			EntityItem entItem = new EntityItem(world, (float)point.getX() + 0.5f, (float)point.getY() + 0.5f, (float)point.getZ() + 0.5f, items);
-			entItem.motionX = 0.0f;
-			entItem.motionY = 0.0f;
-			entItem.motionZ = 0.0f;
-			entItem.delayBeforeCanPickup = 20;
-			entItem.hoverStart = 0.0f;
-			entItem.yOffset = 0.0f;
-			if (items.hasTagCompound()) {
-				entItem.getEntityItem().setTagCompound((NBTTagCompound)items.getTagCompound().copy());
-	        }
-			
-			
-			world.spawnEntityInWorld(entItem);
+	@Override
+	public boolean placeSeed(World worldObj, ItemStack itemStack, Point3I point, boolean doAction) {
+		if (checkClear(worldObj, point)) {
+			if (doAction) {
+				int seedMeta = itemStack.getItemDamage();
+				ItemStack items = new ItemStack(itemStack.getItem(), 1, seedMeta);
+				EntityItem entItem = new EntityItem(worldObj, (float)point.getX() + 0.5f, (float)point.getY() + 0.5f, (float)point.getZ() + 0.5f, items);
+				entItem.motionX = 0.0f;
+				entItem.motionY = 0.0f;
+				entItem.motionZ = 0.0f;
+				entItem.delayBeforeCanPickup = 20;
+				entItem.hoverStart = 0.0f;
+				entItem.yOffset = 0.0f;
+				if (items.hasTagCompound()) {
+					entItem.getEntityItem().setTagCompound((NBTTagCompound)items.getTagCompound().copy());
+		        }
+				
+				
+				worldObj.spawnEntityInWorld(entItem);
+			}
 			return true;
 		}
 		return false;
 	}
 	
-	public static boolean checkClear(World world, Point3I point) {
+	private static boolean checkClear(World world, Point3I point) {
 		AxisAlignedBB block = AxisAlignedBB.getBoundingBox(point.getX(), point.getY() - 1, point.getZ(), point.getX()+1, point.getY()+1, point.getZ()+1);
 		
 		List entities = world.getEntitiesWithinAABB(EntityItem.class, block);
@@ -119,14 +130,5 @@ public class Pneumaticcraft {
 		}
 	}
 	
-	public static boolean isPlant(Block plant) {
-		return (plant.getClass().getName().startsWith("pneumaticCraft.common.block.pneumaticPlants"));
-	}
 	
-	public static boolean isGrown(World world, Point3I point) {
-		Block testBlock = world.getBlock(point.getX(), point.getY(), point.getZ());
-		int meta = world.getBlockMetadata(point.getX(), point.getY(), point.getZ());
-		
-		return (testBlock.getDrops(world, point.getX(), point.getY(), point.getZ(), meta, 0).size()>=2);
-	}
 }

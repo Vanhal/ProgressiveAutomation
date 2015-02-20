@@ -1,6 +1,9 @@
 package com.vanhal.progressiveautomation.util;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class OreHelper {
@@ -18,6 +21,32 @@ public class OreHelper {
 			for (int j = 0; j < ores2.length; j++) {
 				if (ores1[i] == ores2[j]) return true;
 			}
+		}
+		return false;
+	}
+	
+	public static boolean testOreBlock(String testOre, int x, int y, int z, IBlockAccess worldObj) {
+		return testOreBlock(OreDictionary.getOreID(testOre), x, y, z, worldObj);
+	}
+	
+	public static boolean testOreBlock(int testOreID, int x, int y, int z, IBlockAccess worldObj) {
+		Block _block = worldObj.getBlock(x, y, z);
+		int metaData = worldObj.getBlockMetadata(x, y, z);
+		
+		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), 1, metaData);
+		return testOre(testOreID, testItem);
+	}
+	
+	
+	public static boolean testOre(String testOre, ItemStack testItem) {
+		return testOre(OreDictionary.getOreID(testOre), testItem);
+	}
+	
+	public static boolean testOre(int testOreID, ItemStack testItem) {
+		if (testItem == null || testItem.getItem() == null) return false;
+		int[] ordIDs = OreDictionary.getOreIDs(testItem);
+		for (int oreID: ordIDs) {
+			if (testOreID == oreID) return true;
 		}
 		return false;
 	}
