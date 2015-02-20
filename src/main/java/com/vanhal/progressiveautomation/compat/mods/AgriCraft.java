@@ -17,7 +17,6 @@ import com.vanhal.progressiveautomation.compat.BaseMod;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point3I;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class AgriCraft extends Vanilla {
 	
@@ -27,7 +26,7 @@ public class AgriCraft extends Vanilla {
 		this.modID = "AgriCraft";
 	}
 	
-	@Override
+	/*@Override
 	public boolean shouldLoad() {
 		return checkModLoad();
 	}
@@ -97,5 +96,5 @@ public class AgriCraft extends Vanilla {
 		}
 		
 		return items;
-	}
+	}*/
 }

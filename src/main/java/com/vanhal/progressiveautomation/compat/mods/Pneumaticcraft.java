@@ -17,7 +17,6 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.BaseMod;
 import com.vanhal.progressiveautomation.util.Point3I;
 
-import cpw.mods.fml.common.Loader;
 
 /*
  * Seed Mapping:
@@ -46,7 +45,7 @@ public class Pneumaticcraft extends BaseMod {
 		modID = "PneumaticCraft";
 	}
 	
-	@Override
+	/*@Override
 	public boolean isPlantible(ItemStack item) {
 		return (item.getUnlocalizedName().startsWith("item.plasticPlant"));
 	}
@@ -128,7 +127,7 @@ public class Pneumaticcraft extends BaseMod {
 		} else {
 			return false;
 		}
-	}
+	}*/
 	
 
 }

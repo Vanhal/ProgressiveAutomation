@@ -1,18 +1,20 @@
 package com.vanhal.progressiveautomation.compat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Loader;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.util.Point3I;
 
-import cpw.mods.fml.common.Loader;
 
 public class BaseMod {
 	public String modID = "base";
@@ -49,12 +51,12 @@ public class BaseMod {
 	}
 
 	//check if a block in the world is an ungrown plant	
-	public boolean isPlant(Block plantBlock, int metadata) {
+	public boolean isPlant(Block plantBlock, IBlockState state) {
 		return false;
 	}
 
 	//check to see if a plant is fully grown
-	public boolean isGrown(Point3I plantPoint, Block plantBlock, int metadata, World worldObj) {
+	public boolean isGrown(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
 		return false;
 	}
 
@@ -69,10 +71,10 @@ public class BaseMod {
 	}
 	
 	//harvest the crop block and return the drops
-	public ArrayList<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, int metadata, World worldObj) {
-		ArrayList<ItemStack> items = plantBlock.getDrops(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), metadata, 0);
-		worldObj.removeTileEntity( plantPoint.getX(), plantPoint.getY(), plantPoint.getZ() );
-		worldObj.setBlockToAir(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+	public List<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
+		List<ItemStack> items = plantBlock.getDrops(worldObj, plantPoint.toPosition(), state, 0);
+		worldObj.removeTileEntity( plantPoint.toPosition() );
+		worldObj.setBlockToAir(plantPoint.toPosition());
 		
 		return items;
 	}
