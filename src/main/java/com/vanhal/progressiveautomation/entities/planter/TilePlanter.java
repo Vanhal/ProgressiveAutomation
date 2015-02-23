@@ -137,12 +137,14 @@ public class TilePlanter extends UpgradeableTileEntity {
 		Block actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
 		int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
 		
-		ArrayList<ItemStack> items = ModHelper.harvestPlant(currentBlock, actualBlock, metaData, worldObj);
-		if (items!=null) {
-			for (ItemStack item : items) {
-				addToInventory(item);
+		if (slots[SLOT_HOE]!=null) {
+			ArrayList<ItemStack> items = ModHelper.harvestPlant(currentBlock, actualBlock, metaData, worldObj);
+			if (items!=null) {
+				for (ItemStack item : items) {
+					addToInventory(item);
+				}
+				damageHoe(currentBlock);
 			}
-			damageHoe(currentBlock);
 		}
 
 		/*
