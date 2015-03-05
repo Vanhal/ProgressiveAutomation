@@ -31,34 +31,41 @@ public class GUIChopper extends BaseGUI {
 		drawString(StringHelper.localize("gui.chopper"), 5, GRAY);
 		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(chopper.getRange()), infoScreenX, infoScreenW, infroScreenY3, (chopper.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		
-		boolean readyToChop = false;
-		if ( (!chopper.hasFuel()) && (!chopper.isBurning()) ) {
-			String fuelString = "gui.need.fuel";
-			if (chopper.hasEngine()) fuelString = "gui.need.energy";
-			drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else if ( (chopper.getStackInSlot(chopper.SLOT_SAPLINGS) == null) && (!chopper.isBurning()) ) {
-			drawString(StringHelper.localize("gui.need.sapling"), infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else if (chopper.getStackInSlot(chopper.SLOT_AXE) == null) {
-			drawString(StringHelper.localize("gui.need.axe"), infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else {
-			readyToChop = true;
-			String status = "gui.waiting";
-			if (chopper.isChopping()) {
-				status = "gui.chopping";
-			} else if (chopper.isPlanting()) {
-				status = "gui.planting";
+		if (chopper.isLooked()) {
+			boolean readyToChop = false;
+			if ( (!chopper.hasFuel()) && (!chopper.isBurning()) ) {
+				String fuelString = "gui.need.fuel";
+				if (chopper.hasEngine()) fuelString = "gui.need.energy";
+				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
+			} else if ( (chopper.getStackInSlot(chopper.SLOT_SAPLINGS) == null) && (!chopper.isBurning()) ) {
+				drawString(StringHelper.localize("gui.need.sapling"), infoScreenX, infoScreenW, infroScreenY2, RED);
+			} else if (chopper.getStackInSlot(chopper.SLOT_AXE) == null) {
+				drawString(StringHelper.localize("gui.need.axe"), infoScreenX, infoScreenW, infroScreenY2, RED);
+			} else {
+				readyToChop = true;
+				String status = "gui.waiting";
+				if (chopper.isChopping()) {
+					status = "gui.chopping";
+				} else if (chopper.isPlanting()) {
+					status = "gui.planting";
+				}
+				drawString(StringHelper.localize(status), infoScreenX, infoScreenW, infroScreenY2, BLUE);
 			}
-			drawString(StringHelper.localize(status), infoScreenX, infoScreenW, infroScreenY2, BLUE);
-		}
-		
-		if (!readyToChop) {
-			drawString(StringHelper.localize("gui.notready"), infoScreenX, infoScreenW, infroScreenY1, RED);
-		} else if (chopper.isBurning()) {
-			drawString(StringHelper.localize("gui.running"), infoScreenX, infoScreenW, infroScreenY1, BLUE);
+			
+			if (!readyToChop) {
+				drawString(StringHelper.localize("gui.notready"), infoScreenX, infoScreenW, infroScreenY1, RED);
+			} else if (chopper.isBurning()) {
+				drawString(StringHelper.localize("gui.running"), infoScreenX, infoScreenW, infroScreenY1, BLUE);
+			} else {
+				drawString(StringHelper.localize("gui.waiting"), infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			}
 		} else {
-			drawString(StringHelper.localize("gui.waiting"), infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			drawString(getTextLine(1, "gui.hi.chopper"), infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			drawString(getTextLine(2, "gui.addtools"), infoScreenX, infoScreenW, infroScreenY2, GREEN);
 		}
 	}
+	
+	
 	
 	protected void drawElements() {
 		drawFlame(chopper.getPercentDone(), 10, 34);

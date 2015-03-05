@@ -14,7 +14,13 @@ public enum UpgradeType {
 	DIAMOND,
 	WITHER,
 	COBBLE_GEN,
-	FILLER;
+	FILLER,
+	FILTER_MOB,
+	FILTER_ANIMAL,
+	FILTER_ADULT,
+	FILTER_PLAYER,
+	MILKER,
+	SHEARING;
 
 	/**
 	 * Helper method for retrieving the proper range upgrade given the machineLevel

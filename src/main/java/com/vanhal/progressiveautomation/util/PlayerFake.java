@@ -36,11 +36,19 @@ public class PlayerFake extends EntityPlayerMP {
 	public boolean isSneaking = false;
 	public ItemStack previousItem = null;
 	public String myName = "[VANHAL]";
+	
+	public PlayerFake(WorldServer world, String FakeName) {
+		this(world, new GameProfile(UUID.randomUUID(), FakeName));
+		myName = FakeName;
+	}
+	
+	public PlayerFake(WorldServer world, GameProfile FakeName) {
+		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, FakeName, new ItemInWorldManager(world));
+		this.addedToChunk = false;
+	}
 
 	public PlayerFake(WorldServer world) {
-
-		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, NAME, new ItemInWorldManager(world));
-		this.addedToChunk = false;
+		this(world, NAME);
 	}
 
 	public static boolean isBlockBreakable(PlayerFake myFakePlayer, World worldObj, int x, int y, int z) {

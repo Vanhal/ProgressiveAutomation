@@ -2,7 +2,9 @@ package com.vanhal.progressiveautomation.gui.client;
 
 import org.lwjgl.opengl.GL11;
 
+import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.ref.Ref;
+import com.vanhal.progressiveautomation.util.StringHelper;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.gui.FontRenderer;
@@ -72,4 +74,7 @@ public class BaseGUI extends GuiContainer {
 		drawTexturedModalRect(guiLeft + x, guiTop + y + 16 - level, 240, 240 + (16-level), 16, level);
 	}
 
+	public String getTextLine(int line, String text) {
+		return EventPlayers.getPlayerLine(mc.thePlayer.getDisplayName(), line, StringHelper.localize(text));
+	}
 }

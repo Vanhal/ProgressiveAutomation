@@ -36,10 +36,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	protected int progress = 0;
 	protected int burnLevel = 0;
 	
+	//first time looking in this machine, used for displaying help
+	protected boolean firstLook = false;
+	
 	/**
 	 * Direction to auto output items to
 	 */
 	public ForgeDirection extDirection = ForgeDirection.UP;
+	public ForgeDirection facing = ForgeDirection.EAST;
 	
 	/**
 	 * Sygnalises whether the TileEntity needs to be synced with clients
@@ -134,6 +138,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public void writeCommonNBT(NBTTagCompound nbt) {
 		nbt.setInteger("Progress", progress);
 		nbt.setInteger("BurnLevel", burnLevel);
+		nbt.setBoolean("firstLook", firstLook);
+		nbt.setInteger("facing", facing.ordinal());
 	}
 	
 	/**
@@ -183,6 +189,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		
 		if (nbt.hasKey("Progress")) progress = nbt.getInteger("Progress");
 		if (nbt.hasKey("BurnLevel")) burnLevel = nbt.getInteger("BurnLevel");
+		if (nbt.hasKey("firstLook")) firstLook = nbt.getBoolean("firstLook");
+		if (nbt.hasKey("facing")) facing = ForgeDirection.getOrientation(nbt.getInteger("facing"));
 	}
 	
 	/**
@@ -417,7 +425,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public void closeInventory() { }
 
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot==SLOT_FUEL) && (TileEntityFurnace.getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
+		if ( (slot==SLOT_FUEL) && (getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
      		return true;
     	}
 		return false;
@@ -478,7 +486,15 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	public int getBurnTime(ItemStack item) {
-		return TileEntityFurnace.getItemBurnTime(item) / PAConfig.fuelCost;
+		return getItemBurnTime(item) / PAConfig.fuelCost;
+	}
+	
+	public static int getItemBurnTime(ItemStack item) {
+		if (PAConfig.allowPotatos) {
+			if (item.getItem() == Items.potato) return 40;
+			else if (item.getItem() == Items.baked_potato) return 80;
+		}
+		return TileEntityFurnace.getItemBurnTime(item);
 	}
 	
 	public boolean isFuel() {
@@ -617,6 +633,35 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 					}
 				}
 			}
+		}
+		return false;
+	}
+	
+	public boolean roomInInventory(ItemStack item) {
+		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return false;
+		if (item == null) return false;
+		int stackSize = item.stackSize;
+		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+			if (slots[i]!=null) {
+				if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
+					int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
+					if (avail >= stackSize) {
+						return true;
+					} else {
+						stackSize -= avail;
+					}
+				}
+			}
+		}
+		if ( (item != null) && (stackSize>0) ) {
+			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+				if (slots[i]==null) {
+					return true;
+				}
+			}
+		}
+		if (stackSize==0) {
+			return true;
 		}
 		return false;
 	}
@@ -761,8 +806,23 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, minerBlock);
 	}
 	
+	public void setLooked() {
+		if (!firstLook) {
+			firstLook = true;
+			addPartialUpdate("firstLook", firstLook);
+		}
+	}
+	
+	public boolean isLooked() {
+		return firstLook;
+	}
+	
+	public Point2I spiral(int n, int x, int y) {
+		return spiral(n, x, y, facing);
+	}
+	
 	//my function to get a point on a spiral around the block
-	public static Point2I spiral(int n, int x, int y) {
+	public static Point2I spiral(int n, int x, int y, ForgeDirection direction) {
 		int dx, dy;
 
 		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
@@ -790,6 +850,13 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 		}
 
-		return new Point2I(x + dx, y + dy);
+		if (direction == ForgeDirection.NORTH)
+			return new Point2I(x + dy, y - dx);
+		else if (direction == ForgeDirection.SOUTH)
+			return new Point2I(x + dy, y + dx);
+		else if (direction == ForgeDirection.EAST)
+			return new Point2I(x + dx, y + dy);
+		else
+			return new Point2I(x - dx, y + dy);
 	}
 }

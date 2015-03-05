@@ -26,36 +26,43 @@ public class GUIPlanter extends BaseGUI {
 		planter = (TilePlanter) entity;
 	}
 	
+	@Override
 	protected void drawText() {
 		drawString(StringHelper.localize("gui.planter"), 5, GRAY);
 		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(planter.getRange()), infoScreenX, infoScreenW, infroScreenY3, (planter.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		
-		boolean readyToPlant = false;
-		if ( (!planter.hasFuel()) && (!planter.isBurning()) ) {
-			String fuelString = "gui.need.fuel";
-			if (planter.hasEngine()) fuelString = "gui.need.energy";
-			drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else if ( (planter.getStackInSlot(planter.SLOT_SEEDS) == null) && (!planter.isBurning()) ) {
-			drawString(StringHelper.localize("gui.need.seeds"), infoScreenX, infoScreenW, infroScreenY2, RED);
-		} else if (planter.getStackInSlot(planter.SLOT_HOE) == null) {
-			drawString(StringHelper.localize("gui.need.hoe"), infoScreenX, infoScreenW, infroScreenY2, RED);
+		if (planter.isLooked()) {
+			boolean readyToPlant = false;
+			if ( (!planter.hasFuel()) && (!planter.isBurning()) ) {
+				String fuelString = "gui.need.fuel";
+				if (planter.hasEngine()) fuelString = "gui.need.energy";
+				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
+			} else if ( (planter.getStackInSlot(planter.SLOT_SEEDS) == null) && (!planter.isBurning()) ) {
+				drawString(StringHelper.localize("gui.need.seeds"), infoScreenX, infoScreenW, infroScreenY2, RED);
+			} else if (planter.getStackInSlot(planter.SLOT_HOE) == null) {
+				drawString(StringHelper.localize("gui.need.hoe"), infoScreenX, infoScreenW, infroScreenY2, RED);
+			} else {
+				readyToPlant = true;
+				String status = "gui.waiting";
+				if (planter.getStatus()==1) status = "gui.harvesting";
+				else if (planter.getStatus()==2) status = "gui.planting";
+				drawString(StringHelper.localize(status), infoScreenX, infoScreenW, infroScreenY2, BLUE);
+			}
+			
+			if (!readyToPlant) {
+				drawString(StringHelper.localize("gui.notready"), infoScreenX, infoScreenW, infroScreenY1, RED);
+			} else if (planter.isBurning()) {
+				drawString(StringHelper.localize("gui.running"), infoScreenX, infoScreenW, infroScreenY1, BLUE);
+			} else {
+				drawString(StringHelper.localize("gui.waiting"), infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			}
 		} else {
-			readyToPlant = true;
-			String status = "gui.waiting";
-			if (planter.getStatus()==1) status = "gui.harvesting";
-			else if (planter.getStatus()==2) status = "gui.planting";
-			drawString(StringHelper.localize(status), infoScreenX, infoScreenW, infroScreenY2, BLUE);
-		}
-		
-		if (!readyToPlant) {
-			drawString(StringHelper.localize("gui.notready"), infoScreenX, infoScreenW, infroScreenY1, RED);
-		} else if (planter.isBurning()) {
-			drawString(StringHelper.localize("gui.running"), infoScreenX, infoScreenW, infroScreenY1, BLUE);
-		} else {
-			drawString(StringHelper.localize("gui.waiting"), infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			drawString(getTextLine(1, "gui.hi.planter"), infoScreenX, infoScreenW, infroScreenY1, GREEN);
+			drawString(getTextLine(2, "gui.addtools"), infoScreenX, infoScreenW, infroScreenY2, GREEN);
 		}
 	}
 	
+	@Override
 	protected void drawElements() {
 		drawFlame(planter.getPercentDone(), 10, 34);
 	}

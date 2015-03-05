@@ -19,6 +19,8 @@ public class PABlocks {
 				if (PAConfig.chopperEnabled) chopper.add(new BlockChopper(i));
 				if (PAConfig.planterEnabled) planter.add(new BlockPlanter(i));
 				if (PAConfig.crafterEnabled) crafter.add(new BlockCrafter(i));
+				if (PAConfig.killerEnabled) killer.add(new BlockKiller(i));
+				if (PAConfig.farmerEnabled) farmer.add(new BlockFarmer(i));
 				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator.add(new BlockGenerator(i));
 			}
 		}
@@ -53,6 +55,18 @@ public class PABlocks {
 			blockCrafter.preInit(previousTier);
 			previousTier = blockCrafter;
 		}
+		
+		previousTier = BlockFarmer.firstTier;
+		for (BlockFarmer blockFarmer : farmer) {
+			blockFarmer.preInit(previousTier);
+			previousTier = blockFarmer;
+		}
+		
+		previousTier = BlockKiller.firstTier;
+		for (BlockKiller blockKiller : killer) {
+			blockKiller.preInit(previousTier);
+			previousTier = blockKiller;
+		}
 	}
 
 	public static void init() {
@@ -74,6 +88,14 @@ public class PABlocks {
 		
 		for (BlockCrafter blockCrafter : crafter) {
 			blockCrafter.init();
+		}
+		
+		for (BlockKiller blockKiller : killer) {
+			blockKiller.init();
+		}
+		
+		for (BlockFarmer blockfarmer : farmer) {
+			blockfarmer.init();
 		}
 	}
 
@@ -97,6 +119,14 @@ public class PABlocks {
 		for (BlockCrafter blockCrafter : crafter) {
 			blockCrafter.postInit();
 		}
+		
+		for (BlockKiller blockKiller : killer) {
+			blockKiller.postInit();
+		}
+		
+		for (BlockFarmer blockfarmer : farmer) {
+			blockfarmer.postInit();
+		}
 	}
 
 	//blocks
@@ -115,5 +145,11 @@ public class PABlocks {
 	
 	//crafters
 	public static List<BlockCrafter> crafter = new ArrayList<BlockCrafter>(4);
+	
+	//killers
+	public static List<BlockKiller> killer = new ArrayList<BlockKiller>(4);
+		
+	//farmers
+	public static List<BlockFarmer> farmer = new ArrayList<BlockFarmer>(4);
 
 }

@@ -106,7 +106,7 @@ public class TileGenerator extends BaseTileEntity {
 
 	@Override
 	public int getBurnTime(ItemStack item) {
-			return TileEntityFurnace.getItemBurnTime(item) / consumeRate;
+			return getItemBurnTime(item) / consumeRate;
 	}
 
 	//Energy stuff

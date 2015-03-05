@@ -146,18 +146,6 @@ public class TilePlanter extends UpgradeableTileEntity {
 				damageHoe(currentBlock);
 			}
 		}
-
-		/*
-		    PlayerFake faker = new PlayerFake((WorldServer)worldObj);
-		    if (actualBlock.onBlockActivated(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(), faker, metaData, 0, 0, 0)) {
-			IInventory inv = faker.inventory;
-			for (int i = 0; i < inv.getSizeInventory(); i++){
-				if (inv.getStackInSlot(i)!=null) {
-					addToInventory(inv.getStackInSlot(i));
-				}
-			}
-		} */
-
 	}
 	
 	protected boolean plantSeed(int n, boolean doAction) {

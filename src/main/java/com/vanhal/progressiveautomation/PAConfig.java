@@ -17,6 +17,8 @@ public class PAConfig {
 	public static boolean planterEnabled;
 	public static boolean generatorEnabled;
 	public static boolean crafterEnabled;
+	public static boolean farmerEnabled;
+	public static boolean killerEnabled;
 	
 	//allow levels
 	public static boolean allowWoodenLevel;
@@ -26,9 +28,14 @@ public class PAConfig {
 	
 	//special upgrades
 	public static boolean allowCobbleUpgrade;
+	public static boolean allowShearingUpgrade;
+	public static boolean allowMilkerUpgrade;
 	public static boolean allowFillerUpgrade;
 	public static boolean allowWitherUpgrade;
 	public static int witherMultiplier;
+	
+	//killer kills players?
+	public static boolean allowKillPlayer;
 	
 	//rf options
 	public static boolean rfSupport;
@@ -39,6 +46,7 @@ public class PAConfig {
 	//misc options
 	public static boolean allowCoalPellets;
 	public static boolean enableWitherTools;
+	public static boolean allowPotatos;
 	
 	
 	public static void init(Configuration handle) {
@@ -79,6 +87,7 @@ public class PAConfig {
 		
 		//misc options 
 		allowCoalPellets = config.getBoolean("coalPellets", "general", true, "Allow coal pellets (requires restart)");
+		allowPotatos = config.getBoolean("allowPotatos", "general", true, "Allow Potatos to be used as a fuel source in PA machines");
 		enableWitherTools = config.getBoolean("witherTools", "general", true, "Allow Wither tools and resources to create them");
 		
 		
@@ -88,6 +97,8 @@ public class PAConfig {
 		planterEnabled = config.getBoolean("planter", "blocks", true, "Planter/Harvester Block is enabled (requires restart)");
 		generatorEnabled = config.getBoolean("generator", "blocks", true, "Generator Block is enabled (requires restart)");
 		crafterEnabled = config.getBoolean("crafter", "blocks", true, "Crafter Block is enabled (requires restart)");
+		farmerEnabled = config.getBoolean("farmer", "blocks", true, "Killer Block is enabled (requires restart)");
+		killerEnabled = config.getBoolean("killer", "blocks", true, "Animal Farmer Block is enabled (requires restart)");
 
 		allowWoodenLevel = config.getBoolean("wooden", "upgrades", true, "Allow wooden level blocks (requires restart)");
 		allowStoneLevel = config.getBoolean("stone", "upgrades", true, "Allow stone level blocks (requires restart)");
@@ -97,7 +108,11 @@ public class PAConfig {
 		allowCobbleUpgrade = config.getBoolean("cobblegen", "upgrades", true, "Allow cobble gen upgrade for the miner (requires restart)");
 		allowFillerUpgrade = config.getBoolean("filler", "upgrades", true, "Allow filler upgrade for the miner (requires restart)");
 		allowWitherUpgrade = config.getBoolean("wither", "upgrades", true, "Allow the wither upgrade (requires restart)");
+		allowShearingUpgrade = config.getBoolean("shearing", "upgrades", true, "Allow the shearing upgrade (requires restart)");
+		allowMilkerUpgrade = config.getBoolean("milker", "upgrades", true, "Allow the milker upgrade (requires restart)");
 		witherMultiplier = config.getInt("witherMultiplier", "upgrades", 4, 2, 10, "How much the wither upgrade extends the machines. (How much multiplies the upgrades by)");
+		
+		allowKillPlayer = config.getBoolean("killPlayer", "upgrades", true, "Allow the Killer to kill players");
 		
 		//save if changed
 		if (config.hasChanged()) save();
