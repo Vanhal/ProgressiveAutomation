@@ -99,8 +99,9 @@ public class TileKiller extends UpgradeableTileEntity {
 								}
 								
 								faker.setItemInHand(slots[SLOT_SWORD].copy());
-								faker.setItemInUse(faker.getEquipmentInSlot(1), 72000);
+								faker.setItemInUse(faker.getCurrentEquippedItem(), 72000);
 								faker.attackTargetEntityWithCurrentItem(mob);
+								
 								
 								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, xCoord, yCoord, zCoord)) {
 									slots[SLOT_SWORD] = null;

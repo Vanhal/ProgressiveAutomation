@@ -4,14 +4,20 @@ package com.vanhal.progressiveautomation.util;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C15PacketClientSettings;
+import net.minecraft.potion.Potion;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ChunkCoordinates;
@@ -45,6 +51,7 @@ public class PlayerFake extends EntityPlayerMP {
 	public PlayerFake(WorldServer world, GameProfile FakeName) {
 		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, FakeName, new ItemInWorldManager(world));
 		this.addedToChunk = false;
+		this.onGround = true;
 	}
 
 	public PlayerFake(WorldServer world) {
@@ -64,6 +71,11 @@ public class PlayerFake extends EntityPlayerMP {
 	@Override
 	public boolean canCommandSenderUseCommand(int var1, String var2) {
 
+		return false;
+	}
+	
+	@Override
+	public boolean isSprinting() {
 		return false;
 	}
 

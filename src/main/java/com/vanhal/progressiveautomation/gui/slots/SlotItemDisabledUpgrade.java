@@ -19,7 +19,7 @@ public class SlotItemDisabledUpgrade extends SlotItem {
 	@Override
 	public boolean isItemValid(ItemStack itemStack) {
 		if (upgrateEntity.hasUpgrade(upgradeRequired)) {
-			return slotItem.isItemEqual(itemStack);
+			return slotItem.getItem() == itemStack.getItem();
 		}
 		return false;
 	}
