@@ -29,12 +29,15 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyHandler {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
+	
+	protected boolean RedstonePowered = false;
 	
 	//first time looking in this machine, used for displaying help
 	protected boolean firstLook = false;
@@ -298,29 +301,32 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		super.updateEntity();
 		if (!worldObj.isRemote) {
 			if (!isBurning()) {
-				if (readyToBurn()) {
-					if (slots[SLOT_FUEL]!=null) {
-						if (isFuel()) {
-							burnLevel = progress = getBurnTime();
-							addPartialUpdate("Progress", progress);
-							addPartialUpdate("BurnLevel", burnLevel);
-							
-							if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
+				RedstonePowered = isIndirectlyPowered();
+				if (!RedstonePowered) {
+					if (readyToBurn()) {
+						if (slots[SLOT_FUEL]!=null) {
+							if (isFuel()) {
+								burnLevel = progress = getBurnTime();
+								addPartialUpdate("Progress", progress);
+								addPartialUpdate("BurnLevel", burnLevel);
 								
-								slots[SLOT_FUEL] = slots[SLOT_FUEL].getItem().getContainerItem(slots[SLOT_FUEL]);
-							} else {
-								slots[SLOT_FUEL].stackSize--;
-								if (slots[SLOT_FUEL].stackSize==0) {
-									slots[SLOT_FUEL] = null;
+								if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
+									
+									slots[SLOT_FUEL] = slots[SLOT_FUEL].getItem().getContainerItem(slots[SLOT_FUEL]);
+								} else {
+									slots[SLOT_FUEL].stackSize--;
+									if (slots[SLOT_FUEL].stackSize==0) {
+										slots[SLOT_FUEL] = null;
+									}
 								}
-							}
-						} else if (hasEngine()) {
-							if (useEnergy(PAConfig.rfCost, false) > 0) {
-								if (burnLevel != 1 || progress != 1) {
-									//consumed a tick worth of energy
-									burnLevel = progress = 1;
-									addPartialUpdate("Progress", progress);
-									addPartialUpdate("BurnLevel", burnLevel);
+							} else if (hasEngine()) {
+								if (useEnergy(PAConfig.rfCost, false) > 0) {
+									if (burnLevel != 1 || progress != 1) {
+										//consumed a tick worth of energy
+										burnLevel = progress = 1;
+										addPartialUpdate("Progress", progress);
+										addPartialUpdate("BurnLevel", burnLevel);
+									}
 								}
 							}
 						}
@@ -859,4 +865,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		else
 			return new Point2I(x - dx, y + dy);
 	}
+	
+	//check if machine is powered
+	protected boolean isIndirectlyPowered() {
+        return worldObj.getIndirectPowerOutput(xCoord, yCoord - 1, zCoord, 0) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord, 1) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord - 1, 2) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord + 1, 3) ? true : (worldObj.getIndirectPowerOutput(xCoord + 1, yCoord, zCoord, 5) ? true : (worldObj.getIndirectPowerOutput(xCoord - 1, yCoord, zCoord, 4) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord, 0) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 2, zCoord, 1) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord - 1, 2) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord + 1, 3) ? true : (worldObj.getIndirectPowerOutput(xCoord - 1, yCoord + 1, zCoord, 4) ? true : worldObj.getIndirectPowerOutput(xCoord + 1, yCoord + 1, zCoord, 5)))))))))));
+    }
 }
