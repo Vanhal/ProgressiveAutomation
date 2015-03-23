@@ -42,8 +42,8 @@ public class TilePlanter extends UpgradeableTileEntity {
 		setHarvestTime(80);
 		
 		// #36 Planter can't eject items to bottom
-		extDirection = ForgeDirection.DOWN;
-		
+		setExtDirection(ForgeDirection.DOWN);
+
 		//slots
 		SLOT_HOE = 2;
 		SLOT_UPGRADE = 3;

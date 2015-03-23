@@ -47,6 +47,7 @@ public class PAConfig {
 	public static boolean allowCoalPellets;
 	public static boolean enableWitherTools;
 	public static boolean allowPotatos;
+	public static boolean allowWrench;
 	
 	
 	public static void init(Configuration handle) {
@@ -89,6 +90,7 @@ public class PAConfig {
 		allowCoalPellets = config.getBoolean("coalPellets", "general", true, "Allow coal pellets (requires restart)");
 		allowPotatos = config.getBoolean("allowPotatos", "general", true, "Allow Potatos to be used as a fuel source in PA machines");
 		enableWitherTools = config.getBoolean("witherTools", "general", true, "Allow Wither tools and resources to create them");
+		allowWrench = config.getBoolean("allowWrench", "general", true, "Allows the wrench, you've got to be seriously evil to not allow this!");
 		
 		
 		//enable blocks		

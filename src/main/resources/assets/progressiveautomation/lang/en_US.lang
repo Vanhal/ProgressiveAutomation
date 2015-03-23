@@ -29,6 +29,7 @@ tile.KillerStone.name=Stone Killer
 tile.KillerIron.name=Iron Killer
 tile.KillerDiamond.name=Diamond Killer
 
+item.Wrench.name=PA Wrench
 item.RFEngine.name=RF Engine
 item.CreativeRFEngine.name=Creative RF Engine
 item.WoodUpgrade.name=Wooden Upgrade

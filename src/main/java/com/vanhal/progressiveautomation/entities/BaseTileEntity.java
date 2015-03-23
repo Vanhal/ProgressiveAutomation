@@ -7,6 +7,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.ref.WrenchModes;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 
@@ -48,6 +49,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public ForgeDirection extDirection = ForgeDirection.UP;
 	public ForgeDirection facing = ForgeDirection.EAST;
 	
+	public  WrenchModes.Mode sides[] = new WrenchModes.Mode[6];
+	
 	/**
 	 * Sygnalises whether the TileEntity needs to be synced with clients
 	 */
@@ -79,6 +82,16 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		} else {
 			SLOT_INVENTORY_START = SLOT_INVENTORY_END = numSlots;
 		}
+		for (int i =0; i < 6; i++) {
+			sides[i] = WrenchModes.Mode.Normal;
+			if (i==extDirection.ordinal()) sides[i] = WrenchModes.Mode.Output;
+		}
+	}
+	
+	protected void setExtDirection(ForgeDirection dir) {
+		sides[extDirection.ordinal()] = WrenchModes.Mode.Normal;
+		extDirection = dir;
+		sides[extDirection.ordinal()] = WrenchModes.Mode.Output;
 	}
 	
 	/**
@@ -143,6 +156,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		nbt.setInteger("BurnLevel", burnLevel);
 		nbt.setBoolean("firstLook", firstLook);
 		nbt.setInteger("facing", facing.ordinal());
+		int ary[] = new int[6];
+		for (int i = 0; i < 6; i++) {
+			ary[i] = sides[i].ordinal();
+		}
+		nbt.setIntArray("sides", ary);
+		ary = null;
 	}
 	
 	/**
@@ -194,6 +213,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if (nbt.hasKey("BurnLevel")) burnLevel = nbt.getInteger("BurnLevel");
 		if (nbt.hasKey("firstLook")) firstLook = nbt.getBoolean("firstLook");
 		if (nbt.hasKey("facing")) facing = ForgeDirection.getOrientation(nbt.getInteger("facing"));
+		if (nbt.hasKey("sides")) {
+			int ary[] = nbt.getIntArray("sides");
+			for (int i = 0; i<6; i++) {
+				sides[i] = WrenchModes.modes.get(ary[i]);
+			}
+		}
 	}
 	
 	/**
@@ -367,6 +392,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		burnLevel = value;
 	}
 	
+
+	
 	/* Inventory methods */
 	public int getSizeInventory() {
 		return slots.length;
@@ -436,8 +463,18 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
     	}
 		return false;
 	}
+	
+	//sided things
+	public WrenchModes.Mode getSide(ForgeDirection side) {
+		return sides[side.ordinal()];
+	}
+	
+	public void setSide(ForgeDirection side, WrenchModes.Mode type) {
+		sides[side.ordinal()] = type;
+	}
 
-	public int[] getAccessibleSlotsFromSide(int var1) {
+	@Override
+	public int[] getAccessibleSlotsFromSide(int side) {
 		int[] output = new int[slots.length];
 		for (int i=0; i<slots.length; i++) {
 			output[i] = i;
@@ -445,8 +482,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return output;
 	}
 
+	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, int side) {
 		if ( (slot<0) || (slot>SLOT_INVENTORY_END) ) return false;
+		if (sides[side] == WrenchModes.Mode.Disabled) return false;
+		if (sides[side] == WrenchModes.Mode.Output) return false;
+		if ( (sides[side] == WrenchModes.Mode.FuelInput) && (slot != SLOT_FUEL) ) return false;
+		if ( (sides[side] == WrenchModes.Mode.Input) && (slot == SLOT_FUEL) ) return false;
+		
 		if ( (slots[slot] != null) && (slots[slot].isItemEqual(stack)) ) {
 			int availSpace = this.getInventoryStackLimit() - slots[slot].stackSize;
 			if (availSpace>0) {
@@ -458,9 +501,11 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return false;
 	}
 
+	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		if (sides[side] == WrenchModes.Mode.Disabled) return false;
 		if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
-			return true;
+			if ( (sides[side] == WrenchModes.Mode.Normal) || (sides[side] == WrenchModes.Mode.Output) ) return true;
 		}
 		return false;
 	}
@@ -544,19 +589,24 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 				}
 			}
 		}
-		//then check if there is any inventories on top of this block that we can output to
-		if (BlockHelper.getAdjacentTileEntity(this, extDirection) instanceof ISidedInventory) {
-			ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, extDirection);
-			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
-				if (slots[i]!=null) {
-					addtoSidedExtInventory(externalInv, i);
-				}
-			}
-		} else if (BlockHelper.getAdjacentTileEntity(this, extDirection) instanceof IInventory) {
-			IInventory externalInv = (IInventory) BlockHelper.getAdjacentTileEntity(this, extDirection);
-			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
-				if (slots[i]!=null) {
-					addtoExtInventory(externalInv, i);
+		//then check if there is any inventories on any of the output sides that we can output to
+		for (int x = 0; x < 6; x++) {
+			if (sides[x] == WrenchModes.Mode.Output) {
+				ForgeDirection testSide = ForgeDirection.getOrientation(x);
+				if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof ISidedInventory) {
+					ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
+					for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+						if (slots[i]!=null) {
+							addtoSidedExtInventory(externalInv, i);
+						}
+					}
+				} else if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof IInventory) {
+					IInventory externalInv = (IInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
+					for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+						if (slots[i]!=null) {
+							addtoExtInventory(externalInv, i);
+						}
+					}
 				}
 			}
 		}

@@ -17,6 +17,7 @@ import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+import com.vanhal.progressiveautomation.ref.WrenchModes;
 
 import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -230,11 +231,11 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	
 	@Override
     public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis){
-		BaseTileEntity chopper = (BaseTileEntity)worldObj.getTileEntity(x, y, z);
-		if (chopper.facing == ForgeDirection.NORTH) chopper.facing = ForgeDirection.EAST;
-		else if (chopper.facing == ForgeDirection.EAST) chopper.facing = ForgeDirection.SOUTH;
-		else if (chopper.facing == ForgeDirection.SOUTH) chopper.facing = ForgeDirection.WEST;
-		else if (chopper.facing == ForgeDirection.WEST) chopper.facing = ForgeDirection.NORTH;
+		BaseTileEntity tileEntity = (BaseTileEntity)worldObj.getTileEntity(x, y, z);
+		if (tileEntity.facing == ForgeDirection.NORTH) tileEntity.facing = ForgeDirection.EAST;
+		else if (tileEntity.facing == ForgeDirection.EAST) tileEntity.facing = ForgeDirection.SOUTH;
+		else if (tileEntity.facing == ForgeDirection.SOUTH) tileEntity.facing = ForgeDirection.WEST;
+		else if (tileEntity.facing == ForgeDirection.WEST) tileEntity.facing = ForgeDirection.NORTH;
 		//ProgressiveAutomation.logger.info(chopper.facing.toString());
         return true;
     }

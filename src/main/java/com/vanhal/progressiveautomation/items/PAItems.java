@@ -27,6 +27,11 @@ public class PAItems {
 
 	public static void preInit() {
 		//create items
+		if (PAConfig.allowWrench) {
+			wrench = new ItemWrench();
+			wrench.preInit();
+		}
+		
 		if (PAConfig.allowWoodenLevel) woodUpgrade = new ItemWoodUpgrade();
 		if (PAConfig.allowStoneLevel) stoneUpgrade = new ItemStoneUpgrade();
 		if (PAConfig.allowIronLevel) ironUpgrade = new ItemIronUpgrade();
@@ -106,6 +111,8 @@ public class PAItems {
 	}
 
 	//items
+	public static ItemWrench wrench = null;
+	
 	public static ItemWoodUpgrade woodUpgrade = null;
 	public static ItemStoneUpgrade stoneUpgrade = null;
 	public static ItemIronUpgrade ironUpgrade = null;

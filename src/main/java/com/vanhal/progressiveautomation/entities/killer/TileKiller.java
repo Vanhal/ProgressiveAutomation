@@ -48,7 +48,7 @@ public class TileKiller extends UpgradeableTileEntity {
 		setAllowedUpgrades(UpgradeType.WOODEN, UpgradeType.WITHER, UpgradeType.FILTER_ADULT, UpgradeType.FILTER_ANIMAL, UpgradeType.FILTER_MOB, UpgradeType.FILTER_PLAYER);
 
 		//auto output direction
-		extDirection = ForgeDirection.DOWN;
+		setExtDirection(ForgeDirection.DOWN);
 		
 		//slots
 		SLOT_SWORD = 1;
