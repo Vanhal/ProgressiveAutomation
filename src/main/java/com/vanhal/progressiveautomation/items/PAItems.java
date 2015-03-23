@@ -114,6 +114,14 @@ public class PAItems {
 			if (witherUpgrade!=null) witherUpgrade.init();
 			if (cobbleUpgrade!=null) cobbleUpgrade.init();
 			if (fillerUpgrade!=null) fillerUpgrade.init();
+			if (milkerUpgrade!=null) milkerUpgrade.init();
+			if (shearingUpgrade!=null) shearingUpgrade.init();
+			
+			if (filterMobUpgrade!=null) filterMobUpgrade.init();
+			if (filterAnimalUpgrade!=null) filterAnimalUpgrade.init();
+			if (filterAdultUpgrade!=null) filterAdultUpgrade.init();
+			if (filterPlayerUpgrade!=null) filterPlayerUpgrade.init();
+			
 			
 			if (rfEngine!=null) rfEngine.init();
 			cheatRFEngine.init();

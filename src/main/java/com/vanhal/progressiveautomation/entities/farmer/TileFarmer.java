@@ -284,7 +284,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	protected void feedAnimal(EntityAnimal animal) {
 		if (slots[SLOT_FOOD]!=null) {
-			animal.interact(faker);
+			animal.setInLove(faker);
 			slots[SLOT_FOOD].stackSize--;
 			if (slots[SLOT_FOOD].stackSize==0) slots[SLOT_FOOD] = null;
 			currentTime = waitTime;
