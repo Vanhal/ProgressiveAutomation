@@ -1,18 +1,25 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import java.util.ArrayList;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafter;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafterDiamond;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafterIron;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafterStone;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -51,5 +58,14 @@ public class BlockCrafter extends BaseBlock {
 		
 		
 		GameRegistry.addRecipe(recipe);
+	}
+	
+	@Override
+	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
+		TileCrafter crafter = (TileCrafter)world.getTileEntity(pos);
+		if (crafter!=null) {
+			crafter.setInventorySlotContents(crafter.CRAFT_RESULT, null);
+		}
+		return super.getInsides(world, pos);
 	}
 }

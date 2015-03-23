@@ -29,5 +29,5 @@ public class ContainerChopper extends BaseContainer {
 		addInventory(chopper, chopper.SLOT_INVENTORY_START, 112, 16, 3, 3);
 
 		addPlayerInventory(inv);
-	}	
+	}
 }

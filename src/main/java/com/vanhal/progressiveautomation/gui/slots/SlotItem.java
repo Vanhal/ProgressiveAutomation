@@ -16,6 +16,7 @@ public class SlotItem extends Slot {
 		slotItem = baseItem;
 	}
 
+	@Override
 	public boolean isItemValid(ItemStack itemStack) {
 		return slotItem.isItemEqual(itemStack);
 	}

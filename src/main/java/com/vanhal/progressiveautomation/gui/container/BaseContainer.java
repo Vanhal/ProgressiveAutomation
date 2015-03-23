@@ -42,6 +42,14 @@ public class BaseContainer extends Container {
 		return true;
 	}
 	
+	@Override
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
+		if (!entity.isLooked()) {
+			entity.setLooked();
+		}
+	}
+	
 	public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
 		ItemStack stack = null;
 		Slot slotObject = (Slot) inventorySlots.get(slot);

@@ -4,14 +4,20 @@ package com.vanhal.progressiveautomation.util;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C15PacketClientSettings;
+import net.minecraft.potion.Potion;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.DamageSource;
@@ -35,11 +41,20 @@ public class PlayerFake extends EntityPlayerMP {
 	public boolean isSneaking = false;
 	public ItemStack previousItem = null;
 	public String myName = "[VANHAL]";
+	
+	public PlayerFake(WorldServer world, String FakeName) {
+		this(world, new GameProfile(UUID.randomUUID(), FakeName));
+		myName = FakeName;
+	}
+	
+	public PlayerFake(WorldServer world, GameProfile FakeName) {
+		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, FakeName, new ItemInWorldManager(world));
+		this.addedToChunk = false;
+		this.onGround = true;
+	}
 
 	public PlayerFake(WorldServer world) {
-
-		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, NAME, new ItemInWorldManager(world));
-		this.addedToChunk = false;
+		this(world, NAME);
 	}
 
 	/*public static boolean isBlockBreakable(PlayerFake myFakePlayer, World worldObj, int x, int y, int z) {
@@ -55,6 +70,11 @@ public class PlayerFake extends EntityPlayerMP {
 	@Override
 	public boolean canCommandSenderUseCommand(int var1, String var2) {
 
+		return false;
+	}
+	
+	@Override
+	public boolean isSprinting() {
 		return false;
 	}
 

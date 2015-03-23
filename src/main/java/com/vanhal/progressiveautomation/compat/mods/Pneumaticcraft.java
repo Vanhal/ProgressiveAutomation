@@ -65,6 +65,8 @@ public class Pneumaticcraft extends BaseMod {
 	public boolean validBlock(World worldObj, ItemStack itemStack, Point3I testPoint) {
 		Point3I point = new Point3I(testPoint);
 		
+		if (!isPlantible(itemStack)) return false;
+		
 		int seedMeta = itemStack.getItemDamage();
 		//check the planting block is air first
 		if (!worldObj.isAirBlock(point.getX(), point.getY(), point.getZ())) {

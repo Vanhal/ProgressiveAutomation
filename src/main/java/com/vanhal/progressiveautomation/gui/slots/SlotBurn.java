@@ -1,5 +1,7 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -14,6 +16,6 @@ public class SlotBurn extends Slot {
 	}
 
 	public boolean isItemValid(ItemStack itemStack) {
-		return (TileEntityFurnace.getItemBurnTime(itemStack)>0);
+		return (BaseTileEntity.getItemBurnTime(itemStack)>0);
 	}
 }

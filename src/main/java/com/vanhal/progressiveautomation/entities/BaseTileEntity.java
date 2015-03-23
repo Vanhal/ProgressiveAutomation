@@ -32,6 +32,7 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
@@ -41,10 +42,16 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	protected int progress = 0;
 	protected int burnLevel = 0;
 	
+	protected boolean RedstonePowered = false;
+	
+	//first time looking in this machine, used for displaying help
+	protected boolean firstLook = false;
+	
 	/**
 	 * Direction to auto output items to
 	 */
 	public EnumFacing extDirection = EnumFacing.UP;
+	public EnumFacing facing = EnumFacing.EAST;
 	
 	/**
 	 * Sygnalises whether the TileEntity needs to be synced with clients
@@ -139,6 +146,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public void writeCommonNBT(NBTTagCompound nbt) {
 		nbt.setInteger("Progress", progress);
 		nbt.setInteger("BurnLevel", burnLevel);
+		nbt.setBoolean("firstLook", firstLook);
+		nbt.setInteger("facing", facing.ordinal());
 	}
 	
 	/**
@@ -188,6 +197,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		
 		if (nbt.hasKey("Progress")) progress = nbt.getInteger("Progress");
 		if (nbt.hasKey("BurnLevel")) burnLevel = nbt.getInteger("BurnLevel");
+		if (nbt.hasKey("firstLook")) firstLook = nbt.getBoolean("firstLook");
+		if (nbt.hasKey("facing")) facing = EnumFacing.getFront(nbt.getInteger("facing"));
 	}
 	
 	/**
@@ -294,29 +305,32 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public void update() {
 		if (!worldObj.isRemote) {
 			if (!isBurning()) {
-				if (readyToBurn()) {
-					if (slots[SLOT_FUEL]!=null) {
-						if (isFuel()) {
-							burnLevel = progress = getBurnTime();
-							addPartialUpdate("Progress", progress);
-							addPartialUpdate("BurnLevel", burnLevel);
-							
-							if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
+				RedstonePowered = isIndirectlyPowered();
+				if (!RedstonePowered) {
+					if (readyToBurn()) {
+						if (slots[SLOT_FUEL]!=null) {
+							if (isFuel()) {
+								burnLevel = progress = getBurnTime();
+								addPartialUpdate("Progress", progress);
+								addPartialUpdate("BurnLevel", burnLevel);
 								
-								slots[SLOT_FUEL] = slots[SLOT_FUEL].getItem().getContainerItem(slots[SLOT_FUEL]);
-							} else {
-								slots[SLOT_FUEL].stackSize--;
-								if (slots[SLOT_FUEL].stackSize==0) {
-									slots[SLOT_FUEL] = null;
+								if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
+									
+									slots[SLOT_FUEL] = slots[SLOT_FUEL].getItem().getContainerItem(slots[SLOT_FUEL]);
+								} else {
+									slots[SLOT_FUEL].stackSize--;
+									if (slots[SLOT_FUEL].stackSize==0) {
+										slots[SLOT_FUEL] = null;
+									}
 								}
-							}
-						} else if (hasEngine()) {
-							if (useEnergy(PAConfig.rfCost, false) > 0) {
-								if (burnLevel != 1 || progress != 1) {
-									//consumed a tick worth of energy
-									burnLevel = progress = 1;
-									addPartialUpdate("Progress", progress);
-									addPartialUpdate("BurnLevel", burnLevel);
+							} else if (hasEngine()) {
+								if (useEnergy(PAConfig.rfCost, false) > 0) {
+									if (burnLevel != 1 || progress != 1) {
+										//consumed a tick worth of energy
+										burnLevel = progress = 1;
+										addPartialUpdate("Progress", progress);
+										addPartialUpdate("BurnLevel", burnLevel);
+									}
 								}
 							}
 						}
@@ -438,7 +452,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot==SLOT_FUEL) && (TileEntityFurnace.getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
+		if ( (slot==SLOT_FUEL) && (getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
      		return true;
     	}
 		return false;
@@ -502,7 +516,15 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	public int getBurnTime(ItemStack item) {
-		return TileEntityFurnace.getItemBurnTime(item) / PAConfig.fuelCost;
+		return getItemBurnTime(item) / PAConfig.fuelCost;
+	}
+	
+	public static int getItemBurnTime(ItemStack item) {
+		if (PAConfig.allowPotatos) {
+			if (item.getItem() == Items.potato) return 40;
+			else if (item.getItem() == Items.baked_potato) return 80;
+		}
+		return TileEntityFurnace.getItemBurnTime(item);
 	}
 	
 	public boolean isFuel() {
@@ -640,6 +662,35 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 					}
 				}
 			}
+		}
+		return false;
+	}
+	
+	public boolean roomInInventory(ItemStack item) {
+		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return false;
+		if (item == null) return false;
+		int stackSize = item.stackSize;
+		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+			if (slots[i]!=null) {
+				if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
+					int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
+					if (avail >= stackSize) {
+						return true;
+					} else {
+						stackSize -= avail;
+					}
+				}
+			}
+		}
+		if ( (item != null) && (stackSize>0) ) {
+			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+				if (slots[i]==null) {
+					return true;
+				}
+			}
+		}
+		if (stackSize==0) {
+			return true;
 		}
 		return false;
 	}
@@ -784,8 +835,23 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		worldObj.notifyNeighborsOfStateChange(getPos(), minerBlock);
 	}
 	
+	public void setLooked() {
+		if (!firstLook) {
+			firstLook = true;
+			addPartialUpdate("firstLook", firstLook);
+		}
+	}
+	
+	public boolean isLooked() {
+		return firstLook;
+	}
+	
+	public Point2I spiral(int n, int x, int y) {
+		return spiral(n, x, y, facing);
+	}
+	
 	//my function to get a point on a spiral around the block
-	public static Point2I spiral(int n, int x, int y) {
+	public static Point2I spiral(int n, int x, int y, EnumFacing direction) {
 		int dx, dy;
 
 		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
@@ -813,7 +879,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 		}
 
-		return new Point2I(x + dx, y + dy);
+		if (direction == EnumFacing.NORTH)
+			return new Point2I(x + dy, y - dx);
+		else if (direction == EnumFacing.SOUTH)
+			return new Point2I(x + dy, y + dx);
+		else if (direction == EnumFacing.EAST)
+			return new Point2I(x + dx, y + dy);
+		else
+			return new Point2I(x - dx, y + dy);
 	}
 
 
@@ -843,8 +916,19 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	
+	//check if machine is powered
+	protected boolean isIndirectlyPowered() {
+		EnumFacing[] aenumfacing = EnumFacing.values();
+        int i = aenumfacing.length;
+        int j;
 
+        for (j = 0; j < i; ++j) {
+            EnumFacing enumfacing1 = aenumfacing[j];
 
-
-
+            if (worldObj.func_175709_b(pos.offset(enumfacing1), enumfacing1)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

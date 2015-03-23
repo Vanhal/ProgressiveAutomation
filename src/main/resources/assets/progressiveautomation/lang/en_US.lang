@@ -20,6 +20,15 @@ tile.Crafter.name=Wooden Crafter
 tile.CrafterStone.name=Stone Crafter
 tile.CrafterIron.name=Iron Crafter
 tile.CrafterDiamond.name=Diamond Crafter
+tile.Farmer.name=Wooden Animal Farmer
+tile.FarmerStone.name=Stone Animal Farmer
+tile.FarmerIron.name=Iron Animal Farmer
+tile.FarmerDiamond.name=Diamond Animal Farmer
+tile.Killer.name=Wooden Killer
+tile.KillerStone.name=Stone Killer
+tile.KillerIron.name=Iron Killer
+tile.KillerDiamond.name=Diamond Killer
+
 item.RFEngine.name=RF Engine
 item.CreativeRFEngine.name=Creative RF Engine
 item.WoodUpgrade.name=Wooden Upgrade
@@ -29,6 +38,15 @@ item.DiamondUpgrade.name=Diamond Upgrade
 item.CobbleUpgrade.name=Cobble Gen Upgrade
 item.WitherUpgrade.name=Wither Upgrade
 item.FillerUpgrade.name=Filler Upgrade
+
+item.FilterAdultUpgrade.name=Adult Filter Upgrade
+item.FilterAnimalUpgrade.name=Animal Filter Upgrade
+item.FilterMobUpgrade.name=Mob Filter Upgrade
+item.FilterPlayerUpgrade.name=Player Filter Upgrade
+
+item.ShearingUpgrade.name=Shearing Upgrade
+item.MilkerUpgrade.name=Milker Upgrade
+
 item.CoalPellet.name=Fuel Pellet
 
 item.WitherWood.name=Wither Wood
@@ -40,6 +58,8 @@ gui.miner=Miner
 gui.crafter=Auto Crafter
 gui.chopper=Tree Chopper
 gui.planter=Crop Planter
+gui.killer=Killing Machine
+gui.farmer=Animal Farmer
 gui.generator=Generator
 gui.notready=Not Ready
 gui.finished=Finished
@@ -47,6 +67,10 @@ gui.range=Range
 gui.mining=Mining
 gui.running=Running
 gui.waiting=Waiting
+gui.killing=Attacking
+gui.breeding=Breeding
+gui.milking=Milking
+gui.shearing=Shearing
 gui.harvesting=Harvesting
 gui.chopping=Chopping
 gui.planting=Planting
@@ -54,6 +78,7 @@ gui.full=Storage Full
 gui.producing=Creating
 gui.need.fuel=Need Fuel
 gui.need.energy=No RF Power
+gui.need.items=No Items..
 gui.need.cobble=Need Cobble
 gui.need.sapling=Add Saplings
 gui.need.seeds=Add Seeds
@@ -61,6 +86,15 @@ gui.need.pick=Need Pickaxe
 gui.need.hoe=Need Hoe
 gui.need.axe=Need Axe
 gui.need.shovel=Need Shovel
+gui.need.sword=Need Sword
+
+gui.hi.chopper=It Chops
+gui.hi.planter=I plant things
+gui.hi.miner=Lets Mine!
+gui.hi.killer=Bad Mobs!
+gui.hi.farmer=Like rabbits
+gui.addtools=Add tools!
+
 gui.general=General Settings
 gui.general.tooltip=General Settings
 gui.rfoptions.tooltip=RF Settings

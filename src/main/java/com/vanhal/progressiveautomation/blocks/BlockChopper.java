@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.blocks;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopperDiamond;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopperIron;
@@ -55,4 +56,6 @@ public class BlockChopper extends BaseBlock {
 		
 		GameRegistry.addRecipe(recipe);
 	}
+	
+	
 }

@@ -1,0 +1,8 @@
+{
+    "parent": "progressiveautomation:block/ThreeFace",
+    "textures": {
+        "up": "progressiveautomation:blocks/Wooden_Diamond",
+        "side": "progressiveautomation:blocks/Wooden_Sword",
+        "down": "progressiveautomation:blocks/Wooden_Small"
+    }
+}

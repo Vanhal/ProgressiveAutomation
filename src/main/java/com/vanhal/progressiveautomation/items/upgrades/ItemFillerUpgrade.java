@@ -24,12 +24,14 @@ public class ItemFillerUpgrade extends ItemUpgrade {
 		//this.setTextureName(Ref.MODID+":Filler_Upgrade");
 	}
 	
+	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 			"ppp", "brb", "ppp", 'p', Blocks.stone, 'r', Blocks.furnace, 'b', Items.bucket});
 		GameRegistry.addRecipe(recipe);
 	}
 	
+	@Override
 	protected void addUpgradeRecipe() {
 		this.addNormalRecipe();
 	}

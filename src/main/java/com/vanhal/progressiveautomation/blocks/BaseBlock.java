@@ -225,4 +225,16 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public boolean canDismantle(EntityPlayer player, World world, int x, int y, int z) {
 		return true;
 	}
+	
+	@Override
+    public boolean rotateBlock(World worldObj, BlockPos pos, EnumFacing axis){
+		BaseTileEntity chopper = (BaseTileEntity)worldObj.getTileEntity(pos);
+		if (chopper.facing == EnumFacing.NORTH) chopper.facing = EnumFacing.EAST;
+		else if (chopper.facing == EnumFacing.EAST) chopper.facing = EnumFacing.SOUTH;
+		else if (chopper.facing == EnumFacing.SOUTH) chopper.facing = EnumFacing.WEST;
+		else if (chopper.facing == EnumFacing.WEST) chopper.facing = EnumFacing.NORTH;
+		//ProgressiveAutomation.logger.info(chopper.facing.toString());
+        return true;
+    }
+	
 }

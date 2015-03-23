@@ -12,6 +12,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -66,22 +67,19 @@ public class ToolHelper {
 	}
 
 	public static int getLevel(ItemStack itemStack) {
+		//Vanilla Tools
 		if (itemStack.getItem() instanceof ItemTool) {
-			//Vanilla Tools
-			if (itemStack.getItem() instanceof ItemTool) {
-				return ((ItemTool)itemStack.getItem()).getToolMaterial().getHarvestLevel();
-			} else {
-				String material = "";
-				if (itemStack.getItem() instanceof ItemSword) material = ((ItemSword)itemStack.getItem()).getToolMaterialName();
-				else if (itemStack.getItem() instanceof ItemHoe) material = ((ItemHoe)itemStack.getItem()).getMaterialName();
-				if (material.equals("WOOD")) return LEVEL_WOOD;
-				else if (material.equals("STONE")) return LEVEL_STONE;
-				else if (material.equals("IRON")) return LEVEL_IRON;
-				else if (material.equals("GOLD")) return LEVEL_GOLD;
-				else if (material.equals("EMERALD")) return LEVEL_DIAMOND;
-			}
-			
-			
+			return ((ItemTool)itemStack.getItem()).getToolMaterial().getHarvestLevel();
+		} else if ((itemStack.getItem() instanceof ItemSword) ||
+			(itemStack.getItem() instanceof ItemHoe)) {
+			String material = "";
+			if (itemStack.getItem() instanceof ItemSword) material = ((ItemSword)itemStack.getItem()).getToolMaterialName();
+			else if (itemStack.getItem() instanceof ItemHoe) material = ((ItemHoe)itemStack.getItem()).getMaterialName();
+			if (material.equals("WOOD")) return LEVEL_WOOD;
+			else if (material.equals("STONE")) return LEVEL_STONE;
+			else if (material.equals("IRON")) return LEVEL_IRON;
+			else if (material.equals("GOLD")) return LEVEL_GOLD;
+			else if (material.equals("EMERALD")) return LEVEL_DIAMOND;
 		} else {
 			//Tinkers Tools
 			if (itemStack.hasTagCompound()) {
@@ -113,7 +111,7 @@ public class ToolHelper {
 					return TYPE_AXE;
 				} else if (name.substring(14).equalsIgnoreCase("shovel")) {
 					return TYPE_SHOVEL;
-				} else if (name.substring(14).equalsIgnoreCase("hoe")) {
+				} else if ( (name.substring(14).equalsIgnoreCase("hoe")) || (name.substring(14).equalsIgnoreCase("Mattock")) ) {
 					return TYPE_HOE;
 				} else if ( (name.substring(14).equalsIgnoreCase("Broadsword")) ||
 						(name.substring(14).equalsIgnoreCase("Rapier")) ||
@@ -159,7 +157,8 @@ public class ToolHelper {
 	}
 	
 	public static boolean damageTool(ItemStack tool, World world, int x, int y, int z) {
-		if ( (tool.getItem() instanceof ItemTool) || (tool.getItem() instanceof ItemHoe) ) {
+		if ( 	(tool.getItem() instanceof ItemShears) || (tool.getItem() instanceof ItemTool) || 
+				(tool.getItem() instanceof ItemHoe) || (tool.getItem() instanceof ItemSword) ) {
 			if (tool.attemptDamageItem(1, RND)) {
 				return true;
 			}

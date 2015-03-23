@@ -19,7 +19,7 @@ the compilation of the original or modified sources.
 
 Dependency: Code required for the mod to work properly. This includes
 dependencies required to compile the code as well as any file or modification
-that is explicitely or implicitely required for the mod to be working.
+that is explicitly or implicitly required for the mod to be working.
 
 
 1. Scope
@@ -67,7 +67,7 @@ off mod are strictly forbidden.
 
 Allowed distribution sources:
 curse.com / curseforge.com
-The offical github repository
+The official github repository
 The connected drone.io account
 
 
@@ -87,14 +87,14 @@ being revoked.
 
 Servers may install and use this mod on it's own or as part of a mod pack.
 
-Serers may:
+Servers may:
 - Disable parts of the mod as provided for in the mod configs
 - Use the mod as long as it is free to use by everyone equally
 - Charge a blanket subscription to the server
 
 Servers may not:
-- Charge for access to the mod or any portion of the mod using real or virtual currencey including donations
+- Charge for access to the mod or any portion of the mod using real or virtual currency  including donations
 - Limit access to the mod or any portion of the mod to a subset of the server through ranks or otherwise.
-- Give items or blocks from the mod in exchange for donations or real or virtual currencey
+- Give items or blocks from the mod in exchange for donations or real or virtual currency 
 
 By using the mod on a server you accept the licence as it is here.

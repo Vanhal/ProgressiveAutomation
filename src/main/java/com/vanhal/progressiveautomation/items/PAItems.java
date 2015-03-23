@@ -17,11 +17,17 @@ import com.vanhal.progressiveautomation.items.tools.WitherTools;
 import com.vanhal.progressiveautomation.items.upgrades.ItemCobbleGenUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemDiamondUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemFillerUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemFilterAdultUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemFilterAnimalUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemFilterMobUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemFilterPlayerUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemIronUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemMilkerUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemStoneUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWoodUpgrade;
 import com.vanhal.progressiveautomation.ref.Ref;
+import com.vanhal.progressiveautomation.items.upgrades.ItemShearingUpgrade;
 
 public class PAItems {
 
@@ -34,6 +40,18 @@ public class PAItems {
 		if ((PAConfig.allowCobbleUpgrade) && (PAConfig.minerEnabled)) cobbleUpgrade = new ItemCobbleGenUpgrade();
 		if ((PAConfig.allowFillerUpgrade) && (PAConfig.minerEnabled)) fillerUpgrade = new ItemFillerUpgrade();
 		if (PAConfig.allowWitherUpgrade) witherUpgrade = new ItemWitherUpgrade();
+		
+		if (PAConfig.killerEnabled) {
+			if (PAConfig.allowKillPlayer) filterPlayerUpgrade = new ItemFilterPlayerUpgrade();
+			filterMobUpgrade = new ItemFilterMobUpgrade();
+			filterAnimalUpgrade = new ItemFilterAnimalUpgrade();
+			filterAdultUpgrade = new ItemFilterAdultUpgrade();
+		}
+		
+		if (PAConfig.farmerEnabled) {
+			if (PAConfig.allowMilkerUpgrade) milkerUpgrade = new ItemMilkerUpgrade();
+			if (PAConfig.allowShearingUpgrade) shearingUpgrade = new ItemShearingUpgrade();
+		}
 
 
 		if (PAConfig.allowCoalPellets) coalPellet = new ItemCoalPellet();
@@ -63,6 +81,14 @@ public class PAItems {
 		
 		if (witherUpgrade!=null) witherUpgrade.preInit();
 		if (fillerUpgrade!=null) fillerUpgrade.preInit();
+		
+		if (filterPlayerUpgrade!=null) filterPlayerUpgrade.preInit();
+		if (filterMobUpgrade!=null) filterMobUpgrade.preInit();
+		if (filterAnimalUpgrade!=null) filterAnimalUpgrade.preInit();
+		if (filterAdultUpgrade!=null) filterAdultUpgrade.preInit();
+		
+		if (milkerUpgrade!=null) milkerUpgrade.preInit();
+		if (shearingUpgrade!=null) shearingUpgrade.preInit();
 
 		if (PAConfig.rfSupport) {
 			rfEngine.preInit();
@@ -113,6 +139,13 @@ public class PAItems {
 	public static ItemCobbleGenUpgrade cobbleUpgrade = null;
 	public static ItemWitherUpgrade witherUpgrade = null;
 	public static ItemFillerUpgrade fillerUpgrade = null;
+	public static ItemMilkerUpgrade milkerUpgrade = null;
+	public static ItemShearingUpgrade shearingUpgrade = null;
+	
+	public static ItemFilterMobUpgrade filterMobUpgrade = null;
+	public static ItemFilterAnimalUpgrade filterAnimalUpgrade = null;
+	public static ItemFilterAdultUpgrade filterAdultUpgrade = null;
+	public static ItemFilterPlayerUpgrade filterPlayerUpgrade = null;
 
 	public static ItemRFEngine rfEngine = null;
 	public static ItemRFEngine cheatRFEngine = null;

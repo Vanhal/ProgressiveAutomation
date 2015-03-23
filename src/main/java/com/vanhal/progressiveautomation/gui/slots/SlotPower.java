@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 
 import net.minecraft.init.Blocks;
@@ -17,7 +18,7 @@ public class SlotPower extends Slot {
 
 	public boolean isItemValid(ItemStack itemStack) {
 		//check if it burnable
-		boolean isCorrect = (TileEntityFurnace.getItemBurnTime(itemStack)>0);
+		boolean isCorrect = (BaseTileEntity.getItemBurnTime(itemStack)>0);
 		//check if it is a RFEngine
 		if (!isCorrect) {
 			if (itemStack.getItem() instanceof ItemRFEngine) {

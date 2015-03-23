@@ -140,8 +140,14 @@ public class TileCrafter extends UpgradeableTileEntity {
 				//actually consume the item
 				if (consume) {
 					if (amtItems<=0) {
+						if (slots[i].getItem().hasContainerItem(slots[i])) {
+							this.addToInventory(new ItemStack(slots[i].getItem().getContainerItem(), slots[i].stackSize));
+						}
 						slots[i] = null;
 					} else {
+						if (slots[i].getItem().hasContainerItem(slots[i])) {
+							this.addToInventory(new ItemStack(slots[i].getItem().getContainerItem(), slots[i].stackSize - amtItems));
+						}
 						slots[i].stackSize = amtItems;
 					}
 				}

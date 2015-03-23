@@ -9,10 +9,18 @@ import com.vanhal.progressiveautomation.entities.crafter.TileCrafter;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafterDiamond;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafterIron;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafterStone;
+import com.vanhal.progressiveautomation.entities.farmer.TileFarmer;
+import com.vanhal.progressiveautomation.entities.farmer.TileFarmerDiamond;
+import com.vanhal.progressiveautomation.entities.farmer.TileFarmerIron;
+import com.vanhal.progressiveautomation.entities.farmer.TileFarmerStone;
 import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorDiamond;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorIron;
 import com.vanhal.progressiveautomation.entities.generator.TileGeneratorStone;
+import com.vanhal.progressiveautomation.entities.killer.TileKiller;
+import com.vanhal.progressiveautomation.entities.killer.TileKillerDiamond;
+import com.vanhal.progressiveautomation.entities.killer.TileKillerIron;
+import com.vanhal.progressiveautomation.entities.killer.TileKillerStone;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerDiamond;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerIron;
@@ -56,6 +64,18 @@ public class Proxy {
 		GameRegistry.registerTileEntity(TileCrafterStone.class, "TileCrafterStone");
 		GameRegistry.registerTileEntity(TileCrafterIron.class, "TileCrafterIron");
 		GameRegistry.registerTileEntity(TileCrafterDiamond.class, "TileCrafterDiamond");
+		
+		//killer
+		GameRegistry.registerTileEntity(TileKiller.class, "TileKiller");
+		GameRegistry.registerTileEntity(TileKillerStone.class, "TileKillerStone");
+		GameRegistry.registerTileEntity(TileKillerIron.class, "TileKillerIron");
+		GameRegistry.registerTileEntity(TileKillerDiamond.class, "TileKillerDiamond");
+		
+		//farmer
+		GameRegistry.registerTileEntity(TileFarmer.class, "TileFarmer");
+		GameRegistry.registerTileEntity(TileFarmerStone.class, "TileFarmerStone");
+		GameRegistry.registerTileEntity(TileFarmerIron.class, "TileFarmerIron");
+		GameRegistry.registerTileEntity(TileFarmerDiamond.class, "TileFarmerDiamond");
 	}
 	
 	public int registerGui(String guiName) {
