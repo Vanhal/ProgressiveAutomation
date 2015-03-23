@@ -110,7 +110,7 @@ public class ToolHelper {
 					return TYPE_AXE;
 				} else if (name.substring(14).equalsIgnoreCase("shovel")) {
 					return TYPE_SHOVEL;
-				} else if (name.substring(14).equalsIgnoreCase("hoe")) {
+				} else if ( (name.substring(14).equalsIgnoreCase("hoe")) || (name.substring(14).equalsIgnoreCase("Mattock")) ) {
 					return TYPE_HOE;
 				} else if ( (name.substring(14).equalsIgnoreCase("Broadsword")) ||
 						(name.substring(14).equalsIgnoreCase("Rapier")) ||
