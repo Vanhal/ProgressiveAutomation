@@ -131,11 +131,15 @@ public class BlockGenerator extends BaseBlock {
         return state.withProperty(FACING, state.getValue(FACING)).withProperty(BlockGenerator.ACTIVE, buring);
     }
     
-    /*@Override
-    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis){
-    	int metadata = worldObj.getBlockMetadata(x, y, z) + 1;
-    	if (metadata>5) metadata = 2;
-    	worldObj.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-        return true;
-    }*/
+    @Override
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis){
+    	IBlockState state = world.getBlockState(pos);
+        for (IProperty prop : (java.util.Set<IProperty>)state.getProperties().keySet()) {
+            if (prop.getName().equals("facing")) {
+                world.setBlockState(pos, state.cycleProperty(prop));
+                return true;
+            }
+        }
+        return false;
+    }
 }

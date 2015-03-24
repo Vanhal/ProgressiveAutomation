@@ -172,15 +172,14 @@ public class TileGenerator extends BaseTileEntity {
 
 	public void outputEnergy() {
 		//Lets go around the world and try and give it to someone!
-		for (int i = 0; i<6; i++) {
+		for(EnumFacing facing : EnumFacing.values()) {
 			//Do we have any energy up for grabs?
 			if (currentStorage>0) {
-				TileEntity entity = BlockHelper.getAdjacentTileEntity(worldObj, getPos().getX(), getPos().getY(), getPos().getZ(), i);
+				TileEntity entity = worldObj.getTileEntity(pos.offset(facing));
 				if (entity instanceof IEnergyReceiver) {
 					IEnergyReceiver energy = (IEnergyReceiver) entity;
-					EnumFacing fromDirection = EnumFacing.getFront(i);
-					if (energy.canConnectEnergy(fromDirection)) {
-						int giveAmount = energy.receiveEnergy(fromDirection, currentStorage, false);
+					if (energy.canConnectEnergy(facing.getOpposite())) {
+						int giveAmount = energy.receiveEnergy(facing.getOpposite(), currentStorage, false);
 						if (giveAmount>0) {
 							changeCharge(giveAmount * -1);
 						}
@@ -189,7 +188,7 @@ public class TileGenerator extends BaseTileEntity {
 			}
 		}
 	}
-	
+
 	/* ISided Stuff */
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {

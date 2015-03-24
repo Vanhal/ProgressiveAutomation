@@ -17,6 +17,7 @@ import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+import com.vanhal.progressiveautomation.ref.WrenchModes;
 
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -228,11 +229,11 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	
 	@Override
     public boolean rotateBlock(World worldObj, BlockPos pos, EnumFacing axis){
-		BaseTileEntity chopper = (BaseTileEntity)worldObj.getTileEntity(pos);
-		if (chopper.facing == EnumFacing.NORTH) chopper.facing = EnumFacing.EAST;
-		else if (chopper.facing == EnumFacing.EAST) chopper.facing = EnumFacing.SOUTH;
-		else if (chopper.facing == EnumFacing.SOUTH) chopper.facing = EnumFacing.WEST;
-		else if (chopper.facing == EnumFacing.WEST) chopper.facing = EnumFacing.NORTH;
+		BaseTileEntity tileEntity = (BaseTileEntity)worldObj.getTileEntity(pos);
+		if (tileEntity.facing == EnumFacing.NORTH) tileEntity.facing = EnumFacing.EAST;
+		else if (tileEntity.facing == EnumFacing.EAST) tileEntity.facing = EnumFacing.SOUTH;
+		else if (tileEntity.facing == EnumFacing.SOUTH) tileEntity.facing = EnumFacing.WEST;
+		else if (tileEntity.facing == EnumFacing.WEST) tileEntity.facing = EnumFacing.NORTH;
 		//ProgressiveAutomation.logger.info(chopper.facing.toString());
         return true;
     }
