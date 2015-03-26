@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.mods.AgriCraft;
+import com.vanhal.progressiveautomation.compat.mods.GrowOres;
 import com.vanhal.progressiveautomation.compat.mods.MFR;
 import com.vanhal.progressiveautomation.compat.mods.Pams;
 import com.vanhal.progressiveautomation.compat.mods.Pneumaticcraft;
@@ -28,6 +29,7 @@ public class ModHelper {
 		registerMod(new Pneumaticcraft());
 		registerMod(new MFR());
 		registerMod(new AgriCraft());
+		registerMod(new GrowOres());
 		
 		//sudo "mod" to attempt to right click on plants before trying to break them
 		registerMod(new RightClick());

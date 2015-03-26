@@ -16,6 +16,7 @@ import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.ref.WrenchModes;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
@@ -38,6 +39,7 @@ public class TileGenerator extends BaseTileEntity {
 		super.writeCommonNBT(nbt);
 		//save the current energy stored
 		nbt.setInteger("energy", currentStorage);
+		sides[extDirection.ordinal()] = WrenchModes.Mode.Normal;
 
 	}
 

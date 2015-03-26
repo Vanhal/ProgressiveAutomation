@@ -35,7 +35,8 @@ import cpw.mods.fml.common.network.IGuiHandler;
  */
 
 public class SimpleGuiHandler implements IGuiHandler {
-	private int guiIdCounter = 0;
+	private int guiIdCounter = 1;
+	public static int manualGUI = 0;
 	
 	private final TMap containerMap = new THashMap();
 	private final TMap guiMap = new THashMap();
@@ -54,6 +55,7 @@ public class SimpleGuiHandler implements IGuiHandler {
 		return guiIdCounter;
 	}
 
+	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (containerMap.containsKey(ID)) {
 			if (!world.blockExists(x, y, z)) {
@@ -94,6 +96,8 @@ public class SimpleGuiHandler implements IGuiHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			return null;
+		} else if (ID==manualGUI) {
 			return null;
 		}
 
