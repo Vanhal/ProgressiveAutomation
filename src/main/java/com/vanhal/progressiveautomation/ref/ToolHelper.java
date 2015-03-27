@@ -164,7 +164,11 @@ public class ToolHelper {
 		} else {
 			Block mineBlock = world.getBlock(x, y, z);
 			PlayerFake fakePlayer = new PlayerFake((WorldServer)world);
-			tool.getItem().onBlockDestroyed(tool, world, mineBlock, x, y, z, fakePlayer);
+			if (tinkersType(tool.getItem())==TYPE_HOE) {
+				tool.attemptDamageItem(1, RND);
+			} else {
+				tool.getItem().onBlockDestroyed(tool, world, mineBlock, x, y, z, fakePlayer);
+			}
 		}
 		return false;
 	}
