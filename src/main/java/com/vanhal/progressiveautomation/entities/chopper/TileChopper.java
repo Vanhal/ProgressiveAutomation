@@ -204,7 +204,7 @@ public class TileChopper extends UpgradeableTileEntity {
 					//if we're chopping a tree, then damage the tool, otherwise don't
 					if (targetTree) {
 						if (ToolHelper.damageTool(slots[SLOT_AXE], worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
-							slots[SLOT_AXE] = null;
+							destroyTool(SLOT_AXE);
 						}
 					}
 					

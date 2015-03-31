@@ -464,6 +464,18 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return false;
 	}
 	
+	public void destroyTool(int slot) {
+		if ((slot==-1)||(slots[slot]==null)) return;
+		if (ToolHelper.tinkersType(slots[slot].getItem())>0) {
+			addToInventory(slots[slot]);
+		} else {
+			if (!PAConfig.destroyTools) {
+				addToInventory(slots[slot]);
+			}
+		}
+		slots[slot] = null;
+	}
+	
 	//sided things
 	public WrenchModes.Mode getSide(ForgeDirection side) {
 		return sides[side.ordinal()];

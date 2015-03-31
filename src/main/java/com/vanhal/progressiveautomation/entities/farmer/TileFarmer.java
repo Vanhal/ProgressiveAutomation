@@ -304,7 +304,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 				}
 				
 				if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, xCoord, yCoord, zCoord)) {
-					slots[SLOT_SHEARS] = null;
+					destroyTool(SLOT_SHEARS);
 				}
 				
 				currentTime = waitTime;

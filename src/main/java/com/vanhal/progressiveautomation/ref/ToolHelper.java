@@ -121,6 +121,26 @@ public class ToolHelper {
 		}
 		return -1;
 	}
+	
+	public static boolean isBroken(ItemStack item) {
+		if (item==null) return false;
+		boolean broken = tinkersIsBroken(item);
+		if (!broken) {
+			if (item.getItemDamage() >= item.getMaxDamage()) {
+				return true;
+			}
+		}
+		return broken;
+	}
+	
+	public static boolean tinkersIsBroken(ItemStack item) {
+		if (item==null) return false;
+		if ( (item.hasTagCompound()) && (item.getTagCompound().hasKey("InfiTool")) ) {
+			NBTTagCompound tags = item.getTagCompound().getCompoundTag("InfiTool");
+			return tags.getBoolean("Broken");
+		}
+		return false;
+	}
 
 	public static ItemStack getUpgradeType(int level) {
 		if (level>=ToolHelper.LEVEL_DIAMOND) {
@@ -169,6 +189,7 @@ public class ToolHelper {
 			} else {
 				tool.getItem().onBlockDestroyed(tool, world, mineBlock, x, y, z, fakePlayer);
 			}
+			if (tinkersIsBroken(tool)) return true;
 		}
 		return false;
 	}

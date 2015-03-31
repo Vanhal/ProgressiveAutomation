@@ -72,9 +72,9 @@ public class TileMiner extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			checkInventory();
-			useCobbleGen();
 
 			if ( (!isDone()) && (isBurning()) ) {
+				useCobbleGen();
 				//mine!
 				mine();
 			}
@@ -204,7 +204,7 @@ public class TileMiner extends UpgradeableTileEntity {
 				
 					if (miningWith!=1) {
 						if (ToolHelper.damageTool(slots[miningWith], worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY())) {
-							slots[miningWith] = null;
+							destroyTool(miningWith);
 						}
 					}
 				}
@@ -328,7 +328,7 @@ public class TileMiner extends UpgradeableTileEntity {
 			if ( (slots[1] == null) || (slots[1].stackSize==0) ) {
 				if (slots[SLOT_PICKAXE]!=null) {
 					if (ToolHelper.damageTool(slots[SLOT_PICKAXE], worldObj, this.xCoord, this.yCoord, this.zCoord)) {
-						slots[SLOT_PICKAXE] = null;
+						destroyTool(SLOT_PICKAXE);
 					}
 					slots[1] = new ItemStack(Blocks.cobblestone);
 				}
@@ -387,7 +387,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	/* Check if we are ready to go */
 	public boolean readyToBurn() {
 		if ( (totalMineBlocks>0) && (currentMineBlocks < totalMineBlocks) ) {
-			if ( (slots[1]!=null) && (slots[2]!=null) && (slots[3]!=null) ) {
+			if ( ((slots[1]!=null)||(hasUpgrade(UpgradeType.COBBLE_GEN))) && (slots[2]!=null) && (slots[3]!=null) ) {
 				return true;
 			}
 		}

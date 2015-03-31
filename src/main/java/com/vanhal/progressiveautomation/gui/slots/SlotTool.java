@@ -17,6 +17,7 @@ public class SlotTool extends Slot {
 	}
 
 	public boolean isItemValid(ItemStack itemStack) {
+		if (ToolHelper.isBroken(itemStack)) return false;
 		int curLevel = ToolHelper.getLevel(itemStack);
 		int tool = ToolHelper.getType(itemStack.getItem());
 		return ( (tool==type) && (curLevel <= level) );

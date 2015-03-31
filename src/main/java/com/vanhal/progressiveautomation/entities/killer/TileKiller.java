@@ -104,7 +104,7 @@ public class TileKiller extends UpgradeableTileEntity {
 								
 								
 								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, xCoord, yCoord, zCoord)) {
-									slots[SLOT_SWORD] = null;
+									destroyTool(SLOT_SWORD);
 								}
 								
 								pickupDrops(searchBlock);

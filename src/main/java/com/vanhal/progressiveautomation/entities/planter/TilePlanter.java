@@ -213,7 +213,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	
 	protected void damageHoe(Point3I point) {
 		if (ToolHelper.damageTool(slots[SLOT_HOE], worldObj, point.getX(), point.getY(), point.getZ())) {
-			slots[SLOT_HOE] = null;
+			destroyTool(SLOT_HOE);
 		}
 	}
 	
