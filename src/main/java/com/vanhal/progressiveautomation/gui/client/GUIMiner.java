@@ -39,7 +39,7 @@ public class GUIMiner extends BaseGUI {
 				if (miner.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
 				readyToMine = false;
-			} else if (miner.getStackInSlot(1) == null) {
+			} else if ( (miner.getStackInSlot(1) == null) && (!miner.hasUpgrade(UpgradeType.COBBLE_GEN)) ) {
 				drawString(StringHelper.localize("gui.need.cobble"), infoScreenX, infoScreenW, infroScreenY2, RED);
 				readyToMine = false;
 			} else if (miner.getStackInSlot(miner.SLOT_PICKAXE) == null) {
