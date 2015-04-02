@@ -335,4 +335,16 @@ public class TileFarmer extends UpgradeableTileEntity {
 		}
 	}
 	
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if (stack == null) return false;
+		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.shears) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+			return true;
+		} else if ( (slot == this.SLOT_BUCKETS) && (stack.getItem() == Items.bucket) && (hasUpgrade(UpgradeType.MILKER)) ) {
+			return true;
+		}
+		
+		return super.isItemValidForSlot(slot, stack);
+	}
+	
 }

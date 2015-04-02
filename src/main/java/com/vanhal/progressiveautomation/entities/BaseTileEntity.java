@@ -466,7 +466,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	
 	public void destroyTool(int slot) {
 		if ((slot==-1)||(slots[slot]==null)) return;
-		if (ToolHelper.tinkersType(slots[slot].getItem())>0) {
+		if (ToolHelper.tinkersType(slots[slot].getItem())>=0) {
 			addToInventory(slots[slot]);
 		} else {
 			if (!PAConfig.destroyTools) {
@@ -930,6 +930,16 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	
 	//check if machine is powered
 	protected boolean isIndirectlyPowered() {
-        return worldObj.getIndirectPowerOutput(xCoord, yCoord - 1, zCoord, 0) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord, 1) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord - 1, 2) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord + 1, 3) ? true : (worldObj.getIndirectPowerOutput(xCoord + 1, yCoord, zCoord, 5) ? true : (worldObj.getIndirectPowerOutput(xCoord - 1, yCoord, zCoord, 4) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord, 0) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 2, zCoord, 1) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord - 1, 2) ? true : (worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord + 1, 3) ? true : (worldObj.getIndirectPowerOutput(xCoord - 1, yCoord + 1, zCoord, 4) ? true : worldObj.getIndirectPowerOutput(xCoord + 1, yCoord + 1, zCoord, 5)))))))))));
+        return worldObj.getIndirectPowerOutput(xCoord, yCoord - 1, zCoord, 0) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord, 1) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord - 1, 2) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord + 1, 3) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord + 1, yCoord, zCoord, 5) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord - 1, yCoord, zCoord, 4) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 2, zCoord, 1) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord - 1, 2) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord + 1, 3) ? true : 
+        	(worldObj.getIndirectPowerOutput(xCoord - 1, yCoord + 1, zCoord, 4) ? true : 
+        	worldObj.getIndirectPowerOutput(xCoord + 1, yCoord + 1, zCoord, 5))))))))));
     }
 }

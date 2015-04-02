@@ -73,10 +73,12 @@ public class TileMiner extends UpgradeableTileEntity {
 			checkForChanges();
 			checkInventory();
 
-			if ( (!isDone()) && (isBurning()) ) {
+			if (isBurning()) {
 				useCobbleGen();
-				//mine!
-				mine();
+				if (!isDone()) {
+					//mine!
+					mine();
+				}
 			}
 		}
 	}
@@ -390,6 +392,9 @@ public class TileMiner extends UpgradeableTileEntity {
 			if ( ((slots[1]!=null)||(hasUpgrade(UpgradeType.COBBLE_GEN))) && (slots[2]!=null) && (slots[3]!=null) ) {
 				return true;
 			}
+		}
+		if (((slots[1] == null) || (slots[1].stackSize==0)) && (hasUpgrade(UpgradeType.COBBLE_GEN)) && (slots[2]!=null) && (slots[3]!=null) ) {
+			return true;
 		}
 		return false;
 	}
