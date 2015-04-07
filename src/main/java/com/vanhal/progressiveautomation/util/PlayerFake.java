@@ -18,6 +18,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.C15PacketClientSettings;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ChunkCoordinates;
@@ -205,5 +206,10 @@ public class PlayerFake extends EntityPlayerMP {
 	public void func_147100_a(C15PacketClientSettings pkt) {
 
 		return;
+	}
+	
+	@Override
+	public void addPotionEffect(PotionEffect p_70690_1_) {
+		
 	}
 }

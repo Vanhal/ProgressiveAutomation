@@ -557,6 +557,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			if (item.getItem() == Items.potato) return 40;
 			else if (item.getItem() == Items.baked_potato) return 80;
 		}
+		if (item==null) return 0;
 		return TileEntityFurnace.getItemBurnTime(item);
 	}
 	
