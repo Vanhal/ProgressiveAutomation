@@ -1,6 +1,6 @@
 #!/bin/bash
 
-FILE_NAME=`echo "ProgressiveAutomation-1.7.10-1.6.11.jar"`
+FILE_NAME=`echo "ProgressiveAutomation-1.7.10-$version.jar"`
 FILE_LOCATION=`echo "./build/libs/$FILE_NAME"`
 CHANGE_LOG=`git log -1 --pretty=format:"%B"`
 
