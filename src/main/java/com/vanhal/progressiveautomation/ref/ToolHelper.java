@@ -36,6 +36,7 @@ public class ToolHelper {
 	public static final int LEVEL_IRON = 2;
 	public static final int LEVEL_GOLD = 0;
 	public static final int LEVEL_DIAMOND =3;
+	public static final int LEVEL_MAX = 100;
 	
 	//speeds for levels
 	public static int SPEED_WOOD = 2;
