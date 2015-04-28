@@ -18,6 +18,6 @@ public class SlotItem extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack itemStack) {
-		return slotItem.isItemEqual(itemStack);
+		return (slotItem.isItemEqual(itemStack) && (ItemStack.areItemStackTagsEqual(itemStack, slotItem)) );
 	}
 }

@@ -321,7 +321,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 	public boolean isDone() {
-		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
+		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0) && (slots[SLOT_PICKAXE]!=null) && (slots[SLOT_SHOVEL]!=null);
 	}
 	
 	//if we have a cobblegen upgrade then this function will deal with adding cobble that is generated

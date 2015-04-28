@@ -1,6 +1,8 @@
 #!/bin/bash
 
+cd ./build/libs/
 FILE_NAME=`echo "ProgressiveAutomation-1.7.10-*"`
+cd ../../
 FILE_LOCATION=`echo "./build/libs/$FILE_NAME"`
 CHANGE_LOG=`git log -1 --pretty=format:"%B"`
 

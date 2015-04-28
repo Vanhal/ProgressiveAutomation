@@ -106,6 +106,12 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		return null;
 	}
 	
+	//this can be used to set the side fromthe tile entity
+	@SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+        return this.getIcon(side, world.getBlockMetadata(x, y, z));
+    }
+	
 	@SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register) {
 		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();

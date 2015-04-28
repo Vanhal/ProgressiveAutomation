@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.inventory.IInventory;
@@ -16,10 +17,11 @@ public class SlotTool extends Slot {
 		type = ToolType;
 	}
 
+	@Override
 	public boolean isItemValid(ItemStack itemStack) {
 		if (ToolHelper.isBroken(itemStack)) return false;
 		int curLevel = ToolHelper.getLevel(itemStack);
-		int tool = ToolHelper.getType(itemStack.getItem());
+		int tool = ToolHelper.getType(itemStack);
 		return ( (tool==type) && (curLevel <= level) );
 	}
 }

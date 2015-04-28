@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.ref;
 
 import java.util.Random;
+import java.util.Set;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.PAItems;
@@ -48,7 +49,8 @@ public class ToolHelper {
 	//random
 	protected static Random RND = new Random();
 
-	public static int getType(Item item) {
+	public static int getType(ItemStack itemStack) {
+		Item item = itemStack.getItem();
 		if (item instanceof ItemPickaxe) {
 			return TYPE_PICKAXE;
 		} else if (item instanceof ItemAxe) {
@@ -59,6 +61,13 @@ public class ToolHelper {
 			return TYPE_SWORD;
 		} else if (item instanceof ItemHoe) {
 			return TYPE_HOE;
+		} else if (item instanceof ItemTool) {
+			Set<String> toolClasses = ((ItemTool)item).getToolClasses(itemStack);
+			if (toolClasses.contains("pickaxe")) return TYPE_PICKAXE;
+			else if (toolClasses.contains("axe")) return TYPE_AXE;
+			else if (toolClasses.contains("shovel")) return TYPE_SHOVEL;
+			else if (toolClasses.contains("hoe")) return TYPE_HOE;
+			else return -1;
 		} else if (tinkersType(item)>=0) { //see if it's a tinkers type
 			return tinkersType(item);
 		} else {
