@@ -45,6 +45,7 @@ public class TileGenerator extends BaseTileEntity {
 		super.writeCommonNBT(nbt);
 		//save the current energy stored
 		nbt.setInteger("energy", currentStorage);
+		sides[extDirection.ordinal()] = WrenchModes.Mode.Normal;
 
 	}
 

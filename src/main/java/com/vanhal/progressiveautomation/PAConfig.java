@@ -48,6 +48,7 @@ public class PAConfig {
 	public static boolean enableWitherTools;
 	public static boolean allowPotatos;
 	public static boolean allowWrench;
+	public static boolean destroyTools;
 	
 	
 	public static void init(Configuration handle) {
@@ -91,6 +92,7 @@ public class PAConfig {
 		allowPotatos = config.getBoolean("allowPotatos", "general", true, "Allow Potatos to be used as a fuel source in PA machines");
 		enableWitherTools = config.getBoolean("witherTools", "general", true, "Allow Wither tools and resources to create them");
 		allowWrench = config.getBoolean("allowWrench", "general", true, "Allows the wrench, you've got to be seriously evil to not allow this!");
+		destroyTools = config.getBoolean("destroyTools", "general", true, "Changing to false will make the machines spit a fully broken vanilla tool into it's inventory");
 		
 		
 		//enable blocks		

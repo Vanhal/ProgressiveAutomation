@@ -104,8 +104,9 @@ public class TileKiller extends UpgradeableTileEntity {
 								faker.attackTargetEntityWithCurrentItem(mob);
 								
 								
+
 								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, pos.getX(), pos.getY(), pos.getZ())) {
-									slots[SLOT_SWORD] = null;
+									destroyTool(SLOT_SWORD);
 								}
 								
 								pickupDrops(searchBlock);

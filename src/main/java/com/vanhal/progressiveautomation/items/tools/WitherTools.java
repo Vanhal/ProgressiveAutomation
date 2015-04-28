@@ -1,14 +1,21 @@
 package com.vanhal.progressiveautomation.items.tools;
 
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
+
+import com.vanhal.progressiveautomation.ref.Ref;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class WitherTools {
 
 	public static void preInit() {
+		RecipeSorter.register(Ref.MODID+":witherTool", RecipeWitherTool.class, SHAPED, "after:forge:shapedore");
+		
 		witherWood = new ItemWitherWood();
 		witherStone = new ItemWitherStone();
 		witherIron = new ItemWitherIron();

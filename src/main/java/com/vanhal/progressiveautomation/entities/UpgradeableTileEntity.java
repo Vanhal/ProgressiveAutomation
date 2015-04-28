@@ -163,24 +163,24 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	
 	//override isided stuff
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot==SLOT_PICKAXE) && ( ToolHelper.getType(stack.getItem()) == ToolHelper.TYPE_PICKAXE ) ) {
-    		if (ToolHelper.getLevel(stack) <= getUpgradeLevel()) {
+		if ( (slot==SLOT_PICKAXE) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_PICKAXE ) ) {
+    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
-    	} else if ( (slot==SLOT_SHOVEL) && ( ToolHelper.getType(stack.getItem()) == ToolHelper.TYPE_SHOVEL ) ) {
-    		if (ToolHelper.getLevel(stack) <= getUpgradeLevel()) {
+    	} else if ( (slot==SLOT_SHOVEL) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_SHOVEL ) ) {
+    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
-     	} else if ( (slot==SLOT_AXE) && ( ToolHelper.getType(stack.getItem()) == ToolHelper.TYPE_AXE ) ) {
-    		if (ToolHelper.getLevel(stack) <= getUpgradeLevel()) {
+     	} else if ( (slot==SLOT_AXE) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_AXE ) ) {
+    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
-     	} else if ( (slot==SLOT_SWORD) && ( ToolHelper.getType(stack.getItem()) == ToolHelper.TYPE_SWORD ) ) {
-    		if (ToolHelper.getLevel(stack) <= getUpgradeLevel()) {
+     	} else if ( (slot==SLOT_SWORD) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_SWORD ) ) {
+    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
-     	} else if ( (slot==SLOT_HOE) && ( ToolHelper.getType(stack.getItem()) == ToolHelper.TYPE_HOE ) ) {
-    		if (ToolHelper.getLevel(stack) <= getUpgradeLevel()) {
+     	} else if ( (slot==SLOT_HOE) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_HOE ) ) {
+    		if( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
      	} else if ( (slot==SLOT_UPGRADE) && (stack.isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) ) {

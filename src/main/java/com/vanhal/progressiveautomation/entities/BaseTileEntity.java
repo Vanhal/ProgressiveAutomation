@@ -479,10 +479,22 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot==SLOT_FUEL) && (getItemBurnTime(stack)>0) && (ToolHelper.getType(stack.getItem())==-1) ) {
+		if ( (slot==SLOT_FUEL) && (getItemBurnTime(stack)>0) && (ToolHelper.getType(stack)==-1) ) {
      		return true;
     	}
 		return false;
+	}
+	
+	public void destroyTool(int slot) {
+		if ((slot==-1)||(slots[slot]==null)) return;
+		if (ToolHelper.tinkersType(slots[slot].getItem())>=0) {
+			addToInventory(slots[slot]);
+		} else {
+			if (!PAConfig.destroyTools) {
+				addToInventory(slots[slot]);
+			}
+		}
+		slots[slot] = null;
 	}
 	
 	//sided things
@@ -511,7 +523,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if ( (sides[face.ordinal()] == WrenchModes.Mode.FuelInput) && (slot != SLOT_FUEL) ) return false;
 		if ( (sides[face.ordinal()] == WrenchModes.Mode.Input) && (slot == SLOT_FUEL) ) return false;
 		
-		if ( (slots[slot] != null) && (slots[slot].isItemEqual(stack)) ) {
+		if ( (slots[slot] != null) 
+				&& (slots[slot].isItemEqual(stack))
+				&& (ItemStack.areItemStackTagsEqual(stack, slots[slot])) ) {
 			int availSpace = this.getInventoryStackLimit() - slots[slot].stackSize;
 			if (availSpace>0) {
 				return true;
@@ -566,6 +580,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			if (item.getItem() == Items.potato) return 40;
 			else if (item.getItem() == Items.baked_potato) return 80;
 		}
+		if (item==null) return 0;
 		return TileEntityFurnace.getItemBurnTime(item);
 	}
 	
@@ -592,7 +607,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if (getBurnTime(item)>0) {
 			if (slots[0]==null) {
 				targetSlot = 0;
-			} else if (item.isItemEqual(slots[0])) {
+			} else if ( (item.isItemEqual(slots[0])) && (ItemStack.areItemStackTagsEqual(item, slots[0])) ) {
 				targetSlot = 0;
 			}
 		}
@@ -636,7 +651,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if (slots[targetSlot]==null) {
 			slots[targetSlot] = item;
 			item = null;
-		} else if ( (slots[targetSlot].stackSize < slots[targetSlot].getMaxStackSize()) && (slots[targetSlot].isItemEqual(item)) ) {
+		} else if ( (slots[targetSlot].stackSize < slots[targetSlot].getMaxStackSize())
+					&& (slots[targetSlot].isItemEqual(item)) 
+					&& (ItemStack.areItemStackTagsEqual(item, slots[targetSlot])) ) {
 			int avail = slots[targetSlot].getMaxStackSize() - slots[targetSlot].stackSize;
 			if (avail >= item.stackSize) {
 				slots[targetSlot].stackSize += item.stackSize;
@@ -652,7 +669,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			if (inv.getStackInSlot(i)!=null) {
-				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot])) && (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize()) ) {
+				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot]))
+						&& (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize())
+						&& (ItemStack.areItemStackTagsEqual(inv.getStackInSlot(i), slots[fromSlot])) ) {
 					int avail = inv.getStackInSlot(i).getMaxStackSize() - inv.getStackInSlot(i).stackSize;
 					if (avail >= slots[fromSlot].stackSize) {
 						inv.getStackInSlot(i).stackSize += slots[fromSlot].stackSize;
@@ -684,7 +703,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		for (int j = 0; j < trySlots.length; j++) {
 			i = trySlots[j];
 			if (inv.getStackInSlot(i)!=null) {
-				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot])) && (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize()) ) {
+				if ( (inv.getStackInSlot(i).isItemEqual(slots[fromSlot])) 
+						&& (inv.getStackInSlot(i).stackSize < inv.getStackInSlot(i).getMaxStackSize()) 
+						&& (ItemStack.areItemStackTagsEqual(inv.getStackInSlot(i), slots[fromSlot])) ) {
 					int avail = inv.getStackInSlot(i).getMaxStackSize() - inv.getStackInSlot(i).stackSize;
 					if (avail >= slots[fromSlot].stackSize) {
 						inv.getStackInSlot(i).stackSize += slots[fromSlot].stackSize;
@@ -718,7 +739,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		int stackSize = item.stackSize;
 		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 			if (slots[i]!=null) {
-				if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
+				if ( (slots[i].isItemEqual(item))
+						&& (slots[i].stackSize < slots[i].getMaxStackSize())
+						&& (ItemStack.areItemStackTagsEqual(item, slots[i]))) {
 					int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
 					if (avail >= stackSize) {
 						return true;
@@ -752,7 +775,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 			if (slots[i]!=null) {
 				if (item!=null) {
-					if ( (slots[i].isItemEqual(item)) && (slots[i].stackSize < slots[i].getMaxStackSize()) ) {
+					if ( (slots[i].isItemEqual(item)) 
+							&& (slots[i].stackSize < slots[i].getMaxStackSize())
+							&& (ItemStack.areItemStackTagsEqual(item, slots[i])) ) {
 						int avail = slots[i].getMaxStackSize() - slots[i].stackSize;
 						if (avail >= item.stackSize) {
 							slots[i].stackSize += item.stackSize;

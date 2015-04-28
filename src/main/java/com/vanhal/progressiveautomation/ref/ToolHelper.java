@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.ref;
 
 import java.util.Random;
+import java.util.Set;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.PAItems;
@@ -37,6 +38,7 @@ public class ToolHelper {
 	public static final int LEVEL_IRON = 2;
 	public static final int LEVEL_GOLD = 0;
 	public static final int LEVEL_DIAMOND =3;
+	public static final int LEVEL_MAX = 100;
 	
 	//speeds for levels
 	public static int SPEED_WOOD = 2;
@@ -48,7 +50,8 @@ public class ToolHelper {
 	//random
 	protected static Random RND = new Random();
 
-	public static int getType(Item item) {
+	public static int getType(ItemStack itemStack) {
+		Item item = itemStack.getItem();
 		if (item instanceof ItemPickaxe) {
 			return TYPE_PICKAXE;
 		} else if (item instanceof ItemAxe) {
@@ -59,6 +62,13 @@ public class ToolHelper {
 			return TYPE_SWORD;
 		} else if (item instanceof ItemHoe) {
 			return TYPE_HOE;
+		} else if (item instanceof ItemTool) {
+			Set<String> toolClasses = ((ItemTool)item).getToolClasses(itemStack);
+			if (toolClasses.contains("pickaxe")) return TYPE_PICKAXE;
+			else if (toolClasses.contains("axe")) return TYPE_AXE;
+			else if (toolClasses.contains("shovel")) return TYPE_SHOVEL;
+			else if (toolClasses.contains("hoe")) return TYPE_HOE;
+			else return -1;
 		} else if (tinkersType(item)>=0) { //see if it's a tinkers type
 			return tinkersType(item);
 		} else {
@@ -122,6 +132,26 @@ public class ToolHelper {
 		}
 		return -1;
 	}
+	
+	public static boolean isBroken(ItemStack item) {
+		if (item==null) return false;
+		boolean broken = tinkersIsBroken(item);
+		if (!broken) {
+			if (item.getItemDamage() >= item.getMaxDamage()) {
+				return true;
+			}
+		}
+		return broken;
+	}
+	
+	public static boolean tinkersIsBroken(ItemStack item) {
+		if (item==null) return false;
+		if ( (item.hasTagCompound()) && (item.getTagCompound().hasKey("InfiTool")) ) {
+			NBTTagCompound tags = item.getTagCompound().getCompoundTag("InfiTool");
+			return tags.getBoolean("Broken");
+		}
+		return false;
+	}
 
 	public static ItemStack getUpgradeType(int level) {
 		if (level>=ToolHelper.LEVEL_DIAMOND) {
@@ -165,7 +195,12 @@ public class ToolHelper {
 		} else {
 			Block mineBlock = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			PlayerFake fakePlayer = new PlayerFake((WorldServer)world);
-			tool.getItem().onBlockDestroyed(tool, world, mineBlock, new BlockPos(x, y, z), fakePlayer);
+			if (tinkersType(tool.getItem())==TYPE_HOE) {
+				tool.attemptDamageItem(1, RND);
+			} else {
+				tool.getItem().onBlockDestroyed(tool, world, mineBlock, new BlockPos(x, y, z), fakePlayer);
+			}
+			if (tinkersIsBroken(tool)) return true;
 		}
 		return false;
 	}

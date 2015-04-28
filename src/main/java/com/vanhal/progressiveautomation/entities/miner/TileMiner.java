@@ -74,11 +74,13 @@ public class TileMiner extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			checkInventory();
-			useCobbleGen();
 
-			if ( (!isDone()) && (isBurning()) ) {
-				//mine!
-				mine();
+			if (isBurning()) {
+				useCobbleGen();
+				if (!isDone()) {
+					//mine!
+					mine();
+				}
 			}
 		}
 	}
@@ -209,7 +211,7 @@ public class TileMiner extends UpgradeableTileEntity {
 				
 					if (miningWith!=1) {
 						if (ToolHelper.damageTool(slots[miningWith], worldObj, currentPoint.getX(), currentYLevel, currentPoint.getY())) {
-							slots[miningWith] = null;
+							destroyTool(miningWith);
 						}
 					}
 				}
@@ -325,7 +327,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 	public boolean isDone() {
-		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0);
+		return (totalMineBlocks==currentMineBlocks) && (totalMineBlocks>0) && (slots[SLOT_PICKAXE]!=null) && (slots[SLOT_SHOVEL]!=null);
 	}
 	
 	//if we have a cobblegen upgrade then this function will deal with adding cobble that is generated
@@ -334,7 +336,7 @@ public class TileMiner extends UpgradeableTileEntity {
 			if ( (slots[1] == null) || (slots[1].stackSize==0) ) {
 				if (slots[SLOT_PICKAXE]!=null) {
 					if (ToolHelper.damageTool(slots[SLOT_PICKAXE], worldObj, this.pos.getX(), this.pos.getY(), this.pos.getZ())) {
-						slots[SLOT_PICKAXE] = null;
+						destroyTool(SLOT_PICKAXE);
 					}
 					slots[1] = new ItemStack(Blocks.cobblestone);
 				}
@@ -393,9 +395,12 @@ public class TileMiner extends UpgradeableTileEntity {
 	/* Check if we are ready to go */
 	public boolean readyToBurn() {
 		if ( (totalMineBlocks>0) && (currentMineBlocks < totalMineBlocks) ) {
-			if ( (slots[1]!=null) && (slots[2]!=null) && (slots[3]!=null) ) {
+			if ( ((slots[1]!=null)||(hasUpgrade(UpgradeType.COBBLE_GEN))) && (slots[2]!=null) && (slots[3]!=null) ) {
 				return true;
 			}
+		}
+		if (((slots[1] == null) || (slots[1].stackSize==0)) && (hasUpgrade(UpgradeType.COBBLE_GEN)) && (slots[2]!=null) && (slots[3]!=null) ) {
+			return true;
 		}
 		return false;
 	}

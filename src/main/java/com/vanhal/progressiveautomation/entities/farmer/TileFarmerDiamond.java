@@ -9,6 +9,6 @@ public class TileFarmerDiamond extends TileFarmer {
 		super();
 		setUpgradeLevel(ToolHelper.LEVEL_DIAMOND);
 		setAllowedUpgrades(UpgradeType.DIAMOND, UpgradeType.WITHER, UpgradeType.MILKER, UpgradeType.SHEARING);
-		setWaitTime(10);
+		setWaitTime(ToolHelper.LEVEL_MAX);
 	}
 }

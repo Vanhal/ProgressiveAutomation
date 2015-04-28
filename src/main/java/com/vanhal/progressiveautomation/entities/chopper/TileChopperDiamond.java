@@ -8,6 +8,6 @@ public class TileChopperDiamond extends TileChopper {
 	public TileChopperDiamond() {
 		super();
 		setAllowedUpgrades(UpgradeType.DIAMOND, UpgradeType.WITHER);
-		setUpgradeLevel(10);
+		setUpgradeLevel(ToolHelper.LEVEL_MAX);
 	}
 }

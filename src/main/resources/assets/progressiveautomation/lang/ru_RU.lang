@@ -1,0 +1,107 @@
+itemGroup.PATab=Прогрессивная автоматизация
+
+tile.Miner.name=Деревянный шахтёр
+tile.MinerStone.name=Каменный шахтёр
+tile.MinerIron.name=Железный шахтёр
+tile.MinerDiamond.name=Алмазный шахтёр
+tile.Chopper.name=Деревянный лесоруб
+tile.ChopperStone.name=Каменный лесоруб
+tile.ChopperIron.name=Железный лесоруб
+tile.ChopperDiamond.name=Алмазный лесоруб
+tile.Planter.name=Деревянный комбайн
+tile.PlanterStone.name=Каменный комбайн
+tile.PlanterIron.name=Железный комбайн
+tile.PlanterDiamond.name=Алмазный комбайн
+tile.Generator.name=Деревянный генератор
+tile.GeneratorStone.name=Каменный генератор
+tile.GeneratorIron.name=Железный генератор
+tile.GeneratorDiamond.name=Алмазный генератор
+tile.Crafter.name=Деревянный верстак
+tile.CrafterStone.name=Каменный верстак
+tile.CrafterIron.name=Железный верстак
+tile.CrafterDiamond.name=Алмазный верстак
+tile.Farmer.name=Деревянный животновод
+tile.FarmerStone.name=Каменный животновод
+tile.FarmerIron.name=Железный животновод
+tile.FarmerDiamond.name=Алмазный животновод
+tile.Killer.name=Деревянный убийца
+tile.KillerStone.name=Каменный убийца
+tile.KillerIron.name=Железный убийца
+tile.KillerDiamond.name=Алмазный убийца
+
+item.Wrench.name=ПА ключ
+item.Manual.name=Руководство по ПА
+item.RFEngine.name=RF двигатель
+item.CreativeRFEngine.name=Творческий RF двигатель
+item.WoodUpgrade.name=Деревянное улучшение
+item.StoneUpgrade.name=Каменное улучшение
+item.IronUpgrade.name=Железное улучшение
+item.DiamondUpgrade.name=Алмазное улучшение
+item.CobbleUpgrade.name=Улучшение "Генератор булыжника"
+item.WitherUpgrade.name=Улучшение "Иссушитель"
+item.FillerUpgrade.name=Улучшение "Наполнитель"
+
+item.FilterAdultUpgrade.name=Улучшение-фильтр "Взрослая особь"
+item.FilterAnimalUpgrade.name=Улучшение-фильтр "Животное"
+item.FilterMobUpgrade.name=Улучшение-фильтр "Моб"
+item.FilterPlayerUpgrade.name=Улучшение-фильтр "Игрок"
+
+item.ShearingUpgrade.name=Улучшение "Стрижка животных"
+item.MilkerUpgrade.name=Улучшение "Веселый молочник"
+
+item.CoalPellet.name=Топливная гранула
+
+item.WitherWood.name=Высохшая древесина
+item.WitherStone.name=Высохший камень
+item.WitherIron.name=Высохшее железо
+item.WitherDiamond.name=Высохший алмаз
+
+gui.miner=Шахтёр
+gui.crafter=Рабочий стол
+gui.chopper=Фермер деревьев
+gui.planter=Фермер культур
+gui.killer=Машина-убийца
+gui.farmer=Фермер животных
+gui.generator=Генератор
+gui.notready=Не готов
+gui.finished=Готово
+gui.range=Область
+gui.mining=Добыча
+gui.running=Работа
+gui.waiting=Ожидание
+gui.killing=Атака
+gui.breeding=Разведение
+gui.milking=Доение
+gui.shearing=Стрижка
+gui.harvesting=Уборка урожая
+gui.chopping=Рубка
+gui.planting=Посадка
+gui.full=Заполнено
+gui.producing=Создание
+gui.need.fuel=Нет топлива
+gui.need.energy=Нет энергии
+gui.need.items=Нет необх.элементов
+gui.need.cobble=Нет булыжника
+gui.need.sapling=Доб.саженцы
+gui.need.seeds=Доб.семена
+gui.need.pick=Нет кирки
+gui.need.hoe=Нет мотыги
+gui.need.axe=Нет топора
+gui.need.shovel=Нет лопаты
+gui.need.sword=Нет меча
+
+gui.hi.chopper=Я рублю деревья
+gui.hi.planter=Я сажаю культуры
+gui.hi.miner=Я добываю руды
+gui.hi.killer=Я убиваю мобов
+gui.hi.farmer=Я развожу животных
+gui.addtools=Доб.инструменты!
+
+gui.general=Основные настройки
+gui.general.tooltip=Основные настройки
+gui.rfoptions.tooltip=RF настройки
+gui.rfoptions=RF настройки
+gui.block.tooltip=Отключение блоков
+gui.blocks=Отключение блоков
+gui.upgrades.tooltip=Отключение улучшений
+gui.upgrades=Отключение улучшений

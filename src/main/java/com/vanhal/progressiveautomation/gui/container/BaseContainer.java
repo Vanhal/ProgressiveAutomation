@@ -57,7 +57,7 @@ public class BaseContainer extends Container {
 		if (slotObject!=null && slotObject.getHasStack()) {
 			ItemStack stackInSlot = slotObject.getStack();
             stack = stackInSlot.copy();
-
+            
             if (slot < entity.getSizeInventory()) {
                 if (!this.mergeItemStack(stackInSlot, entity.getSizeInventory(), inventorySlots.size(), true)) {
                 	return null;
@@ -68,20 +68,22 @@ public class BaseContainer extends Container {
             		if (targetSlot instanceof Slot) {
             			Slot theTargetSlot = (Slot) targetSlot;
             			int slotNum = theTargetSlot.slotNumber;
-            			if ( (slotNum >= entity.SLOT_INVENTORY_START) && (entity.SLOT_INVENTORY_START != entity.SLOT_INVENTORY_END) ) {
-            				if (!this.mergeItemStack(stackInSlot, entity.SLOT_INVENTORY_START, entity.SLOT_INVENTORY_END + 1, false)) {
-                         		return null;
-                         	}
-            				foundSlot = true;
-            				break;
-            			} else if ( (theTargetSlot.isItemValid(stackInSlot) ) 
-            					&& (theTargetSlot.getSlotStackLimit()>1) 
-            					&& ( (!theTargetSlot.getHasStack()) || (theTargetSlot.getStack().stackSize < theTargetSlot.getSlotStackLimit()) ) ){
-            				if (!this.mergeItemStack(stackInSlot, slotNum, slotNum+1, false)) {
-                    			return null;
-                    		}
-            				foundSlot = true;
-                    		break;
+            			if (slot!=slotNum) {
+	            			if ( (slotNum >= entity.SLOT_INVENTORY_START) && (entity.SLOT_INVENTORY_START != entity.SLOT_INVENTORY_END) && (entity.SLOT_INVENTORY_START != -1) ) {
+	            				if (!this.mergeItemStack(stackInSlot, entity.SLOT_INVENTORY_START, entity.SLOT_INVENTORY_END + 1, false)) {
+	                         		return null;
+	                         	}
+	            				foundSlot = true;
+	            				break;
+	            			} else if ( (theTargetSlot.isItemValid(stackInSlot) ) 
+	            					&& (theTargetSlot.getSlotStackLimit()>1) 
+	            					&& ( (!theTargetSlot.getHasStack()) || (theTargetSlot.getStack().stackSize < theTargetSlot.getSlotStackLimit()) ) ){
+	            				if (!this.mergeItemStack(stackInSlot, slotNum, slotNum+1, false)) {
+	                    			return null;
+	                    		}
+	            				foundSlot = true;
+	                    		break;
+	            			}
             			}
             		}
             	}

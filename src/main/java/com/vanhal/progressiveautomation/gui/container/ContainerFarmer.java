@@ -5,6 +5,7 @@ import com.vanhal.progressiveautomation.entities.farmer.TileFarmer;
 import com.vanhal.progressiveautomation.gui.slots.SlotFeed;
 import com.vanhal.progressiveautomation.gui.slots.SlotItem;
 import com.vanhal.progressiveautomation.gui.slots.SlotItemDisabledUpgrade;
+import com.vanhal.progressiveautomation.gui.slots.SlotShearsDisabledUpgrade;
 import com.vanhal.progressiveautomation.gui.slots.SlotTool;
 import com.vanhal.progressiveautomation.gui.slots.SlotUpgrades;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -27,7 +28,7 @@ public class ContainerFarmer extends BaseContainer {
 		updateType = ToolHelper.getUpgradeType(farmer.getUpgradeLevel());
 		
 		this.addSlotToContainer(new SlotFeed(farmer, farmer.SLOT_FOOD, 11, 16)); //animal food
-		this.addSlotToContainer(new SlotItemDisabledUpgrade(new ItemStack(Items.shears), UpgradeType.SHEARING, farmer, farmer.SLOT_SHEARS, 37, 52)); //shears
+		this.addSlotToContainer(new SlotShearsDisabledUpgrade(UpgradeType.SHEARING, farmer, farmer.SLOT_SHEARS, 37, 52)); //shears
 		this.addSlotToContainer(new SlotItemDisabledUpgrade(new ItemStack(Items.bucket), UpgradeType.MILKER, farmer, farmer.SLOT_BUCKETS, 63, 52)); //buckets
 		this.addSlotToContainer(new SlotUpgrades(farmer, farmer.SLOT_UPGRADE, 89, 52)); //upgrades
 		
