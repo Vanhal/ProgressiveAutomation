@@ -884,6 +884,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	
 	protected void notifyUpdate() {
 		Block minerBlock = worldObj.getBlock(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, minerBlock);
 	}
 	
@@ -934,11 +935,11 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if (direction == ForgeDirection.NORTH)
 			return new Point2I(x + dy, y - dx);
 		else if (direction == ForgeDirection.SOUTH)
-			return new Point2I(x + dy, y + dx);
+			return new Point2I(x - dy, y + dx);
 		else if (direction == ForgeDirection.EAST)
 			return new Point2I(x + dx, y + dy);
 		else
-			return new Point2I(x - dx, y + dy);
+			return new Point2I(x - dx, y - dy);
 	}
 	
 	//check if machine is powered

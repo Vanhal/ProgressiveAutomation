@@ -19,6 +19,7 @@ public class BlockKiller extends BaseBlock {
 
 	public BlockKiller(int level) {
 		super("Killer", level);
+		this.rangeCount = 0;
 	}
 	
 	public static final Block firstTier = Blocks.furnace;

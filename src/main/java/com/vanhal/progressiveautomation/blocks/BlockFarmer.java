@@ -25,6 +25,7 @@ public class BlockFarmer extends BaseBlock {
 
 	public BlockFarmer(int level) {
 		super("Farmer", level);
+		this.rangeCount = 1;
 	}
 	
 	public static final Block firstTier = Blocks.furnace;

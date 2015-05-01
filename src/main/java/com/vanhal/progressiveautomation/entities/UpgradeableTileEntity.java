@@ -77,6 +77,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 
 	@Override
 	public Integer getUpgradeAmount(UpgradeType type) {
+		if (!installedUpgrades.containsKey(type)) return 0;
 		Integer upgradeAmount = installedUpgrades.get(type);
 		return upgradeAmount != null ? upgradeAmount : 0;
 	}
@@ -96,6 +97,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		}
 		tag.setInteger(type.name(), amount);
 		addPartialUpdate("installedUpgrades", tag);
+		notifyUpdate();
 	}
 
 	@Override

@@ -48,8 +48,12 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public String machineType;
 	public int GUIid = -1;
 	
+	protected int rangeCount = -1;
+	
 	protected int blockLevel = ToolHelper.LEVEL_WOOD;
 	protected IIcon[] blockIcons = new IIcon[6];
+	
+	protected IIcon blankSide;
 	
 	public static String returnLevelName(int level) {
 		if (level==ToolHelper.LEVEL_STONE) {
@@ -109,6 +113,21 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	//this can be used to set the side fromthe tile entity
 	@SideOnly(Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+		if ( (rangeCount>=0) && (side>=2) && (side<=5) ) {
+			if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
+				UpgradeableTileEntity tileEntity = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
+				int range = tileEntity.getRange() + rangeCount;
+
+				ForgeDirection dir = tileEntity.facing;
+				if ((side==dir.ordinal())&&(range<2)) return blankSide;
+				dir = this.nextFace(dir);
+				if ((side==dir.ordinal())&&(range<4)) return blankSide;
+				dir = this.nextFace(dir);
+				if ((side==dir.ordinal())&&(range<6)) return blankSide;
+				dir = this.nextFace(dir);
+				if ((side==dir.ordinal())&&(range<8)) return blankSide;
+			}
+		}
         return this.getIcon(side, world.getBlockMetadata(x, y, z));
     }
 	
@@ -121,6 +140,8 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		blockIcons[3] = register.registerIcon(iconPrefix + "_Side");
 		blockIcons[4] = register.registerIcon(iconPrefix + "_Side");
 		blockIcons[5] = register.registerIcon(iconPrefix + "_Side");
+		
+		blankSide = register.registerIcon(Ref.MODID + ":" + getLevelName() + "_Side");
     }
 	
 	@SideOnly(Side.CLIENT)
@@ -242,8 +263,17 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		else if (tileEntity.facing == ForgeDirection.EAST) tileEntity.facing = ForgeDirection.SOUTH;
 		else if (tileEntity.facing == ForgeDirection.SOUTH) tileEntity.facing = ForgeDirection.WEST;
 		else if (tileEntity.facing == ForgeDirection.WEST) tileEntity.facing = ForgeDirection.NORTH;
-		//ProgressiveAutomation.logger.info(chopper.facing.toString());
+		//ProgressiveAutomation.logger.info(tileEntity.facing.toString());
+		worldObj.markBlockForUpdate(x, y, z);
         return true;
     }
+	
+	protected ForgeDirection nextFace(ForgeDirection dir) {
+		if (dir == ForgeDirection.NORTH) return ForgeDirection.EAST;
+		else if (dir == ForgeDirection.EAST) return ForgeDirection.SOUTH;
+		else if (dir == ForgeDirection.SOUTH) return ForgeDirection.WEST;
+		else if (dir == ForgeDirection.WEST) return ForgeDirection.NORTH;
+		return dir;
+	}
 	
 }
