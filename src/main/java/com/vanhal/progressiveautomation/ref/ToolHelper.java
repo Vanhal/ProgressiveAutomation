@@ -124,7 +124,8 @@ public class ToolHelper {
 					return TYPE_HOE;
 				} else if ( (name.substring(14).equalsIgnoreCase("Broadsword")) ||
 						(name.substring(14).equalsIgnoreCase("Rapier")) ||
-						(name.substring(14).equalsIgnoreCase("Cutlass")) ) {
+						(name.substring(14).equalsIgnoreCase("Cutlass")) ||
+						(name.substring(14).equalsIgnoreCase("Cleaver")) ) {
 					return TYPE_SWORD;
 				}
 			}
