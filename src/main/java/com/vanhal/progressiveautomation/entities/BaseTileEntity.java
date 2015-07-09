@@ -884,7 +884,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public int getMaxEnergyStored(EnumFacing from) {
-		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
+		if (slots[SLOT_FUEL] != null && slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
 			return getEngine().getMaxCharge();
 		} else {
 			return 0;
