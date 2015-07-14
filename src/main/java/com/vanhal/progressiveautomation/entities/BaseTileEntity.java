@@ -819,16 +819,18 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 			//try the internal inventory
 			//We'll need to make a copy of it so that it doesn't duplicate at this point
-			ItemStack item = slots[slot].copy();
-			slots[slot] = null;
-			
-			if (item!=null) {
-				addToInventory(item);
-			}
-			
-			//finally if it hasn't already been dropped, drop it
-			if (item!=null) {
-				dropItem(item);
+			if (slots[slot]!=null) {
+				ItemStack item = slots[slot].copy();
+				slots[slot] = null;
+				
+				if (item!=null) {
+					addToInventory(item);
+				}
+				
+				//finally if it hasn't already been dropped, drop it
+				if (item!=null) {
+					dropItem(item);
+				}
 			}
 			
 		}
