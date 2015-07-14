@@ -31,7 +31,10 @@ public class GUIChopper extends BaseGUI {
 		drawString(StringHelper.localize("gui.chopper"), 5, GRAY);
 		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(chopper.getRange()), infoScreenX, infoScreenW, infroScreenY3, (chopper.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		
-		if (chopper.isLooked()) {
+		if (chopper.isInvalidTool()) {
+			drawString(getTextLine(1, "gui.invalidtool.1"), infoScreenX, infoScreenW, infroScreenY1, ORANGE);
+			drawString(getTextLine(2, "gui.invalidtool.2"), infoScreenX, infoScreenW, infroScreenY2, ORANGE);
+		} else if (chopper.isLooked()) {
 			boolean readyToChop = false;
 			if ( (!chopper.hasFuel()) && (!chopper.isBurning()) ) {
 				String fuelString = "gui.need.fuel";

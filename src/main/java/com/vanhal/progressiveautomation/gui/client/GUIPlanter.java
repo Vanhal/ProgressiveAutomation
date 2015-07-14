@@ -31,7 +31,10 @@ public class GUIPlanter extends BaseGUI {
 		drawString(StringHelper.localize("gui.planter"), 5, GRAY);
 		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(planter.getRange()), infoScreenX, infoScreenW, infroScreenY3, (planter.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		
-		if (planter.isLooked()) {
+		if (planter.isInvalidTool()) {
+			drawString(getTextLine(1, "gui.invalidtool.1"), infoScreenX, infoScreenW, infroScreenY1, ORANGE);
+			drawString(getTextLine(2, "gui.invalidtool.2"), infoScreenX, infoScreenW, infroScreenY2, ORANGE);
+		} else if (planter.isLooked()) {
 			boolean readyToPlant = false;
 			if ( (!planter.hasFuel()) && (!planter.isBurning()) ) {
 				String fuelString = "gui.need.fuel";

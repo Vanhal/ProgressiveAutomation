@@ -18,6 +18,8 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 
 	private Map<UpgradeType, Integer> installedUpgrades;
 	private Set<UpgradeType> allowedUpgrades;
+	
+	protected int advancedToolFlash = 0;
 
 	public UpgradeableTileEntity(int numSlots) {
 		super(numSlots);
@@ -34,6 +36,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 			tag.setInteger(mapEntry.getKey().name(), mapEntry.getValue());
 		}
 		nbt.setTag("installedUpgrades", tag);
+		nbt.setInteger("advancedToolFlash", advancedToolFlash);
 	}
 
 	public void readCommonNBT(NBTTagCompound nbt) {
@@ -49,6 +52,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 				installedUpgrades.put(UpgradeType.valueOf(upgradeName), tag.getInteger(upgradeName));
 			}
 		}
+		if (nbt.hasKey("advancedToolFlash")) advancedToolFlash = nbt.getInteger("advancedToolFlash");
 	}
 
 	/**
@@ -67,6 +71,14 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 			installedUpgrades.put(UpgradeType.COBBLE_GEN, nbt.getInteger("hasCobbleUpgrade"));
 		if (nbt.hasKey("hasFillerUpgrade") && nbt.getInteger("hasFillerUpgrade") > 0)
 			installedUpgrades.put(UpgradeType.FILLER, nbt.getInteger("hasFillerUpgrade"));
+	}
+	
+	public void setInvalidTool() {
+		advancedToolFlash = 30;
+	}
+	
+	public boolean isInvalidTool() {
+		return (advancedToolFlash>0);
 	}
 	
 	/* IUpgradeable methods */
@@ -179,28 +191,32 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 				slots[SLOT_UPGRADE] = null;
 			}
 		}
+		if (advancedToolFlash>0) {
+			advancedToolFlash--;
+			if (advancedToolFlash<0) advancedToolFlash = 0;
+		}
 	}
 	
 	//override isided stuff
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if ( (slot==SLOT_PICKAXE) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_PICKAXE ) ) {
-    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
+    		if ( (ToolHelper.getLevel(stack) <= PAConfig.getToolConfigLevel(getUpgradeLevel())) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
     	} else if ( (slot==SLOT_SHOVEL) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_SHOVEL ) ) {
-    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
+    		if ( (ToolHelper.getLevel(stack) <= PAConfig.getToolConfigLevel(getUpgradeLevel())) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
      	} else if ( (slot==SLOT_AXE) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_AXE ) ) {
-    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
+    		if ( (ToolHelper.getLevel(stack) <= PAConfig.getToolConfigLevel(getUpgradeLevel())) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
      	} else if ( (slot==SLOT_SWORD) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_SWORD ) ) {
-    		if ( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
+    		if ( (ToolHelper.getLevel(stack) <= PAConfig.getToolConfigLevel(getUpgradeLevel())) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
      	} else if ( (slot==SLOT_HOE) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_HOE ) ) {
-    		if( (ToolHelper.getLevel(stack) <= getUpgradeLevel()) && (!ToolHelper.isBroken(stack)) ) {
+    		if( (ToolHelper.getLevel(stack) <= PAConfig.getToolConfigLevel(getUpgradeLevel())) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
     		}
      	} else if ( (slot==SLOT_UPGRADE) && (stack.isItemEqual(ToolHelper.getUpgradeType(getUpgradeLevel()))) ) {
