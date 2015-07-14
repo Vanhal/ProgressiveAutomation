@@ -49,6 +49,7 @@ public class PAConfig {
 	public static boolean allowPotatos;
 	public static boolean allowWrench;
 	public static boolean destroyTools;
+	public static boolean shearTrees;
 	
 	
 	public static void init(Configuration handle) {
@@ -93,7 +94,8 @@ public class PAConfig {
 		enableWitherTools = config.getBoolean("witherTools", "general", true, "Allow Wither tools and resources to create them");
 		allowWrench = config.getBoolean("allowWrench", "general", true, "Allows the wrench, you've got to be seriously evil to not allow this!");
 		destroyTools = config.getBoolean("destroyTools", "general", true, "Changing to false will make the machines spit a fully broken vanilla tool into it's inventory");
-		
+		shearTrees = config.getBoolean("shearTrees", "general", true, "Allow the chopper to take a shearing upgrade in order to have a sheer to shear leaves");
+
 		
 		//enable blocks		
 		minerEnabled = config.getBoolean("miner", "blocks", true, "Miner Block is enabled (requires restart)");

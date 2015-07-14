@@ -220,4 +220,10 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	protected void setAllowedUpgrades(UpgradeType first, UpgradeType... rest) {
 		this.allowedUpgrades = EnumSet.of(first, rest);
 	}
+	
+	protected void addAllowedUpgrade(UpgradeType upgrade) {
+		if (allowedUpgrades!=null) {
+			this.allowedUpgrades.add(upgrade);
+		}
+	}
 }

@@ -69,5 +69,8 @@ public class GUIChopper extends BaseGUI {
 	
 	protected void drawElements() {
 		drawFlame(chopper.getPercentDone(), 10, 34);
+		if (chopper.hasUpgrade(UpgradeType.SHEARING)) {
+			drawTexturedModalRect(guiLeft + 62, guiTop + 51, 238, 0, 18, 18);
+		}
 	}
 }

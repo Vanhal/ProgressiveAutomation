@@ -2,11 +2,14 @@ package com.vanhal.progressiveautomation.entities.chopper;
 
 import java.util.ArrayList;
 
+import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,16 +49,30 @@ public class TileChopper extends UpgradeableTileEntity {
 	protected int choppingTime = 0;
 	
 	public int SLOT_SAPLINGS = 1;
+	public int SLOT_SHEARS = 4;
 	
 	public TileChopper() {
-		super(12);
+		super(13);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
 		setAllowedUpgrades(UpgradeType.WOODEN, UpgradeType.WITHER);
+		allowSheer();
+		
 		forceRecalculate = true;
 		
 		//slots
 		SLOT_AXE = 2;
 		SLOT_UPGRADE = 3;
+	}
+	
+	protected boolean removeShears = false;
+	protected void allowSheer() {
+		if ( (PAConfig.shearTrees) && (PAConfig.allowShearingUpgrade) ) {
+			if (!isAllowedUpgrade(UpgradeType.SHEARING)) {
+				addAllowedUpgrade(UpgradeType.SHEARING);
+			}
+		} else {
+			removeShears = true;
+		}
 	}
 	
 	@Override
@@ -109,6 +126,11 @@ public class TileChopper extends UpgradeableTileEntity {
 		
 		if (blockList.size() > 0) {
 			chopping = true;
+		}
+		if (removeShears) {
+			if (slots[SLOT_SHEARS]!=null) slots[SLOT_SHEARS] = null;
+			if (hasUpgrade(UpgradeType.SHEARING)) removeUpgradeCompletely(UpgradeType.SHEARING);
+			removeShears = false;
 		}
 	}
 	
@@ -191,11 +213,23 @@ public class TileChopper extends UpgradeableTileEntity {
 						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[SLOT_AXE]);
 					}
 	
+					
 					//then break the block
 					Block actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
 					int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
-					ArrayList<ItemStack> items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(),
+					
+					ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+					
+					if ( (!targetTree) && (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+						items.add(new ItemStack(Item.getItemFromBlock(actualBlock), 1, metaData));
+						if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
+							destroyTool(SLOT_SHEARS);
+						}
+					} else {
+						items = actualBlock.getDrops(worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ(),
 							metaData, fortuneLevel);
+					}
+					
 					//get the drops
 					for (ItemStack item : items) {
 						addToInventory(item);
@@ -434,7 +468,9 @@ public class TileChopper extends UpgradeableTileEntity {
 
 	/* ISided Stuff */
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot == SLOT_SAPLINGS) && (checkSapling(stack)) ) {
+		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.shears) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+			return true;
+		} else if ( (slot == SLOT_SAPLINGS) && (checkSapling(stack)) ) {
     		return true;
     	}
 		return super.isItemValidForSlot(slot, stack);

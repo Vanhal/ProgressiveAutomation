@@ -857,7 +857,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public int getEnergyStored(ForgeDirection from) {
-		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
+		if ( hasEngine() ) {
 			return getEngine().getCharge(slots[SLOT_FUEL]);
 		} else {
 			return 0;
@@ -865,7 +865,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public int getMaxEnergyStored(ForgeDirection from) {
-		if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
+		if ( hasEngine() ) {
 			return getEngine().getMaxCharge();
 		} else {
 			return 0;
