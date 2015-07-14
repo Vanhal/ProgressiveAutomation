@@ -336,8 +336,11 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 								addPartialUpdate("BurnLevel", burnLevel);
 								
 								if (slots[SLOT_FUEL].getItem().hasContainerItem(slots[SLOT_FUEL])) {
-									
 									slots[SLOT_FUEL] = slots[SLOT_FUEL].getItem().getContainerItem(slots[SLOT_FUEL]);
+									//if the container is no longer fuel then pump it into the internal inventory
+									if (!isFuel()) {
+										moveToInventoryOrDrop(SLOT_FUEL);
+									}
 								} else {
 									slots[SLOT_FUEL].stackSize--;
 									if (slots[SLOT_FUEL].stackSize==0) {
@@ -747,7 +750,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 	public boolean addToInventory(ItemStack item) {
 		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return false;
-		//check to see if this item is something that's used
+		//check to see if this item is something that's used		
 		int extraSlot = extraSlotCheck(item);
 		if (extraSlot>=0) {
 			item = moveItemToSlot(item, extraSlot);
@@ -775,9 +778,11 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if ( (item != null) && (item.stackSize>0) ) {
 			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 				if (slots[i]==null) {
-					slots[i] = item;
-					item = null;
-					return true;
+					if (this.isItemValidForSlot(i, item)) {
+						slots[i] = item;
+						item = null;
+						return true;
+					}
 				}
 			}
 		}
@@ -785,6 +790,51 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			item = null;
 		}
 		//if we still have an item, drop in on the ground
+		if (item!=null) {
+			dropItem(item);
+			item = null;
+		}
+
+		return false;
+	}
+	
+	public void moveToInventoryOrDrop(int slot) {
+		if (!worldObj.isRemote) {
+			//move directly to an output side first if possible
+			for (int x = 0; x < 6; x++) {
+				if (sides[x] == WrenchModes.Mode.Output) {
+					ForgeDirection testSide = ForgeDirection.getOrientation(x);
+					if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof ISidedInventory) {
+						ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
+						if (slots[slot]!=null) {
+							addtoSidedExtInventory(externalInv, slot);
+						}
+					} else if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof IInventory) {
+						IInventory externalInv = (IInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
+						if (slots[slot]!=null) {
+							addtoExtInventory(externalInv, slot);
+						}
+					}
+				}
+			}
+			//try the internal inventory
+			//We'll need to make a copy of it so that it doesn't duplicate at this point
+			ItemStack item = slots[slot].copy();
+			slots[slot] = null;
+			
+			if (item!=null) {
+				addToInventory(item);
+			}
+			
+			//finally if it hasn't already been dropped, drop it
+			if (item!=null) {
+				dropItem(item);
+			}
+			
+		}
+	}
+	
+	public void dropItem(ItemStack item) {
 		if (item!=null) {
 			EntityItem entItem = new EntityItem(worldObj, xCoord + 0.5f, yCoord + 1.5f, zCoord + 0.5f, item);
 			entItem.delayBeforeCanPickup = 1;
@@ -794,10 +844,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			entItem.motionZ = (double)((float)worldObj.rand.nextGaussian() * f3);
 			worldObj.spawnEntityInWorld(entItem);
 		}
-
-		return false;
 	}
-	
 	
 	//the following are for handling energy
 	public boolean hasEngine() {
