@@ -828,7 +828,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 				}
 				
 				//finally if it hasn't already been dropped, drop it
-				if (item!=null) {
+				if ( (item!=null) && ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) ) {
 					dropItem(item);
 				}
 			}
