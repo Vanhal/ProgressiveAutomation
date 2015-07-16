@@ -464,6 +464,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if ( (slot==SLOT_FUEL) && (getItemBurnTime(stack)>0) && (ToolHelper.getType(stack)==-1) ) {
      		return true;
     	}
+		if ( ( (slot >= SLOT_INVENTORY_START) && (slot <= SLOT_INVENTORY_END) ) && (SLOT_INVENTORY_START!=SLOT_INVENTORY_END) ) {
+			return true;
+		}
 		return false;
 	}
 	
