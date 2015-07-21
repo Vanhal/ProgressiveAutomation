@@ -347,4 +347,10 @@ public class TileFarmer extends UpgradeableTileEntity {
 		return super.isItemValidForSlot(slot, stack);
 	}
 	
+	@Override
+	protected Point3I adjustedSpiral(int n) {
+		Point3I point = super.adjustedSpiral(n + 1);
+		return point;
+	}
+	
 }

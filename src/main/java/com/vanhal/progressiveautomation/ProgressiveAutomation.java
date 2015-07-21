@@ -15,6 +15,7 @@ import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessa
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.events.EventPlayers;
+import com.vanhal.progressiveautomation.events.EventRenderWorld;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
@@ -84,6 +85,7 @@ public class ProgressiveAutomation {
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 		FMLCommonHandler.instance().bus().register(instance);
+		MinecraftForge.EVENT_BUS.register(new EventRenderWorld());
 	}
 	
 	@EventHandler

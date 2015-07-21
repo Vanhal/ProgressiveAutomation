@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.entities;
 import com.google.common.base.Enums;
 import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -10,6 +11,12 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.util.Point2I;
+import com.vanhal.progressiveautomation.util.Point3I;
+import com.vanhal.progressiveautomation.events.EventRenderWorld;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 import java.util.*;
 
@@ -20,11 +27,17 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	private Set<UpgradeType> allowedUpgrades;
 	
 	protected int advancedToolFlash = 0;
+	
+	protected boolean showRange = false;
+	
+	protected int displayRangeCount = 0;
+	protected static final int displayTicksPerBlock = 4;
 
 	public UpgradeableTileEntity(int numSlots) {
 		super(numSlots);
 		installedUpgrades = new EnumMap<UpgradeType, Integer>(UpgradeType.class);
 		allowedUpgrades = Collections.emptySet();
+		EventRenderWorld.addMachine(this);
 	}
 	
 	public void writeCommonNBT(NBTTagCompound nbt) {
@@ -37,6 +50,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		}
 		nbt.setTag("installedUpgrades", tag);
 		nbt.setInteger("advancedToolFlash", advancedToolFlash);
+		nbt.setBoolean("showRange", showRange);
 	}
 
 	public void readCommonNBT(NBTTagCompound nbt) {
@@ -53,6 +67,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 			}
 		}
 		if (nbt.hasKey("advancedToolFlash")) advancedToolFlash = nbt.getInteger("advancedToolFlash");
+		if (nbt.hasKey("showRange")) showRange = nbt.getBoolean("showRange");
 	}
 
 	/**
@@ -195,6 +210,20 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 			advancedToolFlash--;
 			if (advancedToolFlash<0) advancedToolFlash = 0;
 		}
+		
+		//code for showing the range of a machine
+		if (worldObj.isRemote) {
+			displayRangeCount++;
+			if ( Math.floor(displayRangeCount/displayTicksPerBlock) >= getRange()) {
+				displayRangeCount = 0;
+			}
+		}
+	}
+	
+	//this will return the current block to render to show the range of a machine
+	public Point3I getRangeBlock() {
+		int block = (int) Math.floor(displayRangeCount/displayTicksPerBlock);
+		return adjustedSpiral(block);
 	}
 	
 	//override isided stuff
@@ -241,5 +270,18 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		if (allowedUpgrades!=null) {
 			this.allowedUpgrades.add(upgrade);
 		}
+	}
+	
+	protected Point3I adjustedSpiral(int n) {
+		Point2I spiralPoint = this.spiral(n + 1, xCoord, zCoord);
+		return new Point3I(spiralPoint.getX(), yCoord, spiralPoint.getY());
+	}
+	
+	public boolean displayRange() {
+		return this.showRange;
+	}
+	
+	public void toggleRange() {
+		this.showRange = !showRange;
 	}
 }

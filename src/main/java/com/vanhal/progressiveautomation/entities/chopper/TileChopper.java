@@ -497,5 +497,11 @@ public class TileChopper extends UpgradeableTileEntity {
 			return true;
 		return false;
 	}
+	
+	@Override
+	protected Point3I adjustedSpiral(int n) {
+		Point3I point = super.adjustedSpiral(n + 1);
+		return point;
+	}
 
 }

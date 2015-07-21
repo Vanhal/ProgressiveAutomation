@@ -11,4 +11,14 @@ public class ClientProxy extends Proxy {
 	public void registerEntities() {
 		super.registerEntities();
 	}
+	
+	@Override
+	public boolean isClient() {
+		return true;
+	}
+	
+	@Override
+	public boolean isServer() {
+		return false;
+	}
 }
