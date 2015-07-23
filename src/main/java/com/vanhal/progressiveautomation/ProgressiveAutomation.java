@@ -85,7 +85,7 @@ public class ProgressiveAutomation {
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 		FMLCommonHandler.instance().bus().register(instance);
-		MinecraftForge.EVENT_BUS.register(new EventRenderWorld());
+		proxy.init();
 	}
 	
 	@EventHandler

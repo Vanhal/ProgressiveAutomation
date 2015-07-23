@@ -110,4 +110,16 @@ public class Proxy {
 	public boolean isServer() {
 		return true;
 	}
+	
+	public void preInit() {
+		
+	}
+	
+	public void init() {
+		
+	}
+	
+	public void postInit() {
+		
+	}
 }

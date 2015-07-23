@@ -12,6 +12,8 @@ import com.vanhal.progressiveautomation.util.Point3I;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +27,7 @@ import net.minecraftforge.event.world.WorldEvent.Unload;
  * That code, and the code based of it retains its original copyright and licence.
  */
 
+@SideOnly(Side.CLIENT)
 public class EventRenderWorld {
 	
 	public static List<UpgradeableTileEntity> machines = new ArrayList<UpgradeableTileEntity>();
@@ -66,10 +69,10 @@ public class EventRenderWorld {
 	
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public void renderWorldLast(RenderWorldLastEvent e) {
+		if (ProgressiveAutomation.proxy.isServer()) return;
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		boolean holdingWrench = false;
 		if(player.inventory.getCurrentItem() == null) return;
-		if (ProgressiveAutomation.proxy.isServer()) return;
 
 		if (player.inventory.getCurrentItem().getItem().equals(PAItems.wrench)) holdingWrench = true;
 		

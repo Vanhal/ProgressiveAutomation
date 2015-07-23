@@ -37,7 +37,9 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		super(numSlots);
 		installedUpgrades = new EnumMap<UpgradeType, Integer>(UpgradeType.class);
 		allowedUpgrades = Collections.emptySet();
-		EventRenderWorld.addMachine(this);
+		if (ProgressiveAutomation.proxy.isClient()) {
+			EventRenderWorld.addMachine(this);
+		}
 	}
 	
 	public void writeCommonNBT(NBTTagCompound nbt) {
