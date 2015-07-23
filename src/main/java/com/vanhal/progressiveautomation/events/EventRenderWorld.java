@@ -114,6 +114,7 @@ public class EventRenderWorld {
 	private int[] colors = {15, 26, 46, 52, 76, 89, 113, 156, 188, 204, 219, 231, 241};
 	
 	private float randomColour(int c) {
+		c = Math.abs(c);
 		int remainder = (int) Math.floor(c % colors.length);
 		return (float)colors[remainder]/(float)255;
 	}
