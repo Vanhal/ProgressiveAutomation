@@ -460,11 +460,17 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 	public void closeInventory() { }
 
+	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		return this.isItemValidForSlot(slot, stack, false);
+	}
+	
+	public boolean isItemValidForSlot(int slot, ItemStack stack, boolean internalStorage) {
 		if ( (slot==SLOT_FUEL) && (getItemBurnTime(stack)>0) && (ToolHelper.getType(stack)==-1) ) {
      		return true;
     	}
-		if ( ( (slot >= SLOT_INVENTORY_START) && (slot <= SLOT_INVENTORY_END) ) && (SLOT_INVENTORY_START!=SLOT_INVENTORY_END) ) {
+		if ( ( (slot >= SLOT_INVENTORY_START) && (slot <= SLOT_INVENTORY_END) ) && 
+				(SLOT_INVENTORY_START!=SLOT_INVENTORY_END) && (internalStorage) ) {
 			return true;
 		}
 		return false;
@@ -781,7 +787,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if ( (item != null) && (item.stackSize>0) ) {
 			for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 				if (slots[i]==null) {
-					if (this.isItemValidForSlot(i, item)) {
+					if (this.isItemValidForSlot(i, item, true)) {
 						slots[i] = item;
 						item = null;
 						return true;

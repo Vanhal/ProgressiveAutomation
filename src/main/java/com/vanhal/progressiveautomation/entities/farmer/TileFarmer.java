@@ -335,9 +335,21 @@ public class TileFarmer extends UpgradeableTileEntity {
 		}
 	}
 	
+	public static boolean isFeed(ItemStack itemStack) {
+		if (itemStack==null) return false;
+		if (itemStack.getItem()==null) return false;
+		if (itemStack.getItem() == Items.wheat) return true;
+		if (itemStack.getItem() == Items.wheat_seeds) return true;
+		if (itemStack.getItem() == Items.carrot) return true;
+		return false;
+	}
+	
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if (stack == null) return false;
+		if ( (slot == this.SLOT_FOOD) && (this.isFeed(stack)) ) {
+			return true;
+		}
 		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.shears) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 			return true;
 		} else if ( (slot == this.SLOT_BUCKETS) && (stack.getItem() == Items.bucket) && (hasUpgrade(UpgradeType.MILKER)) ) {

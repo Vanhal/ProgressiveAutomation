@@ -216,10 +216,13 @@ public class TileCrafter extends UpgradeableTileEntity {
 	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, int side) {
 		if (sides[side] == WrenchModes.Mode.Disabled) return false;
-		if ( (sides[side] == WrenchModes.Mode.Normal) || (sides[side] == WrenchModes.Mode.Output) ) {
+		if ( (sides[side] == WrenchModes.Mode.Output) || (sides[side] == WrenchModes.Mode.Normal) ) {
 			if (slot==OUTPUT_SLOT) {
 				return true;
-			} else if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) && (side!=0) ) {
+			}
+		}
+		if (sides[side] == WrenchModes.Mode.Input) {
+			if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
 				return true;
 			}
 		}
