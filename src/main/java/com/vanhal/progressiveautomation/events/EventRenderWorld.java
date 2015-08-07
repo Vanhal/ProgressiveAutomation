@@ -90,7 +90,9 @@ public class EventRenderWorld {
 		GL11.glShadeModel(GL11.GL_FLAT);
 
 		for (UpgradeableTileEntity machine : machines) {
+			if (machine==null) continue;
 			if (((TileEntity)machine).isInvalid()) continue;
+			if (machine.getWorldObj()==null) continue;
 			if (!machine.getWorldObj().isRemote) continue;
 			if (!holdingWrench && !machine.displayRange()) continue;
 
