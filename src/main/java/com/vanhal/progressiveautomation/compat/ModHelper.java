@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.mods.AgriCraft;
 import com.vanhal.progressiveautomation.compat.mods.GrowOres;
+import com.vanhal.progressiveautomation.compat.mods.ImmersiveEngineering;
 import com.vanhal.progressiveautomation.compat.mods.MFR;
 import com.vanhal.progressiveautomation.compat.mods.Pams;
 import com.vanhal.progressiveautomation.compat.mods.Pneumaticcraft;
@@ -25,6 +26,7 @@ public class ModHelper {
 	private static ArrayList<BaseMod> modsLoaded = new ArrayList<BaseMod>();
 	
 	private static void registerMods() {
+		registerMod(new ImmersiveEngineering());
 		registerMod(new Pams());
 		registerMod(new Pneumaticcraft());
 		registerMod(new MFR());
