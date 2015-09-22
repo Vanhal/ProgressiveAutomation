@@ -14,9 +14,10 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
     }
 }
-ENV = System.getenv()
+def ENV = System.getenv()
 
 ext.configFile = file "build.properties"
+
 
 configFile.withReader {
     // read config. it shall from now on be referenced as simply config or as project.config
@@ -30,6 +31,10 @@ apply plugin: 'forge'
 version = config.mod_version + "." + config.buildNum
 group= "com.vanhal.progressiveautomation" 
 archivesBaseName = "ProgressiveAutomation-" + config.minecraft_version
+
+jar {
+    exclude('cyano/**')
+}
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
