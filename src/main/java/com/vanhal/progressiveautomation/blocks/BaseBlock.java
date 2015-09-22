@@ -160,6 +160,42 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
 				.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Ref.MODID + ":" + name, "inventory"));
 		}
+		if(net.minecraftforge.fml.common.Loader.isModLoaded("poweradvantage")){
+			cyano.poweradvantage.api.modsupport.LightWeightPowerRegistry.registerLightWeightPowerAcceptor(this, 
+					new cyano.poweradvantage.api.modsupport.ILightWeightPowerAcceptor(){
+
+				public boolean canAcceptEnergyType(cyano.poweradvantage.api.ConduitType powerType) {
+					return cyano.poweradvantage.api.ConduitType.areSameType(powerType, "electricity");
+				}
+
+				public float getEnergyDemand(TileEntity yourMachine,
+						cyano.poweradvantage.api.ConduitType powerType) {
+					if(yourMachine instanceof cofh.api.energy.IEnergyReceiver) {
+						cofh.api.energy.IEnergyReceiver m = (cofh.api.energy.IEnergyReceiver)yourMachine;
+						for(EnumFacing dir : EnumFacing.values()){
+							if(m.canConnectEnergy(dir)){
+								return m.getMaxEnergyStored(dir) - m.getEnergyStored(dir);
+							}
+						}
+					}
+					return 0;
+				}
+
+				public float addEnergy(TileEntity yourMachine,
+						float amountAdded, cyano.poweradvantage.api.ConduitType powerType) {
+					if(yourMachine instanceof cofh.api.energy.IEnergyReceiver) {
+						cofh.api.energy.IEnergyReceiver m = (cofh.api.energy.IEnergyReceiver)yourMachine;
+						for(EnumFacing dir : EnumFacing.values()){
+							if(m.canConnectEnergy(dir)){
+								return m.receiveEnergy(dir, (int)amountAdded, false);
+							}
+						}
+					}
+					return 0;
+				}
+
+			});
+		}
 	}
 	
 	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
