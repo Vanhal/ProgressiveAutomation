@@ -50,6 +50,7 @@ public class PAConfig {
 	public static boolean allowWrench;
 	public static boolean destroyTools;
 	public static boolean shearTrees;
+	public static int maxRangeUpgrades;
 	
 	//machine levels
 	public static int woodLevel;
@@ -130,6 +131,8 @@ public class PAConfig {
 		witherMultiplier = config.getInt("witherMultiplier", "upgrades", 4, 2, 10, "How much the wither upgrade extends the machines. (How much multiplies the upgrades by)");
 		
 		allowKillPlayer = config.getBoolean("killPlayer", "upgrades", true, "Allow the Killer to kill players");
+		
+		maxRangeUpgrades = config.getInt("maxRangeUpgrades", "upgrades", Integer.MAX_VALUE, 0, Integer.MAX_VALUE, "Max amount of range upgrades that can be put into a machine");
 		
 		//toolLevels
 		woodLevel = config.getInt("woodLevel", "toolLevels", ToolHelper.LEVEL_WOOD, 0, 100, "The max mining level of the tool that wooden machines will take");
