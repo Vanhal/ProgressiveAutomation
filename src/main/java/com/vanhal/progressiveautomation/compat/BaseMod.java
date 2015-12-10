@@ -40,6 +40,14 @@ public class BaseMod {
 		return false;
 	}
 	
+	public boolean isLog(ItemStack item) {
+		return false;
+	}
+	
+	public boolean isLeaf(ItemStack item) {
+		return false;
+	}
+	
 	public boolean isPlantible(ItemStack item) {
 		return false;
 	}

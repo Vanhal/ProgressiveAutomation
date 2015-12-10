@@ -9,6 +9,7 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -356,18 +357,20 @@ public class TileChopper extends UpgradeableTileEntity {
 	protected boolean isLeaf(String type) {
 		if ( (type.equalsIgnoreCase("treeLeaves")) || (type.equalsIgnoreCase("leavesRubber")) ) {
 			return true;
-		}
+		} 
 		return false;
 	}
 	
 	protected String testBlock(int x, int y, int z) {
 		Block _block = worldObj.getBlock(x, y, z);
 		int metaData = worldObj.getBlockMetadata(x, y, z);
-		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), metaData);
+		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), 1, metaData);
 		int ordID = OreDictionary.getOreID(testItem);
 		if (ordID>=0) {
 			return OreDictionary.getOreName(ordID);
 		} else {
+			if (ModHelper.isLeaf(testItem)) return "treeLeaves";
+			if (ModHelper.isLog(testItem)) return "logWood";
 			return "Unknown";
 		}
 	}
@@ -375,7 +378,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	protected boolean testOre(int OreID, int x, int y, int z) {
 		Block _block = worldObj.getBlock(x, y, z);
 		int metaData = worldObj.getBlockMetadata(x, y, z);
-		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), metaData);
+		ItemStack testItem = new ItemStack(Item.getItemFromBlock(_block), 1, metaData);
 		int[] ordIDs = OreDictionary.getOreIDs(testItem);
 		return false;
 	}
@@ -399,7 +402,10 @@ public class TileChopper extends UpgradeableTileEntity {
 				//ProgressiveAutomation.logger.debug("Plant: "+p1.getX()+", "+yCoord+", "+p1.getY());
 				if (Block.getBlockFromItem(slots[SLOT_SAPLINGS].getItem()) instanceof IPlantable) {
 					Block tree = (Block)Block.getBlockFromItem(slots[SLOT_SAPLINGS].getItem());
-					if (tree.canPlaceBlockAt(worldObj, p1.getX(), yCoord, p1.getY())) {
+					
+					if ( (tree.canPlaceBlockAt(worldObj, p1.getX(), yCoord, p1.getY())) && 
+							(tree.canBlockStay(worldObj, p1.getX(), yCoord, p1.getY())) &&
+							(worldObj.getBlock(p1.getX(), yCoord, p1.getY()).isReplaceable(worldObj, p1.getX(), yCoord, p1.getY())) ) {
 						if (doAction) {
 							worldObj.setBlock(p1.getX(), yCoord, p1.getY(), tree, slots[SLOT_SAPLINGS].getItem().getDamage(slots[SLOT_SAPLINGS]), 7);
 							slots[SLOT_SAPLINGS].stackSize--;

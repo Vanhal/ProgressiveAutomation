@@ -17,6 +17,7 @@ import com.vanhal.progressiveautomation.compat.mods.MFR;
 import com.vanhal.progressiveautomation.compat.mods.Pams;
 import com.vanhal.progressiveautomation.compat.mods.Pneumaticcraft;
 import com.vanhal.progressiveautomation.compat.mods.RightClick;
+import com.vanhal.progressiveautomation.compat.mods.ThaumCraft;
 import com.vanhal.progressiveautomation.compat.mods.Vanilla;
 import com.vanhal.progressiveautomation.util.Point3I;
 
@@ -32,6 +33,7 @@ public class ModHelper {
 		registerMod(new MFR());
 		registerMod(new AgriCraft());
 		registerMod(new GrowOres());
+		registerMod(new ThaumCraft());
 		
 		//sudo "mod" to attempt to right click on plants before trying to break them
 		registerMod(new RightClick());
@@ -65,6 +67,22 @@ public class ModHelper {
 	public static boolean isPlantible(ItemStack item) {
 		for (BaseMod mod: modsLoaded) {
 			if (mod.isPlantible(item)) return true;
+		}
+		return false;
+	}
+	
+	//check if an Itemstack is a log	
+	public static boolean isLog(ItemStack item) {
+		for (BaseMod mod: modsLoaded) {
+			if (mod.isLog(item)) return true;
+		}
+		return false;
+	}
+
+	//check if an Itemstack is a leaf	
+	public static boolean isLeaf(ItemStack item) {
+		for (BaseMod mod: modsLoaded) {
+			if (mod.isLeaf(item)) return true;
 		}
 		return false;
 	}
