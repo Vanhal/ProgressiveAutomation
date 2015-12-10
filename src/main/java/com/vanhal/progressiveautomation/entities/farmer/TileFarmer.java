@@ -209,8 +209,10 @@ public class TileFarmer extends UpgradeableTileEntity {
 					worldObj.removeEntity(item);
 				} else if (item instanceof EntityItem) {
 					if (((EntityItem)item).getEntityItem().getItem() == Items.egg) {
-						if (!worldObj.isRemote) addToInventory(((EntityItem)item).getEntityItem());
-						worldObj.removeEntity(item);
+						if (roomInInventory(((EntityItem)item).getEntityItem())) {
+							if (!worldObj.isRemote) addToInventory(((EntityItem)item).getEntityItem());
+							worldObj.removeEntity(item);
+						}
 					}
 				}
 				
