@@ -874,7 +874,6 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	public boolean canConnectEnergy(ForgeDirection from) {
-		if (worldObj.isRemote) return false;
 		if (getEngine()==null) return false;
 		else return true;
 	}
