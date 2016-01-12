@@ -41,6 +41,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class BaseBlock extends BlockContainer implements IDismantleable {
@@ -100,7 +101,9 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			if (GUIid>=0) {
-				FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, x, y, z);
+				if (!(player instanceof FakePlayer)) {
+					FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, x, y, z);
+				}
 			}
 		}
 		return true;
