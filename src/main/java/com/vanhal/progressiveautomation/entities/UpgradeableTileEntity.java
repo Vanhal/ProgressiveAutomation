@@ -172,6 +172,15 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	public void setUpgradeLevel(int level) {
 		toolLevel = level;
 	}
+	
+	public boolean isAllowedUpgrade(ItemStack itemStack) {
+		if (itemStack.getItem() instanceof ItemUpgrade) {
+			ItemUpgrade upgradeItem = (ItemUpgrade) itemStack.getItem();
+			UpgradeType type = upgradeItem.getType();
+			return allowedUpgrades.contains(type);
+		}
+		return false;
+	}
 
 	@Override
 	public boolean isAllowedUpgrade(UpgradeType type) {
@@ -182,27 +191,31 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	public void updateEntity() {
 		super.updateEntity();
 		if (!worldObj.isRemote) {
-			ItemStack upgrade = SLOT_UPGRADE != -1 ? getStackInSlot(SLOT_UPGRADE) : null;
+			ItemStack upgrade = (SLOT_UPGRADE != -1) ? getStackInSlot(SLOT_UPGRADE) : null;
 			
 			// Something inside the upgrade slot
-			if (upgrade != null && upgrade.stackSize > 0) {
-				ItemUpgrade upgradeItem = (ItemUpgrade) upgrade.getItem();
-				UpgradeType type = upgradeItem.getType();
-				int installedAmount = getUpgradeAmount(type);
-
-				if (allowedUpgrades.contains(upgradeItem.getType()) && installedAmount < upgradeItem.allowedAmount()) {
-					int newTotal = installedAmount + upgrade.stackSize;
-					upgrade.stackSize = newTotal <= upgradeItem.allowedAmount() ? 0 : newTotal - upgradeItem.allowedAmount();
-					newTotal = newTotal - upgrade.stackSize;
-					setUpgradeAmount(type, newTotal);
-				}
-				
-				// We've eaten all items in this stack, it should be disposed of
-				if (upgrade.stackSize <= 0) {
+			if ( (upgrade != null) && (upgrade.stackSize > 0) ) {
+				if (upgrade.getItem() instanceof ItemUpgrade) {
+					ItemUpgrade upgradeItem = (ItemUpgrade) upgrade.getItem();
+					UpgradeType type = upgradeItem.getType();
+					int installedAmount = getUpgradeAmount(type);
+	
+					if (allowedUpgrades.contains(upgradeItem.getType()) && installedAmount < upgradeItem.allowedAmount()) {
+						int newTotal = installedAmount + upgrade.stackSize;
+						upgrade.stackSize = newTotal <= upgradeItem.allowedAmount() ? 0 : newTotal - upgradeItem.allowedAmount();
+						newTotal = newTotal - upgrade.stackSize;
+						setUpgradeAmount(type, newTotal);
+					}
+					
+					// We've eaten all items in this stack, it should be disposed of
+					if (upgrade.stackSize <= 0) {
+						slots[SLOT_UPGRADE] = null;
+					}
+				} else {
+					ProgressiveAutomation.logger.warn("A non upgrade found it's way into the upgrade slot somehow. Deleting.");
 					slots[SLOT_UPGRADE] = null;
 				}
-			}
-			else if (upgrade != null) {
+			} else if (upgrade != null) {
 				// Malformed itemstack? Better delete it
 				ProgressiveAutomation.logger.warn("Inserted ItemStack with stacksize <= 0. Deleting");
 				slots[SLOT_UPGRADE] = null;
@@ -230,6 +243,8 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	
 	//override isided stuff
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+		if ( (slot==SLOT_UPGRADE) && (isAllowedUpgrade(stack)) ) return true;
+		else if (slot==SLOT_UPGRADE) return false;
 		if ( (slot==SLOT_PICKAXE) && ( ToolHelper.getType(stack) == ToolHelper.TYPE_PICKAXE ) ) {
     		if ( (ToolHelper.getLevel(stack) <= PAConfig.getToolConfigLevel(getUpgradeLevel())) && (!ToolHelper.isBroken(stack)) ) {
     			return true;
