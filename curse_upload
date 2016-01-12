@@ -1,6 +1,7 @@
 #!/bin/bash
 
 cd ./build/libs/
+rm *-sources.jar
 FILE_NAME=`echo "ProgressiveAutomation-1.8.9-*"`
 cd ../../
 FILE_LOCATION=`echo "./build/libs/$FILE_NAME"`
