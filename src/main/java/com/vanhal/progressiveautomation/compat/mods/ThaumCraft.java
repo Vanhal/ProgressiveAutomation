@@ -7,19 +7,19 @@ import com.vanhal.progressiveautomation.compat.BaseMod;
 
 public class ThaumCraft extends BaseMod {
 	
-	@Override
-	public boolean shouldLoad() {
-		ProgressiveAutomation.logger.info("Thaumcraft Loaded");
-		return true;
+	public ThaumCraft() {
+		modID = "Thaumcraft";
 	}
 	
 	@Override
 	public boolean isLog(ItemStack item) {
+		if (item == null) return false;
 		return (item.getUnlocalizedName().contains("tile.blockMagicalLog"));
 	}
 	
 	@Override
 	public boolean isLeaf(ItemStack item) {
+		if (item == null) return false;
 		return (item.getUnlocalizedName().contains("tile.blockMagicalLeaves"));
 	}
 	
