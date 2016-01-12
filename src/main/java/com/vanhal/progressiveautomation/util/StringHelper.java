@@ -47,26 +47,6 @@ public final class StringHelper {
 		return StatCollector.translateToLocal(key);
 	}
 
-	public static String getFluidName(FluidStack fluid) {
-
-		return getFluidName(fluid.getFluid());
-	}
-
-	public static String getFluidName(Fluid fluid) {
-
-		String name = "" + END;
-		if (fluid.getRarity() == EnumRarity.UNCOMMON) {
-			name += YELLOW;
-		} else if (fluid.getRarity() == EnumRarity.RARE) {
-			name += BRIGHT_BLUE;
-		} else if (fluid.getRarity() == EnumRarity.EPIC) {
-			name += PINK;
-		}
-		name += fluid.getLocalizedName() + END;
-
-		return name;
-	}
-
 	public static String getItemName(ItemStack item) {
 
 		String name = "" + END;

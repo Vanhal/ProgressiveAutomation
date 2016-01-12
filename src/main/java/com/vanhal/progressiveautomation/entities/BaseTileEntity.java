@@ -30,15 +30,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.server.gui.IUpdatePlayerListBox;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ITickable;
 
-public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyProvider, IEnergyReceiver, IUpdatePlayerListBox {
+public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyProvider, IEnergyReceiver, ITickable {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
@@ -428,7 +427,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 		if (slots[slot]!=null) {
 			ItemStack stack = slots[slot];
 			slots[slot] = null;
@@ -996,10 +995,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
         for (j = 0; j < i; ++j) {
             EnumFacing enumfacing1 = aenumfacing[j];
 
-            if (worldObj.func_175709_b(pos.offset(enumfacing1), enumfacing1)) {
+            if (worldObj.isSidePowered(pos.offset(enumfacing1), enumfacing1)) {
                 return true;
             }
         }
         return false;
     }
+
+	
 }

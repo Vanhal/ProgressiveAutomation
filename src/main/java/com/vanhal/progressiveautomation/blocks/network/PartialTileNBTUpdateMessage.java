@@ -111,7 +111,7 @@ public class PartialTileNBTUpdateMessage implements IMessage {
         NBTTagCompound nbttagcompound;
 
         try {
-            nbttagcompound = CompressedStreamTools.func_152456_a(datainputstream, p_152457_1_);
+            nbttagcompound = CompressedStreamTools.read(datainputstream, p_152457_1_);
         } finally {
             datainputstream.close();
         }

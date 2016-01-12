@@ -54,7 +54,7 @@ public class GrowOres extends BaseMod {
 	
 	@Override
 	public boolean isGrown(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
-		IBlockState testBlock = worldObj.getBlockState(plantPoint.toPosition().offsetUp());
+		IBlockState testBlock = worldObj.getBlockState(plantPoint.toPosition().up());
 		return (this.isPlant(testBlock.getBlock(), testBlock));
 	}
 	

@@ -61,13 +61,13 @@ public class Vanilla extends BaseMod {
 	public boolean isGrown(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
 		int metadata = plantBlock.getMetaFromState(state);
 		if (plantBlock instanceof IGrowable) {
-			return !((IGrowable)plantBlock).isStillGrowing(worldObj, plantPoint.toPosition(), state, true);
+			return !((IGrowable)plantBlock).canGrow(worldObj, plantPoint.toPosition(), state, true);
 		} else if (plantBlock instanceof BlockNetherWart) { //nether wart
 			return (metadata >= 3);
 		} else if (plantBlock == Blocks.reeds) { // sugar cane
-			return (worldObj.getBlockState(plantPoint.toPosition().offsetUp()).getBlock() == Blocks.reeds);
+			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock() == Blocks.reeds);
 		} else if (plantBlock == Blocks.cactus) { //cactus
-			return (worldObj.getBlockState(plantPoint.toPosition().offsetUp()).getBlock() == Blocks.cactus);
+			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock() == Blocks.cactus);
 		}
 		return false;
 	}
