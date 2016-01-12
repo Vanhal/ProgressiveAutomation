@@ -2,7 +2,7 @@
 
 cd ./build/libs/
 rm *-sources.jar
-FILE_NAME=`echo "ProgressiveAutomation-1.8.9-*"`
+FILE_NAME=`echo "ProgressiveAutomation*"`
 cd ../../
 FILE_LOCATION=`echo "./build/libs/$FILE_NAME"`
 CHANGE_LOG=`git log -1 --pretty=format:"%B"`
