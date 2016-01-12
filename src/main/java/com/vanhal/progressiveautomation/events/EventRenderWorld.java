@@ -33,13 +33,20 @@ public class EventRenderWorld {
 	public static List<UpgradeableTileEntity> machines = new ArrayList<UpgradeableTileEntity>();
 	
 	public static boolean containsMachine(UpgradeableTileEntity machine) {
-		if (machines.contains(machine)) return true;
-		for (UpgradeableTileEntity testMachine : machines) {
-			if ( (testMachine.xCoord == machine.xCoord) && (testMachine.yCoord == machine.yCoord) && (testMachine.zCoord == machine.zCoord) ) {
-				return true;
+		try {
+			if (machines.contains(machine)) return true;
+			List<UpgradeableTileEntity> tempList = new ArrayList<UpgradeableTileEntity>(machines);
+			for (UpgradeableTileEntity testMachine : tempList) {
+				if ( (testMachine.xCoord == machine.xCoord) && (testMachine.yCoord == machine.yCoord) && (testMachine.zCoord == machine.zCoord) ) {
+					tempList = null;
+					return true;
+				}
 			}
+			tempList = null;
+			return false;
+		} catch (Exception e) {
+			return false;
 		}
-		return false;
 	}
 
 	public static void addMachine(UpgradeableTileEntity machine) {
