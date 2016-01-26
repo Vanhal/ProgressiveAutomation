@@ -54,7 +54,9 @@ You CANNOT:
 -Create or distribute code which contains 50% or more Functionally Equivalent Statements* from this repository
 -Use any 
 
-*A Functionally Equivalent Statement is a code fragment which, regardless of whitespace and object names, achieves the same result. Basically you can't copy the code, rename the variables, add whitespace and say it's different. It's not.
+*A Functionally Equivalent Statement is a code fragment which, regardless of whitespace and 
+object names, achieves the same result. Basically you can't copy the code, rename the variables, 
+add whitespace and say it's different. It's not.
 
 
 3. Distribution 
@@ -78,8 +80,8 @@ Full permission is granted to include the mod in any modpack (public or private)
 is given, the pack does not attempt to make money and all parts of the mod are available free
 of charge to all players.
 While permission is given under these terms by default, I do reserve the right to revoke permission.
-Failure to read this licence and ASK me for permission to use this mod will result in your permission
-being revoked.
+Failure to read this licence and ASKING me for permission to use this mod will result in your 
+permission being revoked.
 
 
 5. Servers

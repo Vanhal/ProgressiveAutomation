@@ -71,6 +71,10 @@ public class AgriCraft extends Vanilla {
 				faker.setItemInHand(1);
 				faker.setPosition(point.getX(), point.getY(), point.getZ());
 				actualBlock.onBlockActivated(worldObj, point.getX(), point.getY(), point.getZ(), faker, metaData, 0, 0, 0);
+				if ( (faker.inventory.getStackInSlot(1)!=null) && (faker.inventory.getStackInSlot(1).stackSize==itemStack.stackSize) ) {
+					faker = null;
+					return false;
+				}
 				faker = null;
 			}
 			return true;

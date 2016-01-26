@@ -164,12 +164,14 @@ public class TileCrafter extends UpgradeableTileEntity {
 				if (consume) {
 					if (amtItems<=0) {
 						if (slots[i].getItem().hasContainerItem(slots[i])) {
-							this.addToInventory(new ItemStack(slots[i].getItem().getContainerItem(), slots[i].stackSize));
+							ItemStack container = slots[i].getItem().getContainerItem(slots[i]);
+							this.addToInventory(new ItemStack(container.getItem(), slots[i].stackSize, container.getItemDamage()));
 						}
 						slots[i] = null;
-					} else {
+					} else if ( (slots[i]!=null) && (slots[i].stackSize != amtItems) ) {
 						if (slots[i].getItem().hasContainerItem(slots[i])) {
-							this.addToInventory(new ItemStack(slots[i].getItem().getContainerItem(), slots[i].stackSize - amtItems));
+							ItemStack container = slots[i].getItem().getContainerItem(slots[i]);
+							this.addToInventory(new ItemStack(container.getItem(), slots[i].stackSize - amtItems, container.getItemDamage()));
 						}
 						slots[i].stackSize = amtItems;
 					}
@@ -219,7 +221,10 @@ public class TileCrafter extends UpgradeableTileEntity {
 		if ( (sides[side.ordinal()] == WrenchModes.Mode.Normal) || (sides[side.ordinal()] == WrenchModes.Mode.Output) ) {
 			if (slot==OUTPUT_SLOT) {
 				return true;
-			} else if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) && (side!=EnumFacing.DOWN) ) {
+			}
+		}
+		if (sides[side.ordinal()] == WrenchModes.Mode.Input) {
+			if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
 				return true;
 			}
 		}

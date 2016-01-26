@@ -1,6 +1,8 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
 
+import com.vanhal.progressiveautomation.entities.farmer.TileFarmer;
+
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
@@ -13,10 +15,7 @@ public class SlotFeed extends Slot {
 	}
 	
 	public boolean isItemValid(ItemStack itemStack) {
-		if (itemStack.getItem() == Items.wheat) return true;
-		if (itemStack.getItem() == Items.wheat_seeds) return true;
-		if (itemStack.getItem() == Items.carrot) return true;
-		return false;
+		return TileFarmer.isFeed(itemStack);
 	}
 
 }

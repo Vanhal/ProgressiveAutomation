@@ -19,6 +19,7 @@ public class BaseGUI extends GuiContainer {
 	public static int GREEN = 0x5CA028;
 	public static int RED = 0xCC3333;
 	public static int BLUE = 0x4C8BFF;
+	public static int ORANGE = 0xFF9900;
 	
 	protected int guiHeight = 166;
 	protected int guiWidth = 176;

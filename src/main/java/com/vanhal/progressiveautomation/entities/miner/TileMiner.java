@@ -189,8 +189,12 @@ public class TileMiner extends UpgradeableTileEntity {
 					}
 	
 					if (silkTouch>0) {
-						ItemStack item = new ItemStack(currentBlock);
-						addToInventory(item);
+						int i = 0;
+				        Item item = Item.getItemFromBlock(currentBlock);
+				        if (item != null && item.getHasSubtypes()) i = currentBlock.getMetaFromState(worldObj.getBlockState(currentPosition));
+
+						ItemStack addItem = new ItemStack(currentBlock, 1, i);
+						addToInventory(addItem);
 	
 					} else {
 						//mine the block

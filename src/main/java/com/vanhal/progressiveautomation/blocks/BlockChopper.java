@@ -25,6 +25,7 @@ public class BlockChopper extends BaseBlock {
 
 	public BlockChopper(int level) {
 		super("Chopper", level);
+		this.rangeCount = 1;
 	}
 
 	public TileEntity createNewTileEntity(World world, int var2) {

@@ -1,7 +1,19 @@
 package com.vanhal.progressiveautomation.core;
 
+import com.vanhal.progressiveautomation.events.EventRenderWorld;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
+
+import net.minecraftforge.common.MinecraftForge;
+
 
 public class ClientProxy extends Proxy {
+
+	@Override
+	public void registerEntities() {
+		super.registerEntities();
+	}
 	
 	@Override
 	public boolean isClient() {
@@ -12,9 +24,10 @@ public class ClientProxy extends Proxy {
 	public boolean isServer() {
 		return false;
 	}
-
+	
 	@Override
-	public void registerEntities() {
-		super.registerEntities();
+	public void init() {
+		super.init();
+		MinecraftForge.EVENT_BUS.register(new EventRenderWorld());
 	}
 }

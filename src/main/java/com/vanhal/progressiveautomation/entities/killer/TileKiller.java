@@ -262,4 +262,11 @@ public class TileKiller extends UpgradeableTileEntity {
 	public boolean isKilling() {
 		return (searchBlock>-1);
 	}
+	
+	@Override
+	protected Point3I adjustedSpiral(int n) {
+		Point3I point = super.adjustedSpiral(n);
+		point.setY(point.getY()+1);
+		return point;
+	}
 }

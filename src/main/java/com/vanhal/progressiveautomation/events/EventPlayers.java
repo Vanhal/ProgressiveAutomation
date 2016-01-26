@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;

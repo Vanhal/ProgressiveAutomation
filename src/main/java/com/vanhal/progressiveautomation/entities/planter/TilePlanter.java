@@ -289,4 +289,11 @@ public class TilePlanter extends UpgradeableTileEntity {
     	}
 		return super.isItemValidForSlot(slot, stack);
 	}
+	
+	@Override
+	protected Point3I adjustedSpiral(int n) {
+		Point3I point = super.adjustedSpiral(n);
+		point.setY(point.getY()+2);
+		return point;
+	}
 }

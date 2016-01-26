@@ -43,13 +43,19 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
+
 
 public class BaseBlock extends BlockContainer implements IDismantleable {
 	public String name;
 	public String machineType;
 	public int GUIid = -1;
 	
+	protected int rangeCount = -1;
+	
 	protected int blockLevel = ToolHelper.LEVEL_WOOD;
+	
+	//protected IIcon blankSide;
 	
 	public static String returnLevelName(int level) {
 		if (level==ToolHelper.LEVEL_STONE) {
@@ -104,7 +110,9 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			if (GUIid>=0) {
-				FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, pos.getX(), pos.getY(), pos.getZ());
+				if (!(player instanceof FakePlayer)) {
+					FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, pos.getX(), pos.getY(), pos.getZ());
+				}
 			}
 		}
 		return true;
@@ -114,6 +122,45 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public TileEntity createNewTileEntity(World world, int var2) {
 		return null;
 	}
+
+	//this can be used to set the side fromthe tile entity
+	/*@SideOnly(Side.CLIENT)
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
+		if ( (rangeCount>=0) && (side>=2) && (side<=5) ) {
+			if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
+				UpgradeableTileEntity tileEntity = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
+				int range = tileEntity.getRange() + rangeCount;
+
+				ForgeDirection dir = tileEntity.facing;
+				if ((side==dir.ordinal())&&(range<2)) return blankSide;
+				dir = this.nextFace(dir);
+				if ((side==dir.ordinal())&&(range<4)) return blankSide;
+				dir = this.nextFace(dir);
+				if ((side==dir.ordinal())&&(range<6)) return blankSide;
+				dir = this.nextFace(dir);
+				if ((side==dir.ordinal())&&(range<8)) return blankSide;
+			}
+		}
+        return this.getIcon(side, world.getBlockMetadata(x, y, z));
+    }
+	
+	@SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister register) {
+		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
+		blockIcons[0] = register.registerIcon(iconPrefix + "_Bottom");
+		blockIcons[1] = register.registerIcon(iconPrefix + "_Top");
+		blockIcons[2] = register.registerIcon(iconPrefix + "_Side");
+		blockIcons[3] = register.registerIcon(iconPrefix + "_Side");
+		blockIcons[4] = register.registerIcon(iconPrefix + "_Side");
+		blockIcons[5] = register.registerIcon(iconPrefix + "_Side");
+		
+		blankSide = register.registerIcon(Ref.MODID + ":" + getLevelName() + "_Side");
+    }
+	
+	@SideOnly(Side.CLIENT)
+	public IIcon getIcon(int side, int meta) {
+        return blockIcons[side];
+    }*/
 	
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
@@ -235,7 +282,16 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		else if (tileEntity.facing == EnumFacing.SOUTH) tileEntity.facing = EnumFacing.WEST;
 		else if (tileEntity.facing == EnumFacing.WEST) tileEntity.facing = EnumFacing.NORTH;
 		//ProgressiveAutomation.logger.info(chopper.facing.toString());
+		worldObj.markBlockForUpdate(pos);
         return true;
     }
+	
+	protected EnumFacing nextFace(EnumFacing dir) {
+		if (dir == EnumFacing.NORTH) return EnumFacing.EAST;
+		else if (dir == EnumFacing.EAST) return EnumFacing.SOUTH;
+		else if (dir == EnumFacing.SOUTH) return EnumFacing.WEST;
+		else if (dir == EnumFacing.WEST) return EnumFacing.NORTH;
+		return dir;
+	}
 	
 }

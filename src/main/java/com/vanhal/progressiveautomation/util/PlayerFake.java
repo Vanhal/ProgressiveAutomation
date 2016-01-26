@@ -25,16 +25,17 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.FakePlayer;
 
 /**
  * This class was pulled from COFH Core
  * 
- * {@link} https://github.com/CoFH/CoFHCore/blob/master/src/main/java/cofh/entity/PlayerFake.java
+ * {@link} https://github.com/CoFH/CoFHCore/blob/master/src/main/java/cofh/core/entity/CoFHFakePlayer.java
  * @author COFH
  *
  */
 
-public class PlayerFake extends EntityPlayerMP {
+public class PlayerFake extends FakePlayer {
 
 	private static GameProfile NAME = new GameProfile(UUID.fromString("08B9E87C-A9F9-5161-AEC6-B671C8F4FCB9"), "[VANHAL]");
 	//private static GameProfile NAME = new GameProfile("08B9E87C-A9F9-5161-AEC6-B671C8F4FCB9", "[VANHAL]");
@@ -49,7 +50,7 @@ public class PlayerFake extends EntityPlayerMP {
 	}
 	
 	public PlayerFake(WorldServer world, GameProfile FakeName) {
-		super(FMLCommonHandler.instance().getMinecraftServerInstance(), world, FakeName, new ItemInWorldManager(world));
+		super(world, FakeName);
 		this.addedToChunk = false;
 		this.onGround = true;
 	}

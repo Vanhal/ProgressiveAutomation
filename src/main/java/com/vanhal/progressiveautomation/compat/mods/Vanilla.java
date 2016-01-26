@@ -90,7 +90,7 @@ public class Vanilla extends BaseMod {
 		IBlockState plant = getPlantBlock(worldObj, itemStack, point);
 		if (plant!=null) {
 			return (plant.getBlock().canPlaceBlockAt(worldObj, point.toPosition())) &&
-				(worldObj.getBlockState(point.toPosition()) != plant);
+				(worldObj.getBlockState(point.toPosition()).getBlock() != plant.getBlock());
 		}
 		return false;
 	}

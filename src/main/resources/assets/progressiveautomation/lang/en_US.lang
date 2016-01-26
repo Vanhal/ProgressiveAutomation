@@ -96,6 +96,8 @@ gui.hi.miner=Lets Mine!
 gui.hi.killer=Bad Mobs!
 gui.hi.farmer=Like rabbits
 gui.addtools=Add tools!
+gui.invalidtool.1=Tool Level
+gui.invalidtool.2=too high
 
 gui.general=General Settings
 gui.general.tooltip=General Settings

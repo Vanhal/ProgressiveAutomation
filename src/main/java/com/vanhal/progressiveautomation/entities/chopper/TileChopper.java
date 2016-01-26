@@ -3,17 +3,23 @@ package com.vanhal.progressiveautomation.entities.chopper;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -50,16 +56,30 @@ public class TileChopper extends UpgradeableTileEntity {
 	protected int choppingTime = 0;
 	
 	public int SLOT_SAPLINGS = 1;
+	public int SLOT_SHEARS = 4;
 	
 	public TileChopper() {
-		super(12);
+		super(13);
 		setUpgradeLevel(ToolHelper.LEVEL_WOOD);
 		setAllowedUpgrades(UpgradeType.WOODEN, UpgradeType.WITHER);
+		allowSheer();
+		
 		forceRecalculate = true;
 		
 		//slots
 		SLOT_AXE = 2;
 		SLOT_UPGRADE = 3;
+	}
+	
+	protected boolean removeShears = false;
+	protected void allowSheer() {
+		if ( (PAConfig.shearTrees) && (PAConfig.allowShearingUpgrade) ) {
+			if (!isAllowedUpgrade(UpgradeType.SHEARING)) {
+				addAllowedUpgrade(UpgradeType.SHEARING);
+			}
+		} else {
+			removeShears = true;
+		}
 	}
 	
 	@Override
@@ -113,6 +133,11 @@ public class TileChopper extends UpgradeableTileEntity {
 		
 		if (blockList.size() > 0) {
 			chopping = true;
+		}
+		if (removeShears) {
+			if (slots[SLOT_SHEARS]!=null) slots[SLOT_SHEARS] = null;
+			if (hasUpgrade(UpgradeType.SHEARING)) removeUpgradeCompletely(UpgradeType.SHEARING);
+			removeShears = false;
 		}
 	}
 	
@@ -196,11 +221,26 @@ public class TileChopper extends UpgradeableTileEntity {
 						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[SLOT_AXE]);
 					}
 	
+					
 					//then break the block
 					IBlockState actualBlockState = worldObj.getBlockState(currentPosition);
 					Block actualBlock = actualBlockState.getBlock();
 					int metaData = actualBlock.getMetaFromState(actualBlockState);
 					List<ItemStack> items = actualBlock.getDrops(worldObj, currentPosition, actualBlockState, fortuneLevel);
+
+					
+					if ( (!targetTree) && (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+						int i = 0;
+				        Item item = Item.getItemFromBlock(actualBlock);
+				        if (item != null && item.getHasSubtypes()) i = metaData;
+						items.add(new ItemStack(item, 1, i));
+						if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
+							destroyTool(SLOT_SHEARS);
+						}
+					} else {
+						items = actualBlock.getDrops(worldObj, currentBlock.toPosition(), actualBlockState, fortuneLevel);
+					}
+					
 					//get the drops
 					for (ItemStack item : items) {
 						addToInventory(item);
@@ -314,19 +354,45 @@ public class TileChopper extends UpgradeableTileEntity {
 	
 	protected boolean isTree(BlockPos point) { 
 		return (OreHelper.testOreBlock("logWood", point, worldObj)) || 
-				(OreHelper.testOreBlock("woodRubber", point, worldObj));
+				(OreHelper.testOreBlock("woodRubber", point, worldObj)) ||
+				isTree(testBlock(point));
 	}
 	
 	protected boolean isTree(int x, int y, int z) { return isTree(new BlockPos(x,y,z)); }
 	
-	protected boolean isLeaf(BlockPos point) { 
-		return (OreHelper.testOreBlock("treeLeaves", point, worldObj)) || 
-				(OreHelper.testOreBlock("leavesRubber", point, worldObj));
+	protected boolean isTree(String type) {
+		if ( (type.equalsIgnoreCase("logWood")) || (type.equalsIgnoreCase("woodRubber")) ) {
+			return true;
+		}
+		return false;
 	}
 	
-	protected boolean isLeaf(int x, int y, int z) { return isLeaf(new BlockPos(x,y,z)); }
-
+	protected boolean isLeaf(BlockPos point) { 
+		return (OreHelper.testOreBlock("treeLeaves", point, worldObj)) || 
+				(OreHelper.testOreBlock("leavesRubber", point, worldObj)) ||
+				isLeaf(testBlock(point));
+	}
 	
+	
+	protected boolean isLeaf(int x, int y, int z) { return isLeaf(new BlockPos(x,y,z)); }
+	
+	protected boolean isLeaf(String type) {
+		if ( (type.equalsIgnoreCase("treeLeaves")) || (type.equalsIgnoreCase("leavesRubber")) ) {
+			return true;
+		} 
+		return false;
+	}
+	
+	protected String testBlock(BlockPos pos) {
+		IBlockState _blockState = worldObj.getBlockState(pos);
+		Block _block = _blockState.getBlock();
+		int metaData = _block.getMetaFromState(_blockState);
+		ItemStack testItem = new ItemStack(_block, 1, metaData);
+		if (ModHelper.isLeaf(testItem)) return "treeLeaves";
+		if (ModHelper.isLog(testItem)) return "logWood";
+		return "Unknown";
+	}
+		
 	public boolean readyToBurn() {
 		if (slots[SLOT_AXE]!=null) {
 			if (scanBlocks()) {
@@ -347,7 +413,8 @@ public class TileChopper extends UpgradeableTileEntity {
 				if (Block.getBlockFromItem(slots[SLOT_SAPLINGS].getItem()) instanceof IPlantable) {
 					Block tree = (Block)Block.getBlockFromItem(slots[SLOT_SAPLINGS].getItem());
 					BlockPos plantPos = new BlockPos(p1.getX(), getPos().getY(), p1.getY());
-					if (tree.canPlaceBlockAt(worldObj, plantPos)) {
+					if ( (tree.canPlaceBlockAt(worldObj, plantPos)) && 
+							(worldObj.getBlockState(plantPos).getBlock().canReplace(worldObj, plantPos, EnumFacing.DOWN, slots[SLOT_SAPLINGS])) ) {
 						if (doAction) {
 							worldObj.setBlockState(plantPos, 
 									tree.getStateFromMeta(slots[SLOT_SAPLINGS].getItem().getDamage(slots[SLOT_SAPLINGS])), 7);
@@ -417,7 +484,9 @@ public class TileChopper extends UpgradeableTileEntity {
 
 	/* ISided Stuff */
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot == SLOT_SAPLINGS) && (checkSapling(stack)) ) {
+		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.shears) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+			return true;
+		} else if ( (slot == SLOT_SAPLINGS) && (checkSapling(stack)) ) {
     		return true;
     	}
 		return super.isItemValidForSlot(slot, stack);
@@ -443,6 +512,12 @@ public class TileChopper extends UpgradeableTileEntity {
 		if (x >= minCuttingX && x <= maxCuttingX && z >= minCuttingZ && z <= maxCuttingZ) 
 			return true;
 		return false;
+	}
+	
+	@Override
+	protected Point3I adjustedSpiral(int n) {
+		Point3I point = super.adjustedSpiral(n + 1);
+		return point;
 	}
 
 }

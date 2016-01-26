@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.items.upgrades;
 
+import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
@@ -29,6 +30,6 @@ public abstract class ItemTieredUpgrade extends ItemUpgrade {
 
 	@Override
 	public int allowedAmount() {
-		return Integer.MAX_VALUE;
+		return PAConfig.maxRangeUpgrades;
 	}
 }

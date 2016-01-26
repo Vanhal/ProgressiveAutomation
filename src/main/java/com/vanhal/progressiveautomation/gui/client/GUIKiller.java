@@ -32,7 +32,10 @@ public class GUIKiller extends BaseGUI {
 		drawString(StringHelper.localize("gui.killer"), 5, GRAY);
 		drawString(StringHelper.localize("gui.range")+": "+StringHelper.getScaledNumber(killer.getRange()), infoScreenX, infoScreenW, infroScreenY3, (killer.hasUpgrade(UpgradeType.WITHER))?GREEN:WHITE);
 		
-		if (killer.isLooked()) {
+		if (killer.isInvalidTool()) {
+			drawString(getTextLine(1, "gui.invalidtool.1"), infoScreenX, infoScreenW, infroScreenY1, ORANGE);
+			drawString(getTextLine(2, "gui.invalidtool.2"), infoScreenX, infoScreenW, infroScreenY2, ORANGE);
+		} else if (killer.isLooked()) {
 			boolean readyToPlant = false;
 			if ( (!killer.hasFuel()) && (!killer.isBurning()) ) {
 				String fuelString = "gui.need.fuel";

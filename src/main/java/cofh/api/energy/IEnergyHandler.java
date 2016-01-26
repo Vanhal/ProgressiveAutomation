@@ -43,7 +43,6 @@ public interface IEnergyHandler extends IEnergyProvider, IEnergyReceiver {
 	@Override
 	int extractEnergy(EnumFacing facing, int maxExtract, boolean simulate);
 
-
 	/**
 	 * Returns the amount of energy currently stored.
 	 */

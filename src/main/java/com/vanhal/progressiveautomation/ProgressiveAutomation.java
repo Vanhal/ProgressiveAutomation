@@ -15,6 +15,7 @@ import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessa
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.events.EventPlayers;
+import com.vanhal.progressiveautomation.events.EventRenderWorld;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
@@ -32,7 +33,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = Ref.MODID, name = Ref.MODNAME, version = Ref.Version, guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory")
+@Mod(modid = Ref.MODID, name = Ref.MODNAME, version = Ref.Version, guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory", dependencies = "after:CoFHAPI|energy;after:CoFHCore;")
 public class ProgressiveAutomation {
 	@Instance(Ref.MODID)
 	public static ProgressiveAutomation instance;
@@ -84,6 +85,7 @@ public class ProgressiveAutomation {
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 		FMLCommonHandler.instance().bus().register(instance);
+		proxy.init();
 	}
 	
 	@EventHandler

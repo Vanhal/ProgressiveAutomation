@@ -49,6 +49,14 @@ public class PAConfig {
 	public static boolean allowPotatos;
 	public static boolean allowWrench;
 	public static boolean destroyTools;
+	public static boolean shearTrees;
+	public static int maxRangeUpgrades;
+	
+	//machine levels
+	public static int woodLevel;
+	public static int stoneLevel;
+	public static int ironLevel;
+	public static int diamondLevel;
 	
 	
 	public static void init(Configuration handle) {
@@ -59,6 +67,11 @@ public class PAConfig {
 		config.addCustomCategoryComment("blocks", "Enable or disable the blocks, will remove them from the game entirely");
 		config.addCustomCategoryComment("upgrades", "Change the settings of how the various machine upgrades work");
 		config.addCustomCategoryComment("rfoptions", "Change the settings of how PA interacts with RF devices");
+		
+		config.addCustomCategoryComment("toolLevels", "Here you can adjust the tools that each machine level can take.\n"
+				+"Each option takes a mining level (0 being wood, 1 is stone etc)\n"
+				+"Normally you would not have to change these options, but if you are using the likes of\n"
+				+"Igunia tweaks then it is advised to change these to suit your set up");
 		
 		config.addCustomCategoryComment("modcompatibility", 
 				"This section allows you to customise which mods will be compatible with the various machines\n"
@@ -93,7 +106,8 @@ public class PAConfig {
 		enableWitherTools = config.getBoolean("witherTools", "general", true, "Allow Wither tools and resources to create them");
 		allowWrench = config.getBoolean("allowWrench", "general", true, "Allows the wrench, you've got to be seriously evil to not allow this!");
 		destroyTools = config.getBoolean("destroyTools", "general", true, "Changing to false will make the machines spit a fully broken vanilla tool into it's inventory");
-		
+		shearTrees = config.getBoolean("shearTrees", "general", true, "Allow the chopper to take a shearing upgrade in order to have a sheer to shear leaves");
+
 		
 		//enable blocks		
 		minerEnabled = config.getBoolean("miner", "blocks", true, "Miner Block is enabled (requires restart)");
@@ -118,8 +132,25 @@ public class PAConfig {
 		
 		allowKillPlayer = config.getBoolean("killPlayer", "upgrades", true, "Allow the Killer to kill players");
 		
+		maxRangeUpgrades = config.getInt("maxRangeUpgrades", "upgrades", Integer.MAX_VALUE, 0, Integer.MAX_VALUE, "Max amount of range upgrades that can be put into a machine");
+		
+		//toolLevels
+		woodLevel = config.getInt("woodLevel", "toolLevels", ToolHelper.LEVEL_WOOD, 0, 100, "The max mining level of the tool that wooden machines will take");
+		stoneLevel = config.getInt("stoneLevel", "toolLevels", ToolHelper.LEVEL_STONE, 0, 100, "The max mining level of the tool that stone machines will take");
+		ironLevel = config.getInt("ironLevel", "toolLevels", ToolHelper.LEVEL_IRON, 0, 100, "The max mining level of the tool that iron machines will take");
+		diamondLevel = config.getInt("diamondLevel", "toolLevels", ToolHelper.LEVEL_MAX, 0, 100, "The max mining level of the tool that diamond machines will take");
+		
+		
 		//save if changed
 		if (config.hasChanged()) save();
+	}
+	
+	public static int getToolConfigLevel(int level) {
+		if (level == ToolHelper.LEVEL_WOOD) return woodLevel;
+		else if (level == ToolHelper.LEVEL_STONE) return stoneLevel;
+		else if (level == ToolHelper.LEVEL_IRON) return ironLevel;
+		else if (level == ToolHelper.LEVEL_DIAMOND) return diamondLevel;
+		return level;
 	}
 	
 	public static boolean allowLevel(int level) {
