@@ -13,6 +13,7 @@ import com.vanhal.progressiveautomation.util.Point3I;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -134,11 +135,9 @@ public class EventRenderWorld {
 		Tessellator tessellator = Tessellator.getInstance();
 		WorldRenderer wr = tessellator.getWorldRenderer();
 		
-		//TODO: This is not working correctly!!!!
 		//Need to fix.
 		
-		wr.reset();
-		wr.begin(7, wr.getVertexFormat());
+		wr.begin(GL11.GL_QUADS , DefaultVertexFormats.POSITION);
 				
 		wr.pos(x + shrink, y + 1 - shrink, z + shrink).endVertex();
 		wr.pos(x + 1 - shrink, y + 1 - shrink, z + shrink).endVertex();
