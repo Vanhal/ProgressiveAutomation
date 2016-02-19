@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.*;
 public class EventRenderWorld {
 	
 	public static List<UpgradeableTileEntity> machines = new ArrayList<UpgradeableTileEntity>();
+	private static List<UpgradeableTileEntity> toRemove = new ArrayList<UpgradeableTileEntity>();
 	
 	public static boolean containsMachine(UpgradeableTileEntity machine) {
 		try {
@@ -49,6 +50,19 @@ public class EventRenderWorld {
 			return false;
 		}
 	}
+	
+	private static void removeMachines() {
+		try {
+			if (toRemove.size()>0) {
+				for (UpgradeableTileEntity remove : toRemove) {
+					if (containsMachine(remove)) {
+						machines.remove(toRemove);
+					}
+				}
+				toRemove.clear();
+			}
+		} catch (Exception e) {}
+	}
 
 	public static void addMachine(UpgradeableTileEntity machine) {
 		if (!containsMachine(machine)) {
@@ -58,9 +72,10 @@ public class EventRenderWorld {
 	
 	public static void removeMachine(UpgradeableTileEntity machine) {
 		if (containsMachine(machine)) {
-			machines.remove(machine);
+			toRemove.add(machine);
 		}
 	}
+	
 	
 	@SubscribeEvent
 	public void onPlayerChangedDimension(Unload world) {
@@ -78,16 +93,20 @@ public class EventRenderWorld {
 	@SubscribeEvent(priority=EventPriority.HIGHEST)
 	public void renderWorldLast(RenderWorldLastEvent e) {
 		if (ProgressiveAutomation.proxy.isServer()) return;
+		removeMachines();
+		
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		boolean holdingWrench = false;
 		if(player.inventory.getCurrentItem() == null) return;
 
 		if (player.inventory.getCurrentItem().getItem().equals(PAItems.wrench)) holdingWrench = true;
+		else return;
 		
 		float playerOffsetX = -(float)(player.lastTickPosX + (player.posX - player.lastTickPosX) * e.partialTicks);
 		float playerOffsetY = -(float)(player.lastTickPosY + (player.posY - player.lastTickPosY) * e.partialTicks);
 		float playerOffsetZ = -(float)(player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * e.partialTicks);
 
+		GL11.glPushMatrix();
 		GL11.glColorMask(true, true, true, true);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL11.GL_FOG);
@@ -117,6 +136,7 @@ public class EventRenderWorld {
 		}
 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glPopMatrix();
 		
 		
 	}
