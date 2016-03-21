@@ -1,49 +1,37 @@
 package com.vanhal.progressiveautomation.blocks;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import cofh.api.block.IDismantleable;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.entities.IUpgradeable;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.items.ItemBlockMachine;
-import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-import com.vanhal.progressiveautomation.ref.WrenchModes;
 
-import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cofh.api.block.IDismantleable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class BaseBlock extends BlockContainer implements IDismantleable {
@@ -101,13 +89,12 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	@Override
-	public int getRenderType() {
-        return 3;
-    }
-
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			if (GUIid>=0) {
 				if (!(player instanceof FakePlayer)) {
@@ -122,45 +109,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public TileEntity createNewTileEntity(World world, int var2) {
 		return null;
 	}
-
-	//this can be used to set the side fromthe tile entity
-	/*@SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		if ( (rangeCount>=0) && (side>=2) && (side<=5) ) {
-			if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-				UpgradeableTileEntity tileEntity = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
-				int range = tileEntity.getRange() + rangeCount;
-
-				ForgeDirection dir = tileEntity.facing;
-				if ((side==dir.ordinal())&&(range<2)) return blankSide;
-				dir = this.nextFace(dir);
-				if ((side==dir.ordinal())&&(range<4)) return blankSide;
-				dir = this.nextFace(dir);
-				if ((side==dir.ordinal())&&(range<6)) return blankSide;
-				dir = this.nextFace(dir);
-				if ((side==dir.ordinal())&&(range<8)) return blankSide;
-			}
-		}
-        return this.getIcon(side, world.getBlockMetadata(x, y, z));
-    }
-	
-	@SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
-		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
-		blockIcons[0] = register.registerIcon(iconPrefix + "_Bottom");
-		blockIcons[1] = register.registerIcon(iconPrefix + "_Top");
-		blockIcons[2] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[3] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[4] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[5] = register.registerIcon(iconPrefix + "_Side");
-		
-		blankSide = register.registerIcon(Ref.MODID + ":" + getLevelName() + "_Side");
-    }
-	
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-        return blockIcons[side];
-    }*/
 	
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
@@ -199,14 +147,14 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	public void init() {
-		
-	}
-	
-	public void postInit() {
 		if (ProgressiveAutomation.proxy.isClient()) {
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
 				.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Ref.MODID + ":" + name, "inventory"));
 		}
+		
+	}
+	
+	public void postInit() {
 	}
 	
 	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
@@ -282,7 +230,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		else if (tileEntity.facing == EnumFacing.SOUTH) tileEntity.facing = EnumFacing.WEST;
 		else if (tileEntity.facing == EnumFacing.WEST) tileEntity.facing = EnumFacing.NORTH;
 		//ProgressiveAutomation.logger.info(chopper.facing.toString());
-		worldObj.markBlockForUpdate(pos);
+		worldObj.markBlockRangeForRenderUpdate(pos, pos);
         return true;
     }
 	

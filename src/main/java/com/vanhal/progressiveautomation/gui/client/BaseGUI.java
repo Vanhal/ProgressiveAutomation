@@ -6,11 +6,11 @@ import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.util.StringHelper;
 
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class BaseGUI extends GuiContainer {
 	public static int BLACK = 0x000000;

@@ -1,35 +1,30 @@
 package com.vanhal.progressiveautomation.entities.chopper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.compat.ModHelper;
+import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+import com.vanhal.progressiveautomation.util.CoordList;
+import com.vanhal.progressiveautomation.util.OreHelper;
+import com.vanhal.progressiveautomation.util.Point2I;
+import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.oredict.OreDictionary;
-
-import com.vanhal.progressiveautomation.compat.ModHelper;
-import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
-import com.vanhal.progressiveautomation.util.CoordList;
-import com.vanhal.progressiveautomation.util.OreHelper;
-import com.vanhal.progressiveautomation.util.Point2I;
-import com.vanhal.progressiveautomation.util.Point3I;
 
 
 public class TileChopper extends UpgradeableTileEntity {
@@ -218,7 +213,8 @@ public class TileChopper extends UpgradeableTileEntity {
 					//I'm fairly sure this doesn't actually do anything, but gonna leave it here anyway
 					int fortuneLevel = 0;
 					if (targetTree) {
-						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[SLOT_AXE]);
+						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, slots[SLOT_AXE]);
+
 					}
 	
 					
@@ -255,7 +251,6 @@ public class TileChopper extends UpgradeableTileEntity {
 					
 					//remove the block and entity if there is one
 					worldObj.removeTileEntity( currentPosition );
-					//TODO: animate the leaves breaking
 					worldObj.setBlockToAir(currentPosition);
 				}
 				currentBlock = null;
@@ -274,16 +269,16 @@ public class TileChopper extends UpgradeableTileEntity {
 					Block actualBlock = actualBlockState.getBlock();
 					int metaData = actualBlock.getMetaFromState(actualBlockState);
 					
-					choppingTime = (int)Math.ceil( actualBlock.getBlockHardness(worldObj, currentPosition) * 1.5 * 20 );
+					choppingTime = (int)Math.ceil( actualBlock.getBlockHardness(actualBlockState, worldObj, currentPosition) * 1.5 * 20 );
 					
 					Item tool = (Item)slots[SLOT_AXE].getItem();
 					
 					float choppingSpeed = 1.0f;
 	
 					if (isTree(currentPosition)) {
-						choppingSpeed = tool.getDigSpeed( slots[SLOT_AXE], actualBlockState );
+						choppingSpeed = ToolHelper.getDigSpeed( slots[SLOT_AXE], actualBlockState );
 						//check for efficiency on the tool, only for the wood though!
-						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[SLOT_AXE]);
+						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.efficiency, slots[SLOT_AXE]);
 						if (eff>0) {
 							for (int i = 0; i<eff; i++) {
 								choppingSpeed = choppingSpeed * 1.3f;

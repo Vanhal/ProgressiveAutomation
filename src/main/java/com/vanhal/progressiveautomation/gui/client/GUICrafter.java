@@ -1,14 +1,13 @@
 package com.vanhal.progressiveautomation.gui.client;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafter;
-import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.gui.container.ContainerCrafter;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.util.StringHelper;
+
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 public class GUICrafter extends BaseGUI {
 	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Crafter.png");

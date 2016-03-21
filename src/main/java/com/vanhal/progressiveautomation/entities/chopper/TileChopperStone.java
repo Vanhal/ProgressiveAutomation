@@ -1,6 +1,5 @@
 package com.vanhal.progressiveautomation.entities.chopper;
 
-import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 

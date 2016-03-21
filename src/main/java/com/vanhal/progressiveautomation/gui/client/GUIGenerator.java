@@ -1,14 +1,11 @@
 package com.vanhal.progressiveautomation.gui.client;
 
-import java.text.DecimalFormat;
-
 import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.gui.container.ContainerGenerator;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.util.StringHelper;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 

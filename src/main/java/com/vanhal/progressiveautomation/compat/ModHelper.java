@@ -1,27 +1,17 @@
 package com.vanhal.progressiveautomation.compat;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
+
+import com.vanhal.progressiveautomation.compat.mods.MFR;
+import com.vanhal.progressiveautomation.compat.mods.RightClick;
+import com.vanhal.progressiveautomation.compat.mods.Vanilla;
+import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.compat.mods.AgriCraft;
-import com.vanhal.progressiveautomation.compat.mods.GrowOres;
-import com.vanhal.progressiveautomation.compat.mods.ImmersiveEngineering;
-import com.vanhal.progressiveautomation.compat.mods.MFR;
-import com.vanhal.progressiveautomation.compat.mods.Pams;
-import com.vanhal.progressiveautomation.compat.mods.Pneumaticcraft;
-import com.vanhal.progressiveautomation.compat.mods.RightClick;
-import com.vanhal.progressiveautomation.compat.mods.ThaumCraft;
-import com.vanhal.progressiveautomation.compat.mods.Vanilla;
-import com.vanhal.progressiveautomation.util.Point3I;
 
 public class ModHelper {
 

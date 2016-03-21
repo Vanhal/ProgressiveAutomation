@@ -42,7 +42,7 @@ minecraft {
     runDir = "run"
     
     replace "@VERSION@", project.version
-    mappings = "stable_20"
+    mappings = "snapshot_20160312"
 }
 
 processResources

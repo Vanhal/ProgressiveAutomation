@@ -1,8 +1,8 @@
 package com.vanhal.progressiveautomation.entities;
 
-import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-
 import java.util.Set;
+
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 public interface IUpgradeable {
 

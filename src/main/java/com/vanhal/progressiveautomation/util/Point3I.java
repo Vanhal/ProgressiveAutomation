@@ -1,9 +1,7 @@
 package com.vanhal.progressiveautomation.util;
 
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /* A Point case to allow for an x, y point */
 public class Point3I {

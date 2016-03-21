@@ -1,22 +1,23 @@
 package com.vanhal.progressiveautomation.entities;
 
 
-import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
-import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.events.EventRenderWorld;
+import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
-import com.vanhal.progressiveautomation.events.EventRenderWorld;
 
-
-import java.util.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeable {
 	protected int toolLevel = ToolHelper.LEVEL_WOOD;

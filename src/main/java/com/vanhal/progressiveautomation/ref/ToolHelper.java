@@ -3,12 +3,11 @@ package com.vanhal.progressiveautomation.ref;
 import java.util.Random;
 import java.util.Set;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemHoe;
@@ -19,8 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -187,8 +185,19 @@ public class ToolHelper {
 		}
 	}
 	
+	public static float getDigSpeed(ItemStack itemStack, IBlockState state) {
+		if ( (itemStack != null) && (itemStack.getItem() != null) && (itemStack.getItem() instanceof ItemTool) ) {
+			ItemTool tool = (ItemTool) itemStack.getItem();
+			Item.ToolMaterial mat = tool.getToolMaterial();
+			if (tool.canHarvestBlock(state, itemStack)) {
+				return mat.getEfficiencyOnProperMaterial();
+			}
+		}
+		return 1.0f;
+	}
+	
 	public static boolean damageTool(ItemStack tool, World world, int x, int y, int z) {
-		if ( 	(tool.getItem() instanceof ItemShears) || (tool.getItem() instanceof ItemTool) || 
+		if ( (tool.getItem() instanceof ItemShears) || (tool.getItem() instanceof ItemTool) || 
 				(tool.getItem() instanceof ItemHoe) || (tool.getItem() instanceof ItemSword) ) {
 			if (tool.attemptDamageItem(1, RND)) {
 				return true;
@@ -199,7 +208,7 @@ public class ToolHelper {
 			if (tinkersType(tool.getItem())==TYPE_HOE) {
 				tool.attemptDamageItem(1, RND);
 			} else {
-				tool.getItem().onBlockDestroyed(tool, world, mineBlock, new BlockPos(x, y, z), fakePlayer);
+				tool.getItem().onBlockDestroyed(tool, world, mineBlock.getDefaultState(), new BlockPos(x, y, z), fakePlayer);
 			}
 			if (tinkersIsBroken(tool)) return true;
 		}

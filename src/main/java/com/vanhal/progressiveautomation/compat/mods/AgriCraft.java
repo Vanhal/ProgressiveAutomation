@@ -1,21 +1,6 @@
 package com.vanhal.progressiveautomation.compat.mods;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.compat.BaseMod;
 import com.vanhal.progressiveautomation.util.PlayerFake;
-import com.vanhal.progressiveautomation.util.Point3I;
 
 
 public class AgriCraft extends Vanilla {

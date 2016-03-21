@@ -1,40 +1,29 @@
 package com.vanhal.progressiveautomation.blocks;
 
-import java.util.Random;
+import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
+import com.vanhal.progressiveautomation.entities.generator.TileGeneratorDiamond;
+import com.vanhal.progressiveautomation.entities.generator.TileGeneratorIron;
+import com.vanhal.progressiveautomation.entities.generator.TileGeneratorStone;
+import com.vanhal.progressiveautomation.items.PAItems;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
-import com.vanhal.progressiveautomation.entities.generator.TileGeneratorDiamond;
-import com.vanhal.progressiveautomation.entities.generator.TileGeneratorIron;
-import com.vanhal.progressiveautomation.entities.generator.TileGeneratorStone;
-import com.vanhal.progressiveautomation.items.ItemBlockMachine;
-import com.vanhal.progressiveautomation.items.PAItems;
-import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
-
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockGenerator extends BaseBlock {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -92,11 +81,11 @@ public class BlockGenerator extends BaseBlock {
 
         return this.getDefaultState().withProperty(FACING, enumfacing);
     }
-    
-    @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, new IProperty[] {FACING, ACTIVE});
-    }
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+      return new BlockStateContainer(this, new IProperty[] {FACING, ACTIVE});
+	} 
     
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
@@ -108,12 +97,11 @@ public class BlockGenerator extends BaseBlock {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
     }
     
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IBlockState getStateForEntityRender(IBlockState state) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
-    }
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public IBlockState getStateForEntityRender(IBlockState state) {
+//        return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
+//    }
     
     @Override
     public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
@@ -131,15 +119,15 @@ public class BlockGenerator extends BaseBlock {
         return state.withProperty(FACING, state.getValue(FACING)).withProperty(BlockGenerator.ACTIVE, buring);
     }
     
-    @Override
-    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis){
-    	IBlockState state = world.getBlockState(pos);
-        for (IProperty prop : (java.util.Set<IProperty>)state.getProperties().keySet()) {
-            if (prop.getName().equals("facing")) {
-                world.setBlockState(pos, state.cycleProperty(prop));
-                return true;
-            }
-        }
-        return false;
-    }
+//    @Override
+//    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis){
+//    	IBlockState state = world.getBlockState(pos);
+//        for (IProperty prop : (java.util.Set<IProperty>)state.getProperties().keySet()) {
+//            if (prop.getName().equals("facing")) {
+//                world.setBlockState(pos, state.cycleProperty(prop));
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }

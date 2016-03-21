@@ -1,22 +1,19 @@
 package com.vanhal.progressiveautomation.entities.crafter;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.ref.WrenchModes;
+import com.vanhal.progressiveautomation.util.BlockHelper;
+import com.vanhal.progressiveautomation.util.OreHelper;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.oredict.OreDictionary;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.blocks.BlockMiner;
-import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
-import com.vanhal.progressiveautomation.ref.WrenchModes;
-import com.vanhal.progressiveautomation.util.BlockHelper;
-import com.vanhal.progressiveautomation.util.OreHelper;
 
 public class TileCrafter extends UpgradeableTileEntity {
 	

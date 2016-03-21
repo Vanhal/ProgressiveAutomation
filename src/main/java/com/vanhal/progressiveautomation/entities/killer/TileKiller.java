@@ -1,36 +1,26 @@
 package com.vanhal.progressiveautomation.entities.killer;
 
-import java.util.Collection;
 import java.util.List;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.WorldServer;
-
-import com.google.common.collect.Multimap;
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
 
 public class TileKiller extends UpgradeableTileEntity {
 	protected int searchBlock = -1;
@@ -100,9 +90,8 @@ public class TileKiller extends UpgradeableTileEntity {
 								}
 								
 								faker.setItemInHand(slots[SLOT_SWORD].copy());
-								faker.setItemInUse(faker.getCurrentEquippedItem(), 72000);
+//								faker.setItemInUse(faker.getHeldItemMainhand(), 72000);
 								faker.attackTargetEntityWithCurrentItem(mob);
-								
 								
 
 								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, pos.getX(), pos.getY(), pos.getZ())) {
@@ -146,7 +135,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	
 	public EntityLivingBase getMob(int n) {
 		Point3I point = getPoint(n);
-		boundCheck = AxisAlignedBB.fromBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundCheck);
 		if (!entities.isEmpty()) {
@@ -200,7 +189,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	
 	public void pickupDrops(int n) {
 		Point3I point = getPoint(n);
-		boundCheck = AxisAlignedBB.fromBounds(point.getX(), point.getY(), point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
 		List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, boundCheck);
@@ -217,7 +206,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	
 	public void pickupXP(int n) {
 		Point3I point = getPoint(n);
-		boundCheck = AxisAlignedBB.fromBounds(point.getX(), point.getY(), point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
 		List<EntityXPOrb> entities = worldObj.getEntitiesWithinAABB(EntityXPOrb.class, boundCheck);

@@ -1,13 +1,9 @@
 package com.vanhal.progressiveautomation.util;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 public class CoordList {
 	private TMap<String, Point3I> list = new THashMap<String, Point3I>();

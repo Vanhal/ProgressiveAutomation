@@ -12,16 +12,16 @@ import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.world.WorldEvent.Unload;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.*;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Some of this code is partly based on code written by skyboy for minefactoryreloaded
@@ -85,7 +85,7 @@ public class EventRenderWorld {
 				Minecraft.getMinecraft().thePlayer.worldObj.provider == null) {
 			return;
 		}
-		if (world.world.provider.getDimensionId() == Minecraft.getMinecraft().thePlayer.worldObj.provider.getDimensionId()) {
+		if (world.world.provider.getDimension() == Minecraft.getMinecraft().thePlayer.worldObj.provider.getDimension() ) {
 			machines.clear();
 		}
 	}
@@ -153,7 +153,7 @@ public class EventRenderWorld {
 		double shrink = -0.005;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		WorldRenderer wr = tessellator.getWorldRenderer();
+		VertexBuffer wr = tessellator.getBuffer();
 		
 		//Need to fix.
 		

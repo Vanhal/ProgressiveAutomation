@@ -6,9 +6,7 @@ import java.util.List;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.util.text.translation.I18n;
 
 
 /**
@@ -44,7 +42,7 @@ public final class StringHelper {
 
 	public static String localize(String key) {
 
-		return StatCollector.translateToLocal(key);
+		return I18n.translateToLocal(key);
 	}
 
 	public static String getItemName(ItemStack item) {

@@ -1,25 +1,19 @@
 package com.vanhal.progressiveautomation.events;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.ArrayList;
+
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 public class EventPlayers {
 	
@@ -73,7 +67,7 @@ public class EventPlayers {
 				EntityPlayer player = (EntityPlayer) event.entity;
 				if (names.contains(player.getDisplayName())) {
 					ItemStack potato = new ItemStack(Items.poisonous_potato);
-					potato.addEnchantment(Enchantment.unbreaking, 1);
+					potato.addEnchantment(Enchantments.unbreaking, 1);
 					potato.setStackDisplayName("Death Potato");
 					if (!player.inventory.hasItemStack(potato)) {
 						player.inventory.addItemStackToInventory(potato);

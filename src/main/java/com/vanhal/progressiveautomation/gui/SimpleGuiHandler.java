@@ -4,30 +4,14 @@ import java.lang.reflect.Constructor;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
-import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
-import com.vanhal.progressiveautomation.entities.miner.TileMiner;
-import com.vanhal.progressiveautomation.entities.planter.TilePlanter;
-import com.vanhal.progressiveautomation.gui.client.GUIChopper;
-import com.vanhal.progressiveautomation.gui.client.GUIGenerator;
-import com.vanhal.progressiveautomation.gui.client.GUIMiner;
-import com.vanhal.progressiveautomation.gui.client.GUIPlanter;
-import com.vanhal.progressiveautomation.gui.container.ContainerChopper;
-import com.vanhal.progressiveautomation.gui.container.ContainerGenerator;
-import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
-import com.vanhal.progressiveautomation.gui.container.ContainerPlanter;
-
-import net.minecraft.inventory.Container;
-import net.minecraft.network.Packet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.network.Packet;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 

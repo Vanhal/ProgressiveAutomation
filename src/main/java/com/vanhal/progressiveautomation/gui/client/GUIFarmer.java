@@ -1,15 +1,14 @@
 package com.vanhal.progressiveautomation.gui.client;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
 import com.vanhal.progressiveautomation.entities.farmer.TileFarmer;
 import com.vanhal.progressiveautomation.gui.container.ContainerFarmer;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.StringHelper;
+
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 
 public class GUIFarmer extends BaseGUI {
 	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Farmer.png");

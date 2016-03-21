@@ -1,22 +1,6 @@
 package com.vanhal.progressiveautomation.entities.farmer;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.IShearable;
 
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -24,6 +8,21 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.IShearable;
 
 public class TileFarmer extends UpgradeableTileEntity {
 	
@@ -142,7 +141,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	protected EntityAnimal findAnimalToFeed(int n) {
 		Point3I point = getPoint(n);
-		boundCheck = AxisAlignedBB.fromBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
@@ -160,7 +159,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected EntityAnimal findAnimalToShear(int n) {
 		if (!hasUpgrade(UpgradeType.SHEARING)) return null;
 		Point3I point = getPoint(n);
-		boundCheck = AxisAlignedBB.fromBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
@@ -180,7 +179,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected EntityAnimal findAnimalToMilk(int n) {
 		if (!hasUpgrade(UpgradeType.MILKER)) return null;
 		Point3I point = getPoint(n);
-		boundCheck = AxisAlignedBB.fromBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
@@ -188,7 +187,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 				if ( (slots[SLOT_BUCKETS]!=null) && (slots[SLOT_BUCKETS].stackSize>0) ) {
 					initFaker();
 					faker.setItemInHand(slots[SLOT_BUCKETS].copy());
-					if (animal.interact(faker)) {
+					if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
 						return animal;
 					}
 				}
@@ -199,7 +198,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	public void pickup(int n) {
 		Point3I point = getPoint(n);
-		boundCheck = AxisAlignedBB.fromBounds(point.getX(), point.getY(), point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, boundCheck);
@@ -297,7 +296,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected void shearAnimal(EntityAnimal animal) {
 		if ( (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 			if (animal instanceof IShearable) {
-				int fortuneLevel =  EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[SLOT_SHEARS]);
+				int fortuneLevel =  EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("fortune"), slots[SLOT_SHEARS]);
 				
 				List<ItemStack> items = ((IShearable)animal).onSheared(slots[SLOT_SHEARS], worldObj, pos, fortuneLevel);
 				//get the drops
@@ -321,7 +320,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 			ItemStack item = slots[SLOT_BUCKETS].copy();
 			item.stackSize = 1;
 			faker.setItemInHand(item);
-			if (animal.interact(faker)) {
+			if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
 				IInventory inv = faker.inventory;
 				for (int i = 0; i < inv.getSizeInventory(); i++){
 					if (inv.getStackInSlot(i)!=null) {

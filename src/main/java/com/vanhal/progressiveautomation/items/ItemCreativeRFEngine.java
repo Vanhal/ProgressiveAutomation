@@ -2,13 +2,11 @@ package com.vanhal.progressiveautomation.items;
 
 import java.util.List;
 
+import com.vanhal.progressiveautomation.PAConfig;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ref.Ref;
-
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -28,8 +26,8 @@ public class ItemCreativeRFEngine extends ItemRFEngine {
 	
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
-		list.add(EnumChatFormatting.GRAY + "Can power a machine");
-		list.add(EnumChatFormatting.DARK_PURPLE + "Creative Only");
+		list.add(TextFormatting.GRAY + "Can power a machine");
+		list.add(TextFormatting.DARK_PURPLE + "Creative Only");
        
     }
 }

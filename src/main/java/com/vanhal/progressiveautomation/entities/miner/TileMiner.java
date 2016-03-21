@@ -1,33 +1,23 @@
 package com.vanhal.progressiveautomation.entities.miner;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
 
-import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-import com.vanhal.progressiveautomation.util.Point2I;
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.blocks.PABlocks;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+import com.vanhal.progressiveautomation.util.Point2I;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.BlockPos;
-import net.minecraft.world.WorldServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ForgeHooks;
 
 public class TileMiner extends UpgradeableTileEntity {
@@ -121,8 +111,8 @@ public class TileMiner extends UpgradeableTileEntity {
 		if (tryBlock != null) {
 			int meta = tryBlock.getMetaFromState(tryState);
 			if (
-				(tryBlock.getBlockHardness(worldObj, minePos)>=0) &&
-				(!tryBlock.isAir(worldObj, minePos)) 
+				(tryBlock.getBlockHardness(tryState, worldObj, minePos)>=0) &&
+				(!tryBlock.isAir(tryState, worldObj, minePos)) 
 			) {
 				boolean mine = false;
 				//ProgressiveAutomation.logger.info("Tool: "+tryBlock.getHarvestTool(meta)+", Level: "+tryBlock.getHarvestLevel(meta)+", Can use Pick: "+tryBlock.isToolEffective("pickaxe", meta));
@@ -142,7 +132,7 @@ public class TileMiner extends UpgradeableTileEntity {
 						return 3;
 					}
 				} else {
-					if (!tryBlock.getMaterial().isLiquid()) {
+					if (!tryBlock.getMaterial(tryState).isLiquid()) {
 						return 1;
 					}
 				}
@@ -150,7 +140,7 @@ public class TileMiner extends UpgradeableTileEntity {
 			
 			//see if the filler upgrade is active, if it is then the block will need to be filled.
 			if (hasUpgrade(UpgradeType.FILLER)) {
-				if ( (tryBlock.isAir(worldObj, minePos)) || (tryBlock.getMaterial().isLiquid()) ) {
+				if ( (tryBlock.isAir(tryState, worldObj, minePos)) || (tryBlock.getMaterial(tryState).isLiquid()) ) {
 					return 4;
 				}
 			}
@@ -185,7 +175,7 @@ public class TileMiner extends UpgradeableTileEntity {
 					//silk touch the block if we have it
 					int silkTouch = 0;
 					if (miningWith!=1) {
-						silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch.effectId, slots[miningWith]);
+						silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.silkTouch, slots[miningWith]);
 					}
 	
 					if (silkTouch>0) {
@@ -200,7 +190,7 @@ public class TileMiner extends UpgradeableTileEntity {
 						//mine the block
 						int fortuneLevel = 0;
 						if (miningWith!=1) {
-							fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
+							fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, slots[miningWith]);
 						}
 	
 						//then break the block
@@ -241,24 +231,26 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (currentBlock != null) {
 					Point2I currentPoint = spiral(currentColumn, pos.getX(), pos.getZ());
 					BlockPos currentPosition = new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY());
+					IBlockState currentBlockState = worldObj.getBlockState(currentPosition);
 					
 					if (miningWith==4) {
 						miningTime = 1;
 					} else {
-						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(worldObj, currentPosition) * 1.5 * 20 ) ;
+						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(currentBlockState, worldObj, currentPosition) * 1.5 * 20 ) ;
 						
 						if (miningWith!=1) {
-							Item tool = (Item)slots[miningWith].getItem();
-							float miningSpeed = tool.getDigSpeed( slots[miningWith], worldObj.getBlockState(currentPosition) );
+							float miningSpeed = ToolHelper.getDigSpeed( slots[miningWith], currentBlockState );
 	
 							//check for efficiency on the tool
-							int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
-							if (eff>0) {
-								for (int i = 0; i<eff; i++) {
-									miningSpeed = miningSpeed * 1.3f;
+							if (miningSpeed>1) {
+								int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.efficiency, slots[miningWith]);
+								if (eff>0) {
+									for (int i = 0; i<eff; i++) {
+										miningSpeed = miningSpeed * 1.3f;
+									}
 								}
 							}
-	
+		
 							miningTime = (int) Math.ceil(miningTime / miningSpeed);
 						}
 					}

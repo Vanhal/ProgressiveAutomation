@@ -3,20 +3,20 @@ package com.vanhal.progressiveautomation.compat.mods;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.util.PlayerFake;
+import com.vanhal.progressiveautomation.util.Point3I;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.util.PlayerFake;
-import com.vanhal.progressiveautomation.util.Point3I;
 
 public class RightClick extends Vanilla {
 
@@ -38,7 +38,7 @@ public class RightClick extends Vanilla {
 	@Override
 	public List<ItemStack> harvestPlant(Point3I point, Block plantBlock, IBlockState state, World worldObj) {
 		PlayerFake faker = new PlayerFake((WorldServer)worldObj);
-		plantBlock.onBlockActivated(worldObj, point.toPosition(), state, faker, EnumFacing.DOWN, 0, 0, 0);
+		plantBlock.onBlockActivated(worldObj, point.toPosition(), state, faker, null, null, EnumFacing.DOWN, 0, 0, 0);
 		
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		

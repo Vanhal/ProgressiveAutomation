@@ -2,12 +2,9 @@ package com.vanhal.progressiveautomation.gui.slots;
 
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityFurnace;
 
 public class SlotBurn extends Slot {
 

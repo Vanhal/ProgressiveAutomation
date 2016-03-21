@@ -1,35 +1,21 @@
 package com.vanhal.progressiveautomation.entities.planter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.IGrowable;
-import net.minecraft.block.state.BlockState;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.WorldServer;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
-import com.vanhal.progressiveautomation.util.OreHelper;
-import com.vanhal.progressiveautomation.util.PlayerFake;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class TilePlanter extends UpgradeableTileEntity {
 	
@@ -214,7 +200,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 			}
 		} else {
 			if (slots[SLOT_HOE]!=null) {
-				if (plantBlock.isAir(worldObj, plantPosition)) {
+				if (plantBlock.isAir(dirtState, worldObj, plantPosition)) {
 					if ((dirtBlock == Blocks.grass || dirtBlock == Blocks.dirt)) {
 						worldObj.setBlockState(dirtPosition, Blocks.farmland.getDefaultState());
 						damageHoe(dirtPoint);

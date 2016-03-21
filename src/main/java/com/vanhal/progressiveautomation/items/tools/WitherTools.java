@@ -4,12 +4,9 @@ import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.RecipeSorter;
 
 public class WitherTools {
 
