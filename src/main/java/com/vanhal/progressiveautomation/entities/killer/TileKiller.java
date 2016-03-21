@@ -17,6 +17,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
@@ -91,7 +92,6 @@ public class TileKiller extends UpgradeableTileEntity {
 								faker.setItemInHand(slots[SLOT_SWORD].copy());
 //								faker.setItemInUse(faker.getHeldItemMainhand(), 72000);
 								faker.attackTargetEntityWithCurrentItem(mob);
-								
 								
 
 								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, pos.getX(), pos.getY(), pos.getZ())) {

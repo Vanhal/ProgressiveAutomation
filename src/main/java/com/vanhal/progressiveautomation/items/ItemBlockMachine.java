@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.vanhal.progressiveautomation.blocks.BlockChopper;
 import com.vanhal.progressiveautomation.blocks.BlockFarmer;
+import com.vanhal.progressiveautomation.blocks.BlockGenerator;
 import com.vanhal.progressiveautomation.blocks.BlockKiller;
 import com.vanhal.progressiveautomation.blocks.BlockPlanter;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
@@ -41,7 +42,9 @@ public class ItemBlockMachine extends ItemBlock {
 			list.add(TextFormatting.GRAY + "Machine should be placed one block below the ground");
 		} else if (this.block instanceof BlockChopper) {
 			list.add(TextFormatting.GRAY + "Can plant and harvest all types of tree");
-			list.add(TextFormatting.GRAY + "Machine should be placed on the ground");
+			list.add(TextFormatting.GRAY + "Machine should be placed on the same level as saplings");
+		} else if (this.block instanceof BlockGenerator) {
+			list.add(TextFormatting.GRAY + "Produces RF");
 		}
 		
 		if ( (itemStack != null) && (itemStack.getTagCompound() != null) ) {

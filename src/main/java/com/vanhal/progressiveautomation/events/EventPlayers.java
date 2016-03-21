@@ -9,6 +9,7 @@ import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -66,7 +67,7 @@ public class EventPlayers {
 				EntityPlayer player = (EntityPlayer) event.entity;
 				if (names.contains(player.getDisplayName())) {
 					ItemStack potato = new ItemStack(Items.poisonous_potato);
-//					potato.addEnchantment(Enchantment.unbreaking, 1);
+					potato.addEnchantment(Enchantments.unbreaking, 1);
 					potato.setStackDisplayName("Death Potato");
 					if (!player.inventory.hasItemStack(potato)) {
 						player.inventory.addItemStackToInventory(potato);

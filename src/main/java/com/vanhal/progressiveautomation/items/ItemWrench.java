@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.items;
 
 import java.util.List;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.BaseBlock;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.ref.Ref;
@@ -29,7 +30,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class ItemWrench extends BaseItem {
 	public ItemWrench() {
 		super("Wrench");
-		//setTextureName(Ref.MODID+":Wrench");
 		this.setMaxStackSize(1);
 		
 	}
@@ -58,12 +58,13 @@ public class ItemWrench extends BaseItem {
 				IDismantleable dBlock = (IDismantleable)block;
 				if (dBlock.canDismantle(player, world, pos.getX(), pos.getY(), pos.getZ())) {
 					if (!world.isRemote) dBlock.dismantleBlock(player, world, pos.getX(), pos.getY(), pos.getZ(), false);
-//					player.swingItem();
+					return EnumActionResult.SUCCESS;
 				}
 			}
 		} else {
 			if (getMode(itemStack)==WrenchModes.Mode.Rotate) {
 				block.rotateBlock(world, pos, face);
+				return EnumActionResult.SUCCESS;
 			} else {
 				if (block instanceof BaseBlock) {
 					BaseTileEntity PABlock = (BaseTileEntity)world.getTileEntity(pos);
@@ -73,10 +74,11 @@ public class ItemWrench extends BaseItem {
 						PABlock.setSide(face, getMode(itemStack));
 						if (world.isRemote) player.addChatMessage(new TextComponentString(face+" side set to: "+getMode(itemStack)));
 					}
+					return EnumActionResult.SUCCESS;
 				}
 			}
 		}
-		return EnumActionResult.FAIL;
+		return EnumActionResult.PASS;
 	}
 	
 	@Override
@@ -87,7 +89,7 @@ public class ItemWrench extends BaseItem {
 			((ItemWrench)itemStack.getItem()).setMode(itemStack, WrenchModes.modes.get(temp));
 			if (world.isRemote) player.addChatMessage(new TextComponentString("Mode: "+WrenchModes.modes.get(temp)));
 		}
-        return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack);
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
 	}
 	
 	

@@ -19,6 +19,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IShearable;
@@ -184,11 +185,11 @@ public class TileFarmer extends UpgradeableTileEntity {
 		if (!entities.isEmpty()) {
 			for (EntityAnimal animal: entities) {
 				if ( (slots[SLOT_BUCKETS]!=null) && (slots[SLOT_BUCKETS].stackSize>0) ) {
-//					initFaker();
-//					faker.setItemInHand(slots[SLOT_BUCKETS].copy());
-//					if (animal.interact(faker)) {
-//						return animal;
-//					}
+					initFaker();
+					faker.setItemInHand(slots[SLOT_BUCKETS].copy());
+					if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
+						return animal;
+					}
 				}
 			}
 		}
@@ -295,13 +296,13 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected void shearAnimal(EntityAnimal animal) {
 		if ( (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 			if (animal instanceof IShearable) {
-//				int fortuneLevel =  EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[SLOT_SHEARS]);
+				int fortuneLevel =  EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("fortune"), slots[SLOT_SHEARS]);
 				
-//				List<ItemStack> items = ((IShearable)animal).onSheared(slots[SLOT_SHEARS], worldObj, pos, fortuneLevel);
+				List<ItemStack> items = ((IShearable)animal).onSheared(slots[SLOT_SHEARS], worldObj, pos, fortuneLevel);
 				//get the drops
-//				for (ItemStack item : items) {
-//					addToInventory(item);
-//				}
+				for (ItemStack item : items) {
+					addToInventory(item);
+				}
 				
 				if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, pos.getX(), pos.getY(), pos.getZ())) {
 					destroyTool(SLOT_SHEARS);
@@ -319,21 +320,21 @@ public class TileFarmer extends UpgradeableTileEntity {
 			ItemStack item = slots[SLOT_BUCKETS].copy();
 			item.stackSize = 1;
 			faker.setItemInHand(item);
-//			if (animal.interact(faker)) {
-//				IInventory inv = faker.inventory;
-//				for (int i = 0; i < inv.getSizeInventory(); i++){
-//					if (inv.getStackInSlot(i)!=null) {
-//						addToInventory(inv.getStackInSlot(i));
-//						inv.setInventorySlotContents(i, null);
-//					}
-//				}
+			if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
+				IInventory inv = faker.inventory;
+				for (int i = 0; i < inv.getSizeInventory(); i++){
+					if (inv.getStackInSlot(i)!=null) {
+						addToInventory(inv.getStackInSlot(i));
+						inv.setInventorySlotContents(i, null);
+					}
+				}
 				slots[SLOT_BUCKETS].stackSize--;
 				if (slots[SLOT_BUCKETS].stackSize==0) slots[SLOT_BUCKETS] = null;
 				currentTime = waitTime;
 				addPartialUpdate("currentTime", currentTime);
 			}
 		}
-//	}
+	}
 	
 	public static boolean isFeed(ItemStack itemStack) {
 		if (itemStack==null) return false;

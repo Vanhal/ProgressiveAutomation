@@ -109,45 +109,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public TileEntity createNewTileEntity(World world, int var2) {
 		return null;
 	}
-
-	//this can be used to set the side fromthe tile entity
-	/*@SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side) {
-		if ( (rangeCount>=0) && (side>=2) && (side<=5) ) {
-			if (world.getTileEntity(x, y, z) instanceof UpgradeableTileEntity) {
-				UpgradeableTileEntity tileEntity = (UpgradeableTileEntity)world.getTileEntity(x, y, z);
-				int range = tileEntity.getRange() + rangeCount;
-
-				ForgeDirection dir = tileEntity.facing;
-				if ((side==dir.ordinal())&&(range<2)) return blankSide;
-				dir = this.nextFace(dir);
-				if ((side==dir.ordinal())&&(range<4)) return blankSide;
-				dir = this.nextFace(dir);
-				if ((side==dir.ordinal())&&(range<6)) return blankSide;
-				dir = this.nextFace(dir);
-				if ((side==dir.ordinal())&&(range<8)) return blankSide;
-			}
-		}
-        return this.getIcon(side, world.getBlockMetadata(x, y, z));
-    }
-	
-	@SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
-		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
-		blockIcons[0] = register.registerIcon(iconPrefix + "_Bottom");
-		blockIcons[1] = register.registerIcon(iconPrefix + "_Top");
-		blockIcons[2] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[3] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[4] = register.registerIcon(iconPrefix + "_Side");
-		blockIcons[5] = register.registerIcon(iconPrefix + "_Side");
-		
-		blankSide = register.registerIcon(Ref.MODID + ":" + getLevelName() + "_Side");
-    }
-	
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-        return blockIcons[side];
-    }*/
 	
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
@@ -186,14 +147,14 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	public void init() {
-		
-	}
-	
-	public void postInit() {
 		if (ProgressiveAutomation.proxy.isClient()) {
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
 				.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Ref.MODID + ":" + name, "inventory"));
 		}
+		
+	}
+	
+	public void postInit() {
 	}
 	
 	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
@@ -269,7 +230,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		else if (tileEntity.facing == EnumFacing.SOUTH) tileEntity.facing = EnumFacing.WEST;
 		else if (tileEntity.facing == EnumFacing.WEST) tileEntity.facing = EnumFacing.NORTH;
 		//ProgressiveAutomation.logger.info(chopper.facing.toString());
-//		worldObj.markBlockForUpdate(pos);
+		worldObj.markBlockRangeForRenderUpdate(pos, pos);
         return true;
     }
 	

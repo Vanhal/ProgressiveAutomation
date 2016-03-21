@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -174,7 +175,7 @@ public class TileMiner extends UpgradeableTileEntity {
 					//silk touch the block if we have it
 					int silkTouch = 0;
 					if (miningWith!=1) {
-//						silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantment.silkTouch.effectId, slots[miningWith]);
+						silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.silkTouch, slots[miningWith]);
 					}
 	
 					if (silkTouch>0) {
@@ -189,7 +190,7 @@ public class TileMiner extends UpgradeableTileEntity {
 						//mine the block
 						int fortuneLevel = 0;
 						if (miningWith!=1) {
-//							fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[miningWith]);
+							fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, slots[miningWith]);
 						}
 	
 						//then break the block
@@ -230,25 +231,27 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (currentBlock != null) {
 					Point2I currentPoint = spiral(currentColumn, pos.getX(), pos.getZ());
 					BlockPos currentPosition = new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY());
+					IBlockState currentBlockState = worldObj.getBlockState(currentPosition);
 					
 					if (miningWith==4) {
 						miningTime = 1;
 					} else {
-						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(null, worldObj, currentPosition) * 1.5 * 20 ) ;
+						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(currentBlockState, worldObj, currentPosition) * 1.5 * 20 ) ;
 						
 						if (miningWith!=1) {
-							Item tool = (Item)slots[miningWith].getItem();
-//							float miningSpeed = tool.getDigSpeed( slots[miningWith], worldObj.getBlockState(currentPosition) );
+							float miningSpeed = ToolHelper.getDigSpeed( slots[miningWith], currentBlockState );
 	
 							//check for efficiency on the tool
-//							int eff = EnchantmentHelper.getEnchantmentLevel(Enchantment.efficiency.effectId, slots[miningWith]);
-//							if (eff>0) {
-//								for (int i = 0; i<eff; i++) {
-//									miningSpeed = miningSpeed * 1.3f;
-//								}
-//							}
-	
-//							miningTime = (int) Math.ceil(miningTime / miningSpeed);
+							if (miningSpeed>1) {
+								int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.efficiency, slots[miningWith]);
+								if (eff>0) {
+									for (int i = 0; i<eff; i++) {
+										miningSpeed = miningSpeed * 1.3f;
+									}
+								}
+							}
+		
+							miningTime = (int) Math.ceil(miningTime / miningSpeed);
 						}
 					}
 

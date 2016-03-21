@@ -74,7 +74,7 @@ public class TileGenerator extends BaseTileEntity {
 			burnUpdate = isBurning();
 			
 			worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
-//			worldObj.markBlockForUpdate(this.pos);
+			worldObj.markBlockRangeForRenderUpdate(pos, pos);
 		}
 	}
 
