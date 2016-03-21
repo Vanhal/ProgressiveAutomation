@@ -6,11 +6,11 @@ import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.util.StringHelper;
 
-import cpw.mods.fml.client.FMLClientHandler;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public class BaseGUI extends GuiContainer {
 	public static int BLACK = 0x000000;
@@ -24,7 +24,7 @@ public class BaseGUI extends GuiContainer {
 	protected int guiHeight = 166;
 	protected int guiWidth = 176;
 	
-	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
+	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRendererObj;
 	public static final ResourceLocation flame = new ResourceLocation(Ref.MODID, "textures/gui/flame.png");
 	
 	protected ResourceLocation background;
@@ -76,6 +76,6 @@ public class BaseGUI extends GuiContainer {
 	}
 
 	public String getTextLine(int line, String text) {
-		return EventPlayers.getPlayerLine(mc.thePlayer.getDisplayName(), line, StringHelper.localize(text));
+		return EventPlayers.getPlayerLine(mc.thePlayer.getDisplayNameString(), line, StringHelper.localize(text));
 	}
 }

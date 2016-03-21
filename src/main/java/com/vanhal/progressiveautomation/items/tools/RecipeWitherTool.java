@@ -1,12 +1,9 @@
 package com.vanhal.progressiveautomation.items.tools;
 
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class RecipeWitherTool extends ShapedOreRecipe {
@@ -24,7 +21,7 @@ public class RecipeWitherTool extends ShapedOreRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
     	ItemStack result = output.copy();
-    	result.addEnchantment(Enchantment.unbreaking, 10);
+//    	result.addEnchantment(Enchantment.unbreaking, 10);
     	result.setStackDisplayName("Withered "+result.getDisplayName());
     	return result; 
     }
@@ -32,7 +29,7 @@ public class RecipeWitherTool extends ShapedOreRecipe {
     @Override
     public ItemStack getRecipeOutput() {
     	ItemStack result = output.copy();
-    	result.addEnchantment(Enchantment.unbreaking, 10);
+//    	result.addEnchantment(Enchantment.unbreaking, 10);
     	result.setStackDisplayName("Withered "+result.getDisplayName());
     	return result; 
     }

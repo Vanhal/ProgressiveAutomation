@@ -1,25 +1,17 @@
 package com.vanhal.progressiveautomation.compat;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.compat.mods.AgriCraft;
-import com.vanhal.progressiveautomation.compat.mods.GrowOres;
-import com.vanhal.progressiveautomation.compat.mods.ImmersiveEngineering;
 import com.vanhal.progressiveautomation.compat.mods.MFR;
-import com.vanhal.progressiveautomation.compat.mods.Pams;
-import com.vanhal.progressiveautomation.compat.mods.Pneumaticcraft;
 import com.vanhal.progressiveautomation.compat.mods.RightClick;
-import com.vanhal.progressiveautomation.compat.mods.ThaumCraft;
 import com.vanhal.progressiveautomation.compat.mods.Vanilla;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class ModHelper {
 
@@ -27,13 +19,14 @@ public class ModHelper {
 	private static ArrayList<BaseMod> modsLoaded = new ArrayList<BaseMod>();
 	
 	private static void registerMods() {
-		registerMod(new ImmersiveEngineering());
-		registerMod(new Pams());
-		registerMod(new Pneumaticcraft());
+		//registerMod(new ImmersiveEngineering());
+		//registerMod(new Pams());
+		//registerMod(new Pneumaticcraft());
 		registerMod(new MFR());
-		registerMod(new AgriCraft());
-		registerMod(new GrowOres());
-		registerMod(new ThaumCraft());
+		//registerMod(new AgriCraft());
+		//registerMod(new GrowOres());
+		//registerMod(new ThaumCraft());
+
 		
 		//sudo "mod" to attempt to right click on plants before trying to break them
 		registerMod(new RightClick());
@@ -98,18 +91,18 @@ public class ModHelper {
 	}
 	
 	//check if a block in the world is an ungrown plant	
-	public static boolean isPlant(Block plantBlock, int metadata) {
+	public static boolean isPlant(Block plantBlock, IBlockState state) {
 		for (BaseMod mod: modsLoaded) {
-			if (mod.isPlant(plantBlock, metadata)) return true;
+			if (mod.isPlant(plantBlock, state)) return true;
 		}
 		return false;
 	}
 
 	//check to see if a plant is fully grown
-	public static boolean isGrown(Point3I plantPoint, Block plantBlock, int metadata, World worldObj) {
+	public static boolean isGrown(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
 		for (BaseMod mod: modsLoaded) {
-			if (mod.isPlant(plantBlock, metadata)) {
-				if (mod.isGrown(plantPoint, plantBlock, metadata, worldObj)) return true;
+			if (mod.isPlant(plantBlock, state)) {
+				if (mod.isGrown(plantPoint, plantBlock, state, worldObj)) return true;
 			}
 		}
 		return false;
@@ -136,12 +129,12 @@ public class ModHelper {
 	}
 
 	//harvest the crop block
-	public static ArrayList<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, int metadata, World worldObj) {
-		ArrayList<ItemStack> items = null;
+	public static List<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
+		List<ItemStack> items = null;
 		for (BaseMod mod: modsLoaded) {
-			if (mod.isPlant(plantBlock, metadata)) {
-				if (mod.isGrown(plantPoint, plantBlock, metadata, worldObj)) {
-					items = mod.harvestPlant(plantPoint, plantBlock, metadata, worldObj);
+			if (mod.isPlant(plantBlock, state)) {
+				if (mod.isGrown(plantPoint, plantBlock, state, worldObj)) {
+					items = mod.harvestPlant(plantPoint, plantBlock, state, worldObj);
 					if (items!=null) return items;
 				}
 			}

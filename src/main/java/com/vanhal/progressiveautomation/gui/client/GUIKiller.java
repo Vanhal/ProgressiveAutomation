@@ -7,7 +7,6 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.StringHelper;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 

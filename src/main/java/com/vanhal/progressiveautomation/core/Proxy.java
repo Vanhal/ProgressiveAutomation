@@ -30,7 +30,7 @@ import com.vanhal.progressiveautomation.entities.planter.TilePlanterDiamond;
 import com.vanhal.progressiveautomation.entities.planter.TilePlanterIron;
 import com.vanhal.progressiveautomation.entities.planter.TilePlanterStone;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class Proxy {
 
@@ -110,6 +110,7 @@ public class Proxy {
 	public boolean isServer() {
 		return true;
 	}
+
 	
 	public void preInit() {
 		

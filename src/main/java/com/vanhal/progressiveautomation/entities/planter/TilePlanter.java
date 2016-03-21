@@ -1,30 +1,21 @@
 package com.vanhal.progressiveautomation.entities.planter;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.IGrowable;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraft.world.WorldServer;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
-import com.vanhal.progressiveautomation.util.PlayerFake;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 public class TilePlanter extends UpgradeableTileEntity {
 	
@@ -42,19 +33,20 @@ public class TilePlanter extends UpgradeableTileEntity {
 		setHarvestTime(80);
 		
 		// #36 Planter can't eject items to bottom
-		setExtDirection(ForgeDirection.DOWN);
+		setExtDirection(EnumFacing.DOWN);
 
 		//slots
 		SLOT_HOE = 2;
 		SLOT_UPGRADE = 3;
 	}
-	
+		
 	protected void setHarvestTime(int time) {
 		harvestTime = time;
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	@Override
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			checkInventory();
 
@@ -134,11 +126,13 @@ public class TilePlanter extends UpgradeableTileEntity {
 	
 	protected void harvestPlant(int n) {
 		Point3I currentBlock = getPoint(n);
-		Block actualBlock = worldObj.getBlock(currentBlock.getX(), currentBlock.getY(), currentBlock.getZ());
-		int metaData = worldObj.getBlockMetadata( currentBlock.getX(), currentBlock.getY(), currentBlock.getZ() );
+		BlockPos currentPosition = currentBlock.toPosition();;
+		
+		IBlockState currentState = worldObj.getBlockState(currentPosition);
+		Block actualBlock = currentState.getBlock();
 		
 		if (slots[SLOT_HOE]!=null) {
-			ArrayList<ItemStack> items = ModHelper.harvestPlant(currentBlock, actualBlock, metaData, worldObj);
+			List<ItemStack> items = ModHelper.harvestPlant(currentBlock, actualBlock, currentState, worldObj);
 			if (items!=null) {
 				for (ItemStack item : items) {
 					addToInventory(item);
@@ -173,16 +167,16 @@ public class TilePlanter extends UpgradeableTileEntity {
 
 	protected boolean checkPlant(int n) {
 		Point3I plantPoint = getPoint(n);
-		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
-		int metadata = worldObj.getBlockMetadata(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
-		
-		return ModHelper.isGrown(plantPoint, plantBlock, metadata, worldObj);
+		IBlockState blockState = worldObj.getBlockState(plantPoint.toPosition());
+		Block plantBlock = blockState.getBlock();
+
+		return ModHelper.isGrown(plantPoint, plantBlock, blockState, worldObj);
 	}
 	
 	
 	protected Point3I getPoint(int n) {
-		Point2I p1 = spiral(n+1, xCoord, zCoord);
-		return new Point3I(p1.getX(), yCoord + 2, p1.getY());
+		Point2I p1 = spiral(n+1, getPos().getX(), getPos().getZ());
+		return new Point3I(p1.getX(), getPos().getY() + 2, p1.getY());
 	}
 	
 	protected void hoeGround(int n) {
@@ -191,19 +185,24 @@ public class TilePlanter extends UpgradeableTileEntity {
 	
 	protected void hoeGround(int n, boolean reverse) {
 		Point3I plantPoint = getPoint(n);
-		Block plantBlock = worldObj.getBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
+		BlockPos plantPosition = plantPoint.toPosition();
+		IBlockState plantState = worldObj.getBlockState(plantPosition);
+		Block plantBlock = plantState.getBlock();
+		
 		Point3I dirtPoint = new Point3I(plantPoint.getX(), plantPoint.getY() - 1, plantPoint.getZ());
-		Block dirtBlock = worldObj.getBlock(dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ());
+		BlockPos dirtPosition = dirtPoint.toPosition();
+		IBlockState dirtState = worldObj.getBlockState(dirtPosition);
+		Block dirtBlock = dirtState.getBlock();
 		
 		if (reverse) {
 			if (dirtBlock == Blocks.farmland) {
-				worldObj.setBlock(dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ(), Blocks.dirt);
+				worldObj.setBlockState(dirtPosition, Blocks.dirt.getDefaultState());
 			}
 		} else {
 			if (slots[SLOT_HOE]!=null) {
-				if (plantBlock.isAir(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ())) {
+				if (plantBlock.isAir(dirtState, worldObj, plantPosition)) {
 					if ((dirtBlock == Blocks.grass || dirtBlock == Blocks.dirt)) {
-						worldObj.setBlock(dirtPoint.getX(), dirtPoint.getY(), dirtPoint.getZ(), Blocks.farmland);
+						worldObj.setBlockState(dirtPosition, Blocks.farmland.getDefaultState());
 						damageHoe(dirtPoint);
 					}
 				}
@@ -269,7 +268,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 
 
-	/* ISided Stuff */
+	//ISided Stuff
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if ( (slot == SLOT_SEEDS) && (isPlantable(stack)) ) {
     		return true;

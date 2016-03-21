@@ -4,8 +4,8 @@ import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public abstract class ItemTieredUpgrade extends ItemUpgrade {
 	

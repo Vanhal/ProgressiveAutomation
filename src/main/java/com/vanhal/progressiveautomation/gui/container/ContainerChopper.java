@@ -1,9 +1,5 @@
 package com.vanhal.progressiveautomation.gui.container;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.gui.slots.SlotSaplings;
@@ -12,6 +8,10 @@ import com.vanhal.progressiveautomation.gui.slots.SlotTool;
 import com.vanhal.progressiveautomation.gui.slots.SlotUpgrades;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class ContainerChopper extends BaseContainer {
 	protected ItemStack updateType;

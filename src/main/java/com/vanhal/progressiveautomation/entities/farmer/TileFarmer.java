@@ -1,22 +1,6 @@
 package com.vanhal.progressiveautomation.entities.farmer;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.IShearable;
 
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -24,6 +8,20 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.IShearable;
 
 public class TileFarmer extends UpgradeableTileEntity {
 	
@@ -39,7 +37,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected PlayerFake faker;
 	protected int currentAction = 0;
 
-	protected AxisAlignedBB boundCheck = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+	protected AxisAlignedBB boundCheck = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
 	public TileFarmer() {
 		super(13);
@@ -142,7 +140,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	protected EntityAnimal findAnimalToFeed(int n) {
 		Point3I point = getPoint(n);
-		boundCheck.setBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
@@ -160,14 +158,14 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected EntityAnimal findAnimalToShear(int n) {
 		if (!hasUpgrade(UpgradeType.SHEARING)) return null;
 		Point3I point = getPoint(n);
-		boundCheck.setBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityAnimal animal: entities) {
 				if ( slots[SLOT_SHEARS]!=null ) {
 					if (animal instanceof IShearable) {
-						if (((IShearable)animal).isShearable(slots[SLOT_SHEARS], worldObj, point.getX(), point.getY(), point.getZ())) {
+						if (((IShearable)animal).isShearable(slots[SLOT_SHEARS], worldObj, point.toPosition())) {
 							return animal;
 						}
 					}
@@ -180,17 +178,17 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected EntityAnimal findAnimalToMilk(int n) {
 		if (!hasUpgrade(UpgradeType.MILKER)) return null;
 		Point3I point = getPoint(n);
-		boundCheck.setBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityAnimal animal: entities) {
 				if ( (slots[SLOT_BUCKETS]!=null) && (slots[SLOT_BUCKETS].stackSize>0) ) {
-					initFaker();
-					faker.setItemInHand(slots[SLOT_BUCKETS].copy());
-					if (animal.interact(faker)) {
-						return animal;
-					}
+//					initFaker();
+//					faker.setItemInHand(slots[SLOT_BUCKETS].copy());
+//					if (animal.interact(faker)) {
+//						return animal;
+//					}
 				}
 			}
 		}
@@ -199,7 +197,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	public void pickup(int n) {
 		Point3I point = getPoint(n);
-		boundCheck.setBounds(point.getX(), point.getY(), point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
 		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, boundCheck);
@@ -228,8 +226,8 @@ public class TileFarmer extends UpgradeableTileEntity {
 	}
 	
 	protected Point3I getPoint(int n) {
-		Point2I p1 = spiral(n+2, xCoord, zCoord);
-		return new Point3I(p1.getX(), yCoord, p1.getY());
+		Point2I p1 = spiral(n+2, pos.getX(), pos.getZ());
+		return new Point3I(p1.getX(), pos.getY(), p1.getY());
 	}
 
 	
@@ -243,15 +241,15 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	protected void initFaker() {
 		if (faker == null) {
-			faker = new PlayerFake((WorldServer)worldObj, worldObj.getBlock(xCoord, yCoord, zCoord).getLocalizedName());
+			faker = new PlayerFake((WorldServer)worldObj, worldObj.getBlockState(pos).getBlock().getLocalizedName());
 			faker.setPosition(0, 0, 0);
 		}
-		faker.inventory.clearInventory(null, -1);
+		faker.inventory.clear();
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			doPickup();
 			checkInventory();
@@ -286,7 +284,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	protected void feedAnimal(EntityAnimal animal) {
 		if (slots[SLOT_FOOD]!=null) {
-			animal.func_146082_f(faker);
+			animal.setInLove(faker);
 			slots[SLOT_FOOD].stackSize--;
 			if (slots[SLOT_FOOD].stackSize==0) slots[SLOT_FOOD] = null;
 			currentTime = waitTime;
@@ -297,15 +295,15 @@ public class TileFarmer extends UpgradeableTileEntity {
 	protected void shearAnimal(EntityAnimal animal) {
 		if ( (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 			if (animal instanceof IShearable) {
-				int fortuneLevel =  EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[SLOT_SHEARS]);
+//				int fortuneLevel =  EnchantmentHelper.getEnchantmentLevel(Enchantment.fortune.effectId, slots[SLOT_SHEARS]);
 				
-				ArrayList<ItemStack> items = ((IShearable)animal).onSheared(slots[SLOT_SHEARS], worldObj, xCoord, yCoord, zCoord, fortuneLevel);
+//				List<ItemStack> items = ((IShearable)animal).onSheared(slots[SLOT_SHEARS], worldObj, pos, fortuneLevel);
 				//get the drops
-				for (ItemStack item : items) {
-					addToInventory(item);
-				}
+//				for (ItemStack item : items) {
+//					addToInventory(item);
+//				}
 				
-				if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, xCoord, yCoord, zCoord)) {
+				if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, pos.getX(), pos.getY(), pos.getZ())) {
 					destroyTool(SLOT_SHEARS);
 				}
 				
@@ -321,21 +319,21 @@ public class TileFarmer extends UpgradeableTileEntity {
 			ItemStack item = slots[SLOT_BUCKETS].copy();
 			item.stackSize = 1;
 			faker.setItemInHand(item);
-			if (animal.interact(faker)) {
-				IInventory inv = faker.inventory;
-				for (int i = 0; i < inv.getSizeInventory(); i++){
-					if (inv.getStackInSlot(i)!=null) {
-						addToInventory(inv.getStackInSlot(i));
-						inv.setInventorySlotContents(i, null);
-					}
-				}
+//			if (animal.interact(faker)) {
+//				IInventory inv = faker.inventory;
+//				for (int i = 0; i < inv.getSizeInventory(); i++){
+//					if (inv.getStackInSlot(i)!=null) {
+//						addToInventory(inv.getStackInSlot(i));
+//						inv.setInventorySlotContents(i, null);
+//					}
+//				}
 				slots[SLOT_BUCKETS].stackSize--;
 				if (slots[SLOT_BUCKETS].stackSize==0) slots[SLOT_BUCKETS] = null;
 				currentTime = waitTime;
 				addPartialUpdate("currentTime", currentTime);
 			}
 		}
-	}
+//	}
 	
 	public static boolean isFeed(ItemStack itemStack) {
 		if (itemStack==null) return false;

@@ -1,12 +1,9 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
-import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.IUpgradeable;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 

@@ -1,26 +1,5 @@
 package com.vanhal.progressiveautomation.compat.mods;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.IGrowable;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.oredict.OreDictionary;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.compat.BaseMod;
-import com.vanhal.progressiveautomation.util.OreHelper;
-import com.vanhal.progressiveautomation.util.Point3I;
-
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.registry.GameRegistry;
-
 public class Pams extends Vanilla {
 	
 	public Pams() {
@@ -32,7 +11,7 @@ public class Pams extends Vanilla {
 		return checkModLoad();
 	}
 	
-	@Override
+	/*@Override
 	public boolean isPlantible(ItemStack item) {
 		if (item.getItem() instanceof IPlantable) {
 			if (GameRegistry.findUniqueIdentifierFor(item.getItem()).modId.equals(modID)) {
@@ -88,5 +67,5 @@ public class Pams extends Vanilla {
 		ArrayList<ItemStack> items = plantBlock.getDrops(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), metadata, 0);
 		worldObj.setBlock(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), plantBlock, 0, 2);
 		return items;
-	}
+	}*/
 }

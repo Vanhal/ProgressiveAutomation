@@ -1,13 +1,6 @@
 package com.vanhal.progressiveautomation.items;
 
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherDiamond;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherIron;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherStone;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherWood;
 import com.vanhal.progressiveautomation.items.tools.WitherTools;
 import com.vanhal.progressiveautomation.items.upgrades.ItemCobbleGenUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemDiamondUpgrade;
@@ -18,10 +11,15 @@ import com.vanhal.progressiveautomation.items.upgrades.ItemFilterMobUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemFilterPlayerUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemIronUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemMilkerUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemShearingUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemStoneUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWoodUpgrade;
-import com.vanhal.progressiveautomation.items.upgrades.ItemShearingUpgrade;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PAItems {
 
@@ -60,7 +58,7 @@ public class PAItems {
 		if (PAConfig.rfSupport) {
 			rfEngine = new ItemRFEngine();
 		}
-		CheatRFEngine = new ItemCreativeRFEngine();
+		cheatRFEngine = new ItemCreativeRFEngine();
 
 		//preInit them
 		Item previousTier = Items.redstone;
@@ -94,7 +92,7 @@ public class PAItems {
 		if (PAConfig.rfSupport) {
 			rfEngine.preInit();
 		}
-		CheatRFEngine.preInit();
+		cheatRFEngine.preInit();
 
 		if (coalPellet!=null) coalPellet.preInit();
 		
@@ -104,8 +102,37 @@ public class PAItems {
 		}
 	}
 
-	public static void init() {
+	public static void init(FMLInitializationEvent event) {
 		if (cobbleUpgrade!=null) cobbleUpgrade.preInit();
+		
+		if (event.getSide() == Side.CLIENT) {
+			if (wrench!=null) wrench.init();
+			
+			if (woodUpgrade!=null) woodUpgrade.init();
+			if (stoneUpgrade!=null) stoneUpgrade.init();
+			if (ironUpgrade!=null) ironUpgrade.init();
+			if (diamondUpgrade!=null) diamondUpgrade.init();
+			if (witherUpgrade!=null) witherUpgrade.init();
+			if (cobbleUpgrade!=null) cobbleUpgrade.init();
+			if (fillerUpgrade!=null) fillerUpgrade.init();
+			if (milkerUpgrade!=null) milkerUpgrade.init();
+			if (shearingUpgrade!=null) shearingUpgrade.init();
+			
+			if (filterMobUpgrade!=null) filterMobUpgrade.init();
+			if (filterAnimalUpgrade!=null) filterAnimalUpgrade.init();
+			if (filterAdultUpgrade!=null) filterAdultUpgrade.init();
+			if (filterPlayerUpgrade!=null) filterPlayerUpgrade.init();
+			
+			
+			if (rfEngine!=null) rfEngine.init();
+			cheatRFEngine.init();
+			
+			if (coalPellet!=null) coalPellet.init();
+			
+			if (PAConfig.enableWitherTools) {
+				WitherTools.init();
+			}
+		}
 	}
 
 	public static void postInit() {
@@ -133,7 +160,7 @@ public class PAItems {
 	public static ItemFilterPlayerUpgrade filterPlayerUpgrade = null;
 
 	public static ItemRFEngine rfEngine = null;
-	public static ItemRFEngine CheatRFEngine = null;
+	public static ItemRFEngine cheatRFEngine = null;
 
 	public static ItemCoalPellet coalPellet = null;
 	

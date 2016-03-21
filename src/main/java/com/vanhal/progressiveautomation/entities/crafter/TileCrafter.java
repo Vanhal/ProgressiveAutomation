@@ -1,22 +1,19 @@
 package com.vanhal.progressiveautomation.entities.crafter;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.util.ForgeDirection;
-import net.minecraftforge.oredict.OreDictionary;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.blocks.BlockMiner;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.ref.WrenchModes;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.OreHelper;
+
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 public class TileCrafter extends UpgradeableTileEntity {
 	
@@ -38,8 +35,8 @@ public class TileCrafter extends UpgradeableTileEntity {
 		this.craftTime = time;
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			outputItems();
 			
@@ -77,7 +74,7 @@ public class TileCrafter extends UpgradeableTileEntity {
 		for (int x = 0; x < 6; x++) {
 			if (sides[x] == WrenchModes.Mode.Output) {
 				if (slots[OUTPUT_SLOT]!=null) {
-					ForgeDirection testSide = ForgeDirection.getOrientation(x);
+					EnumFacing testSide = EnumFacing.getFront(x);
 					if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof ISidedInventory) {
 						ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
 						addtoSidedExtInventory(externalInv, OUTPUT_SLOT);
@@ -216,14 +213,14 @@ public class TileCrafter extends UpgradeableTileEntity {
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
-		if (sides[side] == WrenchModes.Mode.Disabled) return false;
-		if ( (sides[side] == WrenchModes.Mode.Output) || (sides[side] == WrenchModes.Mode.Normal) ) {
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+		if (sides[side.ordinal()] == WrenchModes.Mode.Disabled) return false;
+		if ( (sides[side.ordinal()] == WrenchModes.Mode.Normal) || (sides[side.ordinal()] == WrenchModes.Mode.Output) ) {
 			if (slot==OUTPUT_SLOT) {
 				return true;
 			}
 		}
-		if (sides[side] == WrenchModes.Mode.Input) {
+		if (sides[side.ordinal()] == WrenchModes.Mode.Input) {
 			if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
 				return true;
 			}
@@ -232,7 +229,7 @@ public class TileCrafter extends UpgradeableTileEntity {
 	}
 	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int var1) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		int[] output = new int[slots.length-9];
 		output[0] = 0;
 		for (int i=1; i<(slots.length-9); i++) {

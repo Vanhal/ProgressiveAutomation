@@ -1,9 +1,8 @@
 package com.vanhal.progressiveautomation.entities;
 
-import cofh.api.energy.IEnergyHandler;
+import java.util.Random;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -11,29 +10,30 @@ import com.vanhal.progressiveautomation.ref.WrenchModes;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 
-import java.util.Random;
-
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
-public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyHandler {
+public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyProvider, IEnergyReceiver, ITickable {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
@@ -46,8 +46,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	/**
 	 * Direction to auto output items to
 	 */
-	public ForgeDirection extDirection = ForgeDirection.UP;
-	public ForgeDirection facing = ForgeDirection.EAST;
+	public EnumFacing extDirection = EnumFacing.UP;
+	public EnumFacing facing = EnumFacing.EAST;
 	
 	public  WrenchModes.Mode sides[] = new WrenchModes.Mode[6];
 	
@@ -88,7 +88,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		}
 	}
 	
-	protected void setExtDirection(ForgeDirection dir) {
+	protected void setExtDirection(EnumFacing dir) {
 		sides[extDirection.ordinal()] = WrenchModes.Mode.Normal;
 		extDirection = dir;
 		sides[extDirection.ordinal()] = WrenchModes.Mode.Output;
@@ -117,22 +117,22 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public void readFromItemStack(ItemStack itemStack) {
-		if (itemStack == null || itemStack.stackTagCompound == null) {
+		if (itemStack == null || itemStack.getTagCompound() == null) {
 			return;
 		}
-		readCommonNBT(itemStack.stackTagCompound);
-		readNonSyncableNBT(itemStack.stackTagCompound);
+		readCommonNBT(itemStack.getTagCompound());
+		readNonSyncableNBT(itemStack.getTagCompound());
 	}
 
 	public void writeToItemStack(ItemStack itemStack) {
 		if (itemStack == null ) {
 			return;
 		}
-		if (itemStack.stackTagCompound == null) {
-			itemStack.stackTagCompound = new NBTTagCompound();
+		if (itemStack.getTagCompound() == null) {
+			itemStack.setTagCompound(new NBTTagCompound());
 		}
-		writeCommonNBT(itemStack.stackTagCompound);
-		writeNonSyncableNBT(itemStack.stackTagCompound);
+		writeCommonNBT(itemStack.getTagCompound());
+		writeNonSyncableNBT(itemStack.getTagCompound());
 	}
 	
 	/**
@@ -212,7 +212,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if (nbt.hasKey("Progress")) progress = nbt.getInteger("Progress");
 		if (nbt.hasKey("BurnLevel")) burnLevel = nbt.getInteger("BurnLevel");
 		if (nbt.hasKey("firstLook")) firstLook = nbt.getBoolean("firstLook");
-		if (nbt.hasKey("facing")) facing = ForgeDirection.getOrientation(nbt.getInteger("facing"));
+		if (nbt.hasKey("facing")) facing = EnumFacing.getFront(nbt.getInteger("facing"));
 		if (nbt.hasKey("sides")) {
 			int ary[] = nbt.getIntArray("sides");
 			for (int i = 0; i<6; i++) {
@@ -243,22 +243,21 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
      * This method is used to sync data when a GUI is opened. the packet will contain
      * all syncable data.
      */
-		@Override
-    public Packet getDescriptionPacket()
-    {
+	@Override
+    public Packet getDescriptionPacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeCommonNBT(nbttagcompound);
         this.writeSyncOnlyNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, -1, nbttagcompound);
+        return new SPacketUpdateTileEntity(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()), -1, nbttagcompound);
     }
 	
 	/**
 	 * This method is used to load syncable data when a GUI is opened.
 	 */
-		@Override    
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-    	this.readCommonNBT(pkt.func_148857_g());
-    	this.readSyncOnlyNBT(pkt.func_148857_g());
+	@Override    
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		this.readCommonNBT(pkt.getNbtCompound());
+    	this.readSyncOnlyNBT(pkt.getNbtCompound());
     }
 	
 	/**
@@ -269,7 +268,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	 */
 	public PartialTileNBTUpdateMessage getPartialUpdateMessage() {
 		
-		PartialTileNBTUpdateMessage message = new PartialTileNBTUpdateMessage(this.xCoord, this.yCoord, this.zCoord, partialUpdateTag);
+		PartialTileNBTUpdateMessage message = new PartialTileNBTUpdateMessage(getPos().getX(), getPos().getY(), getPos().getZ(), partialUpdateTag);
 		dirty = false;
 		partialUpdateTag = new NBTTagCompound();
 		
@@ -322,8 +321,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return dirty;
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	@Override
+	public void update() {
 		if (!worldObj.isRemote) {
 			if (!isBurning()) {
 				RedstonePowered = isIndirectlyPowered();
@@ -398,14 +397,17 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 	
 	/* Inventory methods */
+	@Override
 	public int getSizeInventory() {
 		return slots.length;
 	}
 
+	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return slots[slot];
 	}
 
+	@Override
 	public ItemStack decrStackSize(int slot, int amt) {
 		if (slots[slot] != null) {
 			ItemStack newStack;
@@ -423,7 +425,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return null;
 	}
 
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	@Override
+	public ItemStack removeStackFromSlot(int slot) {
 		if (slots[slot]!=null) {
 			ItemStack stack = slots[slot];
 			slots[slot] = null;
@@ -432,33 +435,45 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return null;
 	}
 
+	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		slots[slot] = stack;
 		if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
 			stack.stackSize = this.getInventoryStackLimit();
 		}
 	}
-
-	public String getInventoryName() {
+	
+	@Override
+	public String getName() {
 		return null;
 	}
 
-	public boolean hasCustomInventoryName() {
+	@Override
+	public boolean hasCustomName() {
 		return false;
 	}
 
+	@Override
+	public ITextComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
 
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this &&
-		 player.getDistanceSq(xCoord + 0.5, yCoord + 0.5, zCoord + 0.5) < 64;
+		return worldObj.getTileEntity(getPos()) == this &&
+		 player.getDistanceSq(getPos().getX() + 0.5, getPos().getY() + 0.5, getPos().getZ() + 0.5) < 64;
 	}
 
-	public void openInventory() { }
+	@Override
+	public void openInventory(EntityPlayer playerIn) {}
 
-	public void closeInventory() { }
+	@Override
+	public void closeInventory(EntityPlayer playerIn) {}
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
@@ -489,16 +504,16 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	//sided things
-	public WrenchModes.Mode getSide(ForgeDirection side) {
+	public WrenchModes.Mode getSide(EnumFacing side) {
 		return sides[side.ordinal()];
 	}
 	
-	public void setSide(ForgeDirection side, WrenchModes.Mode type) {
+	public void setSide(EnumFacing side, WrenchModes.Mode type) {
 		sides[side.ordinal()] = type;
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
+	public int[] getSlotsForFace(EnumFacing side) {
 		int[] output = new int[slots.length];
 		for (int i=0; i<slots.length; i++) {
 			output[i] = i;
@@ -507,12 +522,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing face) {
 		if ( (slot<0) || (slot>SLOT_INVENTORY_END) ) return false;
-		if (sides[side] == WrenchModes.Mode.Disabled) return false;
-		if (sides[side] == WrenchModes.Mode.Output) return false;
-		if ( (sides[side] == WrenchModes.Mode.FuelInput) && (slot != SLOT_FUEL) ) return false;
-		if ( (sides[side] == WrenchModes.Mode.Input) && (slot == SLOT_FUEL) ) return false;
+		if (sides[face.ordinal()] == WrenchModes.Mode.Disabled) return false;
+		if (sides[face.ordinal()] == WrenchModes.Mode.Output) return false;
+		if ( (sides[face.ordinal()] == WrenchModes.Mode.FuelInput) && (slot != SLOT_FUEL) ) return false;
+		if ( (sides[face.ordinal()] == WrenchModes.Mode.Input) && (slot == SLOT_FUEL) ) return false;
 		
 		if ( (slots[slot] != null) 
 				&& (slots[slot].isItemEqual(stack))
@@ -528,10 +543,10 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side) {
-		if (sides[side] == WrenchModes.Mode.Disabled) return false;
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing face) {
+		if (sides[face.ordinal()] == WrenchModes.Mode.Disabled) return false;
 		if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
-			if ( (sides[side] == WrenchModes.Mode.Normal) || (sides[side] == WrenchModes.Mode.Output) ) return true;
+			if ( (sides[face.ordinal()] == WrenchModes.Mode.Normal) || (sides[face.ordinal()] == WrenchModes.Mode.Output) ) return true;
 		}
 		return false;
 	}
@@ -617,18 +632,17 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 		}
 		//then check if there is any inventories on any of the output sides that we can output to
-		for (int x = 0; x < 6; x++) {
-			if (sides[x] == WrenchModes.Mode.Output) {
-				ForgeDirection testSide = ForgeDirection.getOrientation(x);
-				if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof ISidedInventory) {
-					ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
+		for(EnumFacing facing : EnumFacing.values()) {
+			if (sides[facing.ordinal()] == WrenchModes.Mode.Output) {
+				if (worldObj.getTileEntity(pos.offset(facing)) instanceof ISidedInventory) {
+					ISidedInventory externalInv = (ISidedInventory) worldObj.getTileEntity(pos.offset(facing));
 					for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 						if (slots[i]!=null) {
 							addtoSidedExtInventory(externalInv, i);
 						}
 					}
-				} else if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof IInventory) {
-					IInventory externalInv = (IInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
+				} else if (worldObj.getTileEntity(pos.offset(facing)) instanceof IInventory) {
+					IInventory externalInv = (IInventory) worldObj.getTileEntity(pos.offset(facing));
 					for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
 						if (slots[i]!=null) {
 							addtoExtInventory(externalInv, i);
@@ -689,8 +703,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean addtoSidedExtInventory(ISidedInventory inv, int fromSlot) {
-		int side = extDirection.getOpposite().ordinal();
-		int[] trySlots = inv.getAccessibleSlotsFromSide(side);
+		int[] trySlots = inv.getSlotsForFace(extDirection.getOpposite());
 		int i = 0;
 		
 		for (int j = 0; j < trySlots.length; j++) {
@@ -714,7 +727,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if ( (slots[fromSlot] != null) && (slots[fromSlot].stackSize>0) ) {
 			for (int j = 0; j < trySlots.length; j++) {
 				i = trySlots[j];
-				if (inv.canInsertItem(i, slots[fromSlot], side)) {
+				if (inv.canInsertItem(i, slots[fromSlot], extDirection.getOpposite())) {
 					if ( (inv.getStackInSlot(i)==null) && (inv.isItemValidForSlot(i, slots[fromSlot])) ) {
 						inv.setInventorySlotContents(i, slots[fromSlot]);
 						slots[fromSlot] = null;
@@ -812,7 +825,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			//move directly to an output side first if possible
 			for (int x = 0; x < 6; x++) {
 				if (sides[x] == WrenchModes.Mode.Output) {
-					ForgeDirection testSide = ForgeDirection.getOrientation(x);
+					EnumFacing testSide = EnumFacing.getFront(x);
 					if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof ISidedInventory) {
 						ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
 						if (slots[slot]!=null) {
@@ -847,8 +860,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	
 	public void dropItem(ItemStack item) {
 		if (item!=null) {
-			EntityItem entItem = new EntityItem(worldObj, xCoord + 0.5f, yCoord + 1.5f, zCoord + 0.5f, item);
-			entItem.delayBeforeCanPickup = 1;
+			EntityItem entItem = new EntityItem(worldObj, pos.getX() + 0.5f, pos.getY() + 1.5f, pos.getZ() + 0.5f, item);
 			float f3 = 0.05F;
 			entItem.motionX = (double)((float)worldObj.rand.nextGaussian() * f3);
 			entItem.motionY = (double)((float)worldObj.rand.nextGaussian() * f3 + 0.2F);
@@ -873,17 +885,17 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return null;
 	}
 	
-	public boolean canConnectEnergy(ForgeDirection from) {
+	public boolean canConnectEnergy(EnumFacing from) {
 		if (getEngine()==null) return false;
 		else return true;
 	}
 
-	public int receiveEnergy(ForgeDirection from, int maxReceive, boolean simulate) {
+	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		if (worldObj.isRemote) return 0;
 		return addEnergy(maxReceive, simulate);
 	}
 
-	public int extractEnergy(ForgeDirection from, int maxExtract, boolean simulate) {
+	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		return 0;
 	}
 	
@@ -913,7 +925,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return energyReceived;
 	}
 
-	public int getEnergyStored(ForgeDirection from) {
+	public int getEnergyStored(EnumFacing from) {
 		if ( hasEngine() ) {
 			return getEngine().getCharge(slots[SLOT_FUEL]);
 		} else {
@@ -921,7 +933,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		}
 	}
 
-	public int getMaxEnergyStored(ForgeDirection from) {
+	public int getMaxEnergyStored(EnumFacing from) {
 		if ( hasEngine() ) {
 			return getEngine().getMaxCharge();
 		} else {
@@ -940,9 +952,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	protected void notifyUpdate() {
-		Block minerBlock = worldObj.getBlock(xCoord, yCoord, zCoord);
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, minerBlock);
+		Block minerBlock = worldObj.getBlockState(pos).getBlock();
+		worldObj.notifyNeighborsOfStateChange(getPos(), minerBlock);
 	}
 	
 	public void setLooked() {
@@ -961,7 +972,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	//my function to get a point on a spiral around the block
-	public static Point2I spiral(int n, int x, int y, ForgeDirection direction) {
+	public static Point2I spiral(int n, int x, int y, EnumFacing direction) {
 		int dx, dy;
 
 		int k = (int)Math.ceil( (Math.sqrt(n)-1)/2);
@@ -989,28 +1000,74 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 		}
 
-		if (direction == ForgeDirection.NORTH)
+		if (direction == EnumFacing.NORTH)
 			return new Point2I(x + dy, y - dx);
-		else if (direction == ForgeDirection.SOUTH)
-			return new Point2I(x - dy, y + dx);
-		else if (direction == ForgeDirection.EAST)
+		else if (direction == EnumFacing.SOUTH)
+			return new Point2I(x + dy, y + dx);
+		else if (direction == EnumFacing.EAST)
 			return new Point2I(x + dx, y + dy);
 		else
 			return new Point2I(x - dx, y - dy);
 	}
+
+
+	//clear the internal inventory (I have a feeling this is used for pooling but I can't be sure)
+	@Override
+	public void clear() {
+		for (int i = 0; i < this.slots.length; ++i) {
+            this.slots[i] = null;
+        }
+	}
+
+	//WHAT THE HELL ARE THESE??????
+	//They look like they're possibly used for GUI stuff?
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+		
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
 	
 	//check if machine is powered
 	protected boolean isIndirectlyPowered() {
-        return worldObj.getIndirectPowerOutput(xCoord, yCoord - 1, zCoord, 0) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord, 1) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord - 1, 2) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord, yCoord, zCoord + 1, 3) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord + 1, yCoord, zCoord, 5) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord - 1, yCoord, zCoord, 4) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 2, zCoord, 1) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord - 1, 2) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord, yCoord + 1, zCoord + 1, 3) ? true : 
-        	(worldObj.getIndirectPowerOutput(xCoord - 1, yCoord + 1, zCoord, 4) ? true : 
-        	worldObj.getIndirectPowerOutput(xCoord + 1, yCoord + 1, zCoord, 5))))))))));
+		EnumFacing[] aenumfacing = EnumFacing.values();
+        int i = aenumfacing.length;
+        int j;
+
+        for (j = 0; j < i; ++j) {
+            EnumFacing enumfacing1 = aenumfacing[j];
+
+            if (worldObj.isSidePowered(pos.offset(enumfacing1), enumfacing1)) {
+                return true;
+            }
+        }
+        return false;
     }
+	
+	public int getX() {
+		return pos.getX();
+	}
+	
+	public int getY() {
+		return pos.getY();
+	}
+	
+	public int getZ() {
+		return pos.getZ();
+	}
+	
+	public World getWorldObj() {
+		return this.worldObj;
+	}
+
+	
 }

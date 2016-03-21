@@ -3,18 +3,20 @@ package com.vanhal.progressiveautomation.compat.mods;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
-
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class RightClick extends Vanilla {
 
@@ -34,9 +36,9 @@ public class RightClick extends Vanilla {
 	}
 	
 	@Override
-	public ArrayList<ItemStack> harvestPlant(Point3I point, Block plantBlock, int metadata, World worldObj) {
+	public List<ItemStack> harvestPlant(Point3I point, Block plantBlock, IBlockState state, World worldObj) {
 		PlayerFake faker = new PlayerFake((WorldServer)worldObj);
-		plantBlock.onBlockActivated(worldObj, point.getX(), point.getY(), point.getZ(), faker, metadata, 0, 0, 0);
+		plantBlock.onBlockActivated(worldObj, point.toPosition(), state, faker, null, null, EnumFacing.DOWN, 0, 0, 0);
 		
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		
@@ -47,7 +49,7 @@ public class RightClick extends Vanilla {
 			}
 		}
 
-		AxisAlignedBB block = AxisAlignedBB.getBoundingBox(point.getX(), point.getY(), point.getZ(), 
+		AxisAlignedBB block = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 														point.getX()+1, point.getY()+1, point.getZ()+1);
 		List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, block);
 		if (entities.isEmpty()) {

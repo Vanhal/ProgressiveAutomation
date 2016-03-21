@@ -1,21 +1,22 @@
 package com.vanhal.progressiveautomation.blocks;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerDiamond;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerIron;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerStone;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockMiner extends BaseBlock {
@@ -55,21 +56,21 @@ public class BlockMiner extends BaseBlock {
 	}
 	
 	@Override
-	public int isProvidingWeakPower(IBlockAccess block, int x, int y, int z, int side) {
-		TileEntity tile = block.getTileEntity(x, y, z);
+	public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileMiner) {
 			return (((TileMiner)tile).isDone())?15:0;
 		}
 		return 0;
-    }
+	}
 	
 	@Override
-	public int isProvidingStrongPower(IBlockAccess block, int x, int y, int z, int side) {
-        return side == 0 ? this.isProvidingWeakPower(block, x, y, z, side) : 0;
-    }
+	public int getStrongPower(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+        return side == EnumFacing.DOWN ? this.getWeakPower(state, world, pos, side) : 0;
+	}
 	
 	@Override
-	public boolean canProvidePower() {
-        return true;
-    }
+	public boolean canProvidePower(IBlockState state) {
+		return true;
+	}
 }

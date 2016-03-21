@@ -1,19 +1,19 @@
+
+// For those who want the bleeding edge
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven {
             name = "forge"
             url = "http://files.minecraftforge.net/maven"
         }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
     }
 }
+apply plugin: 'net.minecraftforge.gradle.forge'
+
 def ENV = System.getenv()
 
 ext.configFile = file "build.properties"
@@ -33,16 +33,16 @@ x = ENV.DRONE_BUILD_NUMBER as Integer
 
 config.buildNum = x - y
 
-apply plugin: 'forge'
-
 version = config.mod_version + "." + config.buildNum
 group= "com.vanhal.progressiveautomation" 
 archivesBaseName = "ProgressiveAutomation-" + config.minecraft_version
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
+    runDir = "run"
     
     replace "@VERSION@", project.version
+    mappings = "stable_20"
 }
 
 processResources
@@ -64,5 +64,3 @@ processResources
         exclude 'mcmod.info'
     }
 }
-
-sourceSets { main { output.resourcesDir = output.classesDir } }

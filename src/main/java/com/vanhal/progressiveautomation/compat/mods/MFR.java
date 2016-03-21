@@ -1,10 +1,9 @@
 package com.vanhal.progressiveautomation.compat.mods;
 
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.BaseMod;
+
+import net.minecraft.item.ItemStack;
 
 public class MFR extends BaseMod {
 	
