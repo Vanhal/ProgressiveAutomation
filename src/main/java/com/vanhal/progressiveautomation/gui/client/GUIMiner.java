@@ -1,7 +1,5 @@
 package com.vanhal.progressiveautomation.gui.client;
 
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.container.ContainerMiner;
 import com.vanhal.progressiveautomation.ref.Ref;
@@ -9,7 +7,6 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.StringHelper;
 
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 

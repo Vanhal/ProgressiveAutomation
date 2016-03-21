@@ -2,20 +2,16 @@ package com.vanhal.progressiveautomation.items.tools;
 
 import java.util.List;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
-
 import com.vanhal.progressiveautomation.items.BaseItem;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ItemWitherIron extends BaseItem {
 	public ItemWitherIron() {
@@ -43,7 +39,6 @@ public class ItemWitherIron extends BaseItem {
 	
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
-    	list.add(EnumChatFormatting.GRAY + "Can be used to craft tools");
-
+    	list.add(TextFormatting.GRAY + "Can be used to craft tools");
     }
 }

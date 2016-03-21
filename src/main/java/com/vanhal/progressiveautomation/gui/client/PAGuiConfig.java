@@ -4,16 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.Ref;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.common.config.ConfigElement;
+import net.minecraftforge.fml.client.config.DummyConfigElement.DummyCategoryElement;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.GuiConfigEntries;
 import net.minecraftforge.fml.client.config.GuiConfigEntries.CategoryEntry;
 import net.minecraftforge.fml.client.config.IConfigElement;
-import net.minecraftforge.fml.client.config.DummyConfigElement.DummyCategoryElement;
 
 public class PAGuiConfig extends GuiConfig {
 	

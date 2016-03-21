@@ -1,30 +1,18 @@
 package com.vanhal.progressiveautomation.entities.generator;
 
+import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.ref.WrenchModes;
+import com.vanhal.progressiveautomation.util.Point2I;
+
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyReceiver;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.blocks.BlockGenerator;
-import com.vanhal.progressiveautomation.blocks.PABlocks;
-import com.vanhal.progressiveautomation.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.items.ItemRFEngine;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
-import com.vanhal.progressiveautomation.ref.WrenchModes;
-import com.vanhal.progressiveautomation.util.BlockHelper;
-import com.vanhal.progressiveautomation.util.Point2I;
-import com.vanhal.progressiveautomation.util.Point3I;
+import net.minecraft.util.math.BlockPos;
 
 public class TileGenerator extends BaseTileEntity {
 	protected float fireRisk = 0.02f;
@@ -86,7 +74,7 @@ public class TileGenerator extends BaseTileEntity {
 			burnUpdate = isBurning();
 			
 			worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
-			worldObj.markBlockForUpdate(this.pos);
+//			worldObj.markBlockForUpdate(this.pos);
 		}
 	}
 
@@ -101,7 +89,7 @@ public class TileGenerator extends BaseTileEntity {
 			
 			Block supportBlock = worldObj.getBlockState(supportPos).getBlock();
 			Block fireBlock = worldObj.getBlockState(firePos).getBlock();
-			if ( ((fireBlock.isAir(worldObj, firePos)) 
+			if ( ((fireBlock.isAir(null, worldObj, firePos)) 
 				&& (supportBlock.isFlammable(worldObj, supportPos, EnumFacing.UP))) ){
 				worldObj.setBlockState(firePos, Blocks.fire.getDefaultState());
 			}

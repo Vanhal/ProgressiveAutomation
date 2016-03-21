@@ -1,13 +1,10 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.planter.TilePlanter;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class SlotPlantable  extends Slot {
 	

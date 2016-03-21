@@ -1,21 +1,15 @@
 package com.vanhal.progressiveautomation.gui.container;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.NetworkHandler;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.gui.slots.SlotPower;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;

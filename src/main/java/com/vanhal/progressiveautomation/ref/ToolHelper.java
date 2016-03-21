@@ -3,12 +3,10 @@ package com.vanhal.progressiveautomation.ref;
 import java.util.Random;
 import java.util.Set;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemHoe;
@@ -19,8 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -199,7 +196,7 @@ public class ToolHelper {
 			if (tinkersType(tool.getItem())==TYPE_HOE) {
 				tool.attemptDamageItem(1, RND);
 			} else {
-				tool.getItem().onBlockDestroyed(tool, world, mineBlock, new BlockPos(x, y, z), fakePlayer);
+				tool.getItem().onBlockDestroyed(tool, world, mineBlock.getDefaultState(), new BlockPos(x, y, z), fakePlayer);
 			}
 			if (tinkersIsBroken(tool)) return true;
 		}

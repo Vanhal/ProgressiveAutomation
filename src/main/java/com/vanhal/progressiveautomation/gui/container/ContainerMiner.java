@@ -1,16 +1,16 @@
 package com.vanhal.progressiveautomation.gui.container;
 
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotItem;
 import com.vanhal.progressiveautomation.gui.slots.SlotTool;
 import com.vanhal.progressiveautomation.gui.slots.SlotUpgrades;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 
 public class ContainerMiner extends BaseContainer {
 	protected ItemStack updateType;

@@ -1,26 +1,21 @@
 package com.vanhal.progressiveautomation.items;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
+import com.vanhal.progressiveautomation.PAConfig;
+
+import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import cofh.api.energy.IEnergyContainerItem;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.ref.Ref;
-
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.text.DecimalFormat;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	protected int maxCharge = 100000;
@@ -85,12 +80,12 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
     	if ( (itemStack!=null) && (isInit(itemStack)) ) {
     		int charge = getCharge(itemStack);
-    		list.add(EnumChatFormatting.RED + "" + 
+    		list.add(TextFormatting.RED + "" + 
     				String.format("%s", rfDecimalFormat.format(charge)) + "/" +
     				String.format("%s", rfDecimalFormat.format(maxCharge)) + " RF");
     	} else {
-    		list.add(EnumChatFormatting.GRAY + "Add to the fuel slot to");
-        	list.add(EnumChatFormatting.GRAY + "power a machine with RF");
+    		list.add(TextFormatting.GRAY + "Add to the fuel slot to");
+        	list.add(TextFormatting.GRAY + "power a machine with RF");
     	}
     }
     

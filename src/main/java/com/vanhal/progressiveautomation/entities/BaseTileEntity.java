@@ -1,11 +1,8 @@
 package com.vanhal.progressiveautomation.entities;
 
-import cofh.api.energy.IEnergyHandler;
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import java.util.Random;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -13,29 +10,27 @@ import com.vanhal.progressiveautomation.ref.WrenchModes;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 
-import java.util.Random;
-
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyProvider, IEnergyReceiver, ITickable {
@@ -253,14 +248,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeCommonNBT(nbttagcompound);
         this.writeSyncOnlyNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()), -1, nbttagcompound);
+        return new SPacketUpdateTileEntity(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()), -1, nbttagcompound);
     }
 	
 	/**
 	 * This method is used to load syncable data when a GUI is opened.
 	 */
 	@Override    
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.readCommonNBT(pkt.getNbtCompound());
     	this.readSyncOnlyNBT(pkt.getNbtCompound());
     }
@@ -459,7 +454,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 		return null;
 	}
 

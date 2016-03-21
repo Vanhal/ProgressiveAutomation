@@ -2,9 +2,6 @@ package com.vanhal.progressiveautomation.blocks.network;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.tileentity.TileEntity;
-
-import com.vanhal.progressiveautomation.ref.Ref;
-
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -34,7 +31,7 @@ public class NetworkHandler {
 	}
 	
 	public static void sendToAllAroundNearby(IMessage message, TileEntity entity) {
-		CHANNEL.sendToAllAround(message, new TargetPoint(entity.getWorld().provider.getDimensionId(), entity.getPos().getX(), entity.getPos().getY(), entity.getPos().getZ(), NEARBY));
+		CHANNEL.sendToAllAround(message, new TargetPoint(entity.getWorld().provider.getDimension(), entity.getPos().getX(), entity.getPos().getY(), entity.getPos().getZ(), NEARBY));
 	}
 	
 	public static void sendToPlayer(IMessage message, EntityPlayerMP player) {

@@ -1,49 +1,37 @@
 package com.vanhal.progressiveautomation.blocks;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import cofh.api.block.IDismantleable;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.entities.IUpgradeable;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.items.ItemBlockMachine;
-import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-import com.vanhal.progressiveautomation.ref.WrenchModes;
 
-import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cofh.api.block.IDismantleable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class BaseBlock extends BlockContainer implements IDismantleable {
@@ -101,13 +89,12 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	@Override
-	public int getRenderType() {
-        return 3;
-    }
-
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			if (GUIid>=0) {
 				if (!(player instanceof FakePlayer)) {
@@ -282,7 +269,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		else if (tileEntity.facing == EnumFacing.SOUTH) tileEntity.facing = EnumFacing.WEST;
 		else if (tileEntity.facing == EnumFacing.WEST) tileEntity.facing = EnumFacing.NORTH;
 		//ProgressiveAutomation.logger.info(chopper.facing.toString());
-		worldObj.markBlockForUpdate(pos);
+//		worldObj.markBlockForUpdate(pos);
         return true;
     }
 	

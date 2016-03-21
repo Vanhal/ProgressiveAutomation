@@ -3,10 +3,10 @@ package com.vanhal.progressiveautomation.items;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class BaseItem extends Item {
 	public String itemName;

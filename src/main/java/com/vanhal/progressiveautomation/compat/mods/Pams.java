@@ -1,24 +1,5 @@
 package com.vanhal.progressiveautomation.compat.mods;
 
-import java.util.ArrayList;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockNetherWart;
-import net.minecraft.block.IGrowable;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.oredict.OreDictionary;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.compat.BaseMod;
-import com.vanhal.progressiveautomation.util.OreHelper;
-import com.vanhal.progressiveautomation.util.Point3I;
-
-
 public class Pams extends Vanilla {
 	
 	public Pams() {

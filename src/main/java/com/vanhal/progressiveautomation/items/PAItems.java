@@ -1,18 +1,6 @@
 package com.vanhal.progressiveautomation.items;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.relauncher.Side;
-
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherDiamond;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherIron;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherStone;
-import com.vanhal.progressiveautomation.items.tools.ItemWitherWood;
 import com.vanhal.progressiveautomation.items.tools.WitherTools;
 import com.vanhal.progressiveautomation.items.upgrades.ItemCobbleGenUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemDiamondUpgrade;
@@ -23,11 +11,15 @@ import com.vanhal.progressiveautomation.items.upgrades.ItemFilterMobUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemFilterPlayerUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemIronUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemMilkerUpgrade;
+import com.vanhal.progressiveautomation.items.upgrades.ItemShearingUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemStoneUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemWoodUpgrade;
-import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.items.upgrades.ItemShearingUpgrade;
+
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class PAItems {
 
