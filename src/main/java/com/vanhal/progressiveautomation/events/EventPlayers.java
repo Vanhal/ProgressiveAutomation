@@ -62,9 +62,9 @@ public class EventPlayers {
 
 	@SubscribeEvent
 	public void onJoin(EntityJoinWorldEvent event) {
-		if (!event.world.isRemote) {
-			if (event.entity instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) event.entity;
+		if (!event.getWorld().isRemote) {
+			if (event.getEntity() instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) event.getEntity();
 				if (names.contains(player.getDisplayName())) {
 					ItemStack potato = new ItemStack(Items.poisonous_potato);
 					potato.addEnchantment(Enchantments.unbreaking, 1);

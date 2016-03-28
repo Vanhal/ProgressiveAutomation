@@ -25,9 +25,9 @@ public class GrowOres extends BaseMod {
 	
 	@Override
 	public boolean isPlantible(ItemStack item) {
-		if (GameRegistry.findUniqueIdentifierFor(item.getItem()).modId.equals(modID)) {
-			return true;
-		}
+//		if (GameRegistry.findUniqueIdentifierFor(item.getItem()).modId.equals(modID)) {
+//			return true;
+//		}
 		return false;
 	}
 	
@@ -38,9 +38,9 @@ public class GrowOres extends BaseMod {
 	
 	@Override
 	public boolean isPlant(Block plantBlock, IBlockState state) {
-		if (GameRegistry.findUniqueIdentifierFor(plantBlock).modId.equals(modID)) {
-			return true;
-		}
+//		if (GameRegistry.findUniqueIdentifierFor(plantBlock).modId.equals(modID)) {
+//			return true;
+//		}
 		return false;
 	}
 	

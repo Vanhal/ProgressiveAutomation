@@ -98,7 +98,7 @@ public class ProgressiveAutomation {
 	
 	@SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-        if(eventArgs.modID.equals(Ref.MODID))
+        if(eventArgs.getModID().equals(Ref.MODID))
             PAConfig.syncConfig();
     }
 	
