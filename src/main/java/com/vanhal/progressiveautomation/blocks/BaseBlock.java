@@ -151,7 +151,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
 				.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Ref.MODID + ":" + name, "inventory"));
 		}
-		
 	}
 	
 	public void postInit() {

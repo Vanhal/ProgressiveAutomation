@@ -79,13 +79,13 @@ public class EventRenderWorld {
 	
 	@SubscribeEvent
 	public void onPlayerChangedDimension(Unload world) {
-		if (world.world.provider == null ||
+		if (world.getWorld().provider == null ||
 				Minecraft.getMinecraft().thePlayer == null ||
 				Minecraft.getMinecraft().thePlayer.worldObj == null ||
 				Minecraft.getMinecraft().thePlayer.worldObj.provider == null) {
 			return;
 		}
-		if (world.world.provider.getDimension() == Minecraft.getMinecraft().thePlayer.worldObj.provider.getDimension() ) {
+		if (world.getWorld().provider.getDimension() == Minecraft.getMinecraft().thePlayer.worldObj.provider.getDimension() ) {
 			machines.clear();
 		}
 	}
@@ -102,9 +102,9 @@ public class EventRenderWorld {
 		if (player.inventory.getCurrentItem().getItem().equals(PAItems.wrench)) holdingWrench = true;
 		else return;
 		
-		float playerOffsetX = -(float)(player.lastTickPosX + (player.posX - player.lastTickPosX) * e.partialTicks);
-		float playerOffsetY = -(float)(player.lastTickPosY + (player.posY - player.lastTickPosY) * e.partialTicks);
-		float playerOffsetZ = -(float)(player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * e.partialTicks);
+		float playerOffsetX = -(float)(player.lastTickPosX + (player.posX - player.lastTickPosX) * e.getPartialTicks());
+		float playerOffsetY = -(float)(player.lastTickPosY + (player.posY - player.lastTickPosY) * e.getPartialTicks());
+		float playerOffsetZ = -(float)(player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * e.getPartialTicks());
 
 		GL11.glPushMatrix();
 		GL11.glColorMask(true, true, true, true);
