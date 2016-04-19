@@ -7,6 +7,7 @@ import com.vanhal.progressiveautomation.util.Point2I;
 
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -88,8 +89,9 @@ public class TileGenerator extends BaseTileEntity {
 			BlockPos firePos = new BlockPos(p2.getX(), pos.getY(), p2.getY());
 			
 			Block supportBlock = worldObj.getBlockState(supportPos).getBlock();
-			Block fireBlock = worldObj.getBlockState(firePos).getBlock();
-			if ( ((fireBlock.isAir(null, worldObj, firePos)) 
+			IBlockState fireState = worldObj.getBlockState(firePos);
+			Block fireBlock = fireState.getBlock();
+			if ( ((fireBlock.isAir(fireState, worldObj, firePos)) 
 				&& (supportBlock.isFlammable(worldObj, supportPos, EnumFacing.UP))) ){
 				worldObj.setBlockState(firePos, Blocks.fire.getDefaultState());
 			}
