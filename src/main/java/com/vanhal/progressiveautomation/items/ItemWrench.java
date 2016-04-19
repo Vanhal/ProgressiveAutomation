@@ -52,6 +52,11 @@ public class ItemWrench extends BaseItem {
 	
 	@Override
 	public EnumActionResult onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, EnumHand hand) {
+		return EnumActionResult.PASS;
+	}
+	
+	@Override
+    public EnumActionResult onItemUse(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
 		Block block = world.getBlockState(pos).getBlock();
 		if (player.isSneaking()) {
 			if (block instanceof IDismantleable) {
@@ -80,9 +85,10 @@ public class ItemWrench extends BaseItem {
 		}
 		return EnumActionResult.PASS;
 	}
-	
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+		
 		if (player.isSneaking()) {
 			int temp = getMode(itemStack).ordinal() + 1;
 			if (temp>=WrenchModes.modes.size()) temp = 0;
