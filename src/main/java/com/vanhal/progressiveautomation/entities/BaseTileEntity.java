@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.entities;
 import java.util.Random;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -771,6 +772,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 
 	public boolean addToInventory(ItemStack item) {
+		if (item == null) return false;
 		if ( (SLOT_INVENTORY_START==-1) || (SLOT_INVENTORY_END==-1) ) return false;
 		//check to see if this item is something that's used		
 		int extraSlot = extraSlotCheck(item);

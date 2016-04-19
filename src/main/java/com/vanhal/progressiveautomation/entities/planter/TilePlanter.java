@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.entities.planter;
 
 import java.util.List;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -200,7 +201,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 			}
 		} else {
 			if (slots[SLOT_HOE]!=null) {
-				if (plantBlock.isAir(dirtState, worldObj, plantPosition)) {
+				if (plantBlock.isAir(plantState, worldObj, plantPosition)) {
 					if ((dirtBlock == Blocks.grass || dirtBlock == Blocks.dirt)) {
 						worldObj.setBlockState(dirtPosition, Blocks.farmland.getDefaultState());
 						damageHoe(dirtPoint);
