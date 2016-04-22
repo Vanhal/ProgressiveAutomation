@@ -112,7 +112,7 @@ public class ToolHelper {
 	//Get the type of tinker tool
 	public static int tinkersType(Item item) {
 		String name = item.getUnlocalizedName();
-		if (name.length()>=14) {
+		if (name.length()>=16) {
 			if (name.substring(5, 15).equalsIgnoreCase("tconstruct")) {
 				if (name.substring(16).equalsIgnoreCase("pickaxe")) {
 					return TYPE_PICKAXE;
