@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.entities.killer;
 
 import java.util.List;
 
+import com.google.common.collect.Multimap;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -11,11 +12,15 @@ import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -90,7 +95,11 @@ public class TileKiller extends UpgradeableTileEntity {
 								}
 								
 								faker.setItemInHand(slots[SLOT_SWORD].copy());
-//								faker.setItemInUse(faker.getHeldItemMainhand(), 72000);
+								Multimap<String, AttributeModifier> attributeModifiers = slots[SLOT_SWORD].getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
+
+								attributeModifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName());
+								faker.setItemInUse(faker.getHeldItemMainhand(), 72000);
+								faker.onUpdate();
 								faker.attackTargetEntityWithCurrentItem(mob);
 								
 
