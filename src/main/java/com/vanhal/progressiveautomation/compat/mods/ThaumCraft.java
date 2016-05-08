@@ -16,20 +16,16 @@ public class ThaumCraft extends BaseMod {
 	@Override
 	public boolean isLog(ItemStack item) {
 		if (item == null) return false;
-		return (item.getUnlocalizedName().contains("tile.blockMagicalLog"));
+		// the item may be hiding in a delegate, so use getItem()
+		if (item.getItem() == null) return false;
+		return (item.getItem().getUnlocalizedName().contains("tile.blockMagicalLog"));
 	}
 	
 	@Override
 	public boolean isLeaf(ItemStack item) {
 		if (item == null) return false;
-		Boolean rv = false;
-		
-		try {
-			rv = item.getUnlocalizedName().contains("tile.blockMagicalLeaves");			
-		} catch(java.lang.NullPointerException e) {
-			ProgressiveAutomation.logger.warn("NullPointerException caught while calling ItemStack.getUnlocalizedName()");
-		}
-		return rv;
-	}
-	
+		// the item may be hiding in a delegate, so use getItem()
+		if (item.getItem() == null) return false;
+		return (item.getItem().getUnlocalizedName().contains("tile.blockMagicalLog"));
+	}	
 }
