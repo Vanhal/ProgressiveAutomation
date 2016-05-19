@@ -203,7 +203,6 @@ public class PlayerFake extends FakePlayer {
 	}
 
 	public void setItemInUse(ItemStack heldItemMainhand, int i) {
-		// TODO Auto-generated method stub
-		
+		this.ticksSinceLastSwing = (int) getCooldownPeriod() + 1;
 	}
 }
