@@ -196,14 +196,14 @@ public class TilePlanter extends UpgradeableTileEntity {
 		Block dirtBlock = dirtState.getBlock();
 		
 		if (reverse) {
-			if (dirtBlock == Blocks.farmland) {
-				worldObj.setBlockState(dirtPosition, Blocks.dirt.getDefaultState());
+			if (dirtBlock == Blocks.FARMLAND) {
+				worldObj.setBlockState(dirtPosition, Blocks.DIRT.getDefaultState());
 			}
 		} else {
 			if (slots[SLOT_HOE]!=null) {
 				if (plantBlock.isAir(plantState, worldObj, plantPosition)) {
-					if ((dirtBlock == Blocks.grass || dirtBlock == Blocks.dirt)) {
-						worldObj.setBlockState(dirtPosition, Blocks.farmland.getDefaultState());
+					if ((dirtBlock == Blocks.GRASS || dirtBlock == Blocks.DIRT)) {
+						worldObj.setBlockState(dirtPosition, Blocks.FARMLAND.getDefaultState());
 						damageHoe(dirtPoint);
 					}
 				}

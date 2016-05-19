@@ -28,7 +28,7 @@ public class ItemWitherWood extends BaseItem {
 	
     protected void addNormalRecipe() {
     	ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this, 8), new Object[]{
-			"ppp", "pnp", "ppp", 'p', Blocks.log, 'n', Items.nether_star});
+			"ppp", "pnp", "ppp", 'p', Blocks.LOG, 'n', Items.NETHER_STAR});
 		GameRegistry.addRecipe(recipe);
 	}
 

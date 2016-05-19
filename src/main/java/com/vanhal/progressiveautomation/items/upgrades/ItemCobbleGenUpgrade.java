@@ -21,7 +21,6 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class ItemCobbleGenUpgrade extends ItemUpgrade {
 	public ItemCobbleGenUpgrade() {
 		super("CobbleUpgrade", UpgradeType.COBBLE_GEN);
-		//this.setTextureName(Ref.MODID+":Cobble_Upgrade");
 	}
 	
 	protected void addNormalRecipe() {
@@ -35,7 +34,7 @@ public class ItemCobbleGenUpgrade extends ItemUpgrade {
 		}
 		
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "lrw", "ppp", 'p', Blocks.stone, 'r', blockMiner, 'l', Items.lava_bucket, 'w', Items.water_bucket});
+			"ppp", "lrw", "ppp", 'p', Blocks.STONE, 'r', blockMiner, 'l', Items.LAVA_BUCKET, 'w', Items.WATER_BUCKET});
 		GameRegistry.addRecipe(recipe);
 	}
 	

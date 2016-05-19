@@ -26,9 +26,9 @@ public class ItemWitherIron extends BaseItem {
 
     protected void addNormalRecipe() {
 		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 2), 
-				Items.nether_star, 
-				Items.iron_ingot, 
-				Items.iron_ingot
+				Items.NETHER_STAR, 
+				Items.IRON_INGOT, 
+				Items.IRON_INGOT
 			);
 		GameRegistry.addRecipe(recipe);
 	}

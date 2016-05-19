@@ -46,9 +46,9 @@ public class SimpleGuiHandler implements IGuiHandler {
 			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			try {
 				if (!world.isRemote) {
-					Packet packet = tile.getDescriptionPacket();
+					Packet packet = tile.getUpdatePacket();
 					if (packet != null) {
-						((EntityPlayerMP)player).playerNetServerHandler.sendPacket(packet);
+						((EntityPlayerMP)player).connection.sendPacket(packet);
 					}
 					
 				}

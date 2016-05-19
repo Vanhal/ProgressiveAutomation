@@ -34,8 +34,8 @@ public class Vanilla extends BaseMod {
 	@Override
 	public boolean isPlantible(ItemStack item) {
 		if (item.getItem() instanceof IPlantable) return true;
-		if (item.getItem() == Items.reeds) return true; // sugar cane
-		if (Block.getBlockFromItem(item.getItem()) == Blocks.cactus) return true; // cactus
+		if (item.getItem() == Items.REEDS) return true; // sugar cane
+		if (Block.getBlockFromItem(item.getItem()) == Blocks.CACTUS) return true; // cactus
 		return false;
 	}
 	
@@ -49,8 +49,8 @@ public class Vanilla extends BaseMod {
 	public boolean isPlant(Block plantBlock, IBlockState state) {
 		if (plantBlock instanceof IGrowable) return true;
 		if (plantBlock instanceof BlockNetherWart) return true;
-		if (plantBlock == Blocks.reeds) return true;
-		if (plantBlock == Blocks.cactus) return true;
+		if (plantBlock == Blocks.REEDS) return true;
+		if (plantBlock == Blocks.CACTUS) return true;
 		return false;
 	}
 	
@@ -61,10 +61,10 @@ public class Vanilla extends BaseMod {
 			return !((IGrowable)plantBlock).canGrow(worldObj, plantPoint.toPosition(), state, true);
 		} else if (plantBlock instanceof BlockNetherWart) { //nether wart
 			return (metadata >= 3);
-		} else if (plantBlock == Blocks.reeds) { // sugar cane
-			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock() == Blocks.reeds);
-		} else if (plantBlock == Blocks.cactus) { //cactus
-			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock() == Blocks.cactus);
+		} else if (plantBlock == Blocks.REEDS) { // sugar cane
+			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock() == Blocks.REEDS);
+		} else if (plantBlock == Blocks.CACTUS) { //cactus
+			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock() == Blocks.CACTUS);
 		}
 		return false;
 	}
@@ -74,10 +74,10 @@ public class Vanilla extends BaseMod {
 		if (itemStack.getItem() instanceof IPlantable) {
 			//normal crops
 			plant = ((IPlantable)itemStack.getItem()).getPlant(worldObj, point.toPosition());
-		} else if (itemStack.getItem() == Items.reeds) { //sugarcane
-			plant = Blocks.reeds.getDefaultState();
-		} else if (Block.getBlockFromItem(itemStack.getItem()) == Blocks.cactus) { //cactus
-			plant = Blocks.cactus.getDefaultState();
+		} else if (itemStack.getItem() == Items.REEDS) { //sugarcane
+			plant = Blocks.REEDS.getDefaultState();
+		} else if (Block.getBlockFromItem(itemStack.getItem()) == Blocks.CACTUS) { //cactus
+			plant = Blocks.CACTUS.getDefaultState();
 		}
 		return plant;
 	}
@@ -107,7 +107,7 @@ public class Vanilla extends BaseMod {
 	
 	@Override
 	public List<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
-		if ( (plantBlock == Blocks.reeds) || (plantBlock == Blocks.cactus) ) {
+		if ( (plantBlock == Blocks.REEDS) || (plantBlock == Blocks.CACTUS) ) {
 			plantPoint.setY(plantPoint.getY() + 1);
 			state = worldObj.getBlockState(plantPoint.toPosition());
 			plantBlock = state.getBlock();

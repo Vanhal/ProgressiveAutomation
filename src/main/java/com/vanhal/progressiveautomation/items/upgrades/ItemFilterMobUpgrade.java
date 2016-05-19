@@ -18,7 +18,6 @@ public class ItemFilterMobUpgrade extends ItemUpgrade {
 
 	public ItemFilterMobUpgrade() {
 		super("FilterMobUpgrade", UpgradeType.FILTER_MOB);
-		//this.setTextureName(Ref.MODID+":Filter_Mob_Upgrade");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -30,7 +29,7 @@ public class ItemFilterMobUpgrade extends ItemUpgrade {
 	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"pgp", "zrz", "pgp", 'p', Blocks.stone, 'r', Blocks.redstone_block, 'z', Items.rotten_flesh, 'g', Items.gunpowder});
+			"pgp", "zrz", "pgp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 'z', Items.ROTTEN_FLESH, 'g', Items.GUNPOWDER});
 		GameRegistry.addRecipe(recipe);
 	}
 }

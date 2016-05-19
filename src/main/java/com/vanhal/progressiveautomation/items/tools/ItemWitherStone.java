@@ -28,7 +28,7 @@ public class ItemWitherStone extends BaseItem {
 	
     protected void addNormalRecipe() {
     	ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this, 4), new Object[]{
-			" p ", "pnp", " p ", 'p', Blocks.stone, 'n', Items.nether_star});
+			" p ", "pnp", " p ", 'p', Blocks.STONE, 'n', Items.NETHER_STAR});
 		GameRegistry.addRecipe(recipe);
 	}
 

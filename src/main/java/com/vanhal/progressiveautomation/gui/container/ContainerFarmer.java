@@ -26,7 +26,7 @@ public class ContainerFarmer extends BaseContainer {
 		
 		this.addSlotToContainer(new SlotFeed(farmer, farmer.SLOT_FOOD, 11, 16)); //animal food
 		this.addSlotToContainer(new SlotShearsDisabledUpgrade(UpgradeType.SHEARING, farmer, farmer.SLOT_SHEARS, 37, 52)); //shears
-		this.addSlotToContainer(new SlotItemDisabledUpgrade(new ItemStack(Items.bucket), UpgradeType.MILKER, farmer, farmer.SLOT_BUCKETS, 63, 52)); //buckets
+		this.addSlotToContainer(new SlotItemDisabledUpgrade(new ItemStack(Items.BUCKET), UpgradeType.MILKER, farmer, farmer.SLOT_BUCKETS, 63, 52)); //buckets
 		this.addSlotToContainer(new SlotUpgrades(farmer, farmer.SLOT_UPGRADE, 89, 52)); //upgrades
 		
 		//output slots

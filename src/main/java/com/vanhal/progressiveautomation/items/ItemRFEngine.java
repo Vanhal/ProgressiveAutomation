@@ -102,7 +102,7 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
     
     protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"iii", "grg", "iii", 'i', Items.iron_ingot, 'r', Blocks.redstone_block, 'g', Items.gold_ingot});
+			"iii", "grg", "iii", 'i', Items.IRON_INGOT, 'r', Blocks.REDSTONE_BLOCK, 'g', Items.GOLD_INGOT});
 		GameRegistry.addRecipe(recipe);
 	}
 	

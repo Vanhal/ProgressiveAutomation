@@ -97,13 +97,15 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	
 	/**
 	 * Do not extend this method, use writeSyncOnlyNBT, writeCommonNBT or writeNonSyncableNBT as needed.
+	 * @return 
 	 */
 	@Override
-	public final void writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public final NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt = super.writeToNBT(nbt);
 		
 		writeCommonNBT(nbt);
 		writeNonSyncableNBT(nbt);
+		return nbt;
 	}
 	
 	/**
@@ -245,7 +247,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
      * all syncable data.
      */
 	@Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         this.writeCommonNBT(nbttagcompound);
         this.writeSyncOnlyNBT(nbttagcompound);
@@ -584,8 +586,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	
 	public static int getItemBurnTime(ItemStack item) {
 		if (PAConfig.allowPotatos) {
-			if (item.getItem() == Items.potato) return 40;
-			else if (item.getItem() == Items.baked_potato) return 80;
+			if (item.getItem() == Items.POTATO) return 40;
+			else if (item.getItem() == Items.BAKED_POTATO) return 80;
 		}
 		if (item==null) return 0;
 		return TileEntityFurnace.getItemBurnTime(item);

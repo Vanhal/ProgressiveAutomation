@@ -18,7 +18,6 @@ public class ItemFilterPlayerUpgrade extends ItemUpgrade {
 
 	public ItemFilterPlayerUpgrade() {
 		super("FilterPlayerUpgrade", UpgradeType.FILTER_PLAYER);
-		//this.setTextureName(Ref.MODID+":Filter_Player_Upgrade");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -30,7 +29,7 @@ public class ItemFilterPlayerUpgrade extends ItemUpgrade {
 	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"psp", "srs", "psp", 'p', Blocks.stone, 'r', Blocks.redstone_block, 's', Items.iron_sword});
+			"psp", "srs", "psp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 's', Items.IRON_SWORD});
 		GameRegistry.addRecipe(recipe);
 	}
 }

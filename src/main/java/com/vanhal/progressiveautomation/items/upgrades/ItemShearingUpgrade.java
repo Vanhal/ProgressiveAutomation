@@ -18,7 +18,6 @@ public class ItemShearingUpgrade extends ItemUpgrade {
 	
 	public ItemShearingUpgrade() {
 		super("ShearingUpgrade", UpgradeType.SHEARING);
-		//this.setTextureName(Ref.MODID+":Shearing_Upgrade");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -30,7 +29,7 @@ public class ItemShearingUpgrade extends ItemUpgrade {
 	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"plp", "wsw", "plp", 'p', Blocks.stone, 's', Items.shears, 'l', Items.leather, 'w', Blocks.wool});
+			"plp", "wsw", "plp", 'p', Blocks.STONE, 's', Items.SHEARS, 'l', Items.LEATHER, 'w', Blocks.WOOL});
 		GameRegistry.addRecipe(recipe);
 	}
 }

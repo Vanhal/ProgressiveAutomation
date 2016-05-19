@@ -18,7 +18,6 @@ public class ItemMilkerUpgrade extends ItemUpgrade {
 
 	public ItemMilkerUpgrade() {
 		super("MilkerUpgrade", UpgradeType.MILKER);
-		//this.setTextureName(Ref.MODID+":Milker_Upgrade");
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -30,7 +29,7 @@ public class ItemMilkerUpgrade extends ItemUpgrade {
 	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "brb", "ppp", 'p', Blocks.stone, 'r', Blocks.redstone_block, 'b', Items.milk_bucket});
+			"ppp", "brb", "ppp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 'b', Items.MILK_BUCKET});
 		GameRegistry.addRecipe(recipe);
 	}
 

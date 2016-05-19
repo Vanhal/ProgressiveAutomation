@@ -117,7 +117,7 @@ public class TileMiner extends UpgradeableTileEntity {
 				boolean mine = false;
 				//ProgressiveAutomation.logger.info("Tool: "+tryBlock.getHarvestTool(meta)+", Level: "+tryBlock.getHarvestLevel(meta)+", Can use Pick: "+tryBlock.isToolEffective("pickaxe", meta));
 				//ProgressiveAutomation.logger.info("Harvestable: "+ForgeHooks.canToolHarvestBlock(tryBlock, meta, getStackInSlot(2)));
-				if (tryBlock == Blocks.cobblestone) {
+				if (tryBlock == Blocks.COBBLESTONE) {
 					return -1;
 				}
 				if (tryBlock.getHarvestTool(tryState)=="chisel") { //this is compatibility for chisel 1
@@ -175,7 +175,7 @@ public class TileMiner extends UpgradeableTileEntity {
 					//silk touch the block if we have it
 					int silkTouch = 0;
 					if (miningWith!=1) {
-						silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.silkTouch, slots[miningWith]);
+						silkTouch = EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, slots[miningWith]);
 					}
 	
 					if (silkTouch>0) {
@@ -190,7 +190,7 @@ public class TileMiner extends UpgradeableTileEntity {
 						//mine the block
 						int fortuneLevel = 0;
 						if (miningWith!=1) {
-							fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, slots[miningWith]);
+							fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, slots[miningWith]);
 						}
 	
 						//then break the block
@@ -212,7 +212,7 @@ public class TileMiner extends UpgradeableTileEntity {
 
 				//remove the block and entity if there is one
 				worldObj.removeTileEntity( currentPosition );
-				worldObj.setBlockState( currentPosition, Blocks.cobblestone.getDefaultState());
+				worldObj.setBlockState( currentPosition, Blocks.COBBLESTONE.getDefaultState());
 				slots[1].stackSize--;
 				if (slots[1].stackSize == 0) {
 					slots[1] = null;
@@ -243,7 +243,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	
 							//check for efficiency on the tool
 							if (miningSpeed>1) {
-								int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.efficiency, slots[miningWith]);
+								int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, slots[miningWith]);
 								if (eff>0) {
 									for (int i = 0; i<eff; i++) {
 										miningSpeed = miningSpeed * 1.3f;
@@ -334,7 +334,7 @@ public class TileMiner extends UpgradeableTileEntity {
 					if (ToolHelper.damageTool(slots[SLOT_PICKAXE], worldObj, this.pos.getX(), this.pos.getY(), this.pos.getZ())) {
 						destroyTool(SLOT_PICKAXE);
 					}
-					slots[1] = new ItemStack(Blocks.cobblestone);
+					slots[1] = new ItemStack(Blocks.COBBLESTONE);
 				}
 			}
 		}
@@ -402,7 +402,7 @@ public class TileMiner extends UpgradeableTileEntity {
 	}
 
 	public int extraSlotCheck(ItemStack item) {
-		if (item.isItemEqual(new ItemStack(Blocks.cobblestone))) {
+		if (item.isItemEqual(new ItemStack(Blocks.COBBLESTONE))) {
 			return 1;
 		}
 		return super.extraSlotCheck(item);
@@ -411,7 +411,7 @@ public class TileMiner extends UpgradeableTileEntity {
 
 	/* ISided Stuff */
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot==1) && (stack.isItemEqual(new ItemStack(Blocks.cobblestone))) ) {
+		if ( (slot==1) && (stack.isItemEqual(new ItemStack(Blocks.COBBLESTONE))) ) {
     		return true;
     	}
 		return super.isItemValidForSlot(slot, stack);

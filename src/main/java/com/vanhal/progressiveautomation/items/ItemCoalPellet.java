@@ -13,14 +13,14 @@ public class ItemCoalPellet extends BaseItem implements IFuelHandler  {
 	public ItemCoalPellet() {
 		super("CoalPellet");
 		//setTextureName(Ref.MODID+":Coal_Pellet");
-		int coalTime = TileEntityFurnace.getItemBurnTime(new ItemStack(Items.coal));
+		int coalTime = TileEntityFurnace.getItemBurnTime(new ItemStack(Items.COAL));
 		burnTime = coalTime / 8;
 	}
 
     protected void addNormalRecipe() {
-    	ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 8), Items.coal);
+    	ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 8), Items.COAL);
 		GameRegistry.addRecipe(recipe);
-		recipe = new ShapelessOreRecipe(new ItemStack(this, 8), new ItemStack(Items.coal, 1, 1));
+		recipe = new ShapelessOreRecipe(new ItemStack(this, 8), new ItemStack(Items.COAL, 1, 1));
 		GameRegistry.addRecipe(recipe);
 
 		GameRegistry.registerFuelHandler(this);

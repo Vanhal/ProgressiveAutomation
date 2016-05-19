@@ -13,13 +13,12 @@ public class ItemWoodUpgrade extends ItemTieredUpgrade {
 	
 	public ItemWoodUpgrade() {
 		super("WoodUpgrade", UpgradeType.WOODEN, ToolHelper.LEVEL_WOOD);
-		//this.setTextureName(Ref.MODID+":Wood_Upgrade");
 	}
 	
 	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', "logWood", 'r', Items.redstone});
+			"ppp", "prp", "ppp", 'p', "logWood", 'r', Items.REDSTONE});
 		GameRegistry.addRecipe(recipe);
 	}
 	

@@ -213,7 +213,7 @@ public class TileChopper extends UpgradeableTileEntity {
 					//I'm fairly sure this doesn't actually do anything, but gonna leave it here anyway
 					int fortuneLevel = 0;
 					if (targetTree) {
-						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.fortune, slots[SLOT_AXE]);
+						fortuneLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, slots[SLOT_AXE]);
 
 					}
 	
@@ -278,7 +278,7 @@ public class TileChopper extends UpgradeableTileEntity {
 					if (isTree(currentPosition)) {
 						choppingSpeed = ToolHelper.getDigSpeed( slots[SLOT_AXE], actualBlockState );
 						//check for efficiency on the tool, only for the wood though!
-						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.efficiency, slots[SLOT_AXE]);
+						int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, slots[SLOT_AXE]);
 						if (eff>0) {
 							for (int i = 0; i<eff; i++) {
 								choppingSpeed = choppingSpeed * 1.3f;
@@ -479,7 +479,7 @@ public class TileChopper extends UpgradeableTileEntity {
 
 	/* ISided Stuff */
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.shears) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.SHEARS) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 			return true;
 		} else if ( (slot == SLOT_SAPLINGS) && (checkSapling(stack)) ) {
     		return true;

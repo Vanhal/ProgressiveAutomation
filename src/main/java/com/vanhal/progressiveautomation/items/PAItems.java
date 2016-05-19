@@ -61,7 +61,7 @@ public class PAItems {
 		cheatRFEngine = new ItemCreativeRFEngine();
 
 		//preInit them
-		Item previousTier = Items.redstone;
+		Item previousTier = Items.REDSTONE;
 		if (woodUpgrade!=null){
 			woodUpgrade.preInit(previousTier);
 			previousTier = woodUpgrade;

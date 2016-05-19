@@ -25,7 +25,7 @@ public class ItemWitherDiamond extends BaseItem {
     }
 	
 	protected void addNormalRecipe() {
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 1), Items.nether_star, Items.diamond);
+		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 1), Items.NETHER_STAR, Items.DIAMOND);
 		GameRegistry.addRecipe(recipe);
 	}
 

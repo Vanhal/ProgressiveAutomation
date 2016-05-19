@@ -42,73 +42,73 @@ public class WitherTools {
 	}
 	
 	protected static void woodenRecipes() {
-		RecipeWitherTool recipe = new RecipeWitherTool(Items.wooden_axe, new Object[]{
+		RecipeWitherTool recipe = new RecipeWitherTool(Items.WOODEN_AXE, new Object[]{
 				"mm ", "ms ", " s ", 'm', witherWood, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.wooden_hoe, new Object[]{
+		recipe = new RecipeWitherTool(Items.WOODEN_HOE, new Object[]{
 				"mm ", " s ", " s ", 'm', witherWood, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.wooden_pickaxe, new Object[]{
+		recipe = new RecipeWitherTool(Items.WOODEN_PICKAXE, new Object[]{
 				"mmm", " s ", " s ", 'm', witherWood, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.wooden_shovel, new Object[]{
+		recipe = new RecipeWitherTool(Items.WOODEN_SHOVEL, new Object[]{
 				" m ", " s ", " s ", 'm', witherWood, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.wooden_sword, new Object[]{
+		recipe = new RecipeWitherTool(Items.WOODEN_SWORD, new Object[]{
 				" m ", " m ", " s ", 'm', witherWood, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
 	}
 	
 	protected static void stoneRecipes() {
-		RecipeWitherTool recipe = new RecipeWitherTool(Items.stone_axe, new Object[]{
+		RecipeWitherTool recipe = new RecipeWitherTool(Items.STONE_AXE, new Object[]{
 				"mm ", "ms ", " s ", 'm', witherStone, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.stone_hoe, new Object[]{
+		recipe = new RecipeWitherTool(Items.STONE_HOE, new Object[]{
 				"mm ", " s ", " s ", 'm', witherStone, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.stone_pickaxe, new Object[]{
+		recipe = new RecipeWitherTool(Items.STONE_PICKAXE, new Object[]{
 				"mmm", " s ", " s ", 'm', witherStone, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.stone_shovel, new Object[]{
+		recipe = new RecipeWitherTool(Items.STONE_SHOVEL, new Object[]{
 				" m ", " s ", " s ", 'm', witherStone, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.stone_sword, new Object[]{
+		recipe = new RecipeWitherTool(Items.STONE_SWORD, new Object[]{
 				" m ", " m ", " s ", 'm', witherStone, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
 	}
 	
 	protected static void ironRecipes() {
-		RecipeWitherTool recipe = new RecipeWitherTool(Items.iron_axe, new Object[]{
+		RecipeWitherTool recipe = new RecipeWitherTool(Items.IRON_AXE, new Object[]{
 				"mm ", "ms ", " s ", 'm', witherIron, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.iron_hoe, new Object[]{
+		recipe = new RecipeWitherTool(Items.IRON_HOE, new Object[]{
 				"mm ", " s ", " s ", 'm', witherIron, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.iron_pickaxe, new Object[]{
+		recipe = new RecipeWitherTool(Items.IRON_PICKAXE, new Object[]{
 				"mmm", " s ", " s ", 'm', witherIron, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.iron_shovel, new Object[]{
+		recipe = new RecipeWitherTool(Items.IRON_SHOVEL, new Object[]{
 				" m ", " s ", " s ", 'm', witherIron, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.iron_sword, new Object[]{
+		recipe = new RecipeWitherTool(Items.IRON_SWORD, new Object[]{
 				" m ", " m ", " s ", 'm', witherIron, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
 	}
 	
 	protected static void diamondRecipes() {
-		RecipeWitherTool recipe = new RecipeWitherTool(Items.diamond_axe, new Object[]{
+		RecipeWitherTool recipe = new RecipeWitherTool(Items.DIAMOND_AXE, new Object[]{
 				"mm ", "ms ", " s ", 'm', witherDiamond, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.diamond_hoe, new Object[]{
+		recipe = new RecipeWitherTool(Items.DIAMOND_HOE, new Object[]{
 				"mm ", " s ", " s ", 'm', witherDiamond, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.diamond_pickaxe, new Object[]{
+		recipe = new RecipeWitherTool(Items.DIAMOND_PICKAXE, new Object[]{
 				"mmm", " s ", " s ", 'm', witherDiamond, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.diamond_shovel, new Object[]{
+		recipe = new RecipeWitherTool(Items.DIAMOND_SHOVEL, new Object[]{
 				" m ", " s ", " s ", 'm', witherDiamond, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-		recipe = new RecipeWitherTool(Items.diamond_sword, new Object[]{
+		recipe = new RecipeWitherTool(Items.DIAMOND_SWORD, new Object[]{
 				" m ", " m ", " s ", 'm', witherDiamond, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
 	}

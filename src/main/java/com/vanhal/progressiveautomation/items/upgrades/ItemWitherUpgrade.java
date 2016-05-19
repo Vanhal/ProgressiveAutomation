@@ -19,12 +19,11 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class ItemWitherUpgrade extends ItemUpgrade {
 	public ItemWitherUpgrade() {
 		super("WitherUpgrade", UpgradeType.WITHER);
-		//this.setTextureName(Ref.MODID+":Wither_Upgrade");
 	}
 	
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"dgd", "gng", "dgd", 'd', PAItems.diamondUpgrade, 'g', Items.gold_ingot, 'n', Items.nether_star});
+			"dgd", "gng", "dgd", 'd', PAItems.diamondUpgrade, 'g', Items.GOLD_INGOT, 'n', Items.NETHER_STAR});
 		GameRegistry.addRecipe(recipe);
 	}
 	

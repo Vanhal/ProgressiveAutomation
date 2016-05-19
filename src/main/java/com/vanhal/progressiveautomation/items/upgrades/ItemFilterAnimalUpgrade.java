@@ -18,7 +18,6 @@ public class ItemFilterAnimalUpgrade extends ItemUpgrade {
 
 	public ItemFilterAnimalUpgrade() {
 		super("FilterAnimalUpgrade", UpgradeType.FILTER_ANIMAL);
-		//this.setTextureName(Ref.MODID+":Filter_Animal_Upgrade");
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -30,7 +29,7 @@ public class ItemFilterAnimalUpgrade extends ItemUpgrade {
 	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"pep", "lrw", "ppp", 'p', Blocks.stone, 'r', Blocks.redstone_block, 'e', Items.egg, 'l', Items.leather, 'w', Blocks.wool});
+			"pep", "lrw", "ppp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 'e', Items.EGG, 'l', Items.LEATHER, 'w', Blocks.WOOL});
 		GameRegistry.addRecipe(recipe);
 	}
 }

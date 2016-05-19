@@ -66,8 +66,8 @@ public class EventPlayers {
 			if (event.getEntity() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.getEntity();
 				if (names.contains(player.getDisplayName())) {
-					ItemStack potato = new ItemStack(Items.poisonous_potato);
-					potato.addEnchantment(Enchantments.unbreaking, 1);
+					ItemStack potato = new ItemStack(Items.POISONOUS_POTATO);
+					potato.addEnchantment(Enchantments.UNBREAKING, 1);
 					potato.setStackDisplayName("Death Potato");
 					if (!player.inventory.hasItemStack(potato)) {
 						player.inventory.addItemStackToInventory(potato);

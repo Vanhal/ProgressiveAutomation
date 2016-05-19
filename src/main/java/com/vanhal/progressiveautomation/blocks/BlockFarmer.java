@@ -22,7 +22,7 @@ public class BlockFarmer extends BaseBlock {
 		this.rangeCount = 1;
 	}
 	
-	public static final Block firstTier = Blocks.furnace;
+	public static final Block firstTier = Blocks.FURNACE;
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int var2) {
@@ -38,16 +38,16 @@ public class BlockFarmer extends BaseBlock {
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.stone, 'c', previousTier, 'p', Items.shears});
+				"sss", "scs", "sps", 's', Blocks.STONE, 'c', previousTier, 'p', Items.SHEARS});
 		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.iron_ingot, 'c', previousTier, 'p', Items.shears, 'b', Blocks.iron_block});
+				"sbs", "scs", "sps", 's', Items.IRON_INGOT, 'c', previousTier, 'p', Items.SHEARS, 'b', Blocks.IRON_BLOCK});
 		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.diamond, 'c', previousTier, 'p', Items.shears});
+				"sss", "scs", "sps", 's', Items.DIAMOND, 'c', previousTier, 'p', Items.SHEARS});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', Blocks.chest, 'p', Items.shears});
+				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', Blocks.CHEST, 'p', Items.SHEARS});
 		}
 		
 		

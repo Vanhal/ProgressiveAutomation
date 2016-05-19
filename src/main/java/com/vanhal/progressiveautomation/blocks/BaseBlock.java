@@ -66,7 +66,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
     }
 	
 	public BaseBlock(String machineType, int level) {
-		super(Material.iron);
+		super(Material.IRON);
 		
 		this.machineType = machineType;
 		name = machineType+returnLevelName(level);

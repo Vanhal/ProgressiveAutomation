@@ -93,7 +93,7 @@ public class TileGenerator extends BaseTileEntity {
 			Block fireBlock = fireState.getBlock();
 			if ( ((fireBlock.isAir(fireState, worldObj, firePos)) 
 				&& (supportBlock.isFlammable(worldObj, supportPos, EnumFacing.UP))) ){
-				worldObj.setBlockState(firePos, Blocks.fire.getDefaultState());
+				worldObj.setBlockState(firePos, Blocks.FIRE.getDefaultState());
 			}
 		}
 	}

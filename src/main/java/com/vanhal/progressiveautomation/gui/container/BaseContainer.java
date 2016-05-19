@@ -133,7 +133,7 @@ public class BaseContainer extends Container {
 		if (entity.isDirty() && entity.getWorld().getWorldTime() % TICKS_PER_MESSAGE == 0) {
 			PartialTileNBTUpdateMessage message = entity.getPartialUpdateMessage();
 			
-			for (Object o : this.crafters) {
+			for (Object o : this.listeners) {
 				if (o instanceof EntityPlayerMP) {
 					EntityPlayerMP player = (EntityPlayerMP) o;
 					NetworkHandler.sendToPlayer(message, player);

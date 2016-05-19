@@ -74,7 +74,7 @@ public final class BlockHelper {
 		public static final int SIGN = 11;
 	}
 
-	static { // TODO: review which of these can be removed in favor of the vanilla handler
+	/*static { // TODO: review which of these can be removed in favor of the vanilla handler
 		rotateType[Block.getIdFromBlock(Blocks.bed)] = RotationType.PREVENT;
 
 		rotateType[Block.getIdFromBlock(Blocks.stone_slab)] = RotationType.SLAB;
@@ -120,7 +120,7 @@ public final class BlockHelper {
 		rotateType[Block.getIdFromBlock(Blocks.birch_stairs)] = RotationType.STAIRS;
 		rotateType[Block.getIdFromBlock(Blocks.jungle_stairs)] = RotationType.STAIRS;
 		rotateType[Block.getIdFromBlock(Blocks.quartz_stairs)] = RotationType.STAIRS;
-	}
+	}*/
 
 	/*public static MovingObjectPosition getCurrentMovingObjectPosition(EntityPlayer player, double distance) {
 

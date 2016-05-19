@@ -24,7 +24,7 @@ public class ContainerMiner extends BaseContainer {
 		updateType = ToolHelper.getUpgradeType(miner.getUpgradeLevel());
 
 		//add slots
-		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.cobblestone), miner, 1, 11, 16)); //cobble
+		this.addSlotToContainer(new SlotItem(new ItemStack(Blocks.COBBLESTONE), miner, 1, 11, 16)); //cobble
 		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_PICKAXE,  miner.getUpgradeLevel(), miner, miner.SLOT_PICKAXE, 37, 52)); //pickaxe
 		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_SHOVEL, miner.getUpgradeLevel(), miner, miner.SLOT_SHOVEL, 63, 52)); //shovel
 		this.addSlotToContainer(new SlotUpgrades(miner, miner.SLOT_UPGRADE, 89, 52)); //upgrades

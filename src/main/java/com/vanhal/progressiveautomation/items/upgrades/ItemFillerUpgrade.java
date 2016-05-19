@@ -17,13 +17,12 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 public class ItemFillerUpgrade extends ItemUpgrade {
 	public ItemFillerUpgrade() {
 		super("FillerUpgrade", UpgradeType.FILLER);
-		//this.setTextureName(Ref.MODID+":Filler_Upgrade");
 	}
 	
 	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "brb", "ppp", 'p', Blocks.stone, 'r', Blocks.furnace, 'b', Items.bucket});
+			"ppp", "brb", "ppp", 'p', Blocks.STONE, 'r', Blocks.FURNACE, 'b', Items.BUCKET});
 		GameRegistry.addRecipe(recipe);
 	}
 	

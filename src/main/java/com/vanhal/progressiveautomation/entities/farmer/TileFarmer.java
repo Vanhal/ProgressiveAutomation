@@ -207,7 +207,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 				if (item instanceof EntityXPOrb) {
 					worldObj.removeEntity(item);
 				} else if (item instanceof EntityItem) {
-					if (((EntityItem)item).getEntityItem().getItem() == Items.egg) {
+					if (((EntityItem)item).getEntityItem().getItem() == Items.EGG) {
 						if (roomInInventory(((EntityItem)item).getEntityItem())) {
 							if (!worldObj.isRemote) addToInventory(((EntityItem)item).getEntityItem());
 							worldObj.removeEntity(item);
@@ -339,9 +339,9 @@ public class TileFarmer extends UpgradeableTileEntity {
 	public static boolean isFeed(ItemStack itemStack) {
 		if (itemStack==null) return false;
 		if (itemStack.getItem()==null) return false;
-		if (itemStack.getItem() == Items.wheat) return true;
-		if (itemStack.getItem() == Items.wheat_seeds) return true;
-		if (itemStack.getItem() == Items.carrot) return true;
+		if (itemStack.getItem() == Items.WHEAT) return true;
+		if (itemStack.getItem() == Items.WHEAT_SEEDS) return true;
+		if (itemStack.getItem() == Items.CARROT) return true;
 		return false;
 	}
 	
@@ -351,9 +351,9 @@ public class TileFarmer extends UpgradeableTileEntity {
 		if ( (slot == this.SLOT_FOOD) && (this.isFeed(stack)) ) {
 			return true;
 		}
-		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.shears) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.SHEARS) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 			return true;
-		} else if ( (slot == this.SLOT_BUCKETS) && (stack.getItem() == Items.bucket) && (hasUpgrade(UpgradeType.MILKER)) ) {
+		} else if ( (slot == this.SLOT_BUCKETS) && (stack.getItem() == Items.BUCKET) && (hasUpgrade(UpgradeType.MILKER)) ) {
 			return true;
 		}
 		

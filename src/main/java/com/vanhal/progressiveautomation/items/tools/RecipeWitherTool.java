@@ -22,7 +22,7 @@ public class RecipeWitherTool extends ShapedOreRecipe {
     @Override
     public ItemStack getCraftingResult(InventoryCrafting inv) {
     	ItemStack result = output.copy();
-    	result.addEnchantment(Enchantments.unbreaking, 10);
+    	result.addEnchantment(Enchantments.UNBREAKING, 10);
     	result.setStackDisplayName("Withered "+result.getDisplayName());
     	return result; 
     }
@@ -30,7 +30,7 @@ public class RecipeWitherTool extends ShapedOreRecipe {
     @Override
     public ItemStack getRecipeOutput() {
     	ItemStack result = output.copy();
-    	result.addEnchantment(Enchantments.unbreaking, 10);
+    	result.addEnchantment(Enchantments.UNBREAKING, 10);
     	result.setStackDisplayName("Withered "+result.getDisplayName());
     	return result; 
     }
