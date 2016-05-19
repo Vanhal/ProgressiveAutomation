@@ -1,24 +1,18 @@
 package com.vanhal.progressiveautomation.items;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.fml.common.IFuelHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ref.Ref;
-
-import cpw.mods.fml.common.IFuelHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemCoalPellet extends BaseItem implements IFuelHandler  {
 	protected int burnTime = 100;
 
 	public ItemCoalPellet() {
 		super("CoalPellet");
-		setTextureName(Ref.MODID+":Coal_Pellet");
+		//setTextureName(Ref.MODID+":Coal_Pellet");
 		int coalTime = TileEntityFurnace.getItemBurnTime(new ItemStack(Items.coal));
 		burnTime = coalTime / 8;
 	}

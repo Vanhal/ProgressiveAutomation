@@ -1,42 +1,39 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
+import com.vanhal.progressiveautomation.entities.generator.TileGeneratorDiamond;
+import com.vanhal.progressiveautomation.entities.generator.TileGeneratorIron;
+import com.vanhal.progressiveautomation.entities.generator.TileGeneratorStone;
+import com.vanhal.progressiveautomation.items.PAItems;
+import com.vanhal.progressiveautomation.ref.ToolHelper;
+
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
-import com.vanhal.progressiveautomation.entities.generator.TileGeneratorDiamond;
-import com.vanhal.progressiveautomation.entities.generator.TileGeneratorIron;
-import com.vanhal.progressiveautomation.entities.generator.TileGeneratorStone;
-import com.vanhal.progressiveautomation.items.ItemBlockMachine;
-import com.vanhal.progressiveautomation.items.PAItems;
-import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 public class BlockGenerator extends BaseBlock {
-	public IIcon iconTop;
-	public IIcon iconSide;
-	public IIcon inactiveGenerator;
-	public IIcon activeGenerator;
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static final PropertyBool ACTIVE = PropertyBool.create("active");
 
 	public BlockGenerator(int level) {
 		super("Generator", level);
+		this.setDefaultState(this.blockState.getBaseState()
+				.withProperty(FACING, EnumFacing.NORTH)
+				.withProperty(ACTIVE, false));
 	}
 	
 	public TileEntity createNewTileEntity(World world, int var2) {
@@ -69,58 +66,68 @@ public class BlockGenerator extends BaseBlock {
 		GameRegistry.addRecipe(recipe);
 	}
 	
-	@SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register) {
-		String iconPrefix = Ref.MODID + ":" + machineType.toLowerCase() + "/" + getLevelName();
-		iconTop =  register.registerIcon(iconPrefix + "_Top");
-		iconSide = register.registerIcon(iconPrefix + "_Side");
-		inactiveGenerator = register.registerIcon(iconPrefix + "_Front");
-		activeGenerator= register.registerIcon(iconPrefix + "_FrontActive");
+	@Override
+    public int getMetaFromState(IBlockState state) {
+        return ((EnumFacing)state.getValue(FACING)).getIndex();
     }
 	
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int metadata) {
-    	if (metadata==0) metadata = 3;
-        return side == 1 ? iconTop : (side == 0 ? iconTop : (side != metadata ? iconSide : inactiveGenerator));
-    }
+	@Override
+    public IBlockState getStateFromMeta(int meta) {
+    	EnumFacing enumfacing = EnumFacing.getFront(meta);
 
-	@SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess block, int x, int y, int z, int side) {
-		int metadata = block.getBlockMetadata(x, y, z);
-		TileGenerator entity = (TileGenerator) block.getTileEntity(x, y, z);
-		if ( (side==metadata) && (entity.isBurning()) ) return activeGenerator;
-        return this.getIcon(side, metadata);
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(FACING, enumfacing);
     }
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+      return new BlockStateContainer(this, new IProperty[] {FACING, ACTIVE});
+	} 
     
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack itemStack) {
-        int l = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-
-        if (l == 0) {
-            world.setBlockMetadataWithNotify(x, y, z, 2, 2);
-        }
-
-        if (l == 1) {
-            world.setBlockMetadataWithNotify(x, y, z, 5, 2);
-        }
-
-        if (l == 2) {
-            world.setBlockMetadataWithNotify(x, y, z, 3, 2);
-        }
-
-        if (l == 3) {
-            world.setBlockMetadataWithNotify(x, y, z, 4, 2);
-        }
-
-        if (itemStack.hasDisplayName()) {
-            ((TileEntityFurnace)world.getTileEntity(x, y, z)).func_145951_a(itemStack.getDisplayName());
-        }
+    @Override
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
     }
     
     @Override
-    public boolean rotateBlock(World worldObj, int x, int y, int z, ForgeDirection axis){
-    	int metadata = worldObj.getBlockMetadata(x, y, z) + 1;
-    	if (metadata>5) metadata = 2;
-    	worldObj.setBlockMetadataWithNotify(x, y, z, metadata, 2);
-        return true;
+    public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
     }
+    
+//    @Override
+//    @SideOnly(Side.CLIENT)
+//    public IBlockState getStateForEntityRender(IBlockState state) {
+//        return this.getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
+//    }
+    
+    @Override
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        if (!world.isRemote) {
+            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+            world.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+        }
+    }
+    
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+    	boolean buring = false;
+    	if (world.getTileEntity(pos) instanceof TileGenerator) {
+    		buring = ((TileGenerator) world.getTileEntity(pos)).isBurning();
+    	}
+        return state.withProperty(FACING, state.getValue(FACING)).withProperty(BlockGenerator.ACTIVE, buring);
+    }
+    
+//    @Override
+//    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis){
+//    	IBlockState state = world.getBlockState(pos);
+//        for (IProperty prop : (java.util.Set<IProperty>)state.getProperties().keySet()) {
+//            if (prop.getName().equals("facing")) {
+//                world.setBlockState(pos, state.cycleProperty(prop));
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 }

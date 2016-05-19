@@ -1,24 +1,23 @@
 package com.vanhal.progressiveautomation.entities;
 
-import com.google.common.base.Enums;
-import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
-import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntityFurnace;
+import java.util.Collections;
+import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.events.EventRenderWorld;
+import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
-import com.vanhal.progressiveautomation.events.EventRenderWorld;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import java.util.*;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeable {
 	protected int toolLevel = ToolHelper.LEVEL_WOOD;
@@ -57,37 +56,19 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 
 	public void readCommonNBT(NBTTagCompound nbt) {
 		super.readCommonNBT(nbt);
-		readLegacyNBT(nbt);
 
 		// Load upgrades
 		NBTTagCompound tag = nbt.getCompoundTag("installedUpgrades");
 		if (tag != null) {
 			// func_150296_c() returns a set of all tag names inside the NBTTagCompound
-			for (Object key : tag.func_150296_c()) {
+			// This is called getKeySet now?
+			for (Object key : tag.getKeySet()) {
 				String upgradeName = (String) key;
 				installedUpgrades.put(UpgradeType.valueOf(upgradeName), tag.getInteger(upgradeName));
 			}
 		}
 		if (nbt.hasKey("advancedToolFlash")) advancedToolFlash = nbt.getInteger("advancedToolFlash");
 		if (nbt.hasKey("showRange")) showRange = nbt.getBoolean("showRange");
-	}
-
-	/**
-	 * Method kept for compatibility reasons. Needs to be removed at a later date.
-	 * Minecraft must load chunks with placed machines (and afterwards, save the world)
-	 * for legacy NBT to convert into the new map.
-	 * @param nbt NBTTagCompound
-	 */
-	@Deprecated
-	private void readLegacyNBT(NBTTagCompound nbt) {
-		if (nbt.hasKey("NumUpgrades") && nbt.getInteger("NumUpgrades") > 0)
-			installedUpgrades.put(UpgradeType.getRangeUpgrade(toolLevel), nbt.getInteger("NumUpgrades"));
-		if (nbt.hasKey("hasWitherUpgrade") && nbt.getInteger("hasWitherUpgrade") > 0)
-			installedUpgrades.put(UpgradeType.WITHER, nbt.getInteger("hasWitherUpgrade"));
-		if (nbt.hasKey("hasCobbleUpgrade") && nbt.getInteger("hasCobbleUpgrade") > 0)
-			installedUpgrades.put(UpgradeType.COBBLE_GEN, nbt.getInteger("hasCobbleUpgrade"));
-		if (nbt.hasKey("hasFillerUpgrade") && nbt.getInteger("hasFillerUpgrade") > 0)
-			installedUpgrades.put(UpgradeType.FILLER, nbt.getInteger("hasFillerUpgrade"));
 	}
 	
 	public void setInvalidTool() {
@@ -188,8 +169,8 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	}
 
 
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			ItemStack upgrade = (SLOT_UPGRADE != -1) ? getStackInSlot(SLOT_UPGRADE) : null;
 			
@@ -290,8 +271,8 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	}
 	
 	protected Point3I adjustedSpiral(int n) {
-		Point2I spiralPoint = this.spiral(n + 1, xCoord, zCoord);
-		return new Point3I(spiralPoint.getX(), yCoord, spiralPoint.getY());
+		Point2I spiralPoint = this.spiral(n + 1, pos.getX(), pos.getZ());
+		return new Point3I(spiralPoint.getX(), pos.getY(), spiralPoint.getY());
 	}
 	
 	public boolean displayRange() {

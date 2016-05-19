@@ -1,0 +1,12 @@
+{
+    "variants": {
+		"active=false,facing=south": { "model": "progressiveautomation:GeneratorIron" },
+        "active=false,facing=west": { "model": "progressiveautomation:GeneratorIron", "y": 90 },
+        "active=false,facing=north": { "model": "progressiveautomation:GeneratorIron", "y": 180 },
+        "active=false,facing=east": { "model": "progressiveautomation:GeneratorIron", "y": 270 },
+        "active=true,facing=south": { "model": "progressiveautomation:GeneratorOnIron" },
+        "active=true,facing=west": { "model": "progressiveautomation:GeneratorOnIron", "y": 90 },
+        "active=true,facing=north": { "model": "progressiveautomation:GeneratorOnIron", "y": 180 },
+        "active=true,facing=east": { "model": "progressiveautomation:GeneratorOnIron", "y": 270 }
+    }
+}

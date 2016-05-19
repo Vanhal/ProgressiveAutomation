@@ -1,10 +1,5 @@
 package com.vanhal.progressiveautomation;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,23 +10,26 @@ import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessa
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.events.EventPlayers;
-import com.vanhal.progressiveautomation.events.EventRenderWorld;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = Ref.MODID, name = Ref.MODNAME, version = Ref.Version, guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory", dependencies = "after:CoFHAPI|energy;after:CoFHCore;")
 public class ProgressiveAutomation {
@@ -51,7 +49,7 @@ public class ProgressiveAutomation {
 	public static CreativeTabs PATab = new CreativeTabs("PATab") {
 		@Override
 		public Item getTabIconItem() {
-			return PAItems.CheatRFEngine;
+			return PAItems.cheatRFEngine;
 		}
 	};
 	
@@ -80,7 +78,7 @@ public class ProgressiveAutomation {
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		PAItems.init();
+		PAItems.init(event);
 		PABlocks.init();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
@@ -100,7 +98,7 @@ public class ProgressiveAutomation {
 	
 	@SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-        if(eventArgs.modID.equals(Ref.MODID))
+        if(eventArgs.getModID().equals(Ref.MODID))
             PAConfig.syncConfig();
     }
 	

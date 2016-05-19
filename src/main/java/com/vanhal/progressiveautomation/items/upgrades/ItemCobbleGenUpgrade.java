@@ -1,31 +1,27 @@
 package com.vanhal.progressiveautomation.items.upgrades;
 
+import static com.vanhal.progressiveautomation.blocks.PABlocks.miner;
+
 import java.util.List;
 
-import static com.vanhal.progressiveautomation.blocks.PABlocks.miner;
-import net.minecraft.block.Block;
+import com.vanhal.progressiveautomation.blocks.BlockMiner;
+import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import com.vanhal.progressiveautomation.blocks.BlockMiner;
-import com.vanhal.progressiveautomation.blocks.PABlocks;
-import com.vanhal.progressiveautomation.ref.Ref;
-import com.vanhal.progressiveautomation.ref.ToolHelper;
-import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCobbleGenUpgrade extends ItemUpgrade {
 	public ItemCobbleGenUpgrade() {
 		super("CobbleUpgrade", UpgradeType.COBBLE_GEN);
-		this.setTextureName(Ref.MODID+":Cobble_Upgrade");
+		//this.setTextureName(Ref.MODID+":Cobble_Upgrade");
 	}
 	
 	protected void addNormalRecipe() {
@@ -53,7 +49,7 @@ public class ItemCobbleGenUpgrade extends ItemUpgrade {
 	
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
-		list.add(EnumChatFormatting.GRAY + "Uses extra pick durability to mine cobble from an internal cobble gen");
+		list.add(TextFormatting.GRAY + "Uses extra pick durability to mine cobble from an internal cobble gen");
        
     }
 }

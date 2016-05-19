@@ -1,15 +1,19 @@
 package com.vanhal.progressiveautomation.blocks.network;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTSizeTracker;
 import net.minecraft.nbt.NBTTagCompound;
-import io.netty.buffer.ByteBuf;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class PartialTileNBTUpdateMessage implements IMessage {
 	
@@ -60,13 +64,11 @@ public class PartialTileNBTUpdateMessage implements IMessage {
      */
     private static void writeNBTTagCompoundToBuffer(ByteBuf buf, NBTTagCompound tag) throws IOException
     {
-        if (tag == null)
-        {
+        if (tag == null) {
         	buf.writeShort(-1);
-        }
-        else
-        {
-            byte[] abyte = CompressedStreamTools.compress(tag);
+        } else {
+        	//compress doesn't seem to exist any more....
+            byte[] abyte = compress(tag);
             buf.writeShort((short)abyte.length);
             buf.writeBytes(abyte);
         }
@@ -80,16 +82,40 @@ public class PartialTileNBTUpdateMessage implements IMessage {
     {
         short short1 = buf.readShort();
 
-        if (short1 < 0)
-        {
+        if (short1 < 0)  {
             return null;
-        }
-        else
-        {
+        } else  {
             byte[] abyte = new byte[short1];
             buf.readBytes(abyte);
-            return CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L));
+            
+            return decompress(abyte, new NBTSizeTracker(2097152L));
         }
+    }
+    
+    private static byte[] compress(NBTTagCompound p_74798_0_) throws IOException {
+        ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+        DataOutputStream dataoutputstream = new DataOutputStream(new GZIPOutputStream(bytearrayoutputstream));
+
+        try {
+        	CompressedStreamTools.write(p_74798_0_, dataoutputstream);
+        } finally  {
+            dataoutputstream.close();
+        }
+
+        return bytearrayoutputstream.toByteArray();
+    }
+    
+    public static NBTTagCompound decompress(byte[] p_152457_0_, NBTSizeTracker p_152457_1_) throws IOException {
+        DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new GZIPInputStream(new ByteArrayInputStream(p_152457_0_))));
+        NBTTagCompound nbttagcompound;
+
+        try {
+            nbttagcompound = CompressedStreamTools.read(datainputstream, p_152457_1_);
+        } finally {
+            datainputstream.close();
+        }
+
+        return nbttagcompound;
     }
 
 }

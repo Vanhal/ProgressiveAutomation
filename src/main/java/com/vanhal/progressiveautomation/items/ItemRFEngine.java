@@ -1,26 +1,21 @@
 package com.vanhal.progressiveautomation.items;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
+import com.vanhal.progressiveautomation.PAConfig;
+
+import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import cofh.api.energy.IEnergyContainerItem;
-
-import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.ref.Ref;
-
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
-import java.text.DecimalFormat;
 
 public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	protected int maxCharge = 100000;
@@ -29,7 +24,7 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	
 	public ItemRFEngine() {
 		super("RFEngine");
-		setTextureName(Ref.MODID+":RFEngine");
+		//setTextureName(Ref.MODID+":RFEngine");
 		setMaxStackSize(1);
 		setMaxCharge(PAConfig.rfStored);
 	}
@@ -49,12 +44,12 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	
 	public int getCharge(ItemStack itemStack) {
 		initNBT(itemStack);
-		return itemStack.stackTagCompound.getInteger("charge");
+		return itemStack.getTagCompound().getInteger("charge");
 	}
 	
 	public void setCharge(ItemStack itemStack, int charge) {
 		initNBT(itemStack);
-		itemStack.stackTagCompound.setInteger("charge", charge);
+		itemStack.getTagCompound().setInteger("charge", charge);
 	}
 	
 	public int addCharge(ItemStack itemStack, int amount) {
@@ -70,14 +65,14 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	}
 	
 	protected void initNBT(ItemStack itemStack) {
-		if (itemStack.stackTagCompound == null) {
-			itemStack.stackTagCompound = new NBTTagCompound();
-			itemStack.stackTagCompound.setInteger("charge", 0);
+		if (itemStack.getTagCompound() == null) {
+			itemStack.setTagCompound(new NBTTagCompound());
+			itemStack.getTagCompound().setInteger("charge", 0);
 		}
 	}
 	
 	protected boolean isInit(ItemStack itemStack) {
-		return (itemStack.stackTagCompound != null);
+		return (itemStack.getTagCompound() != null);
 	}
 	
 	
@@ -85,12 +80,12 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
     public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
     	if ( (itemStack!=null) && (isInit(itemStack)) ) {
     		int charge = getCharge(itemStack);
-    		list.add(EnumChatFormatting.RED + "" + 
+    		list.add(TextFormatting.RED + "" + 
     				String.format("%s", rfDecimalFormat.format(charge)) + "/" +
     				String.format("%s", rfDecimalFormat.format(maxCharge)) + " RF");
     	} else {
-    		list.add(EnumChatFormatting.GRAY + "Add to the fuel slot to");
-        	list.add(EnumChatFormatting.GRAY + "power a machine with RF");
+    		list.add(TextFormatting.GRAY + "Add to the fuel slot to");
+        	list.add(TextFormatting.GRAY + "power a machine with RF");
     	}
     }
     

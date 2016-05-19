@@ -1,36 +1,31 @@
 package com.vanhal.progressiveautomation.entities.killer;
 
-import java.util.Collection;
 import java.util.List;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.IAnimals;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemSword;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.util.ForgeDirection;
 
 import com.google.common.collect.Multimap;
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point2I;
 import com.vanhal.progressiveautomation.util.Point3I;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.IAnimals;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.WorldServer;
 
 public class TileKiller extends UpgradeableTileEntity {
 	protected int searchBlock = -1;
@@ -40,7 +35,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	public int currentTime = 0;
 	
 	protected PlayerFake faker;
-	protected AxisAlignedBB boundCheck = AxisAlignedBB.getBoundingBox(0, 0, 0, 0, 0, 0);
+	protected AxisAlignedBB boundCheck = new AxisAlignedBB(0, 0, 0, 0, 0, 0);
 
 	public TileKiller() {
 		super(11);
@@ -48,7 +43,7 @@ public class TileKiller extends UpgradeableTileEntity {
 		setAllowedUpgrades(UpgradeType.WOODEN, UpgradeType.WITHER, UpgradeType.FILTER_ADULT, UpgradeType.FILTER_ANIMAL, UpgradeType.FILTER_MOB, UpgradeType.FILTER_PLAYER);
 
 		//auto output direction
-		setExtDirection(ForgeDirection.DOWN);
+		setExtDirection(EnumFacing.DOWN);
 		
 		//slots
 		SLOT_SWORD = 1;
@@ -75,8 +70,9 @@ public class TileKiller extends UpgradeableTileEntity {
 		if (nbt.hasKey("currentBlock")) searchBlock = nbt.getInteger("currentBlock");
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	@Override
+	public void update() {
+		super.update();
 		if (!worldObj.isRemote) {
 			doXpPickup();
 			checkInventory();
@@ -94,16 +90,20 @@ public class TileKiller extends UpgradeableTileEntity {
 							if (slots[SLOT_SWORD]!=null) {
 								//attack the "mob"
 								if (faker == null) {
-									faker = new PlayerFake((WorldServer)worldObj, worldObj.getBlock(xCoord, yCoord, zCoord).getLocalizedName());
+									faker = new PlayerFake((WorldServer)worldObj, worldObj.getBlockState(pos).getBlock().getLocalizedName());
 									faker.setPosition(0, 0, 0);
 								}
 								
 								faker.setItemInHand(slots[SLOT_SWORD].copy());
-								faker.setItemInUse(faker.getCurrentEquippedItem(), 72000);
+								Multimap<String, AttributeModifier> attributeModifiers = slots[SLOT_SWORD].getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
+
+								attributeModifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName());
+								faker.setItemInUse(faker.getHeldItemMainhand(), 72000);
+								faker.onUpdate();
 								faker.attackTargetEntityWithCurrentItem(mob);
 								
-								
-								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, xCoord, yCoord, zCoord)) {
+
+								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, pos.getX(), pos.getY(), pos.getZ())) {
 									destroyTool(SLOT_SWORD);
 								}
 								
@@ -144,7 +144,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	
 	public EntityLivingBase getMob(int n) {
 		Point3I point = getPoint(n);
-		boundCheck.setBounds(point.getX(), point.getY()-1, point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundCheck);
 		if (!entities.isEmpty()) {
@@ -198,7 +198,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	
 	public void pickupDrops(int n) {
 		Point3I point = getPoint(n);
-		boundCheck.setBounds(point.getX(), point.getY(), point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
 		List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, boundCheck);
@@ -215,7 +215,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	
 	public void pickupXP(int n) {
 		Point3I point = getPoint(n);
-		boundCheck.setBounds(point.getX(), point.getY(), point.getZ(), 
+		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
 		List<EntityXPOrb> entities = worldObj.getEntitiesWithinAABB(EntityXPOrb.class, boundCheck);
@@ -242,8 +242,8 @@ public class TileKiller extends UpgradeableTileEntity {
 	}
 	
 	protected Point3I getPoint(int n) {
-		Point2I p1 = spiral(n+1, xCoord, zCoord);
-		return new Point3I(p1.getX(), yCoord + 1, p1.getY());
+		Point2I p1 = spiral(n+1, pos.getX(), pos.getZ());
+		return new Point3I(p1.getX(), pos.getY() + 1, p1.getY());
 	}
 
 	

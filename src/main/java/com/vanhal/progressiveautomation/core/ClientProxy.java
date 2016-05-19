@@ -2,14 +2,11 @@ package com.vanhal.progressiveautomation.core;
 
 import com.vanhal.progressiveautomation.events.EventRenderWorld;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
-
-
 import net.minecraftforge.common.MinecraftForge;
-import cpw.mods.fml.client.registry.ClientRegistry;
+
 
 public class ClientProxy extends Proxy {
+
 	@Override
 	public void registerEntities() {
 		super.registerEntities();

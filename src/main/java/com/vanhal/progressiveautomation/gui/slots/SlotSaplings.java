@@ -1,13 +1,10 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class SlotSaplings extends Slot {
 	

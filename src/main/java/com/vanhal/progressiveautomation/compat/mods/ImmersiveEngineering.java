@@ -1,15 +1,9 @@
 package com.vanhal.progressiveautomation.compat.mods;
 
-import java.util.ArrayList;
-
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
+import net.minecraft.block.state.IBlockState;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
-import com.vanhal.progressiveautomation.util.Point3I;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ImmersiveEngineering extends Vanilla {
 	
@@ -41,7 +35,7 @@ public class ImmersiveEngineering extends Vanilla {
 	}
 	
 	@Override
-	public boolean isPlant(Block plantBlock, int metadata) {
+	public boolean isPlant(Block plantBlock, IBlockState state) {
 		if (haveBlocks()) {
 			if (hemp.equals(plantBlock)) {
 				return true;
@@ -50,8 +44,8 @@ public class ImmersiveEngineering extends Vanilla {
 		return false;
 	}
 	
-	@Override
-	public ArrayList<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, int metadata, World worldObj) {
+	/*@Override
+	public ArrayList<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
 		ArrayList<ItemStack> items = plantBlock.getDrops(worldObj, plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), metadata, 0);
 		
 		//get the top of the plant
@@ -63,5 +57,5 @@ public class ImmersiveEngineering extends Vanilla {
 		}
 		worldObj.setBlockToAir(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ());
 		return items;
-	}
+	}*/
 }

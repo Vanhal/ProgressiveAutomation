@@ -4,26 +4,13 @@ package com.vanhal.progressiveautomation.util;
 import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import net.minecraft.block.Block;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.client.C15PacketClientSettings;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.server.management.ItemInWorldManager;
 import net.minecraft.stats.StatBase;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
@@ -60,7 +47,7 @@ public class PlayerFake extends FakePlayer {
 		this(world, NAME);
 	}
 
-	public static boolean isBlockBreakable(PlayerFake myFakePlayer, World worldObj, int x, int y, int z) {
+	/*public static boolean isBlockBreakable(PlayerFake myFakePlayer, World worldObj, int x, int y, int z) {
 
 		Block block = worldObj.getBlock(x, y, z);
 		if (myFakePlayer == null) {
@@ -68,7 +55,7 @@ public class PlayerFake extends FakePlayer {
 		} else {
 			return block.getPlayerRelativeBlockHardness(myFakePlayer, worldObj, x, y, z) > -1;
 		}
-	}
+	}*/
 
 	@Override
 	public boolean canCommandSenderUseCommand(int var1, String var2) {
@@ -81,11 +68,11 @@ public class PlayerFake extends FakePlayer {
 		return false;
 	}
 
-	@Override
+	/*@Override
 	public ChunkCoordinates getPlayerCoordinates() {
 
 		return null;
-	}
+	}*/
 
 	public void setItemInHand(ItemStack m_item) {
 
@@ -120,22 +107,22 @@ public class PlayerFake extends FakePlayer {
 	public void onUpdate() {
 
 		ItemStack itemstack = previousItem;
-		ItemStack itemstack1 = getHeldItem();
+		ItemStack itemstack1 = getHeldItemMainhand();
 
 		if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
 			if (itemstack != null) {
-				getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers());
+				getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers(null));
 			}
 			if (itemstack1 != null) {
-				getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers());
+				getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers(null));
 			}
 			myName = "[VANHAL]" + (itemstack1 != null ? " using " + itemstack1.getDisplayName() : "");
 		}
 		previousItem = itemstack1 == null ? null : itemstack1.copy();
-		theItemInWorldManager.updateBlockRemoving();
+//		theItemInWorldManager.updateBlockRemoving();
 	}
 
-	@Override
+	/*@Override
 	protected void updateItemUse(ItemStack par1ItemStack, int par2) {
 
 		if (par1ItemStack.getItemUseAction() == EnumAction.drink) {
@@ -151,7 +138,7 @@ public class PlayerFake extends FakePlayer {
 	public String getDisplayName() {
 
 		return getCommandSenderName();
-	}
+	}*/
 
 	@Override
 	public float getEyeHeight() {
@@ -159,19 +146,19 @@ public class PlayerFake extends FakePlayer {
 		return 1.1F;
 	}
 
-	@Override
-	public ItemStack getCurrentArmor(int par1) {
+//	@Override
+//	public ItemStack getCurrentArmor(int par1) {
+//
+//		return new ItemStack(Items.diamond_chestplate);
+//	}
 
-		return new ItemStack(Items.diamond_chestplate);
+	@Override
+	public void addChatMessage(ITextComponent chatmessagecomponent) {
+
 	}
 
 	@Override
-	public void addChatMessage(IChatComponent chatmessagecomponent) {
-
-	}
-
-	@Override
-	public void addChatComponentMessage(IChatComponent chatmessagecomponent) {
+	public void addChatComponentMessage(ITextComponent chatmessagecomponent) {
 
 	}
 
@@ -185,11 +172,11 @@ public class PlayerFake extends FakePlayer {
 
 	}
 
-	@Override
+	/*@Override
 	public boolean isEntityInvulnerable() {
 
 		return true;
-	}
+	}*/
 
 	@Override
 	public void onDeath(DamageSource source) {
@@ -197,20 +184,25 @@ public class PlayerFake extends FakePlayer {
 		return;
 	}
 
-	@Override
-	public void travelToDimension(int dim) {
+//	@Override
+//	public void travelToDimension(int dim) {
+//
+//		return;
+//	}
 
-		return;
-	}
-
-	@Override
+	/*@Override
 	public void func_147100_a(C15PacketClientSettings pkt) {
 
 		return;
-	}
+	}*/
+
 	
 	@Override
 	public void addPotionEffect(PotionEffect p_70690_1_) {
 		
+	}
+
+	public void setItemInUse(ItemStack heldItemMainhand, int i) {
+		this.ticksSinceLastSwing = (int) getCooldownPeriod() + 1;
 	}
 }

@@ -1,10 +1,8 @@
 package com.vanhal.progressiveautomation.upgrades;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
-import com.vanhal.progressiveautomation.items.upgrades.ItemTieredUpgrade;
 import com.vanhal.progressiveautomation.items.upgrades.ItemUpgrade;
 
 public class UpgradeRegistry {

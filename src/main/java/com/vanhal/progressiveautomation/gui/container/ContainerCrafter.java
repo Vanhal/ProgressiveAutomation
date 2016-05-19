@@ -1,24 +1,17 @@
 package com.vanhal.progressiveautomation.gui.container;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.tileentity.TileEntity;
-
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.crafter.TileCrafter;
 import com.vanhal.progressiveautomation.gui.slots.SlotCraftingLocked;
 import com.vanhal.progressiveautomation.gui.slots.SlotFalseCopy;
 import com.vanhal.progressiveautomation.gui.slots.SlotRemoveOnly;
-import com.vanhal.progressiveautomation.gui.slots.SlotSaplings;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.tileentity.TileEntity;
 
 public class ContainerCrafter extends BaseContainer {
 	public TileCrafter crafter;
@@ -53,7 +46,7 @@ public class ContainerCrafter extends BaseContainer {
 	@Override
     public void onCraftMatrixChanged(IInventory inv) {
     	crafter.setInventorySlotContents(crafter.CRAFT_RESULT, 
-    			CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, crafter.getWorldObj()));
+    			CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, crafter.getWorld()));
     	if (init) updateTile();
     }
     

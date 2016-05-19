@@ -1,11 +1,10 @@
 package com.vanhal.progressiveautomation.compat.mods;
 
-import net.minecraft.item.ItemStack;
-
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.BaseMod;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+
+import net.minecraft.item.ItemStack;
 
 public class ThaumCraft extends BaseMod {
 	

@@ -1,21 +1,15 @@
 package com.vanhal.progressiveautomation.gui.container;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.blocks.network.NetworkHandler;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.entities.miner.TileMiner;
 import com.vanhal.progressiveautomation.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.gui.slots.SlotPower;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -136,7 +130,7 @@ public class BaseContainer extends Container {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 		
-		if (entity.isDirty() && entity.getWorldObj().getWorldTime() % TICKS_PER_MESSAGE == 0) {
+		if (entity.isDirty() && entity.getWorld().getWorldTime() % TICKS_PER_MESSAGE == 0) {
 			PartialTileNBTUpdateMessage message = entity.getPartialUpdateMessage();
 			
 			for (Object o : this.crafters) {

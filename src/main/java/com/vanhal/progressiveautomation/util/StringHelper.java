@@ -6,9 +6,7 @@ import java.util.List;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.util.text.translation.I18n;
 
 
 /**
@@ -44,37 +42,17 @@ public final class StringHelper {
 
 	public static String localize(String key) {
 
-		return StatCollector.translateToLocal(key);
-	}
-
-	public static String getFluidName(FluidStack fluid) {
-
-		return getFluidName(fluid.getFluid());
-	}
-
-	public static String getFluidName(Fluid fluid) {
-
-		String name = "" + END;
-		if (fluid.getRarity() == EnumRarity.uncommon) {
-			name += YELLOW;
-		} else if (fluid.getRarity() == EnumRarity.rare) {
-			name += BRIGHT_BLUE;
-		} else if (fluid.getRarity() == EnumRarity.epic) {
-			name += PINK;
-		}
-		name += fluid.getLocalizedName() + END;
-
-		return name;
+		return I18n.translateToLocal(key);
 	}
 
 	public static String getItemName(ItemStack item) {
 
 		String name = "" + END;
-		if (item.getRarity() == EnumRarity.uncommon) {
+		if (item.getRarity() == EnumRarity.UNCOMMON) {
 			name += YELLOW;
-		} else if (item.getRarity() == EnumRarity.rare) {
+		} else if (item.getRarity() == EnumRarity.RARE) {
 			name += BRIGHT_BLUE;
-		} else if (item.getRarity() == EnumRarity.epic) {
+		} else if (item.getRarity() == EnumRarity.EPIC) {
 			name += PINK;
 		}
 		name += item.getDisplayName() + END;

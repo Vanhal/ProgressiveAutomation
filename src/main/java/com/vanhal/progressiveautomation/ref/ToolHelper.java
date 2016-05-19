@@ -3,12 +3,11 @@ package com.vanhal.progressiveautomation.ref;
 import java.util.Random;
 import java.util.Set;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemHoe;
@@ -19,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
@@ -78,12 +77,12 @@ public class ToolHelper {
 	public static int getLevel(ItemStack itemStack) {
 		//Vanilla Tools
 		if (itemStack.getItem() instanceof ItemTool) {
-			return ((ItemTool)itemStack.getItem()).func_150913_i().getHarvestLevel();
+			return ((ItemTool)itemStack.getItem()).getToolMaterial().getHarvestLevel();
 		} else if ((itemStack.getItem() instanceof ItemSword) ||
 			(itemStack.getItem() instanceof ItemHoe)) {
 			String material = "";
 			if (itemStack.getItem() instanceof ItemSword) material = ((ItemSword)itemStack.getItem()).getToolMaterialName();
-			else if (itemStack.getItem() instanceof ItemHoe) material = ((ItemHoe)itemStack.getItem()).getToolMaterialName();
+			else if (itemStack.getItem() instanceof ItemHoe) material = ((ItemHoe)itemStack.getItem()).getMaterialName();
 			if (material.equals("WOOD")) return LEVEL_WOOD;
 			else if (material.equals("STONE")) return LEVEL_STONE;
 			else if (material.equals("IRON")) return LEVEL_IRON;
@@ -101,8 +100,9 @@ public class ToolHelper {
 
 	//check for the tinkers tag
 	public static int tinkersLevel(ItemStack item) {
-		if (item.getTagCompound().hasKey("InfiTool")) {
-			NBTTagCompound tags = item.getTagCompound().getCompoundTag("InfiTool");
+		if (item.getTagCompound().hasKey("Stats")) {
+			NBTTagCompound tags = item.getTagCompound().getCompoundTag("Stats");
+			
 			int toolLevel = tags.getInteger("HarvestLevel");
 			return toolLevel;
 		}
@@ -112,20 +112,20 @@ public class ToolHelper {
 	//Get the type of tinker tool
 	public static int tinkersType(Item item) {
 		String name = item.getUnlocalizedName();
-		if (name.length()>=14) {
-			if (name.substring(5, 13).equalsIgnoreCase("InfiTool")) {
-				if (name.substring(14).equalsIgnoreCase("pickaxe")) {
+		if (name.length()>=16) {
+			if (name.substring(5, 15).equalsIgnoreCase("tconstruct")) {
+				if (name.substring(16).equalsIgnoreCase("pickaxe")) {
 					return TYPE_PICKAXE;
-				} else if (name.substring(14).equalsIgnoreCase("axe")) {
+				} else if ( (name.substring(16).equalsIgnoreCase("axe")) || (name.substring(16).equalsIgnoreCase("hatchet")) ) {
 					return TYPE_AXE;
-				} else if (name.substring(14).equalsIgnoreCase("shovel")) {
+				} else if (name.substring(16).equalsIgnoreCase("shovel")) {
 					return TYPE_SHOVEL;
-				} else if ( (name.substring(14).equalsIgnoreCase("hoe")) || (name.substring(14).equalsIgnoreCase("Mattock")) ) {
+				} else if ( (name.substring(16).equalsIgnoreCase("hoe")) || (name.substring(16).equalsIgnoreCase("Mattock")) ) {
 					return TYPE_HOE;
-				} else if ( (name.substring(14).equalsIgnoreCase("Broadsword")) ||
-						(name.substring(14).equalsIgnoreCase("Rapier")) ||
-						(name.substring(14).equalsIgnoreCase("Cutlass")) ||
-						(name.substring(14).equalsIgnoreCase("Cleaver")) ) {
+				} else if ( (name.substring(16).equalsIgnoreCase("Broadsword")) ||
+						(name.substring(16).equalsIgnoreCase("Rapier")) ||
+						(name.substring(16).equalsIgnoreCase("Cutlass")) ||
+						(name.substring(16).equalsIgnoreCase("Cleaver")) ) {
 					return TYPE_SWORD;
 				}
 			}
@@ -146,8 +146,8 @@ public class ToolHelper {
 	
 	public static boolean tinkersIsBroken(ItemStack item) {
 		if (item==null) return false;
-		if ( (item.hasTagCompound()) && (item.getTagCompound().hasKey("InfiTool")) ) {
-			NBTTagCompound tags = item.getTagCompound().getCompoundTag("InfiTool");
+		if ( (item.hasTagCompound()) && (item.getTagCompound().hasKey("Stats")) ) {
+			NBTTagCompound tags = item.getTagCompound().getCompoundTag("Stats");
 			return tags.getBoolean("Broken");
 		}
 		return false;
@@ -186,19 +186,30 @@ public class ToolHelper {
 		}
 	}
 	
+	public static float getDigSpeed(ItemStack itemStack, IBlockState state) {
+		if ( (itemStack != null) && (itemStack.getItem() != null) && (itemStack.getItem() instanceof ItemTool) ) {
+			ItemTool tool = (ItemTool) itemStack.getItem();
+			Item.ToolMaterial mat = tool.getToolMaterial();
+			if (tool.canHarvestBlock(state, itemStack)) {
+				return mat.getEfficiencyOnProperMaterial();
+			}
+		}
+		return 1.0f;
+	}
+	
 	public static boolean damageTool(ItemStack tool, World world, int x, int y, int z) {
-		if ( 	(tool.getItem() instanceof ItemShears) || (tool.getItem() instanceof ItemTool) || 
+		if ( (tool.getItem() instanceof ItemShears) || (tool.getItem() instanceof ItemTool) || 
 				(tool.getItem() instanceof ItemHoe) || (tool.getItem() instanceof ItemSword) ) {
 			if (tool.attemptDamageItem(1, RND)) {
 				return true;
 			}
 		} else {
-			Block mineBlock = world.getBlock(x, y, z);
+			Block mineBlock = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			PlayerFake fakePlayer = new PlayerFake((WorldServer)world);
 			if (tinkersType(tool.getItem())==TYPE_HOE) {
 				tool.attemptDamageItem(1, RND);
 			} else {
-				tool.getItem().onBlockDestroyed(tool, world, mineBlock, x, y, z, fakePlayer);
+				tool.getItem().onBlockDestroyed(tool, world, mineBlock.getDefaultState(), new BlockPos(x, y, z), fakePlayer);
 			}
 			if (tinkersIsBroken(tool)) return true;
 		}
