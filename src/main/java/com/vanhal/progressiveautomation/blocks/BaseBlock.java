@@ -6,6 +6,7 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.items.ItemBlockMachine;
+import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeRegistry;
@@ -95,7 +96,9 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
+		if ( (heldItem != null) && (heldItem.getItem() != null) && (heldItem.getItem() == PAItems.wrench) ) {
+			return false;
+		} else if (!world.isRemote) {
 			if (GUIid>=0) {
 				if (!(player instanceof FakePlayer)) {
 					FMLNetworkHandler.openGui(player, ProgressiveAutomation.instance, GUIid, world, pos.getX(), pos.getY(), pos.getZ());
