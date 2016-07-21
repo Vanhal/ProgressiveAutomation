@@ -581,6 +581,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	}
 	
 	public int getBurnTime(ItemStack item) {
+		if (PAConfig.fuelCost == 0) return 0;
 		return getItemBurnTime(item) / PAConfig.fuelCost;
 	}
 	
@@ -589,7 +590,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			if (item.getItem() == Items.POTATO) return 40;
 			else if (item.getItem() == Items.BAKED_POTATO) return 80;
 		}
-		if (item==null) return 0;
+		if ( (item == null) || (item.getItem() == null) ) return 0;
 		return TileEntityFurnace.getItemBurnTime(item);
 	}
 	

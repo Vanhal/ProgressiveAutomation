@@ -15,6 +15,9 @@ public class MFR extends BaseMod {
 	
 	@Override
 	public boolean isSapling(ItemStack stack) {
-		return (stack.getUnlocalizedName().compareToIgnoreCase("tile.mfr.rubberwood.sapling")==0);
+		if ( (stack != null) && (stack.getItem() != null) ) {
+			return (stack.getUnlocalizedName().compareToIgnoreCase("tile.mfr.rubberwood.sapling")==0);
+		}
+		return false;
 	}
 }
