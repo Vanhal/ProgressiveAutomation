@@ -29,7 +29,6 @@ public class TileMiner extends UpgradeableTileEntity {
 	protected int currentColumn = 0;
 	protected int currentYLevel = 0;
 	protected Block currentBlock = null;
-	//protected int miningTime = 0;
 	protected int miningWith = 0;
 	
 	protected int blockMineDuration = 0;
