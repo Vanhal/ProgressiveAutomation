@@ -29,8 +29,10 @@ public class TileMiner extends UpgradeableTileEntity {
 	protected int currentColumn = 0;
 	protected int currentYLevel = 0;
 	protected Block currentBlock = null;
-	protected int miningTime = 0;
 	protected int miningWith = 0;
+	
+	protected int blockMineDuration = 0;
+	protected int elapsedDuration = 0;
 
 
 	public TileMiner() {
@@ -152,12 +154,32 @@ public class TileMiner extends UpgradeableTileEntity {
 		if ( (slots[1]==null) || (slots[2]==null) || (slots[3]==null) ) return;
 		if (currentBlock!=null) {
 			//continue to mine this block
-			if (miningTime<=0) {
-				miningTime = 0;
+			if (elapsedDuration >= blockMineDuration) { 
 				//clock is done, lets mine it
 				Point2I currentPoint = spiral(currentColumn, pos.getX(), pos.getZ());
 				BlockPos currentPosition = new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY());
 				//ProgressiveAutomation.logger.info("Point: "+miningWith+" "+currentPoint.getX()+","+currentYLevel+","+currentPoint.getY());
+
+				// Verify the block is what we expect, fixes race condition and item dupe effect
+				Block testBlock = worldObj.getBlockState(currentPosition).getBlock();
+				if (testBlock != currentBlock) {
+					//ProgressiveAutomation.logger.info("Possible race condition found, expected "+currentBlock.getUnlocalizedName()+" actually had "+testBlock.getUnlocalizedName()+".");
+					currentBlock = testBlock;
+					miningWith = canMineBlock( currentPosition.getX(), currentPosition.getY(), currentPosition.getZ() );
+
+					// Intentionally leaving cobble requirement and item durability reduction as penalty for multiple miners in same area
+					if (miningWith == -1) {
+						miningWith = 2;
+					}
+					
+					blockMineDuration = miningDuration( currentPosition, miningWith );
+					// If we haven't waited enough, wait some more!
+					if (elapsedDuration < blockMineDuration) {
+						elapsedDuration++;
+						return;
+					}
+					
+				}
 
 				//don't harvest anything if the block is air or liquid
 				if (miningWith!=4) {
@@ -172,6 +194,7 @@ public class TileMiner extends UpgradeableTileEntity {
 						}
 					}
 
+					
 					//silk touch the block if we have it
 					int silkTouch = 0;
 					if (miningWith!=1) {
@@ -221,9 +244,10 @@ public class TileMiner extends UpgradeableTileEntity {
 				addPartialUpdate("MinedBlocks", currentMineBlocks);
 				currentBlock = null;
 				
+				elapsedDuration = 0;
 
 			} else {
-				miningTime--;
+				elapsedDuration++;
 			}
 		} else {
 			if (!isDone()) {
@@ -231,32 +255,9 @@ public class TileMiner extends UpgradeableTileEntity {
 				if (currentBlock != null) {
 					Point2I currentPoint = spiral(currentColumn, pos.getX(), pos.getZ());
 					BlockPos currentPosition = new BlockPos(currentPoint.getX(), currentYLevel, currentPoint.getY());
-					IBlockState currentBlockState = worldObj.getBlockState(currentPosition);
 					
-					if (miningWith==4) {
-						miningTime = 1;
-					} else {
-						miningTime = (int)Math.ceil( currentBlock.getBlockHardness(currentBlockState, worldObj, currentPosition) * 1.5 * 20 ) ;
-						
-						if (miningWith!=1) {
-							float miningSpeed = ToolHelper.getDigSpeed( slots[miningWith], currentBlockState );
-	
-							//check for efficiency on the tool
-							if (miningSpeed>1) {
-								int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, slots[miningWith]);
-								if (eff>0) {
-									for (int i = 0; i<eff; i++) {
-										miningSpeed = miningSpeed * 1.3f;
-									}
-								}
-							}
-		
-							miningTime = (int) Math.ceil(miningTime / miningSpeed);
-						}
-					}
-
-					//ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+miningTime+" ticks");
-					
+					blockMineDuration = miningDuration( currentPosition, miningWith );
+					//ProgressiveAutomation.logger.info("Mining: "+currentBlock.getUnlocalizedName()+" in "+blockMineDuration+" ticks");
 				}
 			}
 		}
@@ -266,6 +267,48 @@ public class TileMiner extends UpgradeableTileEntity {
 			scanBlocks();
 			currentColumn = getRange();
 		}
+	}
+	
+	// Determine how long it will take to mine the block at pos with the tool specified.
+	private int miningDuration(BlockPos pos, int tool) {
+		int duration = 0;
+		
+		IBlockState state = worldObj.getBlockState(pos);
+		Block block = state.getBlock();
+		int normal = (int)Math.ceil( block.getBlockHardness(state, worldObj, pos) * 1.5 * 20 ) ;
+		
+		switch (tool) {
+			case 1: // Hands
+				duration = normal;
+				break;
+			case 2:  // Pickaxe
+			case 3:  // Shovel
+				float miningSpeed = ToolHelper.getDigSpeed( slots[tool], state );
+
+				// If tool doesn't have efficiency, we're done.
+				if (miningSpeed <= 1) {
+					duration = normal;
+					break;
+				}
+
+				int eff = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, slots[tool]);
+				if (eff>0) {
+					for (int i = 0; i<eff; i++) {
+						miningSpeed = miningSpeed * 1.3f;
+					}
+				}
+
+				duration = (int) Math.ceil(normal / miningSpeed);
+				break;
+			case 4: // Liquid
+				duration = 1;
+				break;
+			default:
+				duration = 0;
+				break;
+		}
+		
+		return duration;
 	}
 
 	public Block getNextBlock() {
@@ -382,7 +425,8 @@ public class TileMiner extends UpgradeableTileEntity {
 			scanBlocks();
 			currentColumn = getRange();
 			currentBlock = null;
-			miningTime = 0;
+			elapsedDuration = 0;
+			blockMineDuration = 0;
 			currentYLevel = pos.getY() - 1;
 		}
 	}
