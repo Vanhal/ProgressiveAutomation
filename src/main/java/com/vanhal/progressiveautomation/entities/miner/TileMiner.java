@@ -66,6 +66,9 @@ public class TileMiner extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			checkInventory();
+			
+			// If we're full, don't do anything else
+			if (isFull()) return;
 
 			if (isBurning()) {
 				useCobbleGen();
