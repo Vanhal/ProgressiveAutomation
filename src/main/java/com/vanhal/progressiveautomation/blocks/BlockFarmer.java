@@ -47,7 +47,7 @@ public class BlockFarmer extends BaseBlock {
 				"sss", "scs", "sps", 's', Items.DIAMOND, 'c', previousTier, 'p', Items.SHEARS});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', Blocks.CHEST, 'p', Items.SHEARS});
+				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', "chestWood", 'p', Items.SHEARS});
 		}
 		
 		
