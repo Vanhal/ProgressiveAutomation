@@ -158,6 +158,9 @@ public class TileChopper extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			checkForChanges();
 			checkInventory();
+			
+			// Pause if we're full and told to
+			if (isFull()) return;
 
 			if (isBurning()) {
 				if (chopping && blockList.size() == 0) {
