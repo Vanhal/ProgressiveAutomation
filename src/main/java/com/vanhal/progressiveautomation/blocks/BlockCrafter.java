@@ -48,7 +48,7 @@ public class BlockCrafter extends BaseBlock {
 				"sss", "scs", "sps", 's', Items.DIAMOND, 'c', previousTier, 'p', Blocks.CRAFTING_TABLE});
 		} else {
 			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', Blocks.CHEST, 'p', Blocks.CRAFTING_TABLE});
+				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', "chestWood", 'p', Blocks.CRAFTING_TABLE});
 		}
 		
 		

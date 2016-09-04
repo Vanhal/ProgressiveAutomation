@@ -76,6 +76,10 @@ public class TileKiller extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			doXpPickup();
 			checkInventory();
+			
+			// Pause if we're full and told to
+			if (isFull()) return;
+
 			if (isBurning()) {
 				if (currentTime>0) {
 					//count down the time between attacks

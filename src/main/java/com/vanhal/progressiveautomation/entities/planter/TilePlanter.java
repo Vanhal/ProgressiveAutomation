@@ -51,6 +51,9 @@ public class TilePlanter extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			checkInventory();
 
+			// Pause if we're full and told to
+			if (isFull()) return;
+
 			if (isBurning()) {
 				if (searchBlock > -1) {
 					if (currentTime>0) {
