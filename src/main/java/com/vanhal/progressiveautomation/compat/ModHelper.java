@@ -6,6 +6,7 @@ import java.util.List;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.mods.ImmersiveEngineering;
 import com.vanhal.progressiveautomation.compat.mods.MFR;
+import com.vanhal.progressiveautomation.compat.mods.Pams;
 import com.vanhal.progressiveautomation.compat.mods.RightClick;
 import com.vanhal.progressiveautomation.compat.mods.Vanilla;
 import com.vanhal.progressiveautomation.util.Point3I;
@@ -22,7 +23,7 @@ public class ModHelper {
 	
 	private static void registerMods() {
 		registerMod(new ImmersiveEngineering());
-		//registerMod(new Pams());
+		registerMod(new Pams());
 		//registerMod(new Pneumaticcraft());
 		registerMod(new MFR());
 		//registerMod(new AgriCraft());
