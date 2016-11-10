@@ -7,6 +7,10 @@ import net.minecraft.item.ItemStack;
 
 public class MFR extends BaseMod {
 	
+	public MFR() {
+		modID = "MFR";
+	}
+	
 	@Override
 	public boolean shouldLoad() {
 		ProgressiveAutomation.logger.info("MFR Loaded");
