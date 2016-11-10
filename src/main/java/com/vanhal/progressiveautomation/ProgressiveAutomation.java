@@ -67,7 +67,7 @@ public class ProgressiveAutomation {
 		
 		PAConfig.init(new Configuration(event.getSuggestedConfigurationFile()));
 		
-		ModHelper.init();
+		
 		
 		PAItems.preInit();
 		PABlocks.preInit();
@@ -80,6 +80,8 @@ public class ProgressiveAutomation {
 	public void init(FMLInitializationEvent event) {
 		PAItems.init(event);
 		PABlocks.init();
+		
+		ModHelper.init();
 		
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
 		FMLCommonHandler.instance().bus().register(instance);
