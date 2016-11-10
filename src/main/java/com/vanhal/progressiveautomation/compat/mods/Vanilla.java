@@ -8,12 +8,18 @@ import com.vanhal.progressiveautomation.util.OreHelper;
 import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockNetherWart;
+import net.minecraft.block.BlockOldLog;
+import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
@@ -34,6 +40,7 @@ public class Vanilla extends BaseMod {
 	@Override
 	public boolean isPlantible(ItemStack item) {
 		if (item.getItem() instanceof IPlantable) return true;
+		if ( (item.getItem() == Items.DYE) && (EnumDyeColor.byDyeDamage(item.getMetadata()) == EnumDyeColor.BROWN) ) return true; //Coco beans
 		if (item.getItem() == Items.REEDS) return true; // sugar cane
 		if (Block.getBlockFromItem(item.getItem()) == Blocks.CACTUS) return true; // cactus
 		return false;
@@ -74,12 +81,31 @@ public class Vanilla extends BaseMod {
 		if (itemStack.getItem() instanceof IPlantable) {
 			//normal crops
 			plant = ((IPlantable)itemStack.getItem()).getPlant(worldObj, point.toPosition());
+			plant = plant.getBlock().getStateFromMeta(itemStack.getItem().getDamage(itemStack));
 		} else if (itemStack.getItem() == Items.REEDS) { //sugarcane
 			plant = Blocks.REEDS.getDefaultState();
 		} else if (Block.getBlockFromItem(itemStack.getItem()) == Blocks.CACTUS) { //cactus
 			plant = Blocks.CACTUS.getDefaultState();
+		} else if ( (itemStack.getItem() == Items.DYE) && (EnumDyeColor.byDyeDamage(itemStack.getMetadata()) == EnumDyeColor.BROWN) ) {
+			plant = getCorrectCocoState(worldObj, point.toPosition());
 		}
 		return plant;
+	}
+	
+	private IBlockState getCorrectCocoState(World worldObj, BlockPos pos) {
+		if (worldObj.isAirBlock(pos)) {
+			for (EnumFacing facing : EnumFacing.VALUES) {
+				if (facing != EnumFacing.DOWN && facing != EnumFacing.UP) {
+					BlockPos testPos = pos.offset(facing);
+					IBlockState testState = worldObj.getBlockState(testPos);
+	                Block testBlock = testState.getBlock();
+					if (testBlock == Blocks.LOG && testState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
+						return Blocks.COCOA.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
+					}
+				}
+			}
+		}
+		return null;
 	}
 	
 	@Override
@@ -97,8 +123,7 @@ public class Vanilla extends BaseMod {
 		IBlockState plant = getPlantBlock(worldObj, itemStack, point);
 		if (plant!=null) {
 			if (doAction) {
-				worldObj.setBlockState(point.toPosition(), 
-						plant.getBlock().getStateFromMeta(itemStack.getItem().getDamage(itemStack)), 7);
+				worldObj.setBlockState(point.toPosition(), plant, 7);
 			}
 			return true;
 		}
