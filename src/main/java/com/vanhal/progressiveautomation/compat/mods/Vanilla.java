@@ -12,6 +12,7 @@ import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockNetherWart;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockStem;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -64,7 +65,14 @@ public class Vanilla extends BaseMod {
 	@Override
 	public boolean isGrown(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
 		int metadata = plantBlock.getMetaFromState(state);
-		if (plantBlock instanceof IGrowable) {
+		//check pumpkins and mellons first
+		if (plantBlock instanceof BlockStem) {
+			for (EnumFacing facing : EnumFacing.Plane.HORIZONTAL) {
+				Block testBlock = worldObj.getBlockState(plantPoint.toPosition().offset(facing)).getBlock();
+				if ( (testBlock == Blocks.MELON_BLOCK) || (testBlock == Blocks.PUMPKIN) )
+					return true;
+			}
+		} else if (plantBlock instanceof IGrowable) {
 			return !((IGrowable)plantBlock).canGrow(worldObj, plantPoint.toPosition(), state, true);
 		} else if (plantBlock instanceof BlockNetherWart) { //nether wart
 			return (metadata >= 3);
@@ -94,14 +102,12 @@ public class Vanilla extends BaseMod {
 	
 	private IBlockState getCorrectCocoState(World worldObj, BlockPos pos) {
 		if (worldObj.isAirBlock(pos)) {
-			for (EnumFacing facing : EnumFacing.VALUES) {
-				if (facing != EnumFacing.DOWN && facing != EnumFacing.UP) {
-					BlockPos testPos = pos.offset(facing);
-					IBlockState testState = worldObj.getBlockState(testPos);
-	                Block testBlock = testState.getBlock();
-					if (testBlock == Blocks.LOG && testState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
-						return Blocks.COCOA.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
-					}
+			for (EnumFacing facing : EnumFacing.Plane.HORIZONTAL) {
+				BlockPos testPos = pos.offset(facing);
+				IBlockState testState = worldObj.getBlockState(testPos);
+	            Block testBlock = testState.getBlock();
+				if (testBlock == Blocks.LOG && testState.getValue(BlockOldLog.VARIANT) == BlockPlanks.EnumType.JUNGLE) {
+					return Blocks.COCOA.getDefaultState().withProperty(BlockHorizontal.FACING, facing);
 				}
 			}
 		}
@@ -132,6 +138,16 @@ public class Vanilla extends BaseMod {
 	
 	@Override
 	public List<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
+		if (plantBlock instanceof BlockStem) {
+			for (EnumFacing facing : EnumFacing.Plane.HORIZONTAL) {
+				IBlockState testState = worldObj.getBlockState(plantPoint.toPosition().offset(facing));
+				Block testBlock = testState.getBlock();
+				if ( (testBlock == Blocks.MELON_BLOCK) || (testBlock == Blocks.PUMPKIN) ) {
+					plantPoint.fromPosition(plantPoint.toPosition().offset(facing));
+					return super.harvestPlant(plantPoint, testBlock, testState, worldObj);
+				}
+			}
+		}
 		if ( (plantBlock == Blocks.REEDS) || (plantBlock == Blocks.CACTUS) ) {
 			plantPoint.setY(plantPoint.getY() + 1);
 			state = worldObj.getBlockState(plantPoint.toPosition());
