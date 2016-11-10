@@ -35,7 +35,9 @@ public class GUIFarmer extends BaseGUI {
 			drawString(getTextLine(2, "gui.invalidtool.2"), infoScreenX, infoScreenW, infroScreenY2, ORANGE);
 		} else if (farmer.isLooked()) {
 			boolean allGood = false;
-			if ( (!farmer.hasFuel()) && (!farmer.isBurning()) ) {
+			if (farmer.isFull()) {
+				drawString(StringHelper.localize("gui.full"), infoScreenX, infoScreenW, infroScreenY2, RED);
+			} else if ( (!farmer.hasFuel()) && (!farmer.isBurning()) ) {
 				String fuelString = "gui.need.fuel";
 				if (farmer.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);

@@ -254,6 +254,10 @@ public class TileFarmer extends UpgradeableTileEntity {
 		if (!worldObj.isRemote) {
 			doPickup();
 			checkInventory();
+
+			// Pause if we're full and told to
+			if (isFull()) return;
+
 			if (isBurning()) {
 				if (currentTime>0) {
 					currentTime--;
