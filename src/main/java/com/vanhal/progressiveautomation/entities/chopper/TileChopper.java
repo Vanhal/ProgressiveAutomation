@@ -412,7 +412,9 @@ public class TileChopper extends UpgradeableTileEntity {
 					Block tree = (Block)Block.getBlockFromItem(slots[SLOT_SAPLINGS].getItem());
 					BlockPos plantPos = new BlockPos(p1.getX(), getPos().getY(), p1.getY());
 					if ( (tree.canPlaceBlockAt(worldObj, plantPos)) && 
-							(worldObj.getBlockState(plantPos).getBlock().canReplace(worldObj, plantPos, EnumFacing.DOWN, slots[SLOT_SAPLINGS])) ) {
+							(worldObj.getBlockState(plantPos).getBlock().canReplace(worldObj, plantPos, EnumFacing.DOWN, slots[SLOT_SAPLINGS])) &&
+							(worldObj.getBlockState(plantPos).getBlock() != tree)
+							) {
 						if (doAction) {
 							worldObj.setBlockState(plantPos, 
 									tree.getStateFromMeta(slots[SLOT_SAPLINGS].getItem().getDamage(slots[SLOT_SAPLINGS])), 7);
