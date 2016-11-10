@@ -34,7 +34,10 @@ public class GUIMiner extends BaseGUI {
 			drawString(getTextLine(2, "gui.invalidtool.2"), infoScreenX, infoScreenW, infroScreenY2, ORANGE);
 		} else if (miner.isLooked()) {
 			boolean readyToMine = true;
-			if ( (!miner.hasFuel()) && (!miner.isBurning()) ) {
+			if (miner.isFull()) {
+				drawString(StringHelper.localize("gui.full"), infoScreenX, infoScreenW, infroScreenY2, RED);
+				readyToMine = false;
+			} else if ( (!miner.hasFuel()) && (!miner.isBurning()) ) {
 				String fuelString = "gui.need.fuel";
 				if (miner.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);

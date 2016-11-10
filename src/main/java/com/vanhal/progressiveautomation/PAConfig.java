@@ -51,6 +51,8 @@ public class PAConfig {
 	public static boolean allowWrench;
 	public static boolean destroyTools;
 	public static boolean shearTrees;
+	public static boolean allowInventoryOverflow;
+	public static boolean pauseOnFullInventory;
 	public static int maxRangeUpgrades;
 	
 	//machine levels
@@ -109,6 +111,8 @@ public class PAConfig {
 		allowWrench = config.getBoolean("allowWrench", "general", true, "Allows the wrench, you've got to be seriously evil to not allow this!");
 		destroyTools = config.getBoolean("destroyTools", "general", true, "Changing to false will make the machines spit a fully broken vanilla tool into it's inventory");
 		shearTrees = config.getBoolean("shearTrees", "general", true, "Allow the chopper to take a shearing upgrade in order to have a sheer to shear leaves");
+		allowInventoryOverflow = config.getBoolean("allowInventoryOverflow", "general", true, "Drop items on the ground if machine's inventory is full, setting this to false will destroy overflow items.");
+		pauseOnFullInventory = config.getBoolean("pauseOnFullInventory",  "general",  false, "Pause machines when the are no open slots in their inventory.");
 
 		
 		//enable blocks		
