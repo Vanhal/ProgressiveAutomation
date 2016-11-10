@@ -8,6 +8,7 @@ public class PAConfig {
 	public static Configuration config;
 	
 	//config options
+	public static int initialRange;
 	public static int upgradeRange;
 	public static int fuelCost;
 	
@@ -84,6 +85,7 @@ public class PAConfig {
 	}
 	
 	public static void syncConfig() {
+		initialRange = config.getInt("InitialRange", "general", 1, 1, 1000, "The default range of the machines without upgrades (default is 1)");
 		upgradeRange = config.getInt("UpdateRange", "upgrades", 1, 1, 1000, "How many blocks does each upgrade add (default is 1)");
 		fuelCost = config.getInt("fuelCost", "general", 2, 1, 300, "Number to divide the normal burn time by for all machines.");
 		if (fuelCost<=0) fuelCost = 1;

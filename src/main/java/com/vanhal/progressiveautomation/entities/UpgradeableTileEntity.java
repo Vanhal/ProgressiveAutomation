@@ -141,7 +141,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 	}
 
 	public int getRange() {
-		int range = (getUpgrades() * PAConfig.upgradeRange) + 1;
+		int range = (getUpgrades() * PAConfig.upgradeRange) + PAConfig.initialRange;
 		if (hasUpgrade(UpgradeType.WITHER)) range = range * PAConfig.witherMultiplier;
 		return range;
 	}
