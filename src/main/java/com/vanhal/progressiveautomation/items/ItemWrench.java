@@ -7,8 +7,8 @@ import com.vanhal.progressiveautomation.blocks.BaseBlock;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.WrenchModes;
+import com.vanhal.progressiveautomation.util.IDismantleable;
 
-import cofh.api.block.IDismantleable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
