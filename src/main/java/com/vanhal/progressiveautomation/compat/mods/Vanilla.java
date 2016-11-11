@@ -126,10 +126,9 @@ public class Vanilla extends BaseMod {
 	
 	@Override
 	public boolean placeSeed(World worldObj, ItemStack itemStack, Point3I point, boolean doAction) {
-		IBlockState plant = getPlantBlock(worldObj, itemStack, point);
-		if (plant!=null) {
+		if (validBlock(worldObj, itemStack, point)) {
 			if (doAction) {
-				worldObj.setBlockState(point.toPosition(), plant, 7);
+				worldObj.setBlockState(point.toPosition(), getPlantBlock(worldObj, itemStack, point), 7);
 			}
 			return true;
 		}

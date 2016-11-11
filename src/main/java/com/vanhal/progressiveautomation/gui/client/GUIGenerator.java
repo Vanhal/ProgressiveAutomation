@@ -51,6 +51,6 @@ public class GUIGenerator extends BaseGUI {
 	}
 	
 	protected void drawElements() {
-		drawFlame(generator.getPercentDone(), 45, 23);
+		drawFlame(generator.getPercentDone(), 47, 22);
 	}
 }

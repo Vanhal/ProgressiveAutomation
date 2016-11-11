@@ -5,6 +5,7 @@ import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.ref.WrenchModes;
 import com.vanhal.progressiveautomation.util.Point2I;
 
+import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -23,9 +24,11 @@ public class TileGenerator extends BaseTileEntity {
 	protected int consumeRate = 1;
 
 	protected boolean burnUpdate = false;
+	
+	public int SLOT_CHARGER = 1;
 
 	public TileGenerator() {
-		super(0);
+		super(1);
 		setEnergyStorage(20000, 0.5f);
 		sides[extDirection.ordinal()] = WrenchModes.Mode.Normal;
 	}
@@ -61,6 +64,19 @@ public class TileGenerator extends BaseTileEntity {
 			if (isBurning()) {
 				changeCharge(generationRate);
 				checkForFire();
+			}
+			
+			//Charge items in charge slot
+			if (slots[SLOT_CHARGER]!=null) {
+				if (currentStorage>0) {
+					if (slots[SLOT_CHARGER].getItem() instanceof IEnergyContainerItem) {
+						IEnergyContainerItem container = (IEnergyContainerItem)slots[SLOT_CHARGER].getItem();
+						if (container.getEnergyStored(slots[SLOT_CHARGER]) < container.getMaxEnergyStored(slots[SLOT_CHARGER])) {
+							int giveAmount = container.receiveEnergy(slots[SLOT_CHARGER], currentStorage, false);
+							if (giveAmount>0) changeCharge(giveAmount * -1);
+						}
+					}
+				}
 			}
 
 			//output the energy to connected devices....
