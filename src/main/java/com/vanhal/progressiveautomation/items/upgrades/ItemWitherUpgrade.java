@@ -7,6 +7,7 @@ import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,9 +23,15 @@ public class ItemWitherUpgrade extends ItemUpgrade {
 	}
 	
 	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"dgd", "gng", "dgd", 'd', PAItems.diamondUpgrade, 'g', Items.GOLD_INGOT, 'n', Items.NETHER_STAR});
-		GameRegistry.addRecipe(recipe);
+		if (PAConfig.allowDiamondLevel) {
+			ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
+				"dgd", "gng", "dgd", 'd', PAItems.diamondUpgrade, 'g', Items.GOLD_INGOT, 'n', Items.NETHER_STAR});
+			GameRegistry.addRecipe(recipe);
+		} else {
+			ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
+				"dgd", "gng", "dgd", 'd', Blocks.DIAMOND_BLOCK, 'g', Items.GOLD_INGOT, 'n', Items.NETHER_STAR});
+			GameRegistry.addRecipe(recipe);
+		}
 	}
 	
 	protected void addUpgradeRecipe() {

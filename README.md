@@ -2,9 +2,9 @@ ModJam4 - Progressive Automation
 ======
 
 Build Status: 
-[![Build Status](https://drone.io/github.com/Vanhal/ModJam/status.png)](https://drone.io/github.com/Vanhal/ModJam/latest)
+[![Build Status](https://drone.io/github.com/Vanhal/ProgressiveAutomation/status.png)](https://drone.io/github.com/Vanhal/ModJam/latest)
 
-Latest Builds can be found on <a href="https://drone.io/github.com/Vanhal/ModJam/files">drone.io</a>
+Latest Builds can be found on <a href="https://drone.io/github.com/Vanhal/ProgressiveAutomation/files">drone.io</a>
 
 This mod provides low tech automation tools for common tasks.
 
