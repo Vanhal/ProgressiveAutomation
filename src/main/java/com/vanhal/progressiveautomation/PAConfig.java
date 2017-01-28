@@ -20,6 +20,7 @@ public class PAConfig {
 	public static boolean crafterEnabled;
 	public static boolean farmerEnabled;
 	public static boolean killerEnabled;
+	public static boolean capacitorEnabled;
 	
 	//allow levels
 	public static boolean allowWoodenLevel;
@@ -123,6 +124,7 @@ public class PAConfig {
 		crafterEnabled = config.getBoolean("crafter", "blocks", true, "Crafter Block is enabled (requires restart)");
 		farmerEnabled = config.getBoolean("farmer", "blocks", true, "Killer Block is enabled (requires restart)");
 		killerEnabled = config.getBoolean("killer", "blocks", true, "Animal Farmer Block is enabled (requires restart)");
+		capacitorEnabled = config.getBoolean("capacitor", "blocks", true, "Capacitor Block is enabled (requires restart)");
 
 		allowWoodenLevel = config.getBoolean("wooden", "upgrades", true, "Allow wooden level blocks (requires restart)");
 		allowStoneLevel = config.getBoolean("stone", "upgrades", true, "Allow stone level blocks (requires restart)");

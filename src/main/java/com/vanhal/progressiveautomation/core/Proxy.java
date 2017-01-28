@@ -1,6 +1,10 @@
 package com.vanhal.progressiveautomation.core;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitor;
+import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorDiamond;
+import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorIron;
+import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorStone;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopperDiamond;
 import com.vanhal.progressiveautomation.entities.chopper.TileChopperIron;
@@ -76,6 +80,12 @@ public class Proxy {
 		GameRegistry.registerTileEntity(TileFarmerStone.class, "TileFarmerStone");
 		GameRegistry.registerTileEntity(TileFarmerIron.class, "TileFarmerIron");
 		GameRegistry.registerTileEntity(TileFarmerDiamond.class, "TileFarmerDiamond");
+		
+		//capacitor
+		GameRegistry.registerTileEntity(TileCapacitor.class, "TileCapacitor");
+		GameRegistry.registerTileEntity(TileCapacitorStone.class, "TileCapacitorStone");
+		GameRegistry.registerTileEntity(TileCapacitorIron.class, "TileCapacitorIron");
+		GameRegistry.registerTileEntity(TileCapacitorDiamond.class, "TileCapacitorDiamond");
 	}
 	
 	public int registerGui(String guiName) {
