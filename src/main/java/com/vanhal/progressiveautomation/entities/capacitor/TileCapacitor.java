@@ -62,8 +62,16 @@ public class TileCapacitor extends BaseTileEntity {
 				}
 			}
 			
-			//output the energy to connected devices....
-			outputEnergy();
+			//output only of we don't get a redstone signal
+			if(worldObj.getRedstonePower(pos, EnumFacing.UP)==0 ||
+				worldObj.getRedstonePower(pos, EnumFacing.DOWN)==0 ||
+				worldObj.getRedstonePower(pos, EnumFacing.NORTH)==0 ||
+				worldObj.getRedstonePower(pos, EnumFacing.SOUTH)==0 ||
+				worldObj.getRedstonePower(pos, EnumFacing.WEST)==0 ||
+				worldObj.getRedstonePower(pos, EnumFacing.EAST)==0){
+				//output the energy to connected devices....
+				outputEnergy();
+			}
 		}
 	}
 	
@@ -81,13 +89,15 @@ public class TileCapacitor extends BaseTileEntity {
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		int energyReceived = 0;
 		if(from.getOpposite().getIndex() == getBlockMetadata()){
-			if(!simulate){
-				if(maxReceive>transferRate){
-					energyReceived = transferRate;
-				}else{
-					energyReceived = maxReceive;
+			if(currentStorage+maxReceive<=maxStorage || currentStorage+transferRate<=maxStorage){
+				if(!simulate){
+					if(maxReceive>transferRate){
+						energyReceived = transferRate;
+					}else{
+						energyReceived = maxReceive;
+					}
+					changeCharge(energyReceived);
 				}
-				changeCharge(energyReceived);
 			}
 		}
 		return energyReceived;
