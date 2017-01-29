@@ -4,7 +4,6 @@ import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitor;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorDiamond;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorIron;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorStone;
-import com.vanhal.progressiveautomation.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
