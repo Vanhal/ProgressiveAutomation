@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.entities.capacitor;
 
+import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.ref.WrenchModes;
 
@@ -22,7 +23,7 @@ public class TileCapacitor extends BaseTileEntity {
 
 	public TileCapacitor() {
 		super(1);
-		setEnergyStorage(20000, 80);
+		setEnergyStorage(5000*PAConfig.rfStorageFactor, 80);
 		sides[extDirection.ordinal()] = WrenchModes.Mode.Normal;
 	}
 

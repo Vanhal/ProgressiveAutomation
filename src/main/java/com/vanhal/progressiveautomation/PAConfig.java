@@ -44,6 +44,7 @@ public class PAConfig {
 	public static int rfCost;
 	public static int rfStored;
 	public static int rfRate;
+	public static int rfStorageFactor;
 	
 	//misc options
 	public static boolean allowCoalPellets;
@@ -104,6 +105,9 @@ public class PAConfig {
 		
 		rfRate = config.getInt("rfRate", "rfoptions", 1000, 1, 100000, "The max rate at which RF can flow into the machines");
 		if (rfRate<=0) rfRate = 1000;
+		
+		rfStorageFactor = config.getInt("rfStorageFactor", "rfoptions", 4, 1, 8, "The multiplier that is applied to the Capacitor RF storage size");
+		if (rfStorageFactor<=0) rfStorageFactor = 1;
 		
 		//misc options 
 		allowCoalPellets = config.getBoolean("coalPellets", "general", true, "Allow coal pellets (requires restart)");
