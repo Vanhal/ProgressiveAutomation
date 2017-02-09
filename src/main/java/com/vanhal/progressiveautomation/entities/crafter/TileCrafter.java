@@ -13,7 +13,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileCrafter extends UpgradeableTileEntity {
 	
@@ -75,12 +78,18 @@ public class TileCrafter extends UpgradeableTileEntity {
 			if (sides[x] == WrenchModes.Mode.Output) {
 				if (slots[OUTPUT_SLOT]!=null) {
 					EnumFacing testSide = EnumFacing.getFront(x);
-					if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof ISidedInventory) {
-						ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
-						addtoSidedExtInventory(externalInv, OUTPUT_SLOT);
-					} else if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof IInventory) {
-						IInventory externalInv = (IInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
-						addtoExtInventory(externalInv, OUTPUT_SLOT);
+					TileEntity tile = BlockHelper.getAdjacentTileEntity(this, testSide);
+					if (tile != null) {
+						if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
+							IItemHandler inv = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
+							addtoExtInventory(inv, OUTPUT_SLOT);
+						} else if (tile instanceof ISidedInventory) {
+							ISidedInventory externalInv = (ISidedInventory) tile;
+							addtoSidedExtInventory(externalInv, OUTPUT_SLOT);
+						} else if (tile instanceof IInventory) {
+							IInventory externalInv = (IInventory) tile;
+							addtoExtInventory(externalInv, OUTPUT_SLOT);
+						}
 					}
 				}
 			}
@@ -214,13 +223,15 @@ public class TileCrafter extends UpgradeableTileEntity {
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+		if ( (side == null) && (slot==OUTPUT_SLOT) ) return true;
+		if (side == null) return false;
 		if (sides[side.ordinal()] == WrenchModes.Mode.Disabled) return false;
 		if ( (sides[side.ordinal()] == WrenchModes.Mode.Normal) || (sides[side.ordinal()] == WrenchModes.Mode.Output) ) {
 			if (slot==OUTPUT_SLOT) {
 				return true;
 			}
 		}
-		if (sides[side.ordinal()] == WrenchModes.Mode.Input) {
+		if ( (sides[side.ordinal()] == WrenchModes.Mode.Normal) || (sides[side.ordinal()] == WrenchModes.Mode.Input) ) {
 			if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
 				return true;
 			}

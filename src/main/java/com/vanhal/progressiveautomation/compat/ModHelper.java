@@ -8,6 +8,7 @@ import com.vanhal.progressiveautomation.compat.mods.ImmersiveEngineering;
 import com.vanhal.progressiveautomation.compat.mods.MFR;
 import com.vanhal.progressiveautomation.compat.mods.Pams;
 import com.vanhal.progressiveautomation.compat.mods.RightClick;
+import com.vanhal.progressiveautomation.compat.mods.TiCon;
 import com.vanhal.progressiveautomation.compat.mods.Vanilla;
 import com.vanhal.progressiveautomation.util.Point3I;
 
@@ -26,6 +27,7 @@ public class ModHelper {
 		registerMod(new Pams());
 		//registerMod(new Pneumaticcraft());
 		registerMod(new MFR());
+		registerMod(new TiCon());
 		//registerMod(new AgriCraft());
 		//registerMod(new GrowOres());
 		//registerMod(new ThaumCraft());
