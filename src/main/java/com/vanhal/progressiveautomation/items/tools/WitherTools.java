@@ -16,17 +16,20 @@ public class WitherTools {
 		witherWood = new ItemWitherWood();
 		witherStone = new ItemWitherStone();
 		witherIron = new ItemWitherIron();
+		witherGold = new ItemWitherGold();
 		witherDiamond = new ItemWitherDiamond();
 		
 		witherWood.preInit();
 		witherStone.preInit();
 		witherIron.preInit();
+		witherGold.preInit();
 		witherDiamond.preInit();
 		
 		//add recipes for the tools
 		woodenRecipes();
 		stoneRecipes();
 		ironRecipes();
+		goldRecipes();
 		diamondRecipes();
 	}
 	
@@ -34,6 +37,7 @@ public class WitherTools {
 		witherWood.init();
 		witherStone.init();
 		witherIron.init();
+		witherGold.init();
 		witherDiamond.init();
 	}
 
@@ -95,6 +99,24 @@ public class WitherTools {
 		GameRegistry.addRecipe(recipe);
 	}
 	
+	protected static void goldRecipes() {
+		RecipeWitherTool recipe = new RecipeWitherTool(Items.GOLDEN_AXE, new Object[]{
+				"mm ", "ms ", " s ", 'm', witherGold, 's', "stickWood"});
+		GameRegistry.addRecipe(recipe);
+		recipe = new RecipeWitherTool(Items.GOLDEN_HOE, new Object[]{
+				"mm ", " s ", " s ", 'm', witherGold, 's', "stickWood"});
+		GameRegistry.addRecipe(recipe);
+		recipe = new RecipeWitherTool(Items.GOLDEN_PICKAXE, new Object[]{
+				"mmm", " s ", " s ", 'm', witherGold, 's', "stickWood"});
+		GameRegistry.addRecipe(recipe);
+		recipe = new RecipeWitherTool(Items.GOLDEN_SHOVEL, new Object[]{
+				" m ", " s ", " s ", 'm', witherGold, 's', "stickWood"});
+		GameRegistry.addRecipe(recipe);
+		recipe = new RecipeWitherTool(Items.GOLDEN_SWORD, new Object[]{
+				" m ", " m ", " s ", 'm', witherGold, 's', "stickWood"});
+		GameRegistry.addRecipe(recipe);
+	}
+	
 	protected static void diamondRecipes() {
 		RecipeWitherTool recipe = new RecipeWitherTool(Items.DIAMOND_AXE, new Object[]{
 				"mm ", "ms ", " s ", 'm', witherDiamond, 's', "stickWood"});
@@ -117,6 +139,7 @@ public class WitherTools {
 	public static ItemWitherWood witherWood = null;
 	public static ItemWitherStone witherStone = null;
 	public static ItemWitherIron witherIron = null;
+	public static ItemWitherGold witherGold = null;
 	public static ItemWitherDiamond witherDiamond = null;
 	
 	//wither tools

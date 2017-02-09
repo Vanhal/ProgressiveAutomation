@@ -390,7 +390,8 @@ public class TileChopper extends UpgradeableTileEntity {
 		if (ModHelper.isLog(testItem)) return "logWood";
 		return "Unknown";
 	}
-		
+	
+	@Override
 	public boolean readyToBurn() {
 		if (slots[SLOT_AXE]!=null) {
 			if (scanBlocks()) {

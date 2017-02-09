@@ -37,6 +37,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyStorage, IEnergyProvider, IEnergyReceiver, ITickable {
 	protected ItemStack[] slots;
@@ -549,10 +553,12 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing face) {
 		if ( (slot<0) || (slot>SLOT_INVENTORY_END) ) return false;
-		if (sides[face.ordinal()] == WrenchModes.Mode.Disabled) return false;
-		if (sides[face.ordinal()] == WrenchModes.Mode.Output) return false;
-		if ( (sides[face.ordinal()] == WrenchModes.Mode.FuelInput) && (slot != SLOT_FUEL) ) return false;
-		if ( (sides[face.ordinal()] == WrenchModes.Mode.Input) && (slot == SLOT_FUEL) ) return false;
+		if (face!=null) {
+			if (sides[face.ordinal()] == WrenchModes.Mode.Disabled) return false;
+			if (sides[face.ordinal()] == WrenchModes.Mode.Output) return false;
+			if ( (sides[face.ordinal()] == WrenchModes.Mode.FuelInput) && (slot != SLOT_FUEL) ) return false;
+			if ( (sides[face.ordinal()] == WrenchModes.Mode.Input) && (slot == SLOT_FUEL) ) return false;
+		}
 		
 		if ( (slots[slot] != null) 
 				&& (slots[slot].isItemEqual(stack))
@@ -569,7 +575,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing face) {
-		if (sides[face.ordinal()] == WrenchModes.Mode.Disabled) return false;
+		if (face!=null)
+			if (sides[face.ordinal()] == WrenchModes.Mode.Disabled) return false;
 		if ( (slot>=SLOT_INVENTORY_START) && (slot<=SLOT_INVENTORY_END) ) {
 			if ( (sides[face.ordinal()] == WrenchModes.Mode.Normal) || (sides[face.ordinal()] == WrenchModes.Mode.Output) ) return true;
 		}
@@ -665,18 +672,28 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		//then check if there is any inventories on any of the output sides that we can output to
 		for(EnumFacing facing : EnumFacing.values()) {
 			if (sides[facing.ordinal()] == WrenchModes.Mode.Output) {
-				if (worldObj.getTileEntity(pos.offset(facing)) instanceof ISidedInventory) {
-					ISidedInventory externalInv = (ISidedInventory) worldObj.getTileEntity(pos.offset(facing));
-					for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
-						if (slots[i]!=null && addtoSidedExtInventory(externalInv, i)) {
-							openSlots = true;
+				TileEntity tile = worldObj.getTileEntity(pos.offset(facing));
+				if (tile != null) {
+					if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {
+						IItemHandler inv = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite());
+						for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+							if (slots[i]!=null && addtoExtInventory(inv, i)) {
+								openSlots = true;
+							}
 						}
-					}
-				} else if (worldObj.getTileEntity(pos.offset(facing)) instanceof IInventory) {
-					IInventory externalInv = (IInventory) worldObj.getTileEntity(pos.offset(facing));
-					for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
-						if (slots[i]!=null && addtoExtInventory(externalInv, i)) {
-							openSlots = true;
+					} else if (tile instanceof ISidedInventory) {
+						ISidedInventory externalInv = (ISidedInventory) tile;
+						for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+							if (slots[i]!=null && addtoSidedExtInventory(externalInv, i)) {
+								openSlots = true;
+							}
+						}
+					} else if (tile instanceof IInventory) {
+						IInventory externalInv = (IInventory) tile;
+						for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
+							if (slots[i]!=null && addtoExtInventory(externalInv, i)) {
+								openSlots = true;
+							}
 						}
 					}
 				}
@@ -702,6 +719,13 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			}
 		}
 		return item;
+	}
+	
+	public boolean addtoExtInventory(IItemHandler inv, int fromSlot) {
+		if (ItemHandlerHelper.insertItemStacked(inv, slots[fromSlot], true) != slots[fromSlot]) {
+			slots[fromSlot] = ItemHandlerHelper.insertItemStacked(inv, slots[fromSlot], false);
+		}
+		return false;
 	}
 	
 	public boolean addtoExtInventory(IInventory inv, int fromSlot) {
@@ -928,7 +952,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	
 	@Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
-        return capability == CapabilityEnergy.ENERGY;
+       	if ( capability == CapabilityEnergy.ENERGY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY )
+       		return true;
+       	return super.hasCapability(capability, facing);
     }
 	
 	@Override
@@ -936,7 +962,9 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) 
         	return CapabilityEnergy.ENERGY.cast(this);
-        return null;
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        	return (T) new SidedInvWrapper(this, facing);
+        return super.getCapability(capability, facing);
     }
 	
 
