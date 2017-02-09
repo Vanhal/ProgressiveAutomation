@@ -1,10 +1,5 @@
-ModJam4 - Progressive Automation
+Progressive Automation
 ======
-
-Build Status: 
-[![Build Status](https://drone.io/github.com/Vanhal/ProgressiveAutomation/status.png)](https://drone.io/github.com/Vanhal/ProgressiveAutomation/latest)
-
-Latest Builds can be found on <a href="https://drone.io/github.com/Vanhal/ProgressiveAutomation/files">drone.io</a>
 
 This mod provides low tech automation tools for common tasks.
 
@@ -40,3 +35,7 @@ You can read more about how the generator works on the [Generator](../../wiki/Ge
 ## [The Crafter](../../wiki/Crafter)
 This machine will, for the cost of a small amount of fuel, craft an item that is selected in the left hand crafting grid using the items that are in the right hand storage slots.
 You can read more about how the generator works on the [Crafter](../../wiki/Crafter) page
+
+## [The Capacitor](../../wiki/Capacitor)
+The capacitor can be supplied power into the red face and will distribute power out the other sides.
+It has a slot that can be used to fill RF engines.

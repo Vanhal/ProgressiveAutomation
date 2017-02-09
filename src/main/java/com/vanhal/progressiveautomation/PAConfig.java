@@ -20,6 +20,7 @@ public class PAConfig {
 	public static boolean crafterEnabled;
 	public static boolean farmerEnabled;
 	public static boolean killerEnabled;
+	public static boolean capacitorEnabled;
 	
 	//allow levels
 	public static boolean allowWoodenLevel;
@@ -43,6 +44,7 @@ public class PAConfig {
 	public static int rfCost;
 	public static int rfStored;
 	public static int rfRate;
+	public static int rfStorageFactor;
 	
 	//misc options
 	public static boolean allowCoalPellets;
@@ -104,6 +106,9 @@ public class PAConfig {
 		rfRate = config.getInt("rfRate", "rfoptions", 1000, 1, 100000, "The max rate at which RF can flow into the machines");
 		if (rfRate<=0) rfRate = 1000;
 		
+		rfStorageFactor = config.getInt("rfStorageFactor", "rfoptions", 4, 1, 8, "The multiplier that is applied to the Capacitor RF storage size");
+		if (rfStorageFactor<=0) rfStorageFactor = 1;
+		
 		//misc options 
 		allowCoalPellets = config.getBoolean("coalPellets", "general", true, "Allow coal pellets (requires restart)");
 		allowPotatos = config.getBoolean("allowPotatos", "general", true, "Allow Potatos to be used as a fuel source in PA machines");
@@ -123,6 +128,7 @@ public class PAConfig {
 		crafterEnabled = config.getBoolean("crafter", "blocks", true, "Crafter Block is enabled (requires restart)");
 		farmerEnabled = config.getBoolean("farmer", "blocks", true, "Killer Block is enabled (requires restart)");
 		killerEnabled = config.getBoolean("killer", "blocks", true, "Animal Farmer Block is enabled (requires restart)");
+		capacitorEnabled = config.getBoolean("capacitor", "blocks", true, "Capacitor Block is enabled (requires restart)");
 
 		allowWoodenLevel = config.getBoolean("wooden", "upgrades", true, "Allow wooden level blocks (requires restart)");
 		allowStoneLevel = config.getBoolean("stone", "upgrades", true, "Allow stone level blocks (requires restart)");
