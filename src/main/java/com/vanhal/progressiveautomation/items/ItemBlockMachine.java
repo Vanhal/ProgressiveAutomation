@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.items;
 
 import java.util.List;
 
+import com.vanhal.progressiveautomation.blocks.BlockCapacitor;
 import com.vanhal.progressiveautomation.blocks.BlockChopper;
 import com.vanhal.progressiveautomation.blocks.BlockFarmer;
 import com.vanhal.progressiveautomation.blocks.BlockGenerator;
@@ -44,7 +45,10 @@ public class ItemBlockMachine extends ItemBlock {
 			list.add(TextFormatting.GRAY + "Can plant and harvest all types of tree");
 			list.add(TextFormatting.GRAY + "Machine should be placed on the same level as saplings");
 		} else if (this.block instanceof BlockGenerator) {
-			list.add(TextFormatting.GRAY + "Produces RF");
+			list.add(TextFormatting.GRAY + "Produces RF from fuel");
+		} else if (this.block instanceof BlockCapacitor) {
+			list.add(TextFormatting.GRAY + "Energy can be input into the red face");
+			list.add(TextFormatting.GRAY + "will be distributed out from the other faces");
 		}
 		
 		if ( (itemStack != null) && (itemStack.getTagCompound() != null) ) {
