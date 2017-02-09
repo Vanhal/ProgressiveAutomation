@@ -20,6 +20,7 @@ public class PABlocks {
 				if (PAConfig.killerEnabled) killer.add(new BlockKiller(i));
 				if (PAConfig.farmerEnabled) farmer.add(new BlockFarmer(i));
 				if (PAConfig.generatorEnabled && PAConfig.rfSupport) generator.add(new BlockGenerator(i));
+				if (PAConfig.capacitorEnabled && PAConfig.rfSupport) capacitor.add(new BlockCapacitor(i));
 			}
 		}
 
@@ -65,6 +66,12 @@ public class PABlocks {
 			blockKiller.preInit(previousTier);
 			previousTier = blockKiller;
 		}
+		
+		previousTier = BlockCapacitor.firstTier;
+		for (BlockCapacitor blockCapacitor : capacitor) {
+			blockCapacitor.preInit(previousTier);
+			previousTier = blockCapacitor;
+		}
 	}
 
 	public static void init() {
@@ -94,6 +101,10 @@ public class PABlocks {
 		
 		for (BlockFarmer blockfarmer : farmer) {
 			blockfarmer.init();
+		}
+		
+		for (BlockCapacitor blockCapacitor : capacitor) {
+			blockCapacitor.init();
 		}
 	}
 
@@ -125,6 +136,10 @@ public class PABlocks {
 		for (BlockFarmer blockfarmer : farmer) {
 			blockfarmer.postInit();
 		}
+		
+		for (BlockCapacitor blockCapacitor : capacitor) {
+			blockCapacitor.postInit();
+		}
 	}
 
 	//blocks
@@ -149,5 +164,8 @@ public class PABlocks {
 		
 	//farmers
 	public static List<BlockFarmer> farmer = new ArrayList<BlockFarmer>(4);
+	
+	//capacitors
+	public static List<BlockCapacitor> capacitor = new ArrayList<BlockCapacitor>(4);
 
 }

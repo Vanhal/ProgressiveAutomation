@@ -32,6 +32,10 @@ public class BaseContainer extends Container {
 		}
 	}
 	
+	public BaseContainer(BaseTileEntity inEntity) { //allow to create a GUI without default fuel slots
+		entity = inEntity;
+	}
+	
 	public boolean canInteractWith(EntityPlayer player) {
 		return true;
 	}
