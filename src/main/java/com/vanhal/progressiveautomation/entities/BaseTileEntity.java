@@ -53,7 +53,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 	public  WrenchModes.Mode sides[] = new WrenchModes.Mode[6];
 	
 	/**
-	 * Sygnalises whether the TileEntity needs to be synced with clients
+	 * Signalises whether the TileEntity needs to be synced with clients
 	 */
 	private boolean dirty;
 	/**

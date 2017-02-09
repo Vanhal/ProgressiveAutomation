@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=south": { "model": "progressiveautomation:CapacitorIron" },
+        "facing=west": { "model": "progressiveautomation:CapacitorIron", "y": 90 },
+        "facing=north": { "model": "progressiveautomation:CapacitorIron", "y": 180 },
+        "facing=east": { "model": "progressiveautomation:CapacitorIron", "y": 270 }
+    }
+}
