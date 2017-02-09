@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.blocks;
 
+import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitor;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorDiamond;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorIron;
@@ -8,6 +9,7 @@ import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -26,7 +28,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockCapacitor extends BaseBlock {
 	
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	public BlockCapacitor(int level) {
 		super("Capacitor", level);
@@ -87,12 +89,12 @@ public class BlockCapacitor extends BaseBlock {
     
     @Override
     public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+        return this.getDefaultState().withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer).getOpposite());
     }
     
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
+        worldIn.setBlockState(pos, state.withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer).getOpposite()), 2);
     }
     
     @Override
@@ -105,6 +107,14 @@ public class BlockCapacitor extends BaseBlock {
     
     public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         return state.withProperty(FACING, state.getValue(FACING));
+    }
+    
+	
+	@Override
+    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis){
+		IBlockState state = world.getBlockState(pos);
+        world.setBlockState(pos, state.cycleProperty(FACING));
+        return true;
     }
 
 }

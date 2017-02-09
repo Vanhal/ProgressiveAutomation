@@ -6,11 +6,12 @@ import com.vanhal.progressiveautomation.ref.WrenchModes;
 
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyReceiver;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 
 public class TileCapacitor extends BaseTileEntity {
@@ -149,12 +150,22 @@ public class TileCapacitor extends BaseTileEntity {
 			//Do we have any energy up for grabs?
 			if (currentStorage>0) {
 				TileEntity entity = worldObj.getTileEntity(pos.offset(facing));
-				if (entity instanceof IEnergyReceiver) {
-					IEnergyReceiver energy = (IEnergyReceiver) entity;
-					if (energy.canConnectEnergy(facing.getOpposite())) {
-						int giveAmount = energy.receiveEnergy(facing.getOpposite(), currentStorage, false);
-						if (giveAmount>0) {
-							changeCharge(giveAmount * -1);
+				if (entity!=null) {
+					if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+						IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing);
+						if (energy.canReceive()) {
+							int giveAmount = energy.receiveEnergy(currentStorage, false);
+							if (giveAmount>0) {
+								changeCharge(giveAmount * -1);
+							}
+						}
+					} else if (entity instanceof IEnergyReceiver) {
+						IEnergyReceiver energy = (IEnergyReceiver) entity;
+						if (energy.canConnectEnergy(facing.getOpposite())) {
+							int giveAmount = energy.receiveEnergy(facing.getOpposite(), currentStorage, false);
+							if (giveAmount>0) {
+								changeCharge(giveAmount * -1);
+							}
 						}
 					}
 				}

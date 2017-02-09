@@ -2,6 +2,8 @@ package com.vanhal.progressiveautomation.entities;
 
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.items.ItemRFEngine;
@@ -32,8 +34,11 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
-public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyProvider, IEnergyReceiver, ITickable {
+public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyStorage, IEnergyProvider, IEnergyReceiver, ITickable {
 	protected ItemStack[] slots;
 	protected int progress = 0;
 	protected int burnLevel = 0;
@@ -921,16 +926,63 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		return null;
 	}
 	
+	@Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
+        return capability == CapabilityEnergy.ENERGY;
+    }
+	
+	@Override
+    @Nonnull
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) 
+        	return CapabilityEnergy.ENERGY.cast(this);
+        return null;
+    }
+	
+
+	@Override
+	public int receiveEnergy(int maxReceive, boolean simulate) {
+		return this.receiveEnergy(EnumFacing.UP, maxReceive, simulate);
+	}
+
+	@Override
+	public int extractEnergy(int maxExtract, boolean simulate) {
+		return this.extractEnergy(EnumFacing.UP, maxExtract, simulate);
+	}
+
+	@Override
+	public int getEnergyStored() {
+		return this.getEnergyStored(EnumFacing.UP);
+	}
+
+	@Override
+	public int getMaxEnergyStored() {
+		return this.getMaxEnergyStored(EnumFacing.UP);
+	}
+
+	@Override
+	public boolean canExtract() {
+		return this.extractEnergy(1, true)>0;
+	}
+
+	@Override
+	public boolean canReceive() {
+		return this.receiveEnergy(1, true)>0;
+	}
+	
+	@Override
 	public boolean canConnectEnergy(EnumFacing from) {
 		if (getEngine()==null) return false;
 		else return true;
 	}
 
+	@Override
 	public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
 		if (worldObj.isRemote) return 0;
 		return addEnergy(maxReceive, simulate);
 	}
 
+	@Override
 	public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
 		return 0;
 	}
