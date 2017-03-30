@@ -152,7 +152,7 @@ public class TileCapacitor extends BaseTileEntity {
 				TileEntity entity = worldObj.getTileEntity(pos.offset(facing));
 				if (entity!=null) {
 					if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-						IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing);
+						IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
 						if (energy.canReceive()) {
 							int giveAmount = energy.receiveEnergy(currentStorage, false);
 							if (giveAmount>0) {
