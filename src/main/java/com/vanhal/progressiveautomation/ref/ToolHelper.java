@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.ref;
 import java.util.Random;
 import java.util.Set;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 
@@ -88,6 +89,7 @@ public class ToolHelper {
 			else if (material.equals("IRON")) return LEVEL_IRON;
 			else if (material.equals("GOLD")) return LEVEL_GOLD;
 			else if (material.equals("EMERALD")) return LEVEL_DIAMOND;
+			else if (material.equals("DIAMOND")) return LEVEL_DIAMOND;
 		} else {
 			//Tinkers Tools
 			if (itemStack.hasTagCompound()) {
