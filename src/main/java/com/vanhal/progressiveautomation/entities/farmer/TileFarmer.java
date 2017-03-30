@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.entities.farmer;
 
 import java.util.List;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
@@ -187,7 +188,9 @@ public class TileFarmer extends UpgradeableTileEntity {
 				if ( (slots[SLOT_BUCKETS]!=null) && (slots[SLOT_BUCKETS].stackSize>0) ) {
 					initFaker();
 					faker.setItemInHand(slots[SLOT_BUCKETS].copy());
+					faker.capabilities.isCreativeMode = true;
 					if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
+						faker.capabilities.isCreativeMode = false;
 						return animal;
 					}
 				}
