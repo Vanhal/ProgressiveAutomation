@@ -25,14 +25,6 @@ configFile.withReader {
     ext.config = new ConfigSlurper().parse prop
 }
 
-def y = config.droneAlter as Integer
-def x = y
-
-if(ENV.DRONE_BUILD_NUMBER)
-x = ENV.DRONE_BUILD_NUMBER as Integer
-
-config.buildNum = x - y
-
 version = config.mod_version + "." + config.buildNum
 group= "com.vanhal.progressiveautomation" 
 archivesBaseName = "ProgressiveAutomation-" + config.minecraft_version
