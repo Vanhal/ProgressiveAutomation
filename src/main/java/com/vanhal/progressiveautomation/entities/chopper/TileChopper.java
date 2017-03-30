@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.entities.chopper;
 import java.util.List;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -25,6 +26,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.IShearable;
 
 
 public class TileChopper extends UpgradeableTileEntity {
@@ -230,9 +232,20 @@ public class TileChopper extends UpgradeableTileEntity {
 					
 					if ( (!targetTree) && (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 						int i = 0;
-				        Item item = Item.getItemFromBlock(actualBlock);
-				        if (item != null && item.getHasSubtypes()) i = metaData;
-						items.add(new ItemStack(item, 1, i));
+						//shear leaves
+						if (actualBlock instanceof IShearable) {
+							IShearable shearBlock = (IShearable)actualBlock;
+							if (shearBlock.isShearable(slots[SLOT_SHEARS], worldObj, currentPosition)) {
+								items = shearBlock.onSheared(slots[SLOT_SHEARS], worldObj, currentPosition,
+										EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.FORTUNE, slots[SLOT_SHEARS]));
+							}
+						} else {
+							Item item = Item.getItemFromBlock(actualBlock);
+					        if (item != null && item.getHasSubtypes()) i = metaData;
+							items.add(new ItemStack(item, 1, i));
+						}
+						
+				        
 						if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
 							destroyTool(SLOT_SHEARS);
 						}
