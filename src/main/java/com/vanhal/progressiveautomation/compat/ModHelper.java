@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.compat.mods.AgriCraft;
 import com.vanhal.progressiveautomation.compat.mods.IC2;
 import com.vanhal.progressiveautomation.compat.mods.ImmersiveEngineering;
 import com.vanhal.progressiveautomation.compat.mods.MFR;
@@ -29,7 +30,7 @@ public class ModHelper {
 		//registerMod(new Pneumaticcraft());
 		registerMod(new MFR());
 		registerMod(new TiCon());
-		//registerMod(new AgriCraft());
+		registerMod(new AgriCraft());
 		//registerMod(new GrowOres());
 		registerMod(new IC2());
 
