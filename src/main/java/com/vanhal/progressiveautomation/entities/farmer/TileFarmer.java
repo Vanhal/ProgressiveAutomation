@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class TileFarmer extends UpgradeableTileEntity {
 	
@@ -186,12 +188,26 @@ public class TileFarmer extends UpgradeableTileEntity {
 		if (!entities.isEmpty()) {
 			for (EntityAnimal animal: entities) {
 				if ( (slots[SLOT_BUCKETS]!=null) && (slots[SLOT_BUCKETS].stackSize>0) ) {
-					initFaker();
-					faker.setItemInHand(slots[SLOT_BUCKETS].copy());
-					faker.capabilities.isCreativeMode = true;
-					if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
-						faker.capabilities.isCreativeMode = false;
-						return animal;
+					if (animal instanceof EntityCow) {
+						NBTTagCompound cowTag = new NBTTagCompound();
+						animal.writeEntityToNBT(cowTag);
+						if (cowTag.hasKey("CurrentUseCooldown")) {
+							int coolDown = cowTag.getInteger("CurrentUseCooldown");
+							if (coolDown <= 0) {
+								return animal;
+							}
+						} else if (cowTag.hasKey("NextUseCooldown")) {
+							int coolDown = cowTag.getInteger("NextUseCooldown");
+							if (coolDown <= 0) {
+								return animal;
+							}
+						} else {
+							initFaker();
+							faker.setItemInHand(slots[SLOT_BUCKETS].copy());
+							if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
+								return animal;
+							}
+						}
 					}
 				}
 			}
