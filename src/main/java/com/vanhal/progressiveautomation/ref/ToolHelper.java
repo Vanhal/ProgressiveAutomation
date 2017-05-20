@@ -194,7 +194,7 @@ public class ToolHelper {
 			if ((itemStack.getItem() instanceof ItemTool)) {
 				ItemTool tool = (ItemTool) itemStack.getItem();
 				Item.ToolMaterial mat = tool.getToolMaterial();
-				if (tool.canHarvestBlock(state, itemStack)) {
+				if (tool.canHarvestBlock(state, itemStack))
 					return mat.getEfficiencyOnProperMaterial();
 			}
 			// Tinkers
