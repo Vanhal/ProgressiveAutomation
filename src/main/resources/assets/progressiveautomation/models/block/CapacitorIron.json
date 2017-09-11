@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "progressiveautomation:blocks/Iron_Top",
-		"front": "progressiveautomation:blocks/Iron_Capacitor",
-        "side": "progressiveautomation:blocks/Iron_Blank"
-    }
-}

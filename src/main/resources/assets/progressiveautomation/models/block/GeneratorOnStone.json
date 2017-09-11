@@ -1,8 +1,0 @@
-{
-    "parent": "block/orientable",
-    "textures": {
-        "top": "progressiveautomation:blocks/Stone_Top",
-	"front": "progressiveautomation:blocks/Stone_FrontActive",
-        "side": "progressiveautomation:blocks/Stone_Blank"
-    }
-}
