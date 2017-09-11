@@ -58,6 +58,7 @@ item.CoalPellet.name=Fuel Pellet
 item.WitherWood.name=Wither Wood
 item.WitherStone.name=Wither Stone
 item.WitherIron.name=Wither Iron
+item.WitherGold.name=Wither Gold
 item.WitherDiamond.name=Wither Diamond
 
 gui.miner=Miner
