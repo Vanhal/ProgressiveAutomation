@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "progressiveautomation:blocks/wooden_top",
+		"front": "progressiveautomation:blocks/wooden_capacitor",
+        "side": "progressiveautomation:blocks/wooden_blank"
+    }
+}

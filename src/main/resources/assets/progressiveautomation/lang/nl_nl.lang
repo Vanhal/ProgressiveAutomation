@@ -1,0 +1,107 @@
+itemGroup.PATab=Progressive Automation
+
+tile.Miner.name=Houten Mijner
+tile.MinerStone.name=Stenen Mijner
+tile.MinerIron.name=Ijzeren Mijner
+tile.MinerDiamond.name=Diamanten Mijner
+tile.Chopper.name=Houten Hakker
+tile.ChopperStone.name=Stenen Hakker
+tile.ChopperIron.name=Ijzeren Hakker
+tile.ChopperDiamond.name=Diamanten Hakker
+tile.Planter.name=Houten Planter
+tile.PlanterStone.name=Stenen Planter
+tile.PlanterIron.name=Ijzeren Planter
+tile.PlanterDiamond.name=Diamanten Planter
+tile.Generator.name=Houten Generator
+tile.GeneratorStone.name=Stenen Generator
+tile.GeneratorIron.name=Ijzeren Generator
+tile.GeneratorDiamond.name=Diamanten Generator
+tile.Crafter.name=Houten Crafter
+tile.CrafterStone.name=Stenen Crafter
+tile.CrafterIron.name=IJzeren Crafter
+tile.CrafterDiamond.name=Diamanten Crafter
+tile.Farmer.name=Houten Dieren Kweker
+tile.FarmerStone.name=Stenen Dieren Kweker
+tile.FarmerIron.name=IJzeren Dieren Kweker
+tile.FarmerDiamond.name=Diamanten Dieren Kweker
+tile.Killer.name=Houten Vermoorder
+tile.KillerStone.name=Stenen Vermoorder
+tile.KillerIron.name=IJzeren Vermoorder
+tile.KillerDiamond.name=Diamanten Vermoorder
+
+item.Wrench.name=PA Steeksleutel
+item.Manual.name=Progressive Automation Handleiding
+item.RFEngine.name=RF Motor
+item.CreativeRFEngine.name=Creatieve RF Motor
+item.WoodUpgrade.name=Houten Upgrade
+item.StoneUpgrade.name=Stenen Upgrade
+item.IronUpgrade.name=Ijzeren Upgrade
+item.DiamondUpgrade.name=Diamanten Upgrade
+item.CobbleUpgrade.name=Keisteen Generator Upgrade
+item.WitherUpgrade.name=Wither Upgrade
+item.FillerUpgrade.name=Vuller Upgrade
+
+item.FilterAdultUpgrade.name=Volwassenen Filter Upgrade
+item.FilterAnimalUpgrade.name=Dieren Filter Upgrade
+item.FilterMobUpgrade.name=Monster Filter Upgrade
+item.FilterPlayerUpgrade.name=Speler Filter Upgrade
+
+item.ShearingUpgrade.name=Scheer Upgrade
+item.MilkerUpgrade.name=Melker Upgrade
+
+item.CoalPellet.name=Brandstofkorrel
+
+item.WitherWood.name=Wither Hout
+item.WitherStone.name=Wither Steen
+item.WitherIron.name=Wither IJzer
+item.WitherDiamond.name=Wither Diamant
+
+gui.miner=Mijner
+gui.crafter=Auto Crafter
+gui.chopper=Boom Hakker
+gui.planter=Gewas Planter
+gui.killer=Vermoordmachine
+gui.farmer=Dierkweker
+gui.generator=Generator
+gui.notready=Niet Gereed
+gui.finished=Gereed
+gui.range=Bereik
+gui.mining=aan het Mijnen
+gui.running=Werkend
+gui.waiting=Wachtend
+gui.killing=aan het Vermoorden
+gui.breeding=aan het Fokken
+gui.milking=aan het Melken
+gui.shearing=aan het Scheren
+gui.harvesting=aan het Oogsten
+gui.chopping=aan het Hakken
+gui.planting=aan het Planten
+gui.full=Opslag Vol
+gui.producing=aan het maken
+gui.need.fuel=Heeft Brandsof Nodig
+gui.need.energy=Geen RF Stroom
+gui.need.items=Geen Items
+gui.need.cobble=Geen Keisteen
+gui.need.sapling=Geen Saplings
+gui.need.seeds=Geen Zaden
+gui.need.pick=Geen Pikhouweel
+gui.need.hoe=Geen Ploeg
+gui.need.axe=Geen Bijl
+gui.need.shovel=Geen Schep
+gui.need.sword=Geen Zwaard
+
+gui.hi.chopper=Het Hakt Bomen om...
+gui.hi.planter=Ik Plant dingen
+gui.hi.miner=Laten we Mijnen!
+gui.hi.killer=Foei Monsters!
+gui.hi.farmer=Als Konijnen
+gui.addtools=Voeg Gereedschap Toe!
+
+gui.general=Hoofdinstellingen
+gui.general.tooltip=Hoofdinstellingen
+gui.rfoptions.tooltip=Stroominstellingen
+gui.rfoptions=Stroominstellingen
+gui.block.tooltip=Schakel Blokken Uit
+gui.blocks=Schakel Blokken Uit
+gui.upgrades.tooltip=Schakel Upgrades Uit
+gui.upgrades=Schakel Upgrades Uit
