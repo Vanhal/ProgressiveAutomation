@@ -189,20 +189,8 @@ public class ToolHelper {
 	}
 	
 	public static float getDigSpeed(ItemStack itemStack, IBlockState state) {
-		if ( (itemStack != null) && (itemStack.getItem() != null)) {
-			// Others
-			if ((itemStack.getItem() instanceof ItemTool)) {
-				ItemTool tool = (ItemTool) itemStack.getItem();
-				Item.ToolMaterial mat = tool.getToolMaterial();
-				if (tool.canHarvestBlock(state, itemStack))
-					return mat.getEfficiencyOnProperMaterial();
-			}
-			// Tinkers
-			else if (itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("Stats")) {
-				NBTTagCompound tags = itemStack.getTagCompound().getCompoundTag("Stats");
-				float tinkersSpeed = (float) tags.getInteger("MiningSpeed");
-				return tinkersSpeed / 100;
-			}
+		if ( (itemStack != null)) {
+			return itemStack.getStrVsBlock(state);
 		}
 		return 1.0f;
 	}
