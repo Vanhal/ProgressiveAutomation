@@ -82,7 +82,6 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public void setName(String newName) {
 		//1.11 requires this new name format!
 		name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, newName);
-		System.out.println("Thy name shall be " + name);
 		setUnlocalizedName(name);
 		setRegistryName(name);
 	}
