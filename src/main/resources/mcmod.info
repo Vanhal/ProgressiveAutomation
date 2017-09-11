@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "progressiveautomation",
+  "name": "Progressive Automation",
+  "description": "A mod that adds automation that can be built in the early game and upgraded throughout late game.",
   "version": "${version}",
   "mcversion": "${mcversion}",
-  "url": "",
-  "updateUrl": "",
-  "authorList": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "url": "https://github.com/Vanhal/ProgressiveAutomation/",
+  "updateUrl": "https://github.com/Vanhal/ProgressiveAutomation/releases",
+  "authorList": ["Vanhal"],
+  "credits": "Vanhal, Gigabit101, Torrins, ToadsworthLP, Psycho Ray",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
