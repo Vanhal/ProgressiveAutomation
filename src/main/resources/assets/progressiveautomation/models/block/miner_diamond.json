@@ -1,0 +1,8 @@
+{
+    "parent": "progressiveautomation:block/three_face",
+    "textures": {
+        "up": "progressiveautomation:blocks/diamond_small",
+        "down": "progressiveautomation:blocks/diamond_big",
+        "side": "progressiveautomation:blocks/diamond_blank"
+    }
+}
