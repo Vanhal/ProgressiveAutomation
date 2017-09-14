@@ -189,12 +189,8 @@ public class ToolHelper {
 	}
 	
 	public static float getDigSpeed(ItemStack itemStack, IBlockState state) {
-		if ( (itemStack != null) && (itemStack.getItem() != null) && (itemStack.getItem() instanceof ItemTool) ) {
-			ItemTool tool = (ItemTool) itemStack.getItem();
-			Item.ToolMaterial mat = tool.getToolMaterial();
-			if (tool.canHarvestBlock(state, itemStack)) {
-				return mat.getEfficiencyOnProperMaterial();
-			}
+		if ( (itemStack != null)) {
+			return itemStack.getStrVsBlock(state);
 		}
 		return 1.0f;
 	}
