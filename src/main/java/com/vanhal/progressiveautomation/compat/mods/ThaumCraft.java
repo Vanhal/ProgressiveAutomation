@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 public class ThaumCraft extends BaseMod {
 	
 	public ThaumCraft() {
-		modID = "Thaumcraft";
+		modID = "thaumcraft";
 	}
 	
 	@Override

@@ -28,7 +28,7 @@ public class Vanilla extends BaseMod {
 	
 	@Override
 	public boolean shouldLoad() {
-		modID = "Vanilla";
+		modID = "vanilla";
 		ProgressiveAutomation.logger.info("Vanilla Loaded");
 		return true;
 	}

@@ -58,6 +58,9 @@ public class ItemWrench extends BaseItem {
 	@Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
 		ItemStack itemStack = player.getHeldItem(hand);
+		
+		if (itemStack.isEmpty() || itemStack.getItem() != this) return EnumActionResult.PASS;
+		
 		Block block = world.getBlockState(pos).getBlock();
 		if (player.isSneaking()) {
 			if (block instanceof IDismantleable) {

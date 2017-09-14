@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 public class MFR extends BaseMod {
 	
 	public MFR() {
-		modID = "MFR";
+		modID = "mfr";
 	}
 	
 	@Override

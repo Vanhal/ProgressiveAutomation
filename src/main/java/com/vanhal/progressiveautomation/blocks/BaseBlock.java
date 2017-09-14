@@ -19,6 +19,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -31,6 +32,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -137,6 +139,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
     }
 	
 	public void dumpItems(World world, BlockPos pos, ItemStack items) {
+		
 		EntityItem entItem = new EntityItem(world, (float)pos.getX() + 0.5f, (float)pos.getY() + 0.5f, (float)pos.getZ() + 0.5f, items);
 		float f3 = 0.05F;
 		entItem.motionX = (double)((float)world.rand.nextGaussian() * f3);
@@ -253,6 +256,17 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		else if (dir == EnumFacing.SOUTH) return EnumFacing.WEST;
 		else if (dir == EnumFacing.WEST) return EnumFacing.NORTH;
 		return dir;
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+		if (!worldIn.isRemote) {
+			if (worldIn.getTileEntity(pos) instanceof BaseTileEntity) {
+				BaseTileEntity tileEntity = (BaseTileEntity) worldIn.getTileEntity(pos);
+				tileEntity.readFromItemStack(stack);
+			}
+		}
 	}
 	
 }
