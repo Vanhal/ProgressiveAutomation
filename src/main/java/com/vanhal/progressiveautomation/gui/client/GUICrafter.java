@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GUICrafter extends BaseGUI {
-	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Crafter.png");
+	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/crafter.png");
 	
 	TileCrafter crafter;
 	

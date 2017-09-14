@@ -171,35 +171,35 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
-			ItemStack upgrade = (SLOT_UPGRADE != -1) ? getStackInSlot(SLOT_UPGRADE) : null;
+		if (!world.isRemote) {
+			ItemStack upgrade = (SLOT_UPGRADE != -1) ? getStackInSlot(SLOT_UPGRADE) : ItemStack.EMPTY;
 			
 			// Something inside the upgrade slot
-			if ( (upgrade != null) && (upgrade.stackSize > 0) ) {
+			if ( (!upgrade.isEmpty()) && (upgrade.getCount() > 0) ) {
 				if (upgrade.getItem() instanceof ItemUpgrade) {
 					ItemUpgrade upgradeItem = (ItemUpgrade) upgrade.getItem();
 					UpgradeType type = upgradeItem.getType();
 					int installedAmount = getUpgradeAmount(type);
 	
 					if (allowedUpgrades.contains(upgradeItem.getType()) && installedAmount < upgradeItem.allowedAmount()) {
-						int newTotal = installedAmount + upgrade.stackSize;
-						upgrade.stackSize = newTotal <= upgradeItem.allowedAmount() ? 0 : newTotal - upgradeItem.allowedAmount();
-						newTotal = newTotal - upgrade.stackSize;
+						int newTotal = installedAmount + upgrade.getCount();
+						upgrade.setCount((newTotal <= upgradeItem.allowedAmount()) ? 0 : newTotal - upgradeItem.allowedAmount());
+						newTotal = newTotal - upgrade.getCount();
 						setUpgradeAmount(type, newTotal);
 					}
 					
 					// We've eaten all items in this stack, it should be disposed of
-					if (upgrade.stackSize <= 0) {
-						slots[SLOT_UPGRADE] = null;
+					if (upgrade.getCount() <= 0) {
+						slots[SLOT_UPGRADE] = ItemStack.EMPTY;
 					}
 				} else {
 					ProgressiveAutomation.logger.warn("A non upgrade found it's way into the upgrade slot somehow. Deleting.");
-					slots[SLOT_UPGRADE] = null;
+					slots[SLOT_UPGRADE] = ItemStack.EMPTY;
 				}
-			} else if (upgrade != null) {
+			} else if (!upgrade.isEmpty()) {
 				// Malformed itemstack? Better delete it
 				ProgressiveAutomation.logger.warn("Inserted ItemStack with stacksize <= 0. Deleting");
-				slots[SLOT_UPGRADE] = null;
+				slots[SLOT_UPGRADE] = ItemStack.EMPTY;
 			}
 		}
 		if (advancedToolFlash>0) {
@@ -208,7 +208,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
 		}
 		
 		//code for showing the range of a machine
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			displayRangeCount++;
 			if ( Math.floor(displayRangeCount/displayTicksPerBlock) >= getRange()) {
 				displayRangeCount = 0;

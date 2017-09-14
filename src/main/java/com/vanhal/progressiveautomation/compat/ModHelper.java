@@ -3,7 +3,6 @@ package com.vanhal.progressiveautomation.compat;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.mods.AgriCraft;
 import com.vanhal.progressiveautomation.compat.mods.BetterWithMods;
 import com.vanhal.progressiveautomation.compat.mods.IC2;
@@ -143,7 +142,7 @@ public class ModHelper {
 			if (mod.isPlant(plantBlock, state)) {
 				if (mod.isGrown(plantPoint, plantBlock, state, worldObj)) {
 					items = mod.harvestPlant(plantPoint, plantBlock, state, worldObj);
-					if (items!=null) return items;
+					if (items != null) return items;
 				}
 			}
 		}

@@ -13,7 +13,7 @@ public class PartialTileNBTUpdateMessageHandler implements IMessageHandler<Parti
 
 	@Override
 	public IMessage onMessage(PartialTileNBTUpdateMessage message, MessageContext ctx) {
-		TileEntity entity =  Minecraft.getMinecraft().thePlayer.worldObj.getTileEntity(new BlockPos(message.x, message.y, message.z));
+		TileEntity entity =  Minecraft.getMinecraft().player.world.getTileEntity(new BlockPos(message.x, message.y, message.z));
 		
 		if (entity != null && entity instanceof BaseTileEntity) {
 			BaseTileEntity paEntity = (BaseTileEntity) entity;

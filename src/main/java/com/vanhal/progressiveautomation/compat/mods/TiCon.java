@@ -4,9 +4,6 @@ import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.BaseMod;
 import com.vanhal.progressiveautomation.util.OreHelper;
 
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 public class TiCon extends BaseMod {

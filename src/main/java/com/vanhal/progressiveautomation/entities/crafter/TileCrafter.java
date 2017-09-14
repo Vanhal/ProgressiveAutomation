@@ -40,7 +40,7 @@ public class TileCrafter extends UpgradeableTileEntity {
 	
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			outputItems();
 			
 			if (isBurning()) {
@@ -53,9 +53,9 @@ public class TileCrafter extends UpgradeableTileEntity {
 						addPartialUpdate("currentTime", currentTime);
 						if (consumeIngredients()) {
 							//create an item, put it in the right slot
-							if (slots[OUTPUT_SLOT]!=null) {
+							if (!slots[OUTPUT_SLOT].isEmpty()) {
 								if (canCraft()) {
-									slots[OUTPUT_SLOT].stackSize += slots[CRAFT_RESULT].stackSize;
+									slots[OUTPUT_SLOT].grow(slots[CRAFT_RESULT].getCount());
 								}
 							} else {
 								slots[OUTPUT_SLOT] = slots[CRAFT_RESULT].copy();
@@ -76,7 +76,7 @@ public class TileCrafter extends UpgradeableTileEntity {
 	protected void outputItems() {
 		for (int x = 0; x < 6; x++) {
 			if (sides[x] == WrenchModes.Mode.Output) {
-				if (slots[OUTPUT_SLOT]!=null) {
+				if (!slots[OUTPUT_SLOT].isEmpty()) {
 					EnumFacing testSide = EnumFacing.getFront(x);
 					TileEntity tile = BlockHelper.getAdjacentTileEntity(this, testSide);
 					if (tile != null) {
@@ -119,14 +119,14 @@ public class TileCrafter extends UpgradeableTileEntity {
 	
 	//test to see if the output slot can accept the resulting craft
 	public boolean canCraft() {
-		return ( (slots[OUTPUT_SLOT]==null) || 
+		return ( (slots[OUTPUT_SLOT].isEmpty()) || 
 			( (slots[OUTPUT_SLOT].isItemEqual(slots[CRAFT_RESULT])) && 
-			((slots[OUTPUT_SLOT].stackSize + slots[CRAFT_RESULT].stackSize) <= slots[OUTPUT_SLOT].getMaxStackSize()) ) 
+			((slots[OUTPUT_SLOT].getCount() + slots[CRAFT_RESULT].getCount()) <= slots[OUTPUT_SLOT].getMaxStackSize()) ) 
 		);
 	}
 	
 	public boolean validRecipe() {
-		return (slots[CRAFT_RESULT]!=null);
+		return (!slots[CRAFT_RESULT].isEmpty());
 	}
 	
 	public boolean hasIngredients() {
@@ -146,7 +146,7 @@ public class TileCrafter extends UpgradeableTileEntity {
 		List<ItemStack> required = new ArrayList<ItemStack>();
 		//get the list of things we need
 		for (int i = CRAFT_GRID_START; i <= CRAFT_GRID_END; i++) {
-			if (this.slots[i] != null) {
+			if (!this.slots[i].isEmpty()) {
 				required.add(slots[i].copy());
 			}
 		}
@@ -154,14 +154,14 @@ public class TileCrafter extends UpgradeableTileEntity {
 		
 		//go through the inventory and see if anything matches up with the requirements
 		for (int i = SLOT_INVENTORY_START; i <= SLOT_INVENTORY_END; i++) {
-			if (slots[i]!=null) {
-				int amtItems = slots[i].stackSize;
+			if (!slots[i].isEmpty()) {
+				int amtItems = slots[i].getCount();
 				for (int j = 0; j < required.size(); j++) {
-					if (required.get(j)!=null) {
+					if (!required.get(j).isEmpty()) {
 						if ( OreHelper.ItemOreMatch(required.get(j), slots[i]) ) {
 							if (amtItems>0) {
 								amtItems--;
-								required.set(j, null);
+								required.set(j, ItemStack.EMPTY);
 							}
 						}
 					}
@@ -171,15 +171,15 @@ public class TileCrafter extends UpgradeableTileEntity {
 					if (amtItems<=0) {
 						if (slots[i].getItem().hasContainerItem(slots[i])) {
 							ItemStack container = slots[i].getItem().getContainerItem(slots[i]);
-							this.addToInventory(new ItemStack(container.getItem(), slots[i].stackSize, container.getItemDamage()));
+							this.addToInventory(new ItemStack(container.getItem(), slots[i].getCount(), container.getItemDamage()));
 						}
-						slots[i] = null;
-					} else if ( (slots[i]!=null) && (slots[i].stackSize != amtItems) ) {
+						slots[i] = ItemStack.EMPTY;
+					} else if ( (!slots[i].isEmpty()) && (slots[i].getCount() != amtItems) ) {
 						if (slots[i].getItem().hasContainerItem(slots[i])) {
 							ItemStack container = slots[i].getItem().getContainerItem(slots[i]);
-							this.addToInventory(new ItemStack(container.getItem(), slots[i].stackSize - amtItems, container.getItemDamage()));
+							this.addToInventory(new ItemStack(container.getItem(), slots[i].getCount() - amtItems, container.getItemDamage()));
 						}
-						slots[i].stackSize = amtItems;
+						slots[i].setCount(amtItems);
 					}
 				}
 			}
@@ -187,7 +187,7 @@ public class TileCrafter extends UpgradeableTileEntity {
 		
 		//check to see if it's all good
 		for (int j = 0; j < required.size(); j++) {
-			if (required.get(j)!=null) {
+			if (!required.get(j).isEmpty()) {
 				required = null;
 				return false;
 			}

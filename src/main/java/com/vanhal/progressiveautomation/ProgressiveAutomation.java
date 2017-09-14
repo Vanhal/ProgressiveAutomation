@@ -15,7 +15,7 @@ import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -48,8 +48,8 @@ public class ProgressiveAutomation {
 	//Creative Tab
 	public static CreativeTabs PATab = new CreativeTabs("PATab") {
 		@Override
-		public Item getTabIconItem() {
-			return PAItems.cheatRFEngine;
+		public ItemStack getTabIconItem() {
+			return new ItemStack(PAItems.cheatRFEngine);
 		}
 	};
 	

@@ -10,7 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIGenerator extends BaseGUI {
-	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Generator.png");
+	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/generator.png");
 	
 	protected int infoScreenX = 68;
 	protected int infoScreenW = 87;

@@ -2,7 +2,7 @@ package com.vanhal.progressiveautomation.items;
 
 import java.util.List;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.google.common.base.CaseFormat;
 import com.vanhal.progressiveautomation.blocks.BaseBlock;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.ref.Ref;
@@ -46,17 +46,21 @@ public class ItemWrench extends BaseItem {
 	}
 	
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean bool) {
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean bool) {
 		list.add(TextFormatting.GRAY + "Current Mode: "+TextFormatting.WHITE+getMode(itemStack));
 	}
 	
 	@Override
-	public EnumActionResult onItemUseFirst(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, EnumHand hand) {
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, EnumHand hand) {
 		return EnumActionResult.PASS;
 	}
 	
 	@Override
-    public EnumActionResult onItemUse(ItemStack itemStack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
+		ItemStack itemStack = player.getHeldItem(hand);
+		
+		if (itemStack.isEmpty() || itemStack.getItem() != this) return EnumActionResult.PASS;
+		
 		Block block = world.getBlockState(pos).getBlock();
 		if (player.isSneaking()) {
 			if (block instanceof IDismantleable) {
@@ -74,10 +78,10 @@ public class ItemWrench extends BaseItem {
 				if (block instanceof BaseBlock) {
 					BaseTileEntity PABlock = (BaseTileEntity)world.getTileEntity(pos);
 					if (getMode(itemStack)==WrenchModes.Mode.Query) {
-						if (world.isRemote) player.addChatMessage(new TextComponentString(face+" side currently set to: "+PABlock.getSide(face)));
+						if (world.isRemote) player.sendMessage(new TextComponentString(face+" side currently set to: "+PABlock.getSide(face)));
 					} else {
 						PABlock.setSide(face, getMode(itemStack));
-						if (world.isRemote) player.addChatMessage(new TextComponentString(face+" side set to: "+getMode(itemStack)));
+						if (world.isRemote) player.sendMessage(new TextComponentString(face+" side set to: "+getMode(itemStack)));
 					}
 					return EnumActionResult.SUCCESS;
 				}
@@ -87,15 +91,15 @@ public class ItemWrench extends BaseItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		
 		if (player.isSneaking()) {
-			int temp = getMode(itemStack).ordinal() + 1;
+			int temp = getMode(player.getHeldItem(hand)).ordinal() + 1;
 			if (temp>=WrenchModes.modes.size()) temp = 0;
-			((ItemWrench)itemStack.getItem()).setMode(itemStack, WrenchModes.modes.get(temp));
-			if (world.isRemote) player.addChatMessage(new TextComponentString("Mode: "+WrenchModes.modes.get(temp)));
+			((ItemWrench)player.getHeldItem(hand).getItem()).setMode(player.getHeldItem(hand), WrenchModes.modes.get(temp));
+			if (world.isRemote) player.sendMessage(new TextComponentString("Mode: "+WrenchModes.modes.get(temp)));
 		}
-        return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStack);
+        return new ActionResult<ItemStack>(EnumActionResult.PASS, player.getHeldItem(hand));
 	}
 	
 	
@@ -106,7 +110,7 @@ public class ItemWrench extends BaseItem {
 		entItem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
 		entItem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
 		
-		world.spawnEntityInWorld(entItem);
+		world.spawnEntity(entItem);
 	}
 	
 	@Override
@@ -123,9 +127,12 @@ public class ItemWrench extends BaseItem {
 	
 	@Override
 	public void init() {
+		//1.11 ResourceLocation changed! This should fix it ~~Psycho Ray
+		String item_name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, itemName);
+		
 		for (int i = 0; i < WrenchModes.Mode.values().length; i++) {
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-				.register(this, i, new ModelResourceLocation(Ref.MODID + ":" + itemName, "inventory"));
+				.register(this, i, new ModelResourceLocation(Ref.MODID + ":" + item_name, "inventory"));
 		}
 	}
 }

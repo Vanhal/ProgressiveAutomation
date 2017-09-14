@@ -17,7 +17,7 @@ public abstract class ItemTieredUpgrade extends ItemUpgrade {
 	}
 	
 	public void preInit(Item previousTier) {
-		GameRegistry.registerItem(this, itemName);
+		GameRegistry.register(this);
 		UpgradeRegistry.registerUpgradeItem(this.getType(), this);
 		addTieredRecipe(previousTier);
 	}

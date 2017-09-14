@@ -21,7 +21,7 @@ import net.minecraft.world.WorldServer;
 public class RightClick extends Vanilla {
 
 	public RightClick() {
-		this.modID = "RightClickPlants";
+		this.modID = "rightclickplants";
 	}
 	
 	@Override
@@ -38,7 +38,7 @@ public class RightClick extends Vanilla {
 	@Override
 	public List<ItemStack> harvestPlant(Point3I point, Block plantBlock, IBlockState state, World worldObj) {
 		PlayerFake faker = new PlayerFake((WorldServer)worldObj);
-		plantBlock.onBlockActivated(worldObj, point.toPosition(), state, faker, null, null, EnumFacing.DOWN, 0, 0, 0);
+		plantBlock.onBlockActivated(worldObj, point.toPosition(), state, faker, null, EnumFacing.DOWN, 0, 0, 0);
 		
 		ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 		

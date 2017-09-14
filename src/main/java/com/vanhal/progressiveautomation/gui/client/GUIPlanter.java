@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIPlanter extends BaseGUI {
 	
-	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Planter.png");
+	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/planter.png");
 	protected int infoScreenX = 38;
 	protected int infoScreenW = 66;
 	protected int infroScreenY1 = 17;
@@ -42,9 +42,9 @@ public class GUIPlanter extends BaseGUI {
 				String fuelString = "gui.need.fuel";
 				if (planter.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
-			} else if ( (planter.getStackInSlot(planter.SLOT_SEEDS) == null) && (!planter.isBurning()) ) {
+			} else if ( (planter.getStackInSlot(planter.SLOT_SEEDS).isEmpty()) && (!planter.isBurning()) ) {
 				drawString(StringHelper.localize("gui.need.seeds"), infoScreenX, infoScreenW, infroScreenY2, RED);
-			} else if (planter.getStackInSlot(planter.SLOT_HOE) == null) {
+			} else if (planter.getStackInSlot(planter.SLOT_HOE).isEmpty()) {
 				drawString(StringHelper.localize("gui.need.hoe"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			} else {
 				readyToPlant = true;

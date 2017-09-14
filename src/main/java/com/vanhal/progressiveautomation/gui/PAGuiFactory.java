@@ -9,13 +9,21 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
 
 public class PAGuiFactory implements IModGuiFactory {
+	
+	@Override
+	public boolean hasConfigGui() {
+        return true;
+    }
 
 	@Override
 	public void initialize(Minecraft minecraftInstance) {
 		// TODO Auto-generated method stub
-
 	}
 
+	public GuiScreen createConfigGui(GuiScreen parentScreen) {
+		return new PAGuiConfig(parentScreen);
+	}
+	
 	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass() {
 		// TODO Auto-generated method stub

@@ -1,18 +1,14 @@
 package com.vanhal.progressiveautomation.compat.mods;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class ImmersiveEngineering extends Vanilla {

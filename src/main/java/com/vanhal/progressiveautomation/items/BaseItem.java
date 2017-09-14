@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
+import com.google.common.base.CaseFormat;
+
 public class BaseItem extends Item {
 	public String itemName;
 	
@@ -22,8 +24,10 @@ public class BaseItem extends Item {
 	
 	
 	public void setName(String newName) {
-		itemName = newName;
+		//1.11 requires this new name format!
+		itemName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, newName);
 		this.setUnlocalizedName(itemName);
+		this.setRegistryName(itemName);
 	}
 	
 	public String getName() {
@@ -31,7 +35,7 @@ public class BaseItem extends Item {
 	}
 	
 	public void preInit() {
-		GameRegistry.registerItem(this, itemName);
+		GameRegistry.register(this);
 		addUpgradeRecipe();
 	}
 	

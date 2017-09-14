@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -18,7 +17,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class EventPlayers {
 	
 	private ArrayList<String> names = new ArrayList<String>();
-	protected static final TMap textLines = new THashMap();
+	protected static final TMap<String,String> textLines = new THashMap<String,String>();
 	private final String url = "https://raw.githubusercontent.com/Vanhal/PAData/master/namesv2.txt";
 	
 	public EventPlayers() {

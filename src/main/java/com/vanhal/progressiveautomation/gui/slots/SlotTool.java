@@ -1,7 +1,6 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 

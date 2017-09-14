@@ -23,10 +23,10 @@ public class SimpleGuiHandler implements IGuiHandler {
 	private int guiIdCounter = 1;
 	public static int manualGUI = 0;
 	
-	private final TMap containerMap = new THashMap();
-	private final TMap guiMap = new THashMap();
+	private final TMap<Integer,Class<?>> containerMap = new THashMap<Integer,Class<?>>();
+	private final TMap<Integer,Class<?>> guiMap = new THashMap<Integer,Class<?>>();
 	
-	public int registerGui(Class gui, Class container) {
+	public int registerGui(Class<?> gui, Class<?> container) {
 		guiIdCounter++;
 		guiMap.put(guiIdCounter, gui);
 		containerMap.put(guiIdCounter, container);
@@ -34,7 +34,7 @@ public class SimpleGuiHandler implements IGuiHandler {
 	}
 	
 
-	public int registerServerGui(Class container) {
+	public int registerServerGui(Class<?> container) {
 		guiIdCounter++;
 		containerMap.put(guiIdCounter, container);
 		return guiIdCounter;
@@ -46,14 +46,14 @@ public class SimpleGuiHandler implements IGuiHandler {
 			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			try {
 				if (!world.isRemote) {
-					Packet packet = tile.getUpdatePacket();
+					Packet<?> packet = tile.getUpdatePacket();
 					if (packet != null) {
 						((EntityPlayerMP)player).connection.sendPacket(packet);
 					}
 					
 				}
 				Class<? extends Container> containerClass = (Class<? extends Container>) containerMap.get(ID);
-				Constructor containerConstructor = containerClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
+				Constructor<?> containerConstructor = containerClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
 				return containerConstructor.newInstance(player.inventory, tile);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -69,7 +69,7 @@ public class SimpleGuiHandler implements IGuiHandler {
 			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			try {
 				Class<? extends GuiScreen> guiClass = (Class<? extends GuiScreen>) guiMap.get(ID);
-				Constructor guiConstructor = guiClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
+				Constructor<?> guiConstructor = guiClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
 				return guiConstructor.newInstance(player.inventory, tile);
 
 			} catch (Exception e) {

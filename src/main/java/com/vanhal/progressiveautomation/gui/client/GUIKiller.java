@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIKiller extends BaseGUI {
 	
-	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Killer.png");
+	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/killer.png");
 	protected int infoScreenX = 38;
 	protected int infoScreenW = 66;
 	protected int infroScreenY1 = 17;
@@ -42,7 +42,7 @@ public class GUIKiller extends BaseGUI {
 				String fuelString = "gui.need.fuel";
 				if (killer.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
-			} else if (killer.getStackInSlot(killer.SLOT_SWORD) == null) {
+			} else if (killer.getStackInSlot(killer.SLOT_SWORD).isEmpty()) {
 				drawString(StringHelper.localize("gui.need.sword"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			} else {
 				readyToPlant = true;

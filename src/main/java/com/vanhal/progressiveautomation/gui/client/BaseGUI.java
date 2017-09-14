@@ -76,6 +76,6 @@ public class BaseGUI extends GuiContainer {
 	}
 
 	public String getTextLine(int line, String text) {
-		return EventPlayers.getPlayerLine(mc.thePlayer.getDisplayNameString(), line, StringHelper.localize(text));
+		return EventPlayers.getPlayerLine(mc.player.getDisplayNameString(), line, StringHelper.localize(text));
 	}
 }

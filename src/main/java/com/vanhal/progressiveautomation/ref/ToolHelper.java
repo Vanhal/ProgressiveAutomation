@@ -3,7 +3,6 @@ package com.vanhal.progressiveautomation.ref;
 import java.util.Random;
 import java.util.Set;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 
@@ -136,7 +135,7 @@ public class ToolHelper {
 	}
 	
 	public static boolean isBroken(ItemStack item) {
-		if (item==null) return false;
+		if (item.isEmpty()) return false;
 		boolean broken = tinkersIsBroken(item);
 		if (!broken) {
 			if (item.getItemDamage() >= item.getMaxDamage()) {
@@ -147,7 +146,7 @@ public class ToolHelper {
 	}
 	
 	public static boolean tinkersIsBroken(ItemStack item) {
-		if (item==null) return false;
+		if (item.isEmpty()) return false;
 		if ( (item.hasTagCompound()) && (item.getTagCompound().hasKey("Stats")) ) {
 			NBTTagCompound tags = item.getTagCompound().getCompoundTag("Stats");
 			return tags.getBoolean("Broken");
@@ -189,7 +188,7 @@ public class ToolHelper {
 	}
 	
 	public static float getDigSpeed(ItemStack itemStack, IBlockState state) {
-		if ( (itemStack != null)) {
+		if ((!itemStack.isEmpty())) {
 			return itemStack.getStrVsBlock(state);
 		}
 		return 1.0f;

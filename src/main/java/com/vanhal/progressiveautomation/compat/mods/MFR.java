@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 public class MFR extends BaseMod {
 	
 	public MFR() {
-		modID = "MFR";
+		modID = "mfr";
 	}
 	
 	@Override
@@ -19,7 +19,7 @@ public class MFR extends BaseMod {
 	
 	@Override
 	public boolean isSapling(ItemStack stack) {
-		if ( (stack != null) && (stack.getItem() != null) ) {
+		if ( (!stack.isEmpty()) && (stack.getItem() != null) ) {
 			return (stack.getUnlocalizedName().compareToIgnoreCase("tile.mfr.rubberwood.sapling")==0);
 		}
 		return false;

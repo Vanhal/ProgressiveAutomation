@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIFarmer extends BaseGUI {
-	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Farmer.png");
+	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/farmer.png");
 	protected int infoScreenX = 38;
 	protected int infoScreenW = 66;
 	protected int infroScreenY1 = 17;
@@ -41,9 +41,9 @@ public class GUIFarmer extends BaseGUI {
 				String fuelString = "gui.need.fuel";
 				if (farmer.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
-			} else if ( (farmer.getStackInSlot(farmer.SLOT_FOOD) == null) && 
-						(farmer.getStackInSlot(farmer.SLOT_BUCKETS) == null) && 
-						(farmer.getStackInSlot(farmer.SLOT_SHEARS) == null) ) {
+			} else if ( (farmer.getStackInSlot(farmer.SLOT_FOOD).isEmpty()) && 
+						(farmer.getStackInSlot(farmer.SLOT_BUCKETS).isEmpty()) && 
+						(farmer.getStackInSlot(farmer.SLOT_SHEARS).isEmpty()) ) {
 				drawString(StringHelper.localize("gui.need.items"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			} else {
 				allGood = true;

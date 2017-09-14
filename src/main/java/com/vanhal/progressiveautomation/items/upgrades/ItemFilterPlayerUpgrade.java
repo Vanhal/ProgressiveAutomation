@@ -21,7 +21,7 @@ public class ItemFilterPlayerUpgrade extends ItemUpgrade {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
 		list.add(TextFormatting.GRAY + "Will make the Killer to kill players only");
 	   
 	}

@@ -1,6 +1,5 @@
 package com.vanhal.progressiveautomation.blocks;
 
-import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitor;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorDiamond;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorIron;
@@ -9,7 +8,6 @@ import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -88,13 +86,13 @@ public class BlockCapacitor extends BaseBlock {
 	} 
     
     @Override
-    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer).getOpposite());
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer).getOpposite());
     }
     
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        worldIn.setBlockState(pos, state.withProperty(FACING, BlockPistonBase.getFacingFromEntity(pos, placer).getOpposite()), 2);
+        worldIn.setBlockState(pos, state.withProperty(FACING, EnumFacing.getDirectionFromEntityLiving(pos, placer).getOpposite()), 2);
     }
     
     @Override

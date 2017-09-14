@@ -30,7 +30,7 @@ public class ItemBlockMachine extends ItemBlock {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
 		if (this.block instanceof BlockFarmer) {
 			list.add(TextFormatting.GRAY + "Used to breed animals");
 			list.add(TextFormatting.GRAY + "Use upgrades for shearing and milking");
@@ -51,7 +51,7 @@ public class ItemBlockMachine extends ItemBlock {
 			list.add(TextFormatting.GRAY + "will be distributed out from the other faces");
 		}
 		
-		if ( (itemStack != null) && (itemStack.getTagCompound() != null) ) {
+		if ( (!itemStack.isEmpty()) && (itemStack.getTagCompound() != null) ) {
 			list.add(TextFormatting.GRAY + "Pre-Configured");
 		}
 		

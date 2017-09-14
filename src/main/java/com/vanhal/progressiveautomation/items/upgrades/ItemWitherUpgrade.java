@@ -43,7 +43,7 @@ public class ItemWitherUpgrade extends ItemUpgrade {
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
 		list.add(TextFormatting.GRAY + "Multiplies the range of a machine by "+PAConfig.witherMultiplier);
        
     }

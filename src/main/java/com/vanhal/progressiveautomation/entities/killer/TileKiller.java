@@ -20,9 +20,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.IAnimals;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
@@ -73,7 +71,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	@Override
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			doXpPickup();
 			checkInventory();
 			
@@ -91,23 +89,23 @@ public class TileKiller extends UpgradeableTileEntity {
 							searchBlock = -1;
 							addPartialUpdate("currentBlock", searchBlock);
 						} else {
-							if (slots[SLOT_SWORD]!=null) {
+							if (!slots[SLOT_SWORD].isEmpty()) {
 								//attack the "mob"
 								if (faker == null) {
-									faker = new PlayerFake((WorldServer)worldObj, worldObj.getBlockState(pos).getBlock().getLocalizedName());
+									faker = new PlayerFake((WorldServer)world, world.getBlockState(pos).getBlock().getLocalizedName());
 									faker.setPosition(0, 0, 0);
 								}
 								
 								faker.setItemInHand(slots[SLOT_SWORD].copy());
 								Multimap<String, AttributeModifier> attributeModifiers = slots[SLOT_SWORD].getAttributeModifiers(EntityEquipmentSlot.MAINHAND);
 
-								attributeModifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getAttributeUnlocalizedName());
+								attributeModifiers.get(SharedMonsterAttributes.ATTACK_SPEED.getName());
 								faker.setItemInUse(faker.getHeldItemMainhand(), 72000);
 								faker.onUpdate();
 								faker.attackTargetEntityWithCurrentItem(mob);
 								
 
-								if (ToolHelper.damageTool(slots[SLOT_SWORD], worldObj, pos.getX(), pos.getY(), pos.getZ())) {
+								if (ToolHelper.damageTool(slots[SLOT_SWORD], world, pos.getX(), pos.getY(), pos.getZ())) {
 									destroyTool(SLOT_SWORD);
 								}
 								
@@ -150,7 +148,7 @@ public class TileKiller extends UpgradeableTileEntity {
 		Point3I point = getPoint(n);
 		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
-		List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, boundCheck);
+		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityLivingBase mob: entities) {
 				if (mob instanceof EntityPlayer) {
@@ -205,12 +203,12 @@ public class TileKiller extends UpgradeableTileEntity {
 		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
-		List<EntityItem> entities = worldObj.getEntitiesWithinAABB(EntityItem.class, boundCheck);
+		List<EntityItem> entities = world.getEntitiesWithinAABB(EntityItem.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityItem item: entities) {
 				if (roomInInventory(item.getEntityItem())) {
-					if (!worldObj.isRemote) addToInventory(item.getEntityItem());
-					worldObj.removeEntity(item);
+					if (!world.isRemote) addToInventory(item.getEntityItem());
+					world.removeEntity(item);
 				}
 			}
 		}
@@ -222,10 +220,10 @@ public class TileKiller extends UpgradeableTileEntity {
 		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
-		List<EntityXPOrb> entities = worldObj.getEntitiesWithinAABB(EntityXPOrb.class, boundCheck);
+		List<EntityXPOrb> entities = world.getEntitiesWithinAABB(EntityXPOrb.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityXPOrb item: entities) {
-				worldObj.removeEntity(item);
+				world.removeEntity(item);
 			}
 		}
 		
@@ -253,7 +251,7 @@ public class TileKiller extends UpgradeableTileEntity {
 	
 	@Override
 	public boolean readyToBurn() {
-		if (slots[SLOT_SWORD]!=null) {
+		if (!slots[SLOT_SWORD].isEmpty()) {
 			if (doSearch()) {
 				return true;
 			}

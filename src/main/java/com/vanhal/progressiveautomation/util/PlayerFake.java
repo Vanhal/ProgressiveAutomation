@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatBase;
@@ -29,7 +28,7 @@ public class PlayerFake extends FakePlayer {
 	//private static GameProfile NAME = new GameProfile("08B9E87C-A9F9-5161-AEC6-B671C8F4FCB9", "[VANHAL]");
 
 	public boolean isSneaking = false;
-	public ItemStack previousItem = null;
+	public ItemStack previousItem = ItemStack.EMPTY;
 	public String myName = "[VANHAL]";
 	
 	public PlayerFake(WorldServer world, String FakeName) {
@@ -58,7 +57,7 @@ public class PlayerFake extends FakePlayer {
 	}*/
 
 	@Override
-	public boolean canCommandSenderUseCommand(int var1, String var2) {
+	public boolean canUseCommand(int var1, String var2) {
 
 		return false;
 	}
@@ -110,15 +109,15 @@ public class PlayerFake extends FakePlayer {
 		ItemStack itemstack1 = getHeldItemMainhand();
 
 		if (!ItemStack.areItemStacksEqual(itemstack1, itemstack)) {
-			if (itemstack != null) {
+			if (!itemstack.isEmpty()) {
 				getAttributeMap().removeAttributeModifiers(itemstack.getAttributeModifiers(null));
 			}
-			if (itemstack1 != null) {
+			if (!itemstack1.isEmpty()) {
 				getAttributeMap().applyAttributeModifiers(itemstack1.getAttributeModifiers(null));
 			}
-			myName = "[VANHAL]" + (itemstack1 != null ? " using " + itemstack1.getDisplayName() : "");
+			myName = "[VANHAL]" + (!itemstack1.isEmpty() ? " using " + itemstack1.getDisplayName() : "");
 		}
-		previousItem = itemstack1 == null ? null : itemstack1.copy();
+		previousItem = (itemstack1.isEmpty()) ? ItemStack.EMPTY : itemstack1.copy();
 //		theItemInWorldManager.updateBlockRemoving();
 	}
 
@@ -153,12 +152,12 @@ public class PlayerFake extends FakePlayer {
 //	}
 
 	@Override
-	public void addChatMessage(ITextComponent chatmessagecomponent) {
+	public void sendMessage(ITextComponent chatmessagecomponent) {
 
 	}
 
 	@Override
-	public void addChatComponentMessage(ITextComponent chatmessagecomponent) {
+	public void sendStatusMessage(ITextComponent chatmessagecomponent, boolean actionBar) {
 
 	}
 

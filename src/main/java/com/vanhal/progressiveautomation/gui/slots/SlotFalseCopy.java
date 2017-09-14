@@ -37,7 +37,7 @@ public class SlotFalseCopy extends Slot {
 	public void putStack(ItemStack stack) {
 		ItemStack newStack = ItemStack.copyItemStack(stack);
 
-		if (newStack != null) {
+		if (!newStack.isEmpty()) {
 			newStack.stackSize = 1;
 		}
 		this.inventory.setInventorySlotContents(this.slotIndex, newStack);

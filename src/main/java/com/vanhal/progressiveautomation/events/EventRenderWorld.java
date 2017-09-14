@@ -80,12 +80,12 @@ public class EventRenderWorld {
 	@SubscribeEvent
 	public void onPlayerChangedDimension(Unload world) {
 		if (world.getWorld().provider == null ||
-				Minecraft.getMinecraft().thePlayer == null ||
-				Minecraft.getMinecraft().thePlayer.worldObj == null ||
-				Minecraft.getMinecraft().thePlayer.worldObj.provider == null) {
+				Minecraft.getMinecraft().player == null ||
+				Minecraft.getMinecraft().player.world == null ||
+				Minecraft.getMinecraft().player.world.provider == null) {
 			return;
 		}
-		if (world.getWorld().provider.getDimension() == Minecraft.getMinecraft().thePlayer.worldObj.provider.getDimension() ) {
+		if (world.getWorld().provider.getDimension() == Minecraft.getMinecraft().player.world.provider.getDimension() ) {
 			machines.clear();
 		}
 	}
@@ -95,9 +95,9 @@ public class EventRenderWorld {
 		if (ProgressiveAutomation.proxy.isServer()) return;
 		removeMachines();
 		
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		boolean holdingWrench = false;
-		if(player.inventory.getCurrentItem() == null) return;
+		if(player.inventory.getCurrentItem().isEmpty()) return;
 
 		if (player.inventory.getCurrentItem().getItem().equals(PAItems.wrench)) holdingWrench = true;
 		else return;

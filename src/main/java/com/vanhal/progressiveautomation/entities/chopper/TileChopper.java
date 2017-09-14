@@ -3,7 +3,6 @@ package com.vanhal.progressiveautomation.entities.chopper;
 import java.util.List;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -15,7 +14,6 @@ import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
@@ -132,7 +130,7 @@ public class TileChopper extends UpgradeableTileEntity {
 			chopping = true;
 		}
 		if (removeShears) {
-			if (slots[SLOT_SHEARS]!=null) slots[SLOT_SHEARS] = null;
+			if (!slots[SLOT_SHEARS].isEmpty()) slots[SLOT_SHEARS] = ItemStack.EMPTY;
 			if (hasUpgrade(UpgradeType.SHEARING)) removeUpgradeCompletely(UpgradeType.SHEARING);
 			removeShears = false;
 		}
@@ -157,7 +155,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	@Override
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			checkForChanges();
 			checkInventory();
 			
@@ -205,7 +203,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	protected void cutTree() {
-		if (slots[SLOT_AXE]==null) return;
+		if (slots[SLOT_AXE].isEmpty()) return;
 		if (currentBlock!=null) {
 			if (choppingTime<=0) { //finished chopping
 				choppingTime = 0;
@@ -224,19 +222,19 @@ public class TileChopper extends UpgradeableTileEntity {
 	
 					
 					//then break the block
-					IBlockState actualBlockState = worldObj.getBlockState(currentPosition);
+					IBlockState actualBlockState = world.getBlockState(currentPosition);
 					Block actualBlock = actualBlockState.getBlock();
 					int metaData = actualBlock.getMetaFromState(actualBlockState);
-					List<ItemStack> items = actualBlock.getDrops(worldObj, currentPosition, actualBlockState, fortuneLevel);
+					List<ItemStack> items = actualBlock.getDrops(world, currentPosition, actualBlockState, fortuneLevel);
 
 					
-					if ( (!targetTree) && (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+					if ( (!targetTree) && (!slots[SLOT_SHEARS].isEmpty()) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 						int i = 0;
 						//shear leaves
 						if (actualBlock instanceof IShearable) {
 							IShearable shearBlock = (IShearable)actualBlock;
-							if (shearBlock.isShearable(slots[SLOT_SHEARS], worldObj, currentPosition)) {
-								items = shearBlock.onSheared(slots[SLOT_SHEARS], worldObj, currentPosition,
+							if (shearBlock.isShearable(slots[SLOT_SHEARS], world, currentPosition)) {
+								items = shearBlock.onSheared(slots[SLOT_SHEARS], world, currentPosition,
 										EnchantmentHelper.getEnchantmentLevel(net.minecraft.init.Enchantments.FORTUNE, slots[SLOT_SHEARS]));
 							}
 						} else {
@@ -246,11 +244,11 @@ public class TileChopper extends UpgradeableTileEntity {
 						}
 						
 				        
-						if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
+						if (ToolHelper.damageTool(slots[SLOT_SHEARS], world, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
 							destroyTool(SLOT_SHEARS);
 						}
 					} else {
-						items = actualBlock.getDrops(worldObj, currentBlock.toPosition(), actualBlockState, fortuneLevel);
+						items = actualBlock.getDrops(world, currentBlock.toPosition(), actualBlockState, fortuneLevel);
 					}
 					
 					//get the drops
@@ -260,14 +258,14 @@ public class TileChopper extends UpgradeableTileEntity {
 					
 					//if we're chopping a tree, then damage the tool, otherwise don't
 					if (targetTree) {
-						if (ToolHelper.damageTool(slots[SLOT_AXE], worldObj, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
+						if (ToolHelper.damageTool(slots[SLOT_AXE], world, currentBlock.getX(), currentBlock.getY(), currentBlock.getZ())) {
 							destroyTool(SLOT_AXE);
 						}
 					}
 					
 					//remove the block and entity if there is one
-					worldObj.removeTileEntity( currentPosition );
-					worldObj.setBlockToAir(currentPosition);
+					world.removeTileEntity( currentPosition );
+					world.setBlockToAir(currentPosition);
 				}
 				currentBlock = null;
 				
@@ -281,13 +279,10 @@ public class TileChopper extends UpgradeableTileEntity {
 				BlockPos currentPosition = currentBlock.toPosition();
 				
 				if (validBlock(currentPosition)) {
-					IBlockState actualBlockState = worldObj.getBlockState(currentPosition);
+					IBlockState actualBlockState = world.getBlockState(currentPosition);
 					Block actualBlock = actualBlockState.getBlock();
-					int metaData = actualBlock.getMetaFromState(actualBlockState);
 					
-					choppingTime = (int)Math.ceil( actualBlock.getBlockHardness(actualBlockState, worldObj, currentPosition) * 1.5 * 20 );
-					
-					Item tool = (Item)slots[SLOT_AXE].getItem();
+					choppingTime = (int)Math.ceil( actualBlock.getBlockHardness(actualBlockState, world, currentPosition) * 1.5 * 20 );
 					
 					float choppingSpeed = 1.0f;
 	
@@ -352,7 +347,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	protected boolean validBlock(BlockPos point) {
-		if (!worldObj.isAirBlock(point)) {
+		if (!world.isAirBlock(point)) {
 			if (isTree(point)) return true;
 			else return isLeaf(point);
 		}
@@ -364,8 +359,8 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	protected boolean isTree(BlockPos point) { 
-		return (OreHelper.testOreBlock("logWood", point, worldObj)) || 
-				(OreHelper.testOreBlock("woodRubber", point, worldObj)) ||
+		return (OreHelper.testOreBlock("logWood", point, world)) || 
+				(OreHelper.testOreBlock("woodRubber", point, world)) ||
 				isTree(testBlock(point));
 	}
 	
@@ -379,8 +374,8 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	protected boolean isLeaf(BlockPos point) { 
-		return (OreHelper.testOreBlock("treeLeaves", point, worldObj)) || 
-				(OreHelper.testOreBlock("leavesRubber", point, worldObj)) ||
+		return (OreHelper.testOreBlock("treeLeaves", point, world)) || 
+				(OreHelper.testOreBlock("leavesRubber", point, world)) ||
 				isLeaf(testBlock(point));
 	}
 	
@@ -395,7 +390,7 @@ public class TileChopper extends UpgradeableTileEntity {
 	}
 	
 	protected String testBlock(BlockPos pos) {
-		IBlockState _blockState = worldObj.getBlockState(pos);
+		IBlockState _blockState = world.getBlockState(pos);
 		Block _block = _blockState.getBlock();
 		int metaData = _block.getMetaFromState(_blockState);
 		ItemStack testItem = new ItemStack(_block, 1, metaData);
@@ -406,9 +401,9 @@ public class TileChopper extends UpgradeableTileEntity {
 	
 	@Override
 	public boolean readyToBurn() {
-		if (slots[SLOT_AXE]!=null) {
+		if (!slots[SLOT_AXE].isEmpty()) {
 			if (scanBlocks()) {
-				if ( (plantSapling && (slots[SLOT_SAPLINGS]!=null)) || (blockList.size()>0) )
+				if ( (plantSapling && (!slots[SLOT_SAPLINGS].isEmpty())) || (blockList.size()>0) )
 					return true;
 			}
 		}
@@ -418,23 +413,23 @@ public class TileChopper extends UpgradeableTileEntity {
 	
 	protected boolean plantSaplings(int n, boolean doAction) {
 		//so this method will attempt to plant saplings on anything that they can be planted on
-		if (slots[SLOT_SAPLINGS]!=null) {
-			if (slots[SLOT_SAPLINGS].stackSize>0) {
+		if (!slots[SLOT_SAPLINGS].isEmpty()) {
+			if (slots[SLOT_SAPLINGS].getCount() > 0) {
 				Point2I p1 = spiral(n + 2, getPos().getX(), getPos().getZ());
 				//ProgressiveAutomation.logger.debug("Plant: "+p1.getX()+", "+getPos().getY()+", "+p1.getY());
 				if (Block.getBlockFromItem(slots[SLOT_SAPLINGS].getItem()) instanceof IPlantable) {
 					Block tree = (Block)Block.getBlockFromItem(slots[SLOT_SAPLINGS].getItem());
 					BlockPos plantPos = new BlockPos(p1.getX(), getPos().getY(), p1.getY());
-					if ( (tree.canPlaceBlockAt(worldObj, plantPos)) && 
-							(worldObj.getBlockState(plantPos).getBlock().canReplace(worldObj, plantPos, EnumFacing.DOWN, slots[SLOT_SAPLINGS])) &&
-							(worldObj.getBlockState(plantPos).getBlock() != tree)
+					if ( (tree.canPlaceBlockAt(world, plantPos)) && 
+							(world.getBlockState(plantPos).getBlock().canPlaceBlockOnSide(world, plantPos, EnumFacing.DOWN)) &&
+							(world.getBlockState(plantPos).getBlock() != tree)
 							) {
 						if (doAction) {
-							worldObj.setBlockState(plantPos, 
+							world.setBlockState(plantPos, 
 									tree.getStateFromMeta(slots[SLOT_SAPLINGS].getItem().getDamage(slots[SLOT_SAPLINGS])), 7);
-							slots[SLOT_SAPLINGS].stackSize--;
-							if (slots[SLOT_SAPLINGS].stackSize==0) {
-								slots[SLOT_SAPLINGS] = null;
+							slots[SLOT_SAPLINGS].shrink(1);
+							if (slots[SLOT_SAPLINGS].getCount() == 0) {
+								slots[SLOT_SAPLINGS] = ItemStack.EMPTY;
 							}
 						}
 						
@@ -463,10 +458,10 @@ public class TileChopper extends UpgradeableTileEntity {
 		boolean update = false;
 
 		//check axe
-		if ( (slots[SLOT_AXE] == null) && (lastAxe>=0) ) {
+		if ( (slots[SLOT_AXE].isEmpty()) && (lastAxe>=0) ) {
 			lastAxe = -1;
 			update = true;
-		} else if (slots[SLOT_AXE] != null) {
+		} else if (!slots[SLOT_AXE].isEmpty()) {
 			if (ToolHelper.getLevel(slots[SLOT_AXE]) != lastAxe) {
 				lastAxe = ToolHelper.getLevel(slots[SLOT_AXE]);
 				update = true;

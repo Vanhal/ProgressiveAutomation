@@ -21,7 +21,7 @@ public class ItemMilkerUpgrade extends ItemUpgrade {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
 		list.add(TextFormatting.GRAY + "Allows the Farmer to Milk animals into buckets");
 	   
 	}

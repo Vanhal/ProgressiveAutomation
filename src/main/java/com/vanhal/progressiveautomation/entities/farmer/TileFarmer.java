@@ -2,7 +2,6 @@ package com.vanhal.progressiveautomation.entities.farmer;
 
 import java.util.List;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
@@ -25,7 +24,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IShearable;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class TileFarmer extends UpgradeableTileEntity {
 	
@@ -94,7 +92,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	public boolean doSearch() {
 		if (searchBlock>=0) return true;
 		//search for any animals that can be fed
-		if (slots[SLOT_FOOD]!=null) {
+		if (!slots[SLOT_FOOD].isEmpty()) {
 			for (int i = 0; i < this.getRange(); i++) {
 				if (findAnimalToFeed(i)!=null) {
 					searchBlock = i;
@@ -108,7 +106,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 		
 		//if we as able to shear then search for animal to shear
 		if (hasUpgrade(UpgradeType.SHEARING)) {
-			if (slots[SLOT_SHEARS]!=null) {
+			if (!slots[SLOT_SHEARS].isEmpty()) {
 				for (int i = 0; i < this.getRange(); i++) {
 					if (findAnimalToShear(i)!=null) {
 						searchBlock = i;
@@ -123,7 +121,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 		
 		//if we are able to milk, and have empty containers then see if there is an animal to milk
 		if (hasUpgrade(UpgradeType.MILKER)) {
-			if ( (slots[SLOT_BUCKETS]!=null) && (slots[SLOT_BUCKETS].stackSize>0) ) {
+			if ( (!slots[SLOT_BUCKETS].isEmpty()) && (slots[SLOT_BUCKETS].getCount() > 0) ) {
 				for (int i = 0; i < this.getRange(); i++) {
 					if (findAnimalToMilk(i)!=null) {
 						searchBlock = i;
@@ -146,10 +144,10 @@ public class TileFarmer extends UpgradeableTileEntity {
 		Point3I point = getPoint(n);
 		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
-		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
+		List<EntityAnimal> entities = world.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityAnimal animal: entities) {
-				if ( (slots[SLOT_FOOD]!=null) && (animal.isBreedingItem(slots[SLOT_FOOD])) ) {
+				if ( (!slots[SLOT_FOOD].isEmpty()) && (animal.isBreedingItem(slots[SLOT_FOOD])) ) {
 					if (animal.getGrowingAge() == 0 && !animal.isInLove()) {
 						return animal;
 					}
@@ -164,12 +162,12 @@ public class TileFarmer extends UpgradeableTileEntity {
 		Point3I point = getPoint(n);
 		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
-		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
+		List<EntityAnimal> entities = world.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityAnimal animal: entities) {
-				if ( slots[SLOT_SHEARS]!=null ) {
+				if ( !slots[SLOT_SHEARS].isEmpty() ) {
 					if (animal instanceof IShearable) {
-						if (((IShearable)animal).isShearable(slots[SLOT_SHEARS], worldObj, point.toPosition())) {
+						if (((IShearable)animal).isShearable(slots[SLOT_SHEARS], world, point.toPosition())) {
 							return animal;
 						}
 					}
@@ -184,10 +182,10 @@ public class TileFarmer extends UpgradeableTileEntity {
 		Point3I point = getPoint(n);
 		boundCheck = new AxisAlignedBB(point.getX(), point.getY()-1, point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
-		List<EntityAnimal> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
+		List<EntityAnimal> entities = world.getEntitiesWithinAABB(EntityAnimal.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityAnimal animal: entities) {
-				if ( (slots[SLOT_BUCKETS]!=null) && (slots[SLOT_BUCKETS].stackSize>0) ) {
+				if ( (!slots[SLOT_BUCKETS].isEmpty()) && (slots[SLOT_BUCKETS].getCount() > 0) ) {
 					if (animal instanceof EntityCow) {
 						NBTTagCompound cowTag = new NBTTagCompound();
 						animal.writeEntityToNBT(cowTag);
@@ -204,7 +202,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 						} else {
 							initFaker();
 							faker.setItemInHand(slots[SLOT_BUCKETS].copy());
-							if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
+							if (animal.processInteract(faker, EnumHand.MAIN_HAND)) {
 								return animal;
 							}
 						}
@@ -220,16 +218,16 @@ public class TileFarmer extends UpgradeableTileEntity {
 		boundCheck = new AxisAlignedBB(point.getX(), point.getY(), point.getZ(), 
 				point.getX()+1, point.getY()+2, point.getZ()+1);
 		//pick up the drops
-		List<Entity> entities = worldObj.getEntitiesWithinAABB(Entity.class, boundCheck);
+		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (Entity item: entities) {
 				if (item instanceof EntityXPOrb) {
-					worldObj.removeEntity(item);
+					world.removeEntity(item);
 				} else if (item instanceof EntityItem) {
 					if (((EntityItem)item).getEntityItem().getItem() == Items.EGG) {
 						if (roomInInventory(((EntityItem)item).getEntityItem())) {
-							if (!worldObj.isRemote) addToInventory(((EntityItem)item).getEntityItem());
-							worldObj.removeEntity(item);
+							if (!world.isRemote) addToInventory(((EntityItem)item).getEntityItem());
+							world.removeEntity(item);
 						}
 					}
 				}
@@ -261,7 +259,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	protected void initFaker() {
 		if (faker == null) {
-			faker = new PlayerFake((WorldServer)worldObj, worldObj.getBlockState(pos).getBlock().getLocalizedName());
+			faker = new PlayerFake((WorldServer)world, world.getBlockState(pos).getBlock().getLocalizedName());
 			faker.setPosition(0, 0, 0);
 		}
 		faker.inventory.clear();
@@ -270,7 +268,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	@Override
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			doPickup();
 			checkInventory();
 
@@ -307,27 +305,27 @@ public class TileFarmer extends UpgradeableTileEntity {
 	}
 	
 	protected void feedAnimal(EntityAnimal animal) {
-		if (slots[SLOT_FOOD]!=null) {
+		if (!slots[SLOT_FOOD].isEmpty()) {
 			animal.setInLove(faker);
-			slots[SLOT_FOOD].stackSize--;
-			if (slots[SLOT_FOOD].stackSize==0) slots[SLOT_FOOD] = null;
+			slots[SLOT_FOOD].shrink(1);
+			if (slots[SLOT_FOOD].getCount() == 0) slots[SLOT_FOOD] = ItemStack.EMPTY;
 			currentTime = waitTime;
 			addPartialUpdate("currentTime", currentTime);
 		}
 	}
 	
 	protected void shearAnimal(EntityAnimal animal) {
-		if ( (slots[SLOT_SHEARS]!=null) && (hasUpgrade(UpgradeType.SHEARING)) ) {
+		if ( (!slots[SLOT_SHEARS].isEmpty()) && (hasUpgrade(UpgradeType.SHEARING)) ) {
 			if (animal instanceof IShearable) {
 				int fortuneLevel =  EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("fortune"), slots[SLOT_SHEARS]);
 				
-				List<ItemStack> items = ((IShearable)animal).onSheared(slots[SLOT_SHEARS], worldObj, pos, fortuneLevel);
+				List<ItemStack> items = ((IShearable)animal).onSheared(slots[SLOT_SHEARS], world, pos, fortuneLevel);
 				//get the drops
 				for (ItemStack item : items) {
 					addToInventory(item);
 				}
 				
-				if (ToolHelper.damageTool(slots[SLOT_SHEARS], worldObj, pos.getX(), pos.getY(), pos.getZ())) {
+				if (ToolHelper.damageTool(slots[SLOT_SHEARS], world, pos.getX(), pos.getY(), pos.getZ())) {
 					destroyTool(SLOT_SHEARS);
 				}
 				
@@ -338,21 +336,21 @@ public class TileFarmer extends UpgradeableTileEntity {
 	}
 	
 	protected void milkAnimal(EntityAnimal animal) {
-		if ( (slots[SLOT_BUCKETS]!=null) && (hasUpgrade(UpgradeType.MILKER)) ) {
+		if ( (!slots[SLOT_BUCKETS].isEmpty()) && (hasUpgrade(UpgradeType.MILKER)) ) {
 			initFaker();
 			ItemStack item = slots[SLOT_BUCKETS].copy();
-			item.stackSize = 1;
+			item.setCount(1);
 			faker.setItemInHand(item);
-			if (animal.processInteract(faker, EnumHand.MAIN_HAND, faker.getHeldItemMainhand())) {
+			if (animal.processInteract(faker, EnumHand.MAIN_HAND)) {
 				IInventory inv = faker.inventory;
 				for (int i = 0; i < inv.getSizeInventory(); i++){
-					if (inv.getStackInSlot(i)!=null) {
+					if (!inv.getStackInSlot(i).isEmpty()) {
 						addToInventory(inv.getStackInSlot(i));
-						inv.setInventorySlotContents(i, null);
+						inv.setInventorySlotContents(i, ItemStack.EMPTY);
 					}
 				}
-				slots[SLOT_BUCKETS].stackSize--;
-				if (slots[SLOT_BUCKETS].stackSize==0) slots[SLOT_BUCKETS] = null;
+				slots[SLOT_BUCKETS].shrink(1);
+				if (slots[SLOT_BUCKETS].getCount() == 0) slots[SLOT_BUCKETS] = ItemStack.EMPTY;
 				currentTime = waitTime;
 				addPartialUpdate("currentTime", currentTime);
 			}
@@ -360,7 +358,7 @@ public class TileFarmer extends UpgradeableTileEntity {
 	}
 	
 	public static boolean isFeed(ItemStack itemStack) {
-		if (itemStack==null) return false;
+		if (itemStack.isEmpty()) return false;
 		if (itemStack.getItem()==null) return false;
 		if (itemStack.getItem() == Items.WHEAT) return true;
 		if (itemStack.getItem() == Items.WHEAT_SEEDS) return true;
@@ -370,8 +368,8 @@ public class TileFarmer extends UpgradeableTileEntity {
 	
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if (stack == null) return false;
-		if ( (slot == this.SLOT_FOOD) && (this.isFeed(stack)) ) {
+		if (stack.isEmpty()) return false;
+		if ( (slot == this.SLOT_FOOD) && (TileFarmer.isFeed(stack)) ) {
 			return true;
 		}
 		if ( (slot == this.SLOT_SHEARS) && (stack.getItem() == Items.SHEARS) && (hasUpgrade(UpgradeType.SHEARING)) ) {

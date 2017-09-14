@@ -62,14 +62,14 @@ public class TileGenerator extends BaseTileEntity {
 	@Override
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (isBurning()) {
 				changeCharge(generationRate);
 				checkForFire();
 			}
 			
 			//Charge items in charge slot
-			if (slots[SLOT_CHARGER]!=null) {
+			if (!slots[SLOT_CHARGER].isEmpty()) {
 				if (currentStorage>0) {
 					if (slots[SLOT_CHARGER].getItem() instanceof IEnergyContainerItem) {
 						IEnergyContainerItem container = (IEnergyContainerItem)slots[SLOT_CHARGER].getItem();
@@ -92,26 +92,26 @@ public class TileGenerator extends BaseTileEntity {
 		if (isBurning() != burnUpdate) {
 			burnUpdate = isBurning();
 			
-			worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
-			worldObj.markBlockRangeForRenderUpdate(pos, pos);
+			world.getBlockState(pos).neighborChanged(world, pos, world.getBlockState(pos).getBlock(), pos);
+			world.markBlockRangeForRenderUpdate(pos, pos);
 		}
 	}
 
 	protected void checkForFire() {
-		if (fireRisk > worldObj.rand.nextFloat()) {
+		if (fireRisk > world.rand.nextFloat()) {
 			//start a fire on a block nearby
-			int n = (int)Math.floor(8*worldObj.rand.nextFloat()) + 1;
+			int n = (int)Math.floor(8*world.rand.nextFloat()) + 1;
 			Point2I p2 = spiral(n, pos.getX(), pos.getZ());
 			
 			BlockPos supportPos = new BlockPos(p2.getX(), pos.getY() - 1, p2.getY());
 			BlockPos firePos = new BlockPos(p2.getX(), pos.getY(), p2.getY());
 			
-			Block supportBlock = worldObj.getBlockState(supportPos).getBlock();
-			IBlockState fireState = worldObj.getBlockState(firePos);
+			Block supportBlock = world.getBlockState(supportPos).getBlock();
+			IBlockState fireState = world.getBlockState(firePos);
 			Block fireBlock = fireState.getBlock();
-			if ( ((fireBlock.isAir(fireState, worldObj, firePos)) 
-				&& (supportBlock.isFlammable(worldObj, supportPos, EnumFacing.UP))) ){
-				worldObj.setBlockState(firePos, Blocks.FIRE.getDefaultState());
+			if ( ((fireBlock.isAir(fireState, world, firePos)) 
+				&& (supportBlock.isFlammable(world, supportPos, EnumFacing.UP))) ){
+				world.setBlockState(firePos, Blocks.FIRE.getDefaultState());
 			}
 		}
 	}
@@ -186,7 +186,7 @@ public class TileGenerator extends BaseTileEntity {
 		for(EnumFacing facing : EnumFacing.values()) {
 			//Do we have any energy up for grabs?
 			if (currentStorage>0) {
-				TileEntity entity = worldObj.getTileEntity(pos.offset(facing));
+				TileEntity entity = world.getTileEntity(pos.offset(facing));
 				if (entity!=null) {
 					if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
 						IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());

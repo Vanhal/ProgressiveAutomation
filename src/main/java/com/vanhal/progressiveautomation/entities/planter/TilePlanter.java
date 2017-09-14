@@ -2,7 +2,6 @@ package com.vanhal.progressiveautomation.entities.planter;
 
 import java.util.List;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -48,7 +47,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	@Override
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			checkInventory();
 
 			// Pause if we're full and told to
@@ -132,11 +131,11 @@ public class TilePlanter extends UpgradeableTileEntity {
 		Point3I currentBlock = getPoint(n);
 		BlockPos currentPosition = currentBlock.toPosition();;
 		
-		IBlockState currentState = worldObj.getBlockState(currentPosition);
+		IBlockState currentState = world.getBlockState(currentPosition);
 		Block actualBlock = currentState.getBlock();
 		
-		if (slots[SLOT_HOE]!=null) {
-			List<ItemStack> items = ModHelper.harvestPlant(currentBlock, actualBlock, currentState, worldObj);
+		if (!slots[SLOT_HOE].isEmpty()) {
+			List<ItemStack> items = ModHelper.harvestPlant(currentBlock, actualBlock, currentState, world);
 			if (items!=null) {
 				for (ItemStack item : items) {
 					addToInventory(item);
@@ -147,19 +146,19 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 	
 	protected boolean plantSeed(int n, boolean doAction) {
-		if (slots[SLOT_SEEDS]!=null) {
-			if (slots[SLOT_SEEDS].stackSize>0) {
+		if (!slots[SLOT_SEEDS].isEmpty()) {
+			if (slots[SLOT_SEEDS].getCount() > 0) {
 				Point3I point = getPoint(n);
 				
 				if (ModHelper.shouldHoe(slots[SLOT_SEEDS])) {
 					hoeGround(n);
 				}
 				
-				if (ModHelper.placeSeed(worldObj, slots[SLOT_SEEDS], point, doAction)) {
+				if (ModHelper.placeSeed(world, slots[SLOT_SEEDS], point, doAction)) {
 					if (doAction) {
-						slots[SLOT_SEEDS].stackSize--;
-						 if (slots[SLOT_SEEDS].stackSize==0) {
-							 slots[SLOT_SEEDS] = null;
+						slots[SLOT_SEEDS].shrink(1);
+						 if (slots[SLOT_SEEDS].getCount() == 0) {
+							 slots[SLOT_SEEDS] = ItemStack.EMPTY;
 						 }
 					}
 					return true;
@@ -171,10 +170,10 @@ public class TilePlanter extends UpgradeableTileEntity {
 
 	protected boolean checkPlant(int n) {
 		Point3I plantPoint = getPoint(n);
-		IBlockState blockState = worldObj.getBlockState(plantPoint.toPosition());
+		IBlockState blockState = world.getBlockState(plantPoint.toPosition());
 		Block plantBlock = blockState.getBlock();
 
-		return ModHelper.isGrown(plantPoint, plantBlock, blockState, worldObj);
+		return ModHelper.isGrown(plantPoint, plantBlock, blockState, world);
 	}
 	
 	
@@ -190,23 +189,23 @@ public class TilePlanter extends UpgradeableTileEntity {
 	protected void hoeGround(int n, boolean reverse) {
 		Point3I plantPoint = getPoint(n);
 		BlockPos plantPosition = plantPoint.toPosition();
-		IBlockState plantState = worldObj.getBlockState(plantPosition);
+		IBlockState plantState = world.getBlockState(plantPosition);
 		Block plantBlock = plantState.getBlock();
 		
 		Point3I dirtPoint = new Point3I(plantPoint.getX(), plantPoint.getY() - 1, plantPoint.getZ());
 		BlockPos dirtPosition = dirtPoint.toPosition();
-		IBlockState dirtState = worldObj.getBlockState(dirtPosition);
+		IBlockState dirtState = world.getBlockState(dirtPosition);
 		Block dirtBlock = dirtState.getBlock();
 		
 		if (reverse) {
 			if (dirtBlock == Blocks.FARMLAND) {
-				worldObj.setBlockState(dirtPosition, Blocks.DIRT.getDefaultState());
+				world.setBlockState(dirtPosition, Blocks.DIRT.getDefaultState());
 			}
 		} else {
-			if (slots[SLOT_HOE]!=null) {
-				if (plantBlock.isAir(plantState, worldObj, plantPosition)) {
+			if (!slots[SLOT_HOE].isEmpty()) {
+				if (plantBlock.isAir(plantState, world, plantPosition)) {
 					if ((dirtBlock == Blocks.GRASS || dirtBlock == Blocks.DIRT)) {
-						worldObj.setBlockState(dirtPosition, Blocks.FARMLAND.getDefaultState());
+						world.setBlockState(dirtPosition, Blocks.FARMLAND.getDefaultState());
 						damageHoe(dirtPoint);
 					}
 				}
@@ -215,7 +214,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	}
 	
 	protected void damageHoe(Point3I point) {
-		if (ToolHelper.damageTool(slots[SLOT_HOE], worldObj, point.getX(), point.getY(), point.getZ())) {
+		if (ToolHelper.damageTool(slots[SLOT_HOE], world, point.getX(), point.getY(), point.getZ())) {
 			destroyTool(SLOT_HOE);
 		}
 	}
@@ -227,7 +226,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 	protected int statusSet = 0;
 	
 	public int getStatus() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			return statusSet;
 		} else {
 			if (searchBlock > -1) {
@@ -249,7 +248,7 @@ public class TilePlanter extends UpgradeableTileEntity {
 
 	@Override
 	public boolean readyToBurn() {
-		if (slots[SLOT_HOE]!=null) {
+		if (!slots[SLOT_HOE].isEmpty()) {
 			if (doSearch()) {
 				return true;
 			}

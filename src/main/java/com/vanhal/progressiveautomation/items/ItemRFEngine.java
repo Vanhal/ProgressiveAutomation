@@ -23,7 +23,7 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	private static DecimalFormat rfDecimalFormat = new DecimalFormat("###,###,###,###,###");
 	
 	public ItemRFEngine() {
-		super("RFEngine");
+		super("RfEngine");
 		//setTextureName(Ref.MODID+":RFEngine");
 		setMaxStackSize(1);
 		setMaxCharge(PAConfig.rfStored);
@@ -77,8 +77,8 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	
 	
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
-    	if ( (itemStack!=null) && (isInit(itemStack)) ) {
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
+    	if ( (!itemStack.isEmpty()) && (isInit(itemStack)) ) {
     		int charge = getCharge(itemStack);
     		list.add(TextFormatting.RED + "" + 
     				String.format("%s", rfDecimalFormat.format(charge)) + "/" +

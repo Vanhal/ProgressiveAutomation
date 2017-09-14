@@ -59,7 +59,7 @@ public class BlockCrafter extends BaseBlock {
 	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
 		TileCrafter crafter = (TileCrafter)world.getTileEntity(pos);
 		if (crafter!=null) {
-			crafter.setInventorySlotContents(crafter.CRAFT_RESULT, null);
+			crafter.setInventorySlotContents(crafter.CRAFT_RESULT, ItemStack.EMPTY);
 		}
 		return super.getInsides(world, pos);
 	}

@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUICapacitor extends BaseGUI {
 	
-public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Capacitor.png");
+public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/capacitor.png");
 	
 	protected int infoScreenX = 68;
 	protected int infoScreenW = 87;

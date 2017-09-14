@@ -32,7 +32,7 @@ public class ItemFillerUpgrade extends ItemUpgrade {
 	}
 	
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List list, boolean par) {
+    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
 		list.add(TextFormatting.GRAY + "Will make the miner fill in any air and fluid blocks while mining");
        
     }

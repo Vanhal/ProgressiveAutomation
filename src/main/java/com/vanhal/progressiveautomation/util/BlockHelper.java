@@ -2,7 +2,6 @@ package com.vanhal.progressiveautomation.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -144,7 +143,7 @@ public final class BlockHelper {
 
 	public static int determineXZPlaceFacing(EntityLivingBase living) {
 
-		int quadrant = MathHelper.floor_double(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int quadrant = MathHelper.floor(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 
 		switch (quadrant) {
 		case 0:
@@ -371,7 +370,7 @@ public final class BlockHelper {
 		}
 		int meta = worldObj.getBlockMetadata(x, y, z);
 		List<ItemStack> stacks = null;
-		if (silkTouch && block.canSilkHarvest(worldObj, null, x, y, z, meta)) {
+		if (silkTouch && block.canSilkHarvest(worldObj, null, x, y, z, meta)) {	//Be careful here, if you ever uncomment. ItemStack can't be null.
 			stacks = new LinkedList<ItemStack>();
 			stacks.add(createStackedBlock(block, meta));
 		} else {
@@ -380,7 +379,7 @@ public final class BlockHelper {
 		if (!doBreak) {
 			return stacks;
 		}
-		worldObj.playAuxSFXAtEntity(null, 2001, new BlockPos(x, y, z), Block.getIdFromBlock(block) + (meta << 12));
+		worldObj.playAuxSFXAtEntity(null, 2001, new BlockPos(x, y, z), Block.getIdFromBlock(block) + (meta << 12));	//ItemStack can't be null
 		worldObj.setBlockToAir(BlockPos(x, y, z));
 
 		List<EntityItem> result = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(x - 2, y - 2, z - 2, x + 3, y + 3, z + 3));

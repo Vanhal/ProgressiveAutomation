@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -17,18 +16,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 import com.vanhal.progressiveautomation.util.Point3I;
 
 
 public class AgriCraft extends Vanilla {
 	
-	private PlayerFake faker = null;
-
 	public AgriCraft() {
 		this.modID = "agricraft";
 	}
@@ -41,7 +35,7 @@ public class AgriCraft extends Vanilla {
 	@Override
 	public boolean isPlantible(ItemStack item) {
 		if (item.getItem() instanceof IPlantable) return true;
-		if (item != null) {
+		if (!item.isEmpty()) {
 			if (item.getItem() != null) {
 				if (item.getItem().toString().contains("ItemAgriSeed")) {
 					return true;
@@ -100,8 +94,8 @@ public class AgriCraft extends Vanilla {
 				faker.inventory.setInventorySlotContents(1, itemStack.copy());
 				faker.setItemInHand(1);
 				faker.setPosition(point.getX(), point.getY(), point.getZ());
-				actualBlock.onBlockActivated(worldObj, point.toPosition(), block, faker, EnumHand.MAIN_HAND, faker.inventory.getStackInSlot(1), EnumFacing.UP, 0, 0, 0);
-				if ( (faker.inventory.getStackInSlot(1)!=null) && (faker.inventory.getStackInSlot(1).stackSize==itemStack.stackSize) ) {
+				actualBlock.onBlockActivated(worldObj, point.toPosition(), block, faker, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
+				if ( (!faker.inventory.getStackInSlot(1).isEmpty()) && (faker.inventory.getStackInSlot(1).getCount() == itemStack.getCount()) ) {
 					faker = null;
 					return false;
 				}
@@ -115,7 +109,7 @@ public class AgriCraft extends Vanilla {
 	@Override
 	public List<ItemStack> harvestPlant(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
 		PlayerFake faker = new PlayerFake((WorldServer)worldObj);
-		plantBlock.onBlockActivated(worldObj, plantPoint.toPosition(), state, faker, EnumHand.MAIN_HAND, null, EnumFacing.UP, 0, 0, 0);
+		plantBlock.onBlockActivated(worldObj, plantPoint.toPosition(), state, faker, EnumHand.MAIN_HAND, EnumFacing.UP, 0, 0, 0);
 		
 		AxisAlignedBB block = new AxisAlignedBB(plantPoint.getX(), plantPoint.getY(), plantPoint.getZ(), 
 								plantPoint.getX()+1, plantPoint.getY()+1, plantPoint.getZ()+1);

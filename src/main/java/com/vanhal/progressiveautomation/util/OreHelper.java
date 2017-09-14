@@ -46,7 +46,7 @@ public class OreHelper {
 	}
 	
 	public static boolean testOre(int testOreID, ItemStack testItem) {
-		if (testItem == null || testItem.getItem() == null) return false;
+		if (testItem.isEmpty() || testItem.getItem() == null) return false;
 		int[] ordIDs = OreDictionary.getOreIDs(testItem);
 		for (int oreID: ordIDs) {
 			if (testOreID == oreID) return true;

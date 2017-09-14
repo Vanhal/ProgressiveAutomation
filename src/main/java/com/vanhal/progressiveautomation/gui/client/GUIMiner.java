@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GUIMiner extends BaseGUI {
-	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Miner.png");
+	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/miner.png");
 	protected int infoScreenX = 38;
 	protected int infoScreenW = 66;
 	protected int infroScreenY1 = 17;
@@ -42,13 +42,13 @@ public class GUIMiner extends BaseGUI {
 				if (miner.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
 				readyToMine = false;
-			} else if ( (miner.getStackInSlot(1) == null) && (!miner.hasUpgrade(UpgradeType.COBBLE_GEN)) ) {
+			} else if ( (miner.getStackInSlot(1).isEmpty()) && (!miner.hasUpgrade(UpgradeType.COBBLE_GEN)) ) {
 				drawString(StringHelper.localize("gui.need.cobble"), infoScreenX, infoScreenW, infroScreenY2, RED);
 				readyToMine = false;
-			} else if (miner.getStackInSlot(miner.SLOT_PICKAXE) == null) {
+			} else if (miner.getStackInSlot(miner.SLOT_PICKAXE).isEmpty()) {
 				drawString(StringHelper.localize("gui.need.pick"), infoScreenX, infoScreenW, infroScreenY2, RED);
 				readyToMine = false;
-			} else if (miner.getStackInSlot(miner.SLOT_SHOVEL) == null) {
+			} else if (miner.getStackInSlot(miner.SLOT_SHOVEL).isEmpty()) {
 				drawString(StringHelper.localize("gui.need.shovel"), infoScreenX, infoScreenW, infroScreenY2, RED);
 				readyToMine = false;
 			} else {

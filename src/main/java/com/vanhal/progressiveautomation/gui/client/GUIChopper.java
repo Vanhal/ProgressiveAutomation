@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIChopper extends BaseGUI {
 	
-	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/Chopper.png");
+	public static final ResourceLocation texture = new ResourceLocation(Ref.MODID, "textures/gui/chopper.png");
 	protected int infoScreenX = 38;
 	protected int infoScreenW = 66;
 	protected int infroScreenY1 = 17;
@@ -41,9 +41,9 @@ public class GUIChopper extends BaseGUI {
 				String fuelString = "gui.need.fuel";
 				if (chopper.hasEngine()) fuelString = "gui.need.energy";
 				drawString(StringHelper.localize(fuelString), infoScreenX, infoScreenW, infroScreenY2, RED);
-			} else if ( (chopper.getStackInSlot(chopper.SLOT_SAPLINGS) == null) && (!chopper.isBurning()) ) {
+			} else if ( (chopper.getStackInSlot(chopper.SLOT_SAPLINGS).isEmpty()) && (!chopper.isBurning()) ) {
 				drawString(StringHelper.localize("gui.need.sapling"), infoScreenX, infoScreenW, infroScreenY2, RED);
-			} else if (chopper.getStackInSlot(chopper.SLOT_AXE) == null) {
+			} else if (chopper.getStackInSlot(chopper.SLOT_AXE).isEmpty()) {
 				drawString(StringHelper.localize("gui.need.axe"), infoScreenX, infoScreenW, infroScreenY2, RED);
 			} else {
 				readyToChop = true;

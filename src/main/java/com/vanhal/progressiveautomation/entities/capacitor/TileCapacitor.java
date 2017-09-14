@@ -50,9 +50,9 @@ public class TileCapacitor extends BaseTileEntity {
 	@Override
 	public void update() {
 		super.update();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			//Charge items in charge slot
-			if (slots[SLOT_CHARGER]!=null) {
+			if (!slots[SLOT_CHARGER].isEmpty()) {
 				if (currentStorage>0) {
 					if (slots[SLOT_CHARGER].getItem() instanceof IEnergyContainerItem) {
 						IEnergyContainerItem container = (IEnergyContainerItem)slots[SLOT_CHARGER].getItem();
@@ -65,12 +65,12 @@ public class TileCapacitor extends BaseTileEntity {
 			}
 			
 			//output only of we don't get a redstone signal
-			if(worldObj.getRedstonePower(pos, EnumFacing.UP)==0 ||
-				worldObj.getRedstonePower(pos, EnumFacing.DOWN)==0 ||
-				worldObj.getRedstonePower(pos, EnumFacing.NORTH)==0 ||
-				worldObj.getRedstonePower(pos, EnumFacing.SOUTH)==0 ||
-				worldObj.getRedstonePower(pos, EnumFacing.WEST)==0 ||
-				worldObj.getRedstonePower(pos, EnumFacing.EAST)==0){
+			if(world.getRedstonePower(pos, EnumFacing.UP)==0 ||
+				world.getRedstonePower(pos, EnumFacing.DOWN)==0 ||
+				world.getRedstonePower(pos, EnumFacing.NORTH)==0 ||
+				world.getRedstonePower(pos, EnumFacing.SOUTH)==0 ||
+				world.getRedstonePower(pos, EnumFacing.WEST)==0 ||
+				world.getRedstonePower(pos, EnumFacing.EAST)==0) {
 				//output the energy to connected devices....
 				outputEnergy();
 			}
@@ -149,7 +149,7 @@ public class TileCapacitor extends BaseTileEntity {
 		for(EnumFacing facing : EnumFacing.values()) {
 			//Do we have any energy up for grabs?
 			if (currentStorage>0) {
-				TileEntity entity = worldObj.getTileEntity(pos.offset(facing));
+				TileEntity entity = world.getTileEntity(pos.offset(facing));
 				if (entity!=null) {
 					if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
 						IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());

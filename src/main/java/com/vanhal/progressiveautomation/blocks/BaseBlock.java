@@ -2,10 +2,10 @@ package com.vanhal.progressiveautomation.blocks;
 
 import java.util.ArrayList;
 
+import com.google.common.base.CaseFormat;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.items.ItemBlockMachine;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.Ref;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
@@ -19,9 +19,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -30,6 +32,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -70,15 +73,19 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		super(Material.IRON);
 		
 		this.machineType = machineType;
-		name = machineType+returnLevelName(level);
-		setUnlocalizedName(name);
-		
-		
+		setName(machineType+returnLevelName(level));
 		setHardness(1.0f);
 		setCreativeTab(ProgressiveAutomation.PATab);
 		blockLevel = level;
 		
 		GUIid = ProgressiveAutomation.proxy.registerGui(machineType);
+	}
+	
+	public void setName(String newName) {
+		//1.11 requires this new name format!
+		name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, newName);
+		setUnlocalizedName(name);
+		setRegistryName(name);
 	}
 	
 	public String getLevelName() {
@@ -95,8 +102,9 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if ( (heldItem != null) && (heldItem.getItem() != null) && (heldItem.getItem() == PAItems.wrench) ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
+		if ( (!heldItem.isEmpty()) && (heldItem.getItem() != null) && (heldItem.getItem() == PAItems.wrench) ) {
 			return false;
 		} else if (!world.isRemote) {
 			if (GUIid>=0) {
@@ -131,13 +139,14 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
     }
 	
 	public void dumpItems(World world, BlockPos pos, ItemStack items) {
+		
 		EntityItem entItem = new EntityItem(world, (float)pos.getX() + 0.5f, (float)pos.getY() + 0.5f, (float)pos.getZ() + 0.5f, items);
 		float f3 = 0.05F;
 		entItem.motionX = (double)((float)world.rand.nextGaussian() * f3);
 		entItem.motionY = (double)((float)world.rand.nextGaussian() * f3 + 0.2F);
 		entItem.motionZ = (double)((float)world.rand.nextGaussian() * f3);
 		
-		world.spawnEntityInWorld(entItem);
+		world.spawnEntity(entItem);
 	}
 	
 	public void addRecipe(Block previousTier) {
@@ -145,14 +154,19 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	public void preInit(Block previousTier) {
-		GameRegistry.registerBlock(this, ItemBlockMachine.class, name);
+		final ItemBlock itemBlock = new ItemBlock(this);
+		GameRegistry.register(this);
+		GameRegistry.register(itemBlock, this.getRegistryName());
 		addRecipe(previousTier);
 	}
 	
 	public void init() {
+		//1.11 ResourceLocation changed! This should fix it ~~Psycho Ray
+		String block_name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
+		
 		if (ProgressiveAutomation.proxy.isClient()) {
 			Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-				.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Ref.MODID + ":" + name, "inventory"));
+				.register(Item.getItemFromBlock(this), 0, new ModelResourceLocation(Ref.MODID + ":" + block_name, "inventory"));
 		}
 	}
 	
@@ -167,7 +181,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
         	//get the inventory
             for (int i = 0; i < tileEntity.getSizeInventory(); ++i) {
                 ItemStack itemstack = tileEntity.getStackInSlot(i);
-                if (itemstack != null) {
+                if (!itemstack.isEmpty()) {
                 	items.add(itemstack);
                 }
             }
@@ -179,7 +193,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 					while (amount > 0) {
 						ItemStack upgradeItemStack = new ItemStack(UpgradeRegistry.getUpgradeItem(upgradeType));
 						int stackSize = amount > 64 ? 64 : amount;
-						upgradeItemStack.stackSize = stackSize;
+						upgradeItemStack.setCount(stackSize);
 						amount -= stackSize;
 						items.add(upgradeItemStack);
 					}
@@ -242,6 +256,17 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 		else if (dir == EnumFacing.SOUTH) return EnumFacing.WEST;
 		else if (dir == EnumFacing.WEST) return EnumFacing.NORTH;
 		return dir;
+	}
+	
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
+		if (!worldIn.isRemote) {
+			if (worldIn.getTileEntity(pos) instanceof BaseTileEntity) {
+				BaseTileEntity tileEntity = (BaseTileEntity) worldIn.getTileEntity(pos);
+				tileEntity.readFromItemStack(stack);
+			}
+		}
 	}
 	
 }
