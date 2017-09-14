@@ -21,7 +21,7 @@ import net.minecraft.world.WorldServer;
 public class RightClick extends Vanilla {
 
 	public RightClick() {
-		this.modID = "RightClickPlants";
+		this.modID = "rightclickplants";
 	}
 	
 	@Override

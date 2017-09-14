@@ -28,7 +28,7 @@ import com.vanhal.progressiveautomation.compat.BaseMod;
 public class Pneumaticcraft extends BaseMod {
 	
 	public Pneumaticcraft() {
-		modID = "PneumaticCraft";
+		modID = "pneumaticcraft";
 	}
 	
 	/*@Override
