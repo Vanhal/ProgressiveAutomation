@@ -16,6 +16,7 @@
 /.classpath
 /.project
 /bin
+.classpath
 
 ## intellij
 /out
