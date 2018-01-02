@@ -58,6 +58,7 @@ item.CoalPellet.name=煤粒
 item.WitherWood.name=凋零木板
 item.WitherStone.name=凋零石板
 item.WitherIron.name=凋零鐵錠
+item.WitherGold.name=凋零金錠
 item.WitherDiamond.name=凋零鑽石
 
 gui.miner=採礦機
