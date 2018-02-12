@@ -87,7 +87,7 @@ gui.producing=創造中
 gui.maximum=最大
 gui.need.fuel=需要燃料
 gui.need.energy=需要RF能量
-gui.need.items=缺少物品...
+gui.need.items=缺少物品…
 gui.need.cobble=需要鵝卵石
 gui.need.sapling=需要樹苗
 gui.need.seeds=需要種子
@@ -99,10 +99,10 @@ gui.need.sword=需要劍
 
 gui.hi.chopper=它會伐木
 gui.hi.planter=我能種植
-gui.hi.miner=讓我們挖掘吧! 
-gui.hi.killer=壞蛋怪物! 
+gui.hi.miner=讓我們挖掘吧！
+gui.hi.killer=壞蛋怪物！
 gui.hi.farmer=喜歡兔子
-gui.addtools=添加工具! 
+gui.addtools=添加工具！
 gui.invalidtool.1=工具等級
 gui.invalidtool.2=過高
 
