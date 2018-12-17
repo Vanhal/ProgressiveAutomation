@@ -9,7 +9,7 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -34,7 +34,7 @@ minecraft {
     runDir = "run"
     
     replace "@VERSION@", project.version
-    mappings = "snapshot_20161220"
+    mappings = "stable_39"
 }
 
 processResources
@@ -56,3 +56,18 @@ processResources
         exclude 'mcmod.info'
     }
 }
+
+repositories {
+  maven { // CoFH
+    name 'Covers Maven'
+    url 'http://maven.covers1624.net/'
+  }
+}
+
+dependencies {
+  deobfProvided ("cofh:CoFHCore:${mc_version}-${cofhcore_version}:universal") {
+    exclude group: 'mezz.jei'
+  }
+}
+
+  
