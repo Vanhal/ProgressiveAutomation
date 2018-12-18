@@ -6,10 +6,15 @@ import java.util.List;
 import com.vanhal.progressiveautomation.PAConfig;
 
 import net.minecraft.block.Block;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+@Mod.EventBusSubscriber
 public class PABlocks {
-
-	public PABlocks() {
+	public static final List<Block> blocks = new ArrayList<>();
+	
+	public static void preInit() {
 		//create the blocks
 		for (int i = 0; i <= 3; i++) {
 			if (PAConfig.allowLevel(i)) {
@@ -24,147 +29,43 @@ public class PABlocks {
 			}
 		}
 
-		Block previousTier = BlockMiner.firstTier;
-		for (BlockMiner blockMiner : miner) {
-			blockMiner.preInit(previousTier);
-			previousTier = blockMiner;
-		}
-		
-		previousTier = BlockChopper.firstTier;
-		for (BlockChopper blockChopper : chopper) {
-			blockChopper.preInit(previousTier);
-			previousTier = blockChopper;
-		}
-		
-		previousTier = BlockPlanter.firstTier;
-		for (BlockPlanter blockPlanter : planter) {
-			blockPlanter.preInit(previousTier);
-			previousTier = blockPlanter;
-		}
-		
-		previousTier = BlockGenerator.firstTier;
-		for (BlockGenerator blockGenerator : generator) {
-			blockGenerator.preInit(previousTier);
-			previousTier = blockGenerator;
-		}
-		
-		previousTier = BlockCrafter.firstTier;
-		for (BlockCrafter blockCrafter : crafter) {
-			blockCrafter.preInit(previousTier);
-			previousTier = blockCrafter;
-		}
-		
-		previousTier = BlockFarmer.firstTier;
-		for (BlockFarmer blockFarmer : farmer) {
-			blockFarmer.preInit(previousTier);
-			previousTier = blockFarmer;
-		}
-		
-		previousTier = BlockKiller.firstTier;
-		for (BlockKiller blockKiller : killer) {
-			blockKiller.preInit(previousTier);
-			previousTier = blockKiller;
-		}
-		
-		previousTier = BlockCapacitor.firstTier;
-		for (BlockCapacitor blockCapacitor : capacitor) {
-			blockCapacitor.preInit(previousTier);
-			previousTier = blockCapacitor;
-		}
+		blocks.addAll(miner);
+		blocks.addAll(chopper);
+		blocks.addAll(planter);
+		blocks.addAll(crafter);
+		blocks.addAll(killer);
+		blocks.addAll(farmer);
+		blocks.addAll(generator);
+		blocks.addAll(capacitor);	
 	}
-
-	public static void init() {
-		for (BlockMiner blockMiner : miner) {
-			blockMiner.init();
-		}
-		
-		for (BlockChopper blockChopper : chopper) {
-			blockChopper.init();
-		}
-		
-		for (BlockPlanter blockPlanter : planter) {
-			blockPlanter.init();
-		}
-		
-		for (BlockGenerator blockGenerator : generator) {
-			blockGenerator.init();
-		}
-		
-		for (BlockCrafter blockCrafter : crafter) {
-			blockCrafter.init();
-		}
-		
-		for (BlockKiller blockKiller : killer) {
-			blockKiller.init();
-		}
-		
-		for (BlockFarmer blockfarmer : farmer) {
-			blockfarmer.init();
-		}
-		
-		for (BlockCapacitor blockCapacitor : capacitor) {
-			blockCapacitor.init();
-		}
+	
+	@SubscribeEvent
+	public void blockRegister(RegistryEvent.Register<Block> event) {
+		event.getRegistry().registerAll(blocks.toArray(new Block[blocks.size()]));
 	}
-
-	public static void postInit() {
-		for (BlockMiner blockMiner : miner) {
-			blockMiner.postInit();
-		}
-		
-		for (BlockChopper blockChopper : chopper) {
-			blockChopper.postInit();
-		}
-		
-		for (BlockPlanter blockPlanter : planter) {
-			blockPlanter.postInit();
-		}
-		
-		for (BlockGenerator blockGenerator : generator) {
-			blockGenerator.postInit();
-		}
-		
-		for (BlockCrafter blockCrafter : crafter) {
-			blockCrafter.postInit();
-		}
-		
-		for (BlockKiller blockKiller : killer) {
-			blockKiller.postInit();
-		}
-		
-		for (BlockFarmer blockfarmer : farmer) {
-			blockfarmer.postInit();
-		}
-		
-		for (BlockCapacitor blockCapacitor : capacitor) {
-			blockCapacitor.postInit();
-		}
-	}
-
-	//blocks
-
+	
 	//miners
-	public static List<BlockMiner> miner = new ArrayList<BlockMiner>(4);
+	private static List<BlockMiner> miner = new ArrayList<BlockMiner>(4);
 
 	//choppers
-	public static List<BlockChopper> chopper = new ArrayList<BlockChopper>(4);
+	private static List<BlockChopper> chopper = new ArrayList<BlockChopper>(4);
 
 	//planters
-	public static List<BlockPlanter> planter = new ArrayList<BlockPlanter>(4);
+	private static List<BlockPlanter> planter = new ArrayList<BlockPlanter>(4);
 
 	//generators
-	public static List<BlockGenerator> generator = new ArrayList<BlockGenerator>(4);
+	private static List<BlockGenerator> generator = new ArrayList<BlockGenerator>(4);
 	
 	//crafters
-	public static List<BlockCrafter> crafter = new ArrayList<BlockCrafter>(4);
+	private static List<BlockCrafter> crafter = new ArrayList<BlockCrafter>(4);
 	
 	//killers
-	public static List<BlockKiller> killer = new ArrayList<BlockKiller>(4);
+	private static List<BlockKiller> killer = new ArrayList<BlockKiller>(4);
 		
 	//farmers
-	public static List<BlockFarmer> farmer = new ArrayList<BlockFarmer>(4);
+	private static List<BlockFarmer> farmer = new ArrayList<BlockFarmer>(4);
 	
 	//capacitors
-	public static List<BlockCapacitor> capacitor = new ArrayList<BlockCapacitor>(4);
+	private static List<BlockCapacitor> capacitor = new ArrayList<BlockCapacitor>(4);
 
 }

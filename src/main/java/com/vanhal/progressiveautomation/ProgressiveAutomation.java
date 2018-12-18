@@ -12,6 +12,7 @@ import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
 import com.vanhal.progressiveautomation.items.PAItems;
+import com.vanhal.progressiveautomation.items.tools.WitherTools;
 import com.vanhal.progressiveautomation.ref.Ref;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -67,18 +68,16 @@ public class ProgressiveAutomation {
 				PartialTileNBTUpdateMessage.class, Side.CLIENT);
 
 		PAConfig.init(new Configuration(event.getSuggestedConfigurationFile()));
-
 		PAItems.preInit();
 		PABlocks.preInit();
-
+		WitherTools.preInit();
+		
 		PAConfig.save();
 		MinecraftForge.EVENT_BUS.register(new EventPlayers());
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-		PAItems.init(event);
-		PABlocks.init();
 
 		ModHelper.init();
 
@@ -89,8 +88,6 @@ public class ProgressiveAutomation {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		PAItems.postInit();
-		PABlocks.postInit();
 
 		proxy.registerEntities();
 

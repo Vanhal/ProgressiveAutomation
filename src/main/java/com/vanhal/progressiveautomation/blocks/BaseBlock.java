@@ -154,10 +154,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	public void preInit(Block previousTier) {
-//		final ItemBlock itemBlock = new ItemBlock(this);
-/*		GameRegistry.register(this);
-		GameRegistry.register(itemBlock, this.getRegistryName());
-		addRecipe(previousTier);*/
+		PAItems.addItemBlock(this);
 	}
 	
 	public void init() {

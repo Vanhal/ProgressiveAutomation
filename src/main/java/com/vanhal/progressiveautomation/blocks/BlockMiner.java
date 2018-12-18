@@ -6,9 +6,7 @@ import com.vanhal.progressiveautomation.entities.miner.TileMinerIron;
 import com.vanhal.progressiveautomation.entities.miner.TileMinerStone;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -27,8 +25,6 @@ public class BlockMiner extends BaseBlock {
 		else if (blockLevel == ToolHelper.LEVEL_STONE) return new TileMinerStone();
 		else return new TileMiner();
 	}
-	
-	public static final Block firstTier = Blocks.FURNACE;
 	
 	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {
