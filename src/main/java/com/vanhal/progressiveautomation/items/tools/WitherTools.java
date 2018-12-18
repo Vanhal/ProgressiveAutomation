@@ -1,17 +1,9 @@
 package com.vanhal.progressiveautomation.items.tools;
 
-import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
-
-import com.vanhal.progressiveautomation.ref.Ref;
-
-import net.minecraft.init.Items;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.RecipeSorter;
-
 public class WitherTools {
 
 	public static void preInit() {
-		RecipeSorter.register(Ref.MODID+":witherTool", RecipeWitherTool.class, SHAPED, "after:forge:shapedore");
+//		RecipeSorter.register(Ref.MODID+":witherTool", RecipeWitherTool.class, SHAPED, "after:forge:shapedore");
 		
 		witherWood = new ItemWitherWood();
 		witherStone = new ItemWitherStone();
@@ -26,11 +18,11 @@ public class WitherTools {
 		witherDiamond.preInit();
 		
 		//add recipes for the tools
-		woodenRecipes();
+/*		woodenRecipes();
 		stoneRecipes();
 		ironRecipes();
 		goldRecipes();
-		diamondRecipes();
+		diamondRecipes(); */
 	}
 	
 	public static void init() {
@@ -45,7 +37,7 @@ public class WitherTools {
 
 	}
 	
-	protected static void woodenRecipes() {
+/*	protected static void woodenRecipes() {
 		RecipeWitherTool recipe = new RecipeWitherTool(Items.WOODEN_AXE, new Object[]{
 				"mm ", "ms ", " s ", 'm', witherWood, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
@@ -133,7 +125,7 @@ public class WitherTools {
 		recipe = new RecipeWitherTool(Items.DIAMOND_SWORD, new Object[]{
 				" m ", " m ", " s ", 'm', witherDiamond, 's', "stickWood"});
 		GameRegistry.addRecipe(recipe);
-	}
+	} */
 	
 	//wither resources
 	public static ItemWitherWood witherWood = null;

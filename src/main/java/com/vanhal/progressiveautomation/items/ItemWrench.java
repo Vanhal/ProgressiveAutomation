@@ -12,9 +12,9 @@ import com.vanhal.progressiveautomation.util.IDismantleable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -24,8 +24,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemWrench extends BaseItem {
 	public ItemWrench() {
@@ -46,8 +44,9 @@ public class ItemWrench extends BaseItem {
 	}
 	
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean bool) {
-		list.add(TextFormatting.GRAY + "Current Mode: "+TextFormatting.WHITE+getMode(itemStack));
+	public void addInformation(final ItemStack stack, final World worldIn,
+			final List<String> tooltip, final ITooltipFlag flagIn) {
+		tooltip.add(TextFormatting.GRAY + "Current Mode: "+TextFormatting.WHITE+getMode(stack));
 	}
 	
 	@Override

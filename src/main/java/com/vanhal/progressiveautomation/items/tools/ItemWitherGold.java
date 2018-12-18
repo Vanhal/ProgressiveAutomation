@@ -4,14 +4,12 @@ import java.util.List;
 
 import com.vanhal.progressiveautomation.items.BaseItem;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ItemWitherGold extends BaseItem {
 	public ItemWitherGold() {
@@ -23,7 +21,7 @@ public class ItemWitherGold extends BaseItem {
         return true;
     }
 
-    protected void addNormalRecipe() {
+    /* protected void addNormalRecipe() {
 		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 2), 
 				Items.NETHER_STAR, 
 				Items.GOLD_INGOT, 
@@ -34,10 +32,12 @@ public class ItemWitherGold extends BaseItem {
 
 	protected void addUpgradeRecipe() {
 		addNormalRecipe();
-	}
+	}*/
 	
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
-    	list.add(TextFormatting.GRAY + "Can be used to craft tools");
+	@Override
+    public void addInformation(final ItemStack stack, final World worldIn,
+    		final List<String> tooltip, final ITooltipFlag flagIn) {
+    	tooltip.add(TextFormatting.GRAY + "Can be used to craft tools");
     }
 }

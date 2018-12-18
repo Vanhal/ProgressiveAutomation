@@ -12,6 +12,7 @@ import com.vanhal.progressiveautomation.entities.BaseTileEntity;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -30,29 +31,30 @@ public class ItemBlockMachine extends ItemBlock {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
+    public void addInformation(final ItemStack stack, final World worldIn,
+    		final List<String> tooltip, final ITooltipFlag flagIn) {
 		if (this.block instanceof BlockFarmer) {
-			list.add(TextFormatting.GRAY + "Used to breed animals");
-			list.add(TextFormatting.GRAY + "Use upgrades for shearing and milking");
-			list.add(TextFormatting.GRAY + "Place on the same level as the animals");
+			tooltip.add(TextFormatting.GRAY + "Used to breed animals");
+			tooltip.add(TextFormatting.GRAY + "Use upgrades for shearing and milking");
+			tooltip.add(TextFormatting.GRAY + "Place on the same level as the animals");
 		} else if (this.block instanceof BlockKiller) {
-			list.add(TextFormatting.GRAY + "Used to kill things that are on top of it");
-			list.add(TextFormatting.GRAY + "Use filter upgrades to determine which types");
+			tooltip.add(TextFormatting.GRAY + "Used to kill things that are on top of it");
+			tooltip.add(TextFormatting.GRAY + "Use filter upgrades to determine which types");
 		} else if (this.block instanceof BlockPlanter) {
-			list.add(TextFormatting.GRAY + "Can plant and harvest all types of crops");
-			list.add(TextFormatting.GRAY + "Machine should be placed one block below the ground");
+			tooltip.add(TextFormatting.GRAY + "Can plant and harvest all types of crops");
+			tooltip.add(TextFormatting.GRAY + "Machine should be placed one block below the ground");
 		} else if (this.block instanceof BlockChopper) {
-			list.add(TextFormatting.GRAY + "Can plant and harvest all types of tree");
-			list.add(TextFormatting.GRAY + "Machine should be placed on the same level as saplings");
+			tooltip.add(TextFormatting.GRAY + "Can plant and harvest all types of tree");
+			tooltip.add(TextFormatting.GRAY + "Machine should be placed on the same level as saplings");
 		} else if (this.block instanceof BlockGenerator) {
-			list.add(TextFormatting.GRAY + "Produces RF from fuel");
+			tooltip.add(TextFormatting.GRAY + "Produces RF from fuel");
 		} else if (this.block instanceof BlockCapacitor) {
-			list.add(TextFormatting.GRAY + "Energy can be input into the red face");
-			list.add(TextFormatting.GRAY + "will be distributed out from the other faces");
+			tooltip.add(TextFormatting.GRAY + "Energy can be input into the red face");
+			tooltip.add(TextFormatting.GRAY + "will be distributed out from the other faces");
 		}
 		
-		if ( (!itemStack.isEmpty()) && (itemStack.getTagCompound() != null) ) {
-			list.add(TextFormatting.GRAY + "Pre-Configured");
+		if ( (!stack.isEmpty()) && (stack.getTagCompound() != null) ) {
+			tooltip.add(TextFormatting.GRAY + "Pre-Configured");
 		}
 		
     }

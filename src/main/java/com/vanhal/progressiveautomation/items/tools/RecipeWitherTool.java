@@ -4,14 +4,15 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class RecipeWitherTool extends ShapedOreRecipe {
 	
 	protected ItemStack output = ItemStack.EMPTY;
 
-	public RecipeWitherTool(Item result, Object... recipe) { 
-		super(new ItemStack(result), recipe); 
+	public RecipeWitherTool(ResourceLocation name, Item result, Object... recipe) { 
+		super(name, new ItemStack(result), recipe); 
 		output = new ItemStack(result);
 	}
 	
