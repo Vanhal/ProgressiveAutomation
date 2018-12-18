@@ -23,7 +23,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
+//import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -32,10 +32,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+//import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+//import net.minecraftforge.fml.common.registry.GameRegistry;
 
 
 public class BaseBlock extends BlockContainer implements IDismantleable {
@@ -84,7 +84,7 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	public void setName(String newName) {
 		//1.11 requires this new name format!
 		name = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, newName);
-		setUnlocalizedName(name);
+		setTranslationKey(name);
 		setRegistryName(name);
 	}
 	
@@ -154,10 +154,10 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
 	}
 	
 	public void preInit(Block previousTier) {
-		final ItemBlock itemBlock = new ItemBlock(this);
-		GameRegistry.register(this);
+//		final ItemBlock itemBlock = new ItemBlock(this);
+/*		GameRegistry.register(this);
 		GameRegistry.register(itemBlock, this.getRegistryName());
-		addRecipe(previousTier);
+		addRecipe(previousTier);*/
 	}
 	
 	public void init() {

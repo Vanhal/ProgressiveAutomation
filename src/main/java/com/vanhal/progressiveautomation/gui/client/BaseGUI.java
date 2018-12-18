@@ -24,7 +24,7 @@ public class BaseGUI extends GuiContainer {
 	protected int guiHeight = 166;
 	protected int guiWidth = 176;
 	
-	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRendererObj;
+	public static final FontRenderer fontRenderer = FMLClientHandler.instance().getClient().fontRenderer;
 	public static final ResourceLocation flame = new ResourceLocation(Ref.MODID, "textures/gui/flame.png");
 	
 	protected ResourceLocation background;
@@ -59,15 +59,15 @@ public class BaseGUI extends GuiContainer {
 	}
 	
 	protected void drawString(String text, int y, int colour) {
-		drawString(text, ((xSize - fontRendererObj.getStringWidth(text)) / 2) , y, colour);
+		drawString(text, ((xSize - fontRenderer.getStringWidth(text)) / 2) , y, colour);
 	}
 	
 	protected void drawString(String text, int x, int y, int colour) {
-		fontRendererObj.drawString(text, x, y, colour);
+		fontRenderer.drawString(text, x, y, colour);
 	}
 	
 	protected void drawString(String text, int x, int w, int y, int colour) {
-		drawString(text, x + ((w - fontRendererObj.getStringWidth(text)) / 2) , y, colour);
+		drawString(text, x + ((w - fontRenderer.getStringWidth(text)) / 2) , y, colour);
 	}
 	
 	public void drawFlame(float progress, int x, int y) {

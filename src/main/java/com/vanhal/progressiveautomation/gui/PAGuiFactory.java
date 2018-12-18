@@ -24,23 +24,23 @@ public class PAGuiFactory implements IModGuiFactory {
 		return new PAGuiConfig(parentScreen);
 	}
 	
-	@Override
+/*	@Override
 	public Class<? extends GuiScreen> mainConfigGuiClass() {
 		// TODO Auto-generated method stub
 		return PAGuiConfig.class;
 	}
-
+*/
 	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+/*	@Override
 	public RuntimeOptionGuiHandler getHandlerFor(
 			RuntimeOptionCategoryElement element) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+*/
 }

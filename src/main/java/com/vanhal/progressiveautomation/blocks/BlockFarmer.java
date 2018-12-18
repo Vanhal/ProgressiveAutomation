@@ -8,12 +8,8 @@ import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockFarmer extends BaseBlock {
 
@@ -32,7 +28,7 @@ public class BlockFarmer extends BaseBlock {
 		else return new TileFarmer();
 	}
 	
-	@Override
+/*	@Override
 	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
@@ -53,4 +49,5 @@ public class BlockFarmer extends BaseBlock {
 		
 		GameRegistry.addRecipe(recipe);
 	}
+*/
 }

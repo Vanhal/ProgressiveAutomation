@@ -9,15 +9,11 @@ import com.vanhal.progressiveautomation.ref.ToolHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockMiner extends BaseBlock {
 	
@@ -34,6 +30,7 @@ public class BlockMiner extends BaseBlock {
 	
 	public static final Block firstTier = Blocks.FURNACE;
 	
+	/*
 	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
@@ -53,7 +50,7 @@ public class BlockMiner extends BaseBlock {
 		
 		
 		GameRegistry.addRecipe(recipe);
-	}
+	}*/
 	
 	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess world, BlockPos pos, EnumFacing side) {

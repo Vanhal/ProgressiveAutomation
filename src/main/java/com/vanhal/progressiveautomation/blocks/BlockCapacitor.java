@@ -4,7 +4,6 @@ import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitor;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorDiamond;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorIron;
 import com.vanhal.progressiveautomation.entities.capacitor.TileCapacitorStone;
-import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
@@ -14,15 +13,12 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockCapacitor extends BaseBlock {
 	
@@ -43,7 +39,7 @@ public class BlockCapacitor extends BaseBlock {
 	
 	public static final Block firstTier = Blocks.FURNACE;
 	
-	public void addRecipe(Block previousTier) {
+/*	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
@@ -62,7 +58,7 @@ public class BlockCapacitor extends BaseBlock {
 		
 		
 		GameRegistry.addRecipe(recipe);
-	}
+	}*/
 	
 	@Override
     public int getMetaFromState(IBlockState state) {
@@ -71,7 +67,7 @@ public class BlockCapacitor extends BaseBlock {
 	
 	@Override
     public IBlockState getStateFromMeta(int meta) {
-    	EnumFacing enumfacing = EnumFacing.getFront(meta);
+    	EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
             enumfacing = EnumFacing.NORTH;

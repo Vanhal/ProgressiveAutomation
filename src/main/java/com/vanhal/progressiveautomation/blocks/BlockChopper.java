@@ -8,12 +8,8 @@ import com.vanhal.progressiveautomation.ref.ToolHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class BlockChopper extends BaseBlock {
 
@@ -31,7 +27,7 @@ public class BlockChopper extends BaseBlock {
 	
 	public static final Block firstTier = Blocks.FURNACE;
 	
-	public void addRecipe(Block previousTier) {
+/*	public void addRecipe(Block previousTier) {
 		ShapedOreRecipe recipe = null;
 		
 		if (blockLevel == ToolHelper.LEVEL_STONE) {
@@ -50,5 +46,5 @@ public class BlockChopper extends BaseBlock {
 		
 		
 		GameRegistry.addRecipe(recipe);
-	}
+	}*/
 }

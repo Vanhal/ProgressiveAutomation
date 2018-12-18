@@ -11,8 +11,8 @@ import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.util.Point3I;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -56,7 +56,7 @@ public class EventRenderWorld {
 			if (toRemove.size()>0) {
 				for (UpgradeableTileEntity remove : toRemove) {
 					if (containsMachine(remove)) {
-						machines.remove(toRemove);
+						machines.remove(remove);
 					}
 				}
 				toRemove.clear();
@@ -153,7 +153,7 @@ public class EventRenderWorld {
 		double shrink = -0.005;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer wr = tessellator.getBuffer();
+		BufferBuilder wr = tessellator.getBuffer();
 		
 		//Need to fix.
 		

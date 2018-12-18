@@ -64,7 +64,7 @@ public class EventPlayers {
 		if (!event.getWorld().isRemote) {
 			if (event.getEntity() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.getEntity();
-				if (names.contains(player.getDisplayName())) {
+				if (names.contains(player.getDisplayName().toString())) {
 					ItemStack potato = new ItemStack(Items.POISONOUS_POTATO);
 					potato.addEnchantment(Enchantments.UNBREAKING, 1);
 					potato.setStackDisplayName("Death Potato");
