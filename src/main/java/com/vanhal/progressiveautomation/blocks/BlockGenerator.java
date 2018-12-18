@@ -40,28 +40,7 @@ public class BlockGenerator extends BaseBlock {
 	}
 	
 	public static final Block firstTier = Blocks.REDSTONE_BLOCK;
-	
-/*	public void addRecipe(Block previousTier) {
-		ShapedOreRecipe recipe = null;
 		
-		if (blockLevel == ToolHelper.LEVEL_STONE) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sss", 's', Blocks.STONE, 'c', previousTier, 'e', PAItems.rfEngine});
-		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sbs", 's', Items.IRON_INGOT, 'c', previousTier, 'b', Blocks.IRON_BLOCK, 'e', PAItems.rfEngine});
-		} else if (blockLevel >= ToolHelper.LEVEL_DIAMOND) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"ses", "scs", "sss", 's', Items.DIAMOND, 'c', previousTier, 'e', PAItems.rfEngine});
-		} else {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sps", "ses", "srs", 's', "logWood", 'r', Blocks.FURNACE, 'p', previousTier, 'e', PAItems.rfEngine});
-		}
-		
-		
-		GameRegistry.addRecipe(recipe);
-	}*/
-	
 	@Override
     public int getMetaFromState(IBlockState state) {
         return ((EnumFacing)state.getValue(FACING)).getIndex();

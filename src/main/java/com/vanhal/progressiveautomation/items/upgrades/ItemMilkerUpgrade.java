@@ -24,11 +24,4 @@ public class ItemMilkerUpgrade extends ItemUpgrade {
 	   
 	}
 	
-/*	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "brb", "ppp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 'b', Items.MILK_BUCKET});
-		GameRegistry.addRecipe(recipe);
-	}
-*/
 }

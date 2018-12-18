@@ -10,24 +10,7 @@ public class ItemStoneUpgrade extends ItemTieredUpgrade {
 		super("StoneUpgrade", UpgradeType.STONE, ToolHelper.LEVEL_STONE);
 	}
 	
-/*	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Blocks.STONE, 'r', Items.REDSTONE});
-		GameRegistry.addRecipe(recipe);
-	}
-	
-	@Override
-	protected void addUpgradeRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Blocks.STONE, 'r', PAItems.woodUpgrade});
-		GameRegistry.addRecipe(recipe);
-	}
-*/	
 	@Override
 	protected void addTieredRecipe(Item previousTier) {
-/*		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "prp", "ppp", 'p', Blocks.STONE, 'r', previousTier});
-		GameRegistry.addRecipe(recipe);
-*/	}
+	}
 }

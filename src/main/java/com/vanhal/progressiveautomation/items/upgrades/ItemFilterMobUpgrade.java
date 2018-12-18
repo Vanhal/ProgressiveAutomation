@@ -24,11 +24,4 @@ public class ItemFilterMobUpgrade extends ItemUpgrade {
 		tooltip.add(TextFormatting.GRAY + "Will make the Killer to kill enemy mobs only");
        
     }
-	
-/*	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"pgp", "zrz", "pgp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 'z', Items.ROTTEN_FLESH, 'g', Items.GUNPOWDER});
-		GameRegistry.addRecipe(recipe);
-	}
-*/}
+}

@@ -23,11 +23,4 @@ public class ItemFilterPlayerUpgrade extends ItemUpgrade {
 		tooltip.add(TextFormatting.GRAY + "Will make the Killer to kill players only");
 	   
 	}
-
-/*	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"psp", "srs", "psp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 's', Items.IRON_SWORD});
-		GameRegistry.addRecipe(recipe);
-	}
-*/}
+}

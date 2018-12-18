@@ -15,20 +15,9 @@ public class ItemFillerUpgrade extends ItemUpgrade {
 	public ItemFillerUpgrade() {
 		super("FillerUpgrade", UpgradeType.FILLER);
 	}
-	/*
-	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "brb", "ppp", 'p', Blocks.STONE, 'r', Blocks.FURNACE, 'b', Items.BUCKET});
-		GameRegistry.addRecipe(recipe);
-	}
-	
-	@Override
-	protected void addUpgradeRecipe() {
-		this.addNormalRecipe();
-	}
-	*/
+
 	@SideOnly(Side.CLIENT)
+	@Override
     public void addInformation(final ItemStack stack, final World worldIn,
     		final List<String> tooltip, final ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.GRAY + "Will make the miner fill in any air and fluid blocks while mining");

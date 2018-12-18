@@ -9,7 +9,7 @@ import net.minecraft.block.Block;
 
 public class PABlocks {
 
-	public static void preInit() {
+	public PABlocks() {
 		//create the blocks
 		for (int i = 0; i <= 3; i++) {
 			if (PAConfig.allowLevel(i)) {
@@ -24,7 +24,6 @@ public class PABlocks {
 			}
 		}
 
-		//preInit
 		Block previousTier = BlockMiner.firstTier;
 		for (BlockMiner blockMiner : miner) {
 			blockMiner.preInit(previousTier);

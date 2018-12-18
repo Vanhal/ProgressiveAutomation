@@ -23,11 +23,4 @@ public class ItemFilterAnimalUpgrade extends ItemUpgrade {
 		tooltip.add(TextFormatting.GRAY + "Will make the Killer to kill animals only");
        
     }
-
-/*	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"pep", "lrw", "ppp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 'e', Items.EGG, 'l', Items.LEATHER, 'w', Blocks.WOOL});
-		GameRegistry.addRecipe(recipe);
-	}
-*/}
+}

@@ -24,11 +24,4 @@ public class ItemShearingUpgrade extends ItemUpgrade {
 		tooltip.add(TextFormatting.GRAY + "Allows the Farmer shear animals");
 	   
 	}
-	
-/*	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"plp", "wsw", "plp", 'p', Blocks.STONE, 's', Items.SHEARS, 'l', Items.LEATHER, 'w', Blocks.WOOL});
-		GameRegistry.addRecipe(recipe);
-	}
-*/}
+}

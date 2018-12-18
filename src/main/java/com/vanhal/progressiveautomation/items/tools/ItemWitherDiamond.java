@@ -22,15 +22,6 @@ public class ItemWitherDiamond extends BaseItem {
         return true;
     }
 	
-/*	protected void addNormalRecipe() {
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 1), Items.NETHER_STAR, Items.DIAMOND);
-		GameRegistry.addRecipe(recipe);
-	}
-
-	protected void addUpgradeRecipe() {
-		addNormalRecipe();
-	}*/
-	
 	@SideOnly(Side.CLIENT)
 	@Override
     public void addInformation(final ItemStack stack, final World worldIn,

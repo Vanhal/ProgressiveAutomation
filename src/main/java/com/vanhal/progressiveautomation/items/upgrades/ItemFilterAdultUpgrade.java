@@ -24,13 +24,5 @@ public class ItemFilterAdultUpgrade extends ItemUpgrade {
 		tooltip.add(TextFormatting.GRAY + "Will make the Killer to kill adults only");
 	   
 	}
-	
-	/*
-	@Override
-	protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"pep", "lrw", "pep", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 'e', Items.EGG, 'l', Items.LEATHER, 'w', Blocks.WOOL});
-		GameRegistry.addRecipe(recipe);
-	}*/
 
 }

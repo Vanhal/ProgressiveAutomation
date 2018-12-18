@@ -17,21 +17,6 @@ public class ItemCobbleGenUpgrade extends ItemUpgrade {
 		super("CobbleUpgrade", UpgradeType.COBBLE_GEN);
 	}
 	
-/*	protected void addNormalRecipe() {
-		// No sense to add the recipe with no miner present!
-		if (miner.size() == 0) {
-			return;
-		}
-		BlockMiner blockMiner = miner.get(0);
-		if (blockMiner.getLevelName().equals("Wooden") && miner.size() > 1) {
-			blockMiner = miner.get(1);
-		}
-		
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"ppp", "lrw", "ppp", 'p', Blocks.STONE, 'r', blockMiner, 'l', Items.LAVA_BUCKET, 'w', Items.WATER_BUCKET});
-		GameRegistry.addRecipe(recipe);
-	}*/
-	
 	protected void addUpgradeRecipe() {
 		this.addNormalRecipe();
 	}

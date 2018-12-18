@@ -31,27 +31,6 @@ public class BlockCrafter extends BaseBlock {
 	
 	public static final Block firstTier = Blocks.FURNACE;
 	
-/*	public void addRecipe(Block previousTier) {
-		ShapedOreRecipe recipe = null;
-		
-		if (blockLevel == ToolHelper.LEVEL_STONE) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.STONE, 'c', previousTier, 'p', Blocks.CRAFTING_TABLE});
-		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.IRON_INGOT, 'c', previousTier, 'p', Blocks.CRAFTING_TABLE, 'b', Blocks.IRON_BLOCK});
-		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.DIAMOND, 'c', previousTier, 'p', Blocks.CRAFTING_TABLE});
-		} else {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', "chestWood", 'p', Blocks.CRAFTING_TABLE});
-		}
-		
-		
-		GameRegistry.addRecipe(recipe);
-	}*/
-	
 	@Override
 	protected ArrayList<ItemStack> getInsides(World world, BlockPos pos) {
 		TileCrafter crafter = (TileCrafter)world.getTileEntity(pos);

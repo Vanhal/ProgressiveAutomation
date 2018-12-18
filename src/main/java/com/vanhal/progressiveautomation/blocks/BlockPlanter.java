@@ -26,25 +26,4 @@ public class BlockPlanter extends BaseBlock {
 
 	
 	public static final Block firstTier = Blocks.FURNACE;
-	/*
-	public void addRecipe(Block previousTier) {
-		ShapedOreRecipe recipe = null;
-		
-		if (blockLevel == ToolHelper.LEVEL_STONE) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.STONE, 'c', previousTier, 'p', Items.STONE_HOE});
-		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.IRON_INGOT, 'c', previousTier, 'p', Items.IRON_HOE, 'b', Blocks.IRON_BLOCK});
-		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.DIAMOND, 'c', previousTier, 'p', Items.DIAMOND_HOE});
-		} else {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', "chestWood", 'p', Items.WOODEN_HOE});
-		}
-		
-		
-		GameRegistry.addRecipe(recipe);
-	}*/
 }

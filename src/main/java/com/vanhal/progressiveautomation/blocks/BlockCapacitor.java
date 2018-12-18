@@ -38,28 +38,7 @@ public class BlockCapacitor extends BaseBlock {
 	}
 	
 	public static final Block firstTier = Blocks.FURNACE;
-	
-/*	public void addRecipe(Block previousTier) {
-		ShapedOreRecipe recipe = null;
 		
-		if (blockLevel == ToolHelper.LEVEL_STONE) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Blocks.STONE, 'c', previousTier, 'p', PAItems.rfEngine});
-		} else if (blockLevel == ToolHelper.LEVEL_IRON) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sbs", "scs", "sps", 's', Items.IRON_INGOT, 'c', previousTier, 'p', PAItems.rfEngine, 'b', Blocks.IRON_BLOCK});
-		} else if (blockLevel == ToolHelper.LEVEL_DIAMOND) {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"sss", "scs", "sps", 's', Items.DIAMOND, 'c', previousTier, 'p', PAItems.rfEngine});
-		} else {
-			recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"scs", "srs", "sps", 's', "logWood", 'r', previousTier, 'c', "chestWood", 'p', PAItems.rfEngine});
-		}
-		
-		
-		GameRegistry.addRecipe(recipe);
-	}*/
-	
 	@Override
     public int getMetaFromState(IBlockState state) {
         return ((EnumFacing)state.getValue(FACING)).getIndex();

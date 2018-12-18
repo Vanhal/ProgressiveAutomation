@@ -94,17 +94,6 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
     public double getDurabilityForDisplay(ItemStack itemStack) {
         return 1.0 - (double)getCharge(itemStack) / (double)maxCharge;
     }
-    
-    
-/*    protected void addNormalRecipe() {
-		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-			"iii", "grg", "iii", 'i', Items.IRON_INGOT, 'r', Blocks.REDSTONE_BLOCK, 'g', Items.GOLD_INGOT});
-		GameRegistry.addRecipe(recipe);
-	}
-	
-	protected void addUpgradeRecipe() {
-		addNormalRecipe();
-	}*/
 
 	@Override
 	public int receiveEnergy(ItemStack itemStack, int maxReceive, boolean simulate) {

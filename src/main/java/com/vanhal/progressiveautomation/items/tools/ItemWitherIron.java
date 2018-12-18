@@ -22,19 +22,6 @@ public class ItemWitherIron extends BaseItem {
         return true;
     }
 
-/*    protected void addNormalRecipe() {
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 2), 
-				Items.NETHER_STAR, 
-				Items.IRON_INGOT, 
-				Items.IRON_INGOT
-			);
-		GameRegistry.addRecipe(recipe);
-	}
-
-	protected void addUpgradeRecipe() {
-		addNormalRecipe();
-	}*/
-	
 	@SideOnly(Side.CLIENT)
 	@Override
     public void addInformation(final ItemStack stack, final World worldIn,

@@ -21,19 +21,6 @@ public class ItemWitherGold extends BaseItem {
         return true;
     }
 
-    /* protected void addNormalRecipe() {
-		ShapelessOreRecipe recipe = new ShapelessOreRecipe(new ItemStack(this, 2), 
-				Items.NETHER_STAR, 
-				Items.GOLD_INGOT, 
-				Items.GOLD_INGOT
-			);
-		GameRegistry.addRecipe(recipe);
-	}
-
-	protected void addUpgradeRecipe() {
-		addNormalRecipe();
-	}*/
-	
 	@SideOnly(Side.CLIENT)
 	@Override
     public void addInformation(final ItemStack stack, final World worldIn,

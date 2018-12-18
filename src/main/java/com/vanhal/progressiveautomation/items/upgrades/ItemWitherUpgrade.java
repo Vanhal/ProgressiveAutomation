@@ -18,18 +18,6 @@ public class ItemWitherUpgrade extends ItemUpgrade {
 		super("WitherUpgrade", UpgradeType.WITHER);
 	}
 	
-/*	protected void addNormalRecipe() {
-		if (PAConfig.allowDiamondLevel) {
-			ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"dgd", "gng", "dgd", 'd', PAItems.diamondUpgrade, 'g', Items.GOLD_INGOT, 'n', Items.NETHER_STAR});
-			GameRegistry.addRecipe(recipe);
-		} else {
-			ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
-				"dgd", "gng", "dgd", 'd', Blocks.DIAMOND_BLOCK, 'g', Items.GOLD_INGOT, 'n', Items.NETHER_STAR});
-			GameRegistry.addRecipe(recipe);
-		}
-	}
-*/	
 	protected void addUpgradeRecipe() {
 		this.addNormalRecipe();
 	}
