@@ -172,7 +172,7 @@ public final class BlockHelper {
 	/* Safe Tile Entity Retrieval */
 	public static TileEntity getAdjacentTileEntity(World world, int x, int y, int z, EnumFacing dir) {
 
-		return world == null ? null : world.getTileEntity(new BlockPos(x + dir.getFrontOffsetX(), y + dir.getFrontOffsetY(), z + dir.getFrontOffsetZ()));
+		return world == null ? null : world.getTileEntity(new BlockPos(x + dir.getXOffset(), y + dir.getYOffset(), z + dir.getZOffset()));
 	}
 
 	public static TileEntity getAdjacentTileEntity(World world, int x, int y, int z, int side) {

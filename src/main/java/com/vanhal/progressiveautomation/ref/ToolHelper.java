@@ -2,7 +2,9 @@ package com.vanhal.progressiveautomation.ref;
 
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
+import com.mojang.authlib.GameProfile;
 import com.vanhal.progressiveautomation.items.PAItems;
 import com.vanhal.progressiveautomation.util.PlayerFake;
 
@@ -23,6 +25,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
 public class ToolHelper {
+    public static final String USERNAME = "FAKE_PLAYER_PROGRESSIVE_AUTOMATION";
+    public static GameProfile PROFILE = new GameProfile(UUID.nameUUIDFromBytes(USERNAME.getBytes()), USERNAME);
+
 	//tools
 	public static int TYPE_PICKAXE = 0;
 	public static int TYPE_SHOVEL = 1;
@@ -77,7 +82,8 @@ public class ToolHelper {
 	public static int getLevel(ItemStack itemStack) {
 		//Vanilla Tools
 		if (itemStack.getItem() instanceof ItemTool) {
-			return ((ItemTool)itemStack.getItem()).getToolMaterial().getHarvestLevel();
+			String toolClass = ((ItemTool)itemStack.getItem()).getToolClasses(itemStack).iterator().next();
+			return ((ItemTool)itemStack.getItem()).getHarvestLevel(itemStack, toolClass, null, null);
 		} else if ((itemStack.getItem() instanceof ItemSword) ||
 			(itemStack.getItem() instanceof ItemHoe)) {
 			String material = "";
@@ -112,7 +118,7 @@ public class ToolHelper {
 	
 	//Get the type of tinker tool
 	public static int tinkersType(Item item) {
-		String name = item.getUnlocalizedName();
+		String name = item.getTranslationKey();
 		if (name.length()>=16) {
 			if (name.substring(5, 15).equalsIgnoreCase("tconstruct")) {
 				if (name.substring(16).equalsIgnoreCase("pickaxe")) {
@@ -189,7 +195,7 @@ public class ToolHelper {
 	
 	public static float getDigSpeed(ItemStack itemStack, IBlockState state) {
 		if ((!itemStack.isEmpty())) {
-			return itemStack.getStrVsBlock(state);
+			return itemStack.getDestroySpeed(state);
 		}
 		return 1.0f;
 	}
@@ -197,14 +203,14 @@ public class ToolHelper {
 	public static boolean damageTool(ItemStack tool, World world, int x, int y, int z) {
 		if ( (tool.getItem() instanceof ItemShears) || (tool.getItem() instanceof ItemTool) || 
 				(tool.getItem() instanceof ItemHoe) || (tool.getItem() instanceof ItemSword) ) {
-			if (tool.attemptDamageItem(1, RND)) {
+			if (tool.attemptDamageItem(1, RND, null)) {
 				return true;
 			}
 		} else {
 			Block mineBlock = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 			PlayerFake fakePlayer = new PlayerFake((WorldServer)world);
 			if (tinkersType(tool.getItem())==TYPE_HOE) {
-				tool.attemptDamageItem(1, RND);
+				tool.attemptDamageItem(1, RND, null);
 			} else {
 				tool.getItem().onBlockDestroyed(tool, world, mineBlock.getDefaultState(), new BlockPos(x, y, z), fakePlayer);
 			}

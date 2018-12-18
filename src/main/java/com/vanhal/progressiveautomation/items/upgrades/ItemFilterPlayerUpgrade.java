@@ -4,15 +4,12 @@ import java.util.List;
 
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemFilterPlayerUpgrade extends ItemUpgrade {
 
@@ -21,15 +18,16 @@ public class ItemFilterPlayerUpgrade extends ItemUpgrade {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
-		list.add(TextFormatting.GRAY + "Will make the Killer to kill players only");
+	public void addInformation(final ItemStack stack, final World worldIn,
+			final List<String> tooltip, final ITooltipFlag flagIn) {
+		tooltip.add(TextFormatting.GRAY + "Will make the Killer to kill players only");
 	   
 	}
 
-	@Override
+/*	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 			"psp", "srs", "psp", 'p', Blocks.STONE, 'r', Blocks.REDSTONE_BLOCK, 's', Items.IRON_SWORD});
 		GameRegistry.addRecipe(recipe);
 	}
-}
+*/}

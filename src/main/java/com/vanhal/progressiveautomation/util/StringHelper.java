@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 
 
 /**
@@ -42,7 +42,7 @@ public final class StringHelper {
 
 	public static String localize(String key) {
 
-		return I18n.translateToLocal(key);
+		return I18n.format(key);
 	}
 
 	public static String getItemName(ItemStack item) {

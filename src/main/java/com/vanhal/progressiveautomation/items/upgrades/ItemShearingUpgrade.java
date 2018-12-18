@@ -4,15 +4,12 @@ import java.util.List;
 
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class ItemShearingUpgrade extends ItemUpgrade {
 	
@@ -21,15 +18,17 @@ public class ItemShearingUpgrade extends ItemUpgrade {
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
-		list.add(TextFormatting.GRAY + "Allows the Farmer shear animals");
+	@Override
+	public void addInformation(final ItemStack stack, final World worldIn,
+			final List<String> tooltip, final ITooltipFlag flagIn) {
+		tooltip.add(TextFormatting.GRAY + "Allows the Farmer shear animals");
 	   
 	}
 	
-	@Override
+/*	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 			"plp", "wsw", "plp", 'p', Blocks.STONE, 's', Items.SHEARS, 'l', Items.LEATHER, 'w', Blocks.WOOL});
 		GameRegistry.addRecipe(recipe);
 	}
-}
+*/}
