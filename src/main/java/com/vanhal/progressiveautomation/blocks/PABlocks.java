@@ -41,7 +41,9 @@ public class PABlocks {
 	
 	@SubscribeEvent
 	public void blockRegister(RegistryEvent.Register<Block> event) {
-		event.getRegistry().registerAll(blocks.toArray(new Block[blocks.size()]));
+		for(Block b:blocks) {
+			event.getRegistry().register(b);
+		}
 	}
 	
 	//miners

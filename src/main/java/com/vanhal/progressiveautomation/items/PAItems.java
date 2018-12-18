@@ -24,20 +24,31 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 
 @Mod.EventBusSubscriber
 public class PAItems {
 	public static final List<Item> items = new ArrayList<>();
-	public static Item wrench;
-	public static Item cheatRFEngine;
+	
+	@ObjectHolder("progressiveautomation:wrench")
+	public static final Item wrench = null;
+	@ObjectHolder("progressiveautomation:creative_rf_engine")
+	public static final Item cheatRFEngine = null;
+	@ObjectHolder("progressiveautomation:wood_upgrade")	
+	public static final Item woodUpgrade = null;
+	@ObjectHolder("progressiveautomation:diamond_upgrade")
+	public static final Item diamondUpgrade = null;
+	@ObjectHolder("progressiveautomation:stone_upgrade")
+	public static final Item stoneUpgrade = null;
+	@ObjectHolder("progressiveautomation:iron_upgrade")
+	public static final Item ironUpgrade = null;
 	
 	public static void preInit() {
 		//create items
 		
 		
 		if (PAConfig.allowWrench) {
-			wrench = new ItemWrench();
-			items.add(wrench);
+			items.add(new ItemWrench());
 		}
 		
 		if (PAConfig.allowWoodenLevel) items.add(new ItemWoodUpgrade());
@@ -66,9 +77,7 @@ public class PAItems {
 		if (PAConfig.rfSupport) {
 			items.add(new ItemRFEngine());
 		}
-		cheatRFEngine = new ItemCreativeRFEngine();
-		items.add(cheatRFEngine);
-
+		items.add(new ItemCreativeRFEngine());
 	}
 
 	public static void addItemBlock(BaseBlock baseBlock) {
@@ -79,6 +88,8 @@ public class PAItems {
 	
 	@SubscribeEvent
 	public static final void registerItems(RegistryEvent.Register<Item> event) {
-		event.getRegistry().registerAll(items.toArray(new Item[items.size()]));
+		for(Item i:items) {
+			event.getRegistry().register(i);
+		}
 	}
 }
