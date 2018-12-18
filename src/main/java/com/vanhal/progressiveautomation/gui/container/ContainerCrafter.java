@@ -46,7 +46,7 @@ public class ContainerCrafter extends BaseContainer {
 	@Override
     public void onCraftMatrixChanged(IInventory inv) {
     	crafter.setInventorySlotContents(crafter.CRAFT_RESULT, 
-    			CraftingManager.getInstance().findMatchingRecipe(this.craftMatrix, crafter.getWorld()));
+    			CraftingManager.findMatchingRecipe(this.craftMatrix, crafter.getWorld()).getRecipeOutput());
     	if (init) updateTile();
     }
     

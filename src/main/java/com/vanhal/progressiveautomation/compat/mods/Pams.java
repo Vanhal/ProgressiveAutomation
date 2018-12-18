@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.oredict.OreDictionary;
 
 import com.vanhal.progressiveautomation.util.Point3I;
 
@@ -26,7 +27,7 @@ public class Pams extends Vanilla {
 	@Override
 	public boolean isPlantible(ItemStack item) {
 		if (item.getItem() instanceof IPlantable) {
-			if (Item.REGISTRY.getNameForObject(item.getItem()).getResourceDomain().equals(modID)) {
+			if (Item.REGISTRY.getNameForObject(item.getItem()).getNamespace().equals(modID)) {
 				return true;
 			}
 		}
@@ -40,10 +41,7 @@ public class Pams extends Vanilla {
 	
 	@Override
 	public boolean isSapling(ItemStack stack) {
-		if (stack.getUnlocalizedName().contains("sapling")) {
-			return Item.REGISTRY.getNameForObject(stack.getItem()).getResourceDomain().equals(modID);
-		}
-		return false;
+		return OreDictionary.containsMatch(true, OreDictionary.getOres("treeSapling"), stack);
 	}
 	
 	@Override
@@ -58,7 +56,7 @@ public class Pams extends Vanilla {
 	
 	@Override
 	public boolean validBlock(World worldObj, ItemStack itemStack, Point3I point) {
-		if (Item.REGISTRY.getNameForObject(itemStack.getItem()).getResourceDomain().equals(modID)) {
+		if (Item.REGISTRY.getNameForObject(itemStack.getItem()).getNamespace().equals(modID)) {
 			IBlockState plantState = getPlantBlock(worldObj, itemStack, point);
 			Block plant = plantState.getBlock();
 			

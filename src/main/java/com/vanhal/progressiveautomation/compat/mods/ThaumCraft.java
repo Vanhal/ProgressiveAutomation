@@ -3,6 +3,7 @@ package com.vanhal.progressiveautomation.compat.mods;
 import com.vanhal.progressiveautomation.compat.BaseMod;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class ThaumCraft extends BaseMod {
 	
@@ -15,7 +16,7 @@ public class ThaumCraft extends BaseMod {
 		if (item.isEmpty()) return false;
 		// the item may be hiding in a delegate, so use getItem()
 		if (item.getItem() == null) return false;
-		return (item.getItem().getUnlocalizedName().contains("tile.blockMagicalLog"));
+		return OreDictionary.containsMatch(true, OreDictionary.getOres("logWood"), item);
 	}
 	
 	@Override
@@ -23,6 +24,6 @@ public class ThaumCraft extends BaseMod {
 		if (item.isEmpty()) return false;
 		// the item may be hiding in a delegate, so use getItem()
 		if (item.getItem() == null) return false;
-		return (item.getItem().getUnlocalizedName().contains("tile.blockMagicalLog"));
+		return OreDictionary.containsMatch(true, OreDictionary.getOres("treeLeaves"), item);
 	}	
 }

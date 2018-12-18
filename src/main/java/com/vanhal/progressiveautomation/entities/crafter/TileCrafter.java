@@ -77,7 +77,7 @@ public class TileCrafter extends UpgradeableTileEntity {
 		for (int x = 0; x < 6; x++) {
 			if (sides[x] == WrenchModes.Mode.Output) {
 				if (!slots[OUTPUT_SLOT].isEmpty()) {
-					EnumFacing testSide = EnumFacing.getFront(x);
+					EnumFacing testSide = EnumFacing.byIndex(x);
 					TileEntity tile = BlockHelper.getAdjacentTileEntity(this, testSide);
 					if (tile != null) {
 						if (tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing.getOpposite())) {

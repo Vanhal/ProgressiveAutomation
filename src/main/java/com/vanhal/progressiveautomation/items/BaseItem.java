@@ -26,7 +26,7 @@ public class BaseItem extends Item {
 	public void setName(String newName) {
 		//1.11 requires this new name format!
 		itemName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, newName);
-		this.setUnlocalizedName(itemName);
+		this.setTranslationKey(itemName);
 		this.setRegistryName(itemName);
 	}
 	
@@ -35,7 +35,7 @@ public class BaseItem extends Item {
 	}
 	
 	public void preInit() {
-		GameRegistry.register(this);
+//		GameRegistry.register(this);
 		addUpgradeRecipe();
 	}
 	

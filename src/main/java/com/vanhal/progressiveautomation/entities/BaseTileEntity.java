@@ -12,8 +12,8 @@ import com.vanhal.progressiveautomation.ref.WrenchModes;
 import com.vanhal.progressiveautomation.util.BlockHelper;
 import com.vanhal.progressiveautomation.util.Point2I;
 
-import cofh.api.energy.IEnergyProvider;
-import cofh.api.energy.IEnergyReceiver;
+import cofh.redstoneflux.api.IEnergyProvider;
+import cofh.redstoneflux.api.IEnergyReceiver;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -235,7 +235,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 		if (nbt.hasKey("BurnLevel")) burnLevel = nbt.getInteger("BurnLevel");
 		if (nbt.hasKey("inventoryFull")) inventoryFull = nbt.getBoolean("inventoryFull");
 		if (nbt.hasKey("firstLook")) firstLook = nbt.getBoolean("firstLook");
-		if (nbt.hasKey("facing")) facing = EnumFacing.getFront(nbt.getInteger("facing"));
+		if (nbt.hasKey("facing")) facing = EnumFacing.byIndex(nbt.getInteger("facing"));
 		if (nbt.hasKey("sides")) {
 			int ary[] = nbt.getIntArray("sides");
 			for (int i = 0; i<6; i++) {
@@ -899,7 +899,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 			//move directly to an output side first if possible
 			for (int x = 0; x < 6; x++) {
 				if (sides[x] == WrenchModes.Mode.Output) {
-					EnumFacing testSide = EnumFacing.getFront(x);
+					EnumFacing testSide = EnumFacing.byIndex(x);
 					if (BlockHelper.getAdjacentTileEntity(this, testSide) instanceof ISidedInventory) {
 						ISidedInventory externalInv = (ISidedInventory) BlockHelper.getAdjacentTileEntity(this, testSide);
 						if (!slots[slot].isEmpty()) {

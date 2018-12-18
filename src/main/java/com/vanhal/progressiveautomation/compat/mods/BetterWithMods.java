@@ -24,7 +24,7 @@ public class BetterWithMods extends Vanilla {
 	
 	@Override
 	public boolean isPlantible(ItemStack item) {
-		if (Item.REGISTRY.getNameForObject(item.getItem()).getResourceDomain().equals(modID)) {
+		if (Item.REGISTRY.getNameForObject(item.getItem()).getNamespace().equals(modID)) {
 			if (item.getItem() instanceof IPlantable) return true;
 			if (!item.isEmpty()) {
 				if (item.getItem() != null) {
@@ -41,7 +41,7 @@ public class BetterWithMods extends Vanilla {
 	@Override
 	public boolean isPlant(Block plantBlock, IBlockState state) {
 		if (super.isPlant(plantBlock, state)) {
-			if (Block.REGISTRY.getNameForObject(plantBlock).getResourceDomain().equals(modID)) {
+			if (Block.REGISTRY.getNameForObject(plantBlock).getNamespace().equals(modID)) {
 				return true;
 			}
 		}
@@ -58,7 +58,7 @@ public class BetterWithMods extends Vanilla {
 	protected IBlockState getPlantBlock(World worldObj, ItemStack itemStack, Point3I point) {
 		if ( (!itemStack.isEmpty()) && (itemStack.getItem()!=null) ) {
 			if (itemStack.getItem() instanceof ItemBlock) {
-				return ((ItemBlock)itemStack.getItem()).block.getDefaultState();
+				return ((ItemBlock)itemStack.getItem()).getBlock().getDefaultState();
 			}
 		}
 		return null;
@@ -66,8 +66,8 @@ public class BetterWithMods extends Vanilla {
 
 	@Override
 	public boolean isGrown(Point3I plantPoint, Block plantBlock, IBlockState state, World worldObj) {
-		if (plantBlock.getUnlocalizedName().contains("hemp")) {
-			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock().getUnlocalizedName().contains("hemp"));
+		if (plantBlock.getTranslationKey().contains("hemp")) {
+			return (worldObj.getBlockState(plantPoint.toPosition().up()).getBlock().getTranslationKey().contains("hemp"));
 		}
 		return false;
 	}

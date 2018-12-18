@@ -206,8 +206,8 @@ public class TileKiller extends UpgradeableTileEntity {
 		List<EntityItem> entities = world.getEntitiesWithinAABB(EntityItem.class, boundCheck);
 		if (!entities.isEmpty()) {
 			for (EntityItem item: entities) {
-				if (roomInInventory(item.getEntityItem())) {
-					if (!world.isRemote) addToInventory(item.getEntityItem());
+				if (roomInInventory(item.getItem())) {
+					if (!world.isRemote) addToInventory(item.getItem());
 					world.removeEntity(item);
 				}
 			}

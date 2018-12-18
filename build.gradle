@@ -68,6 +68,10 @@ dependencies {
   deobfProvided ("cofh:CoFHCore:${mc_version}-${cofhcore_version}:universal") {
     exclude group: 'mezz.jei'
   }
+
+ deobfProvided ("cofh:RedstoneFlux:${mc_version}-${redstoneflux_version}:universal") {
+   exclude group: 'mezz.jei'
+   }
 }
 
   

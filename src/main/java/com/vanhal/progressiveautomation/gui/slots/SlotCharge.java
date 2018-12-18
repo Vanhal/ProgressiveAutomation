@@ -1,6 +1,6 @@
 package com.vanhal.progressiveautomation.gui.slots;
 
-import cofh.api.energy.IEnergyContainerItem;
+import cofh.redstoneflux.api.IEnergyContainerItem;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

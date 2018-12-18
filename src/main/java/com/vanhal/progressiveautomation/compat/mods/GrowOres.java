@@ -69,7 +69,7 @@ public class GrowOres extends BaseMod {
 	@Override
 	public boolean placeSeed(World worldObj, ItemStack itemStack, Point3I point, boolean doAction) {
 		if (itemStack.getItem() instanceof ItemBlock) {
-			Block plant = ((ItemBlock)itemStack.getItem()).block;
+			Block plant = ((ItemBlock)itemStack.getItem()).getBlock();
 			if (plant!=null) {
 				if (doAction) {
 					worldObj.setBlockState(point.toPosition(), 

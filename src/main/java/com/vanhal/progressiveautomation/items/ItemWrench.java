@@ -113,7 +113,7 @@ public class ItemWrench extends BaseItem {
 		world.spawnEntity(entItem);
 	}
 	
-	@Override
+/*	@Override
 	protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 			"s s", " i ", " s ", 'i', Items.IRON_INGOT, 's', Items.STICK});
@@ -123,7 +123,7 @@ public class ItemWrench extends BaseItem {
 	@Override
 	protected void addUpgradeRecipe() {
 		addNormalRecipe();
-	}
+	}*/
 	
 	@Override
 	public void init() {

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.vanhal.progressiveautomation.PAConfig;
 
-import cofh.api.energy.IEnergyContainerItem;
+import cofh.redstoneflux.api.IEnergyContainerItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -100,7 +100,7 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
     }
     
     
-    protected void addNormalRecipe() {
+/*    protected void addNormalRecipe() {
 		ShapedOreRecipe recipe = new ShapedOreRecipe(new ItemStack(this), new Object[]{
 			"iii", "grg", "iii", 'i', Items.IRON_INGOT, 'r', Blocks.REDSTONE_BLOCK, 'g', Items.GOLD_INGOT});
 		GameRegistry.addRecipe(recipe);
@@ -108,7 +108,7 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 	
 	protected void addUpgradeRecipe() {
 		addNormalRecipe();
-	}
+	}*/
 
 	@Override
 	public int receiveEnergy(ItemStack itemStack, int maxReceive, boolean simulate) {

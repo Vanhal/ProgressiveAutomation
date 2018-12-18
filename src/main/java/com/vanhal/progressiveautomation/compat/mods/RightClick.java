@@ -57,7 +57,7 @@ public class RightClick extends Vanilla {
 		}
 		
 		for (EntityItem item: entities) {
-			items.add(item.getEntityItem());
+			items.add(item.getItem());
 			worldObj.removeEntity(item);
 		}
 		
