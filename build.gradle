@@ -1,4 +1,3 @@
-
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -16,29 +15,19 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 
 def ENV = System.getenv()
 
-ext.configFile = file "build.properties"
-
-configFile.withReader {
-    // read config. it shall from now on be referenced as simply config or as project.config
-    def prop = new Properties()
-    prop.load(it)
-    ext.config = new ConfigSlurper().parse prop
-}
-
-version = config.mod_version + "." + config.buildNum
+version = project.mod_version + "." + project.buildNum
 group= "com.vanhal.progressiveautomation" 
-archivesBaseName = "ProgressiveAutomation-" + config.minecraft_version
+archivesBaseName = "ProgressiveAutomation-" + project.minecraft_version
 
 minecraft {
-    version = config.minecraft_version + "-" + config.forge_version
+    version = project.minecraft_version + "-" + project.forge_version
     runDir = "run"
     
     replace "@VERSION@", project.version
     mappings = "stable_39"
 }
 
-processResources
-{
+processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
     inputs.property "mcversion", project.minecraft.version
@@ -65,11 +54,11 @@ repositories {
 }
 
 dependencies {
-  deobfProvided ("cofh:CoFHCore:${mc_version}-${cofhcore_version}:universal") {
+  deobfCompile ("cofh:CoFHCore:${project.cofhcore_version}:universal") {
     exclude group: 'mezz.jei'
   }
 
- deobfProvided ("cofh:RedstoneFlux:${mc_version}-${redstoneflux_version}:universal") {
+ deobfCompile ("cofh:RedstoneFlux:${project.redstoneflux_version}:universal") {
    exclude group: 'mezz.jei'
    }
 }
