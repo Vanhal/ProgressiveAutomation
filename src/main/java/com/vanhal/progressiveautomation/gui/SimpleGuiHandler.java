@@ -1,7 +1,5 @@
 package com.vanhal.progressiveautomation.gui;
 
-import java.lang.reflect.Constructor;
-
 import gnu.trove.map.TMap;
 import gnu.trove.map.hash.THashMap;
 import net.minecraft.client.gui.GuiScreen;
@@ -15,73 +13,68 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
+import java.lang.reflect.Constructor;
+
 /*
  * Contains some code from cofh Core
  */
-
 public class SimpleGuiHandler implements IGuiHandler {
-	private int guiIdCounter = 1;
-	public static int manualGUI = 0;
-	
-	private final TMap<Integer,Class<?>> containerMap = new THashMap<Integer,Class<?>>();
-	private final TMap<Integer,Class<?>> guiMap = new THashMap<Integer,Class<?>>();
-	
-	public int registerGui(Class<?> gui, Class<?> container) {
-		guiIdCounter++;
-		guiMap.put(guiIdCounter, gui);
-		containerMap.put(guiIdCounter, container);
-		return guiIdCounter;
-	}
-	
 
-	public int registerServerGui(Class<?> container) {
-		guiIdCounter++;
-		containerMap.put(guiIdCounter, container);
-		return guiIdCounter;
-	}
+    private int guiIdCounter = 1;
+    public static int manualGUI = 0;
+    private final TMap<Integer, Class<?>> containerMap = new THashMap<>();
+    private final TMap<Integer, Class<?>> guiMap = new THashMap<>();
 
-	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if (containerMap.containsKey(ID)) {
-			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-			try {
-				if (!world.isRemote) {
-					Packet<?> packet = tile.getUpdatePacket();
-					if (packet != null) {
-						((EntityPlayerMP)player).connection.sendPacket(packet);
-					}
-					
-				}
-				Class<? extends Container> containerClass = (Class<? extends Container>) containerMap.get(ID);
-				Constructor<?> containerConstructor = containerClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
-				return containerConstructor.newInstance(player.inventory, tile);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-		return null;
-	}
+    public int registerGui(Class<?> gui, Class<?> container) {
+        guiIdCounter++;
+        guiMap.put(guiIdCounter, gui);
+        containerMap.put(guiIdCounter, container);
+        return guiIdCounter;
+    }
 
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		if (guiMap.containsKey(ID)) {
-			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-			try {
-				Class<? extends GuiScreen> guiClass = (Class<? extends GuiScreen>) guiMap.get(ID);
-				Constructor<?> guiConstructor = guiClass.getDeclaredConstructor(new Class[] { InventoryPlayer.class, TileEntity.class });
-				return guiConstructor.newInstance(player.inventory, tile);
+    public int registerServerGui(Class<?> container) {
+        guiIdCounter++;
+        containerMap.put(guiIdCounter, container);
+        return guiIdCounter;
+    }
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return null;
-		} else if (ID==manualGUI) {
-			return null;
-		}
+    @Override
+    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        if (containerMap.containsKey(ID)) {
+            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+            try {
+                if (!world.isRemote) {
+                    Packet<?> packet = tile.getUpdatePacket();
+                    if (packet != null) {
+                        ((EntityPlayerMP) player).connection.sendPacket(packet);
+                    }
+                }
+                Class<? extends Container> containerClass = (Class<? extends Container>) containerMap.get(ID);
+                Constructor<?> containerConstructor = containerClass.getDeclaredConstructor(new Class[]{InventoryPlayer.class, TileEntity.class});
+                return containerConstructor.newInstance(player.inventory, tile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+        return null;
+    }
 
-		return null;
-	}
-
-
+    @Override
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        if (guiMap.containsKey(ID)) {
+            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+            try {
+                Class<? extends GuiScreen> guiClass = (Class<? extends GuiScreen>) guiMap.get(ID);
+                Constructor<?> guiConstructor = guiClass.getDeclaredConstructor(new Class[]{InventoryPlayer.class, TileEntity.class});
+                return guiConstructor.newInstance(player.inventory, tile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        } else if (ID == manualGUI) {
+            return null;
+        }
+        return null;
+    }
 }

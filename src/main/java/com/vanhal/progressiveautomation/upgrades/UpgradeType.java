@@ -8,34 +8,35 @@ import com.vanhal.progressiveautomation.ref.ToolHelper;
  */
 public enum UpgradeType {
 
-	WOODEN,
-	STONE,
-	IRON,
-	DIAMOND,
-	WITHER,
-	COBBLE_GEN,
-	FILLER,
-	FILTER_MOB,
-	FILTER_ANIMAL,
-	FILTER_ADULT,
-	FILTER_PLAYER,
-	MILKER,
-	SHEARING;
+    WOODEN,
+    STONE,
+    IRON,
+    DIAMOND,
+    WITHER,
+    COBBLE_GEN,
+    FILLER,
+    FILTER_MOB,
+    FILTER_ANIMAL,
+    FILTER_ADULT,
+    FILTER_PLAYER,
+    MILKER,
+    SHEARING;
 
-	/**
-	 * Helper method for retrieving the proper range upgrade given the machineLevel
-	 * @param machineLevel
-	 * @return
-	 */
-	public static UpgradeType getRangeUpgrade(int machineLevel) {
-		if (machineLevel >= ToolHelper.LEVEL_DIAMOND) {
-			 return DIAMOND;
-		} else if (machineLevel == ToolHelper.LEVEL_IRON) {
-			return IRON;
-		} else if (machineLevel == ToolHelper.LEVEL_STONE) {
-			return STONE;
-		} else {
-			return WOODEN;
-		}
-	}
+    /**
+     * Helper method for retrieving the proper range upgrade given the machineLevel
+     *
+     * @param machineLevel
+     * @return
+     */
+    public static UpgradeType getRangeUpgrade(int machineLevel) {
+        if (machineLevel >= ToolHelper.LEVEL_DIAMOND) {
+            return DIAMOND;
+        } else if (machineLevel == ToolHelper.LEVEL_IRON) {
+            return IRON;
+        } else if (machineLevel == ToolHelper.LEVEL_STONE) {
+            return STONE;
+        } else {
+            return WOODEN;
+        }
+    }
 }

@@ -1,9 +1,6 @@
 package com.vanhal.progressiveautomation;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import com.vanhal.progressiveautomation.blocks.PABlocks;
+import com.vanhal.progressiveautomation.api.PAItems;
 import com.vanhal.progressiveautomation.blocks.network.NetworkHandler;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessageHandler;
@@ -11,10 +8,7 @@ import com.vanhal.progressiveautomation.compat.ModHelper;
 import com.vanhal.progressiveautomation.core.Proxy;
 import com.vanhal.progressiveautomation.events.EventPlayers;
 import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
-import com.vanhal.progressiveautomation.items.PAItems;
-import com.vanhal.progressiveautomation.items.tools.WitherTools;
 import com.vanhal.progressiveautomation.ref.Ref;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -30,74 +24,69 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Ref.MODID, 
-     name = Ref.MODNAME, 
-     version = Ref.Version, 
-     guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory", 
-     dependencies = "after:CoFHAPI|energy;after:CoFHCore;")
+@Mod(modid = Ref.MODID,
+        name = Ref.MODNAME,
+        version = Ref.Version,
+        guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory",
+        dependencies = "after:CoFHAPI|energy;after:CoFHCore;")
 public class ProgressiveAutomation {
-	@Instance(Ref.MODID)
-	public static ProgressiveAutomation instance;
 
-	@SidedProxy(clientSide = "com.vanhal." + Ref.MODID + ".core.ClientProxy", serverSide = "com.vanhal." + Ref.MODID
-			+ ".core.Proxy")
-	public static Proxy proxy;
+    @Instance(Ref.MODID)
+    public static ProgressiveAutomation instance;
 
-	// logger
-	public static final Logger logger = LogManager.getLogger(Ref.MODID);
+    @SidedProxy(clientSide = "com.vanhal." + Ref.MODID + ".core.ClientProxy", serverSide = "com.vanhal." + Ref.MODID
+            + ".core.Proxy")
+    public static Proxy proxy;
 
-	// gui handler
-	public static SimpleGuiHandler guiHandler = new SimpleGuiHandler();
+    // logger
+    public static final Logger logger = LogManager.getLogger(Ref.MODID);
 
-	// Creative Tab
-	public static CreativeTabs PATab = new CreativeTabs("PATab") {
-		@Override
-		public ItemStack createIcon() {
-			return new ItemStack(PAItems.cheatRFEngine);
-		}
-	};
+    // gui handler
+    public static SimpleGuiHandler guiHandler = new SimpleGuiHandler();
 
-	public ProgressiveAutomation() {
-		logger.info("Starting automation");
-	}
+    // Creative Tab
+    public static CreativeTabs PATab = new CreativeTabs("PATab") {
+        @Override
+        public ItemStack createIcon() {
+            return new ItemStack(PAItems.CREATIVE_RF_ENGINE);
+        }
+    };
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		NetworkHandler.registerMessageHandler(PartialTileNBTUpdateMessageHandler.class,
-				PartialTileNBTUpdateMessage.class, Side.CLIENT);
+    public ProgressiveAutomation() {
+        logger.info("Starting automation");
+    }
 
-		PAConfig.init(new Configuration(event.getSuggestedConfigurationFile()));
-		PAItems.preInit();
-		PABlocks.preInit();
-		WitherTools.preInit();
-		
-		PAConfig.save();
-		MinecraftForge.EVENT_BUS.register(new EventPlayers());
-	}
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        NetworkHandler.registerMessageHandler(PartialTileNBTUpdateMessageHandler.class,
+                PartialTileNBTUpdateMessage.class, Side.CLIENT);
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
+        PAConfig.init(new Configuration(event.getSuggestedConfigurationFile()));
 
-		ModHelper.init();
+        PAConfig.save();
+        MinecraftForge.EVENT_BUS.register(new EventPlayers());
+    }
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
-		MinecraftForge.EVENT_BUS.register(instance);
-		proxy.init();
-	}
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        ModHelper.init();
+        NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
+        MinecraftForge.EVENT_BUS.register(instance);
+        proxy.init();
+    }
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        proxy.registerEntities();
+        PAConfig.postInit();
+    }
 
-		proxy.registerEntities();
-
-		PAConfig.postInit();
-	}
-
-	@SubscribeEvent
-	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-		if (eventArgs.getModID().equals(Ref.MODID))
-			PAConfig.syncConfig();
-	}
-
+    @SubscribeEvent
+    public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
+        if (eventArgs.getModID().equals(Ref.MODID))
+            PAConfig.syncConfig();
+    }
 }

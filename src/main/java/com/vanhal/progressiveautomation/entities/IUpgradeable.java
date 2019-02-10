@@ -1,37 +1,37 @@
 package com.vanhal.progressiveautomation.entities;
 
-import java.util.Set;
-
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
+
+import java.util.Set;
 
 public interface IUpgradeable {
 
-	@Deprecated
-	public int getUpgrades();
+    @Deprecated
+    int getUpgrades();
 
-	@Deprecated
-	public void setUpgrades(int value);
+    @Deprecated
+    void setUpgrades(int value);
 
-	@Deprecated
-	public void addUpgrades(int addValue);
-	
-	public int getRange();
-	
-	public int getUpgradeLevel();
-	
-	public void setUpgradeLevel(int level);
+    @Deprecated
+    void addUpgrades(int addValue);
 
-	public boolean isAllowedUpgrade(UpgradeType type);
+    int getRange();
 
-	public boolean hasUpgrade(UpgradeType type);
+    int getUpgradeLevel();
 
-	public Integer getUpgradeAmount(UpgradeType type);
+    void setUpgradeLevel(int level);
 
-	public void setUpgradeAmount(UpgradeType type, Integer amount);
+    boolean isAllowedUpgrade(UpgradeType type);
 
-	public void addUpgrade(UpgradeType type, Integer amount);
+    boolean hasUpgrade(UpgradeType type);
 
-	public void removeUpgradeCompletely(UpgradeType type);
+    Integer getUpgradeAmount(UpgradeType type);
 
-	public Set<UpgradeType> getInstalledUpgradeTypes();
+    void setUpgradeAmount(UpgradeType type, Integer amount);
+
+    void addUpgrade(UpgradeType type, Integer amount);
+
+    void removeUpgradeCompletely(UpgradeType type);
+
+    Set<UpgradeType> getInstalledUpgradeTypes();
 }

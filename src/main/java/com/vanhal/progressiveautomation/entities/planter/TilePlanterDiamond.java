@@ -5,10 +5,10 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 public class TilePlanterDiamond extends TilePlanter {
 
-	public TilePlanterDiamond() {
-		super();
-		setUpgradeLevel(ToolHelper.LEVEL_MAX);
-		setAllowedUpgrades(UpgradeType.DIAMOND, UpgradeType.WITHER);
-		setHarvestTime(10);
-	}
+    public TilePlanterDiamond() {
+        super();
+        setUpgradeLevel(ToolHelper.LEVEL_MAX);
+        setAllowedUpgrades(UpgradeType.DIAMOND, UpgradeType.WITHER);
+        setHarvestTime(10);
+    }
 }

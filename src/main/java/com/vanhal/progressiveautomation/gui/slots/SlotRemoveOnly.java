@@ -9,14 +9,12 @@ import net.minecraft.item.ItemStack;
  */
 public class SlotRemoveOnly extends Slot {
 
-	public SlotRemoveOnly(IInventory inventory, int index, int x, int y) {
-		super(inventory, index, x, y);
-	}
+    public SlotRemoveOnly(IInventory inventory, int index, int x, int y) {
+        super(inventory, index, x, y);
+    }
 
-	@Override
-	public boolean isItemValid(ItemStack stack) {
-
-		return false;
-	}
-
+    @Override
+    public boolean isItemValid(ItemStack stack) {
+        return false;
+    }
 }

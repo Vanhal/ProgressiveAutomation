@@ -18,17 +18,11 @@ public class ContainerKiller extends BaseContainer {
 	public ContainerKiller(InventoryPlayer inv, TileEntity entity) {
 		super((BaseTileEntity)entity, 11, 40);
 		killer = (TileKiller) entity;
-		
 		updateType = ToolHelper.getUpgradeType(killer.getUpgradeLevel());
-		
-		this.addSlotToContainer(new SlotTool(ToolHelper.TYPE_SWORD,  killer.getUpgradeLevel(), killer, killer.SLOT_SWORD, 49, 52)); //sword
-		this.addSlotToContainer(new SlotUpgrades(killer, killer.SLOT_UPGRADE, 76, 52)); //upgrades
-		
+		addSlotToContainer(new SlotTool(ToolHelper.TYPE_SWORD,  killer.getUpgradeLevel(), killer, killer.SLOT_SWORD, 49, 52)); //sword
+		addSlotToContainer(new SlotUpgrades(killer, killer.SLOT_UPGRADE, 76, 52)); //upgrades
 		//output slots
 		addInventory(killer, killer.SLOT_INVENTORY_START, 112, 16, 3, 3);
-
 		addPlayerInventory(inv);
 	}
-
-	
 }

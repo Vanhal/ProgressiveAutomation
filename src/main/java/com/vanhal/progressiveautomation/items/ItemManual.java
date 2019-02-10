@@ -8,14 +8,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
 public class ItemManual extends BaseItem {
-	public ItemManual() {
-		super("Manual");
-		//setTextureName(Ref.MODID+":Manual");
-		this.setMaxStackSize(1);
-	}
-	
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(hand));
-	}
+
+    //TODO Finish this up. This was not previously implemented in the game.
+    public ItemManual() {
+        this.setMaxStackSize(1);
+    }
+
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        return new ActionResult<>(EnumActionResult.PASS, playerIn.getHeldItem(hand));
+    }
 }

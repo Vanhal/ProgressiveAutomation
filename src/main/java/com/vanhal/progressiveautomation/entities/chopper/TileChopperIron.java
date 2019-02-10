@@ -5,10 +5,10 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 public class TileChopperIron extends TileChopper {
 
-	public TileChopperIron() {
-		super();
-		setUpgradeLevel(ToolHelper.LEVEL_IRON);
-		setAllowedUpgrades(UpgradeType.IRON, UpgradeType.WITHER);
-		allowSheer();
-	}
+    public TileChopperIron() {
+        super();
+        setUpgradeLevel(ToolHelper.LEVEL_IRON);
+        setAllowedUpgrades(UpgradeType.IRON, UpgradeType.WITHER);
+        allowSheer();
+    }
 }

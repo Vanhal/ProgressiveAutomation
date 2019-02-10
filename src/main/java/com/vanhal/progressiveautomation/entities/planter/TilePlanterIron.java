@@ -5,10 +5,10 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 public class TilePlanterIron extends TilePlanter {
 
-	public TilePlanterIron() {
-		super();
-		setUpgradeLevel(ToolHelper.LEVEL_IRON);
-		setAllowedUpgrades(UpgradeType.IRON, UpgradeType.WITHER);
-		setHarvestTime(20);
-	}
+    public TilePlanterIron() {
+        super();
+        setUpgradeLevel(ToolHelper.LEVEL_IRON);
+        setAllowedUpgrades(UpgradeType.IRON, UpgradeType.WITHER);
+        setHarvestTime(20);
+    }
 }

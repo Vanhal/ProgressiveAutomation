@@ -5,10 +5,10 @@ import com.vanhal.progressiveautomation.upgrades.UpgradeType;
 
 public class TileFarmerIron extends TileFarmer {
 
-	public TileFarmerIron() {
-		super();
-		setUpgradeLevel(ToolHelper.LEVEL_IRON);
-		setAllowedUpgrades(UpgradeType.IRON, UpgradeType.WITHER, UpgradeType.MILKER, UpgradeType.SHEARING);
-		setWaitTime(20);
-	}
+    public TileFarmerIron() {
+        super();
+        setUpgradeLevel(ToolHelper.LEVEL_IRON);
+        setAllowedUpgrades(UpgradeType.IRON, UpgradeType.WITHER, UpgradeType.MILKER, UpgradeType.SHEARING);
+        setWaitTime(20);
+    }
 }

@@ -1,9 +1,6 @@
 package com.vanhal.progressiveautomation.items.upgrades;
 
-import java.util.List;
-
 import com.vanhal.progressiveautomation.upgrades.UpgradeType;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -11,17 +8,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public class ItemFilterMobUpgrade extends ItemUpgrade {
 
-	public ItemFilterMobUpgrade() {
-		super("FilterMobUpgrade", UpgradeType.FILTER_MOB);
-	}
+    public ItemFilterMobUpgrade() {
+        super(UpgradeType.FILTER_MOB);
+    }
 
-	@SideOnly(Side.CLIENT)
-	@Override
-    public void addInformation(final ItemStack stack, final World worldIn,
-			final List<String> tooltip, final ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.GRAY + "Will make the Killer to kill enemy mobs only");
-       
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void addInformation(final ItemStack stack, final World worldIn, final List<String> tooltip, final ITooltipFlag flagIn) {
+        tooltip.add(TextFormatting.GRAY + "Will make the Killer to kill enemy mobs only");
     }
 }
