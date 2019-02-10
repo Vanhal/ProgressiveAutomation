@@ -160,6 +160,7 @@ public class UpgradeableTileEntity extends BaseTileEntity implements IUpgradeabl
         toolLevel = level;
     }
 
+    //TODO Find issue that causes TE's to not upgrade -ProxyNeko
     public boolean isAllowedUpgrade(ItemStack itemStack) {
         if (itemStack.getItem() instanceof ItemUpgrade) {
             ItemUpgrade upgradeItem = (ItemUpgrade) itemStack.getItem();

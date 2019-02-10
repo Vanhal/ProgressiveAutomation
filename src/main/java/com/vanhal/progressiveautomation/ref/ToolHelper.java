@@ -66,7 +66,7 @@ public class ToolHelper {
         } else if (item instanceof ItemHoe) {
             return TYPE_HOE;
         } else if (item instanceof ItemTool) {
-            Set<String> toolClasses = ((ItemTool) item).getToolClasses(itemStack);
+            Set<String> toolClasses = (item).getToolClasses(itemStack);
             if (toolClasses.contains("pickaxe")) return TYPE_PICKAXE;
             else if (toolClasses.contains("axe")) return TYPE_AXE;
             else if (toolClasses.contains("shovel")) return TYPE_SHOVEL;
