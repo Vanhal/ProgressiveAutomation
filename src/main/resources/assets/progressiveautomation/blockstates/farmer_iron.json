@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": [ { "model": "progressiveautomation:farmer_iron" } ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "progressiveautomation:farmer_iron"
+      }
+    ]
+  }
 }

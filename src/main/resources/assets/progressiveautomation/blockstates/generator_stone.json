@@ -1,12 +1,34 @@
 {
-    "variants": {
-		"active=false,facing=south": { "model": "progressiveautomation:generator_stone" },
-        "active=false,facing=west": { "model": "progressiveautomation:generator_stone", "y": 90 },
-        "active=false,facing=north": { "model": "progressiveautomation:generator_stone", "y": 180 },
-        "active=false,facing=east": { "model": "progressiveautomation:generator_stone", "y": 270 },
-        "active=true,facing=south": { "model": "progressiveautomation:generator_on_stone" },
-        "active=true,facing=west": { "model": "progressiveautomation:generator_on_stone", "y": 90 },
-        "active=true,facing=north": { "model": "progressiveautomation:generator_on_stone", "y": 180 },
-        "active=true,facing=east": { "model": "progressiveautomation:generator_on_stone", "y": 270 }
+  "variants": {
+    "active=false,facing=south": {
+      "model": "progressiveautomation:generator_stone"
+    },
+    "active=false,facing=west": {
+      "model": "progressiveautomation:generator_stone",
+      "y": 90
+    },
+    "active=false,facing=north": {
+      "model": "progressiveautomation:generator_stone",
+      "y": 180
+    },
+    "active=false,facing=east": {
+      "model": "progressiveautomation:generator_stone",
+      "y": 270
+    },
+    "active=true,facing=south": {
+      "model": "progressiveautomation:generator_on_stone"
+    },
+    "active=true,facing=west": {
+      "model": "progressiveautomation:generator_on_stone",
+      "y": 90
+    },
+    "active=true,facing=north": {
+      "model": "progressiveautomation:generator_on_stone",
+      "y": 180
+    },
+    "active=true,facing=east": {
+      "model": "progressiveautomation:generator_on_stone",
+      "y": 270
     }
+  }
 }
