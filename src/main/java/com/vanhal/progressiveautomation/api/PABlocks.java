@@ -1,10 +1,10 @@
 package com.vanhal.progressiveautomation.api;
 
-import com.vanhal.progressiveautomation.ref.Ref;
+import com.vanhal.progressiveautomation.References;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@GameRegistry.ObjectHolder(Ref.MODID)
+@GameRegistry.ObjectHolder(References.MODID)
 public class PABlocks {
 
     public static final Block CAPACITOR_WOODEN = null;

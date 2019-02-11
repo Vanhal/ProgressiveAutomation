@@ -1,14 +1,13 @@
 package com.vanhal.progressiveautomation;
 
 import com.vanhal.progressiveautomation.api.PAItems;
-import com.vanhal.progressiveautomation.blocks.network.NetworkHandler;
-import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessage;
-import com.vanhal.progressiveautomation.blocks.network.PartialTileNBTUpdateMessageHandler;
-import com.vanhal.progressiveautomation.compat.ModHelper;
-import com.vanhal.progressiveautomation.core.Proxy;
-import com.vanhal.progressiveautomation.events.EventPlayers;
-import com.vanhal.progressiveautomation.gui.SimpleGuiHandler;
-import com.vanhal.progressiveautomation.ref.Ref;
+import com.vanhal.progressiveautomation.common.compat.ModHelper;
+import com.vanhal.progressiveautomation.client.events.EventPlayers;
+import com.vanhal.progressiveautomation.client.gui.SimpleGuiHandler;
+import com.vanhal.progressiveautomation.common.CommonProxy;
+import com.vanhal.progressiveautomation.common.network.NetworkHandler;
+import com.vanhal.progressiveautomation.common.network.PartialTileNBTUpdateMessage;
+import com.vanhal.progressiveautomation.common.network.PartialTileNBTUpdateMessageHandler;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,22 +26,24 @@ import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(modid = Ref.MODID,
-        name = Ref.MODNAME,
-        version = Ref.Version,
-        guiFactory = "com.vanhal.progressiveautomation.gui.PAGuiFactory",
+@Mod(modid = References.MODID,
+        name = References.MODNAME,
+        version = References.Version,
+        guiFactory = "com.vanhal.progressiveautomation.client.PAGuiFactory",
         dependencies = "after:CoFHAPI|energy;after:CoFHCore;")
 public class ProgressiveAutomation {
 
-    @Instance(Ref.MODID)
+    @Instance(References.MODID)
     public static ProgressiveAutomation instance;
 
-    @SidedProxy(clientSide = "com.vanhal." + Ref.MODID + ".core.ClientProxy", serverSide = "com.vanhal." + Ref.MODID
-            + ".core.Proxy")
-    public static Proxy proxy;
+    @SidedProxy(
+            clientSide = "com.vanhal." + References.MODID + ".client.ClientProxy",
+            serverSide = "com.vanhal." + References.MODID + ".common.CommonProxy"
+    )
+    public static CommonProxy proxy;
 
     // logger
-    public static final Logger logger = LogManager.getLogger(Ref.MODID);
+    public static final Logger logger = LogManager.getLogger(References.MODID);
 
     // gui handler
     public static SimpleGuiHandler guiHandler = new SimpleGuiHandler();
@@ -86,7 +87,7 @@ public class ProgressiveAutomation {
 
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent eventArgs) {
-        if (eventArgs.getModID().equals(Ref.MODID))
+        if (eventArgs.getModID().equals(References.MODID))
             PAConfig.syncConfig();
     }
 }

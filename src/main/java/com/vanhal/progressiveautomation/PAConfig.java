@@ -1,6 +1,6 @@
 package com.vanhal.progressiveautomation;
 
-import com.vanhal.progressiveautomation.ref.ToolHelper;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import net.minecraftforge.common.config.Configuration;
 
 public class PAConfig {
