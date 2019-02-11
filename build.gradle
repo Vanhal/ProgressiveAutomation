@@ -16,13 +16,13 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 def ENV = System.getenv()
 
 version = project.mod_version + "." + project.buildNum
-group= "com.vanhal.progressiveautomation" 
+group = "com.vanhal.progressiveautomation"
 archivesBaseName = "ProgressiveAutomation-" + project.minecraft_version
 
 minecraft {
     version = project.minecraft_version + "-" + project.forge_version
     runDir = "run"
-    
+
     replace "@VERSION@", project.version
     mappings = "stable_39"
 }
@@ -35,11 +35,11 @@ processResources {
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version': project.version, 'mcversion': project.minecraft.version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
@@ -47,20 +47,20 @@ processResources {
 }
 
 repositories {
-  maven { // CoFH
-    name 'Covers Maven'
-    url 'http://maven.covers1624.net/'
-  }
+    maven { // CoFH
+        name 'Covers Maven'
+        url 'http://maven.covers1624.net/'
+    }
 }
 
 dependencies {
-  deobfCompile ("cofh:CoFHCore:${project.cofhcore_version}:universal") {
-    exclude group: 'mezz.jei'
-  }
+    deobfCompile("cofh:CoFHCore:${project.cofhcore_version}:universal") {
+        exclude group: 'mezz.jei'
+    }
 
- deobfCompile ("cofh:RedstoneFlux:${project.redstoneflux_version}:universal") {
-   exclude group: 'mezz.jei'
-   }
+    deobfCompile("cofh:RedstoneFlux:${project.redstoneflux_version}:universal") {
+        exclude group: 'mezz.jei'
+    }
 }
 
   

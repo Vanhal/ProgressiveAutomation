@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": [ { "model": "progressiveautomation:planter_diamond" } ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "progressiveautomation:planter_diamond"
+      }
+    ]
+  }
 }

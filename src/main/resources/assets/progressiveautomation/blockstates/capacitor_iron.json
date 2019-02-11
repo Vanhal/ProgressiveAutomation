@@ -1,10 +1,27 @@
 {
-    "variants": {
-        "facing=south": { "model": "progressiveautomation:capacitor_iron" },
-        "facing=west": { "model": "progressiveautomation:capacitor_iron", "y": 90 },
-        "facing=north": { "model": "progressiveautomation:capacitor_iron", "y": 180 },
-        "facing=east": { "model": "progressiveautomation:capacitor_iron", "y": 270 },
-        "facing=up": { "model": "progressiveautomation:capacitor_iron", "x": 90 },
-        "facing=down": { "model": "progressiveautomation:capacitor_iron", "x": -90 }
+  "variants": {
+    "facing=south": {
+      "model": "progressiveautomation:capacitor_iron"
+    },
+    "facing=west": {
+      "model": "progressiveautomation:capacitor_iron",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "progressiveautomation:capacitor_iron",
+      "y": 180
+    },
+    "facing=east": {
+      "model": "progressiveautomation:capacitor_iron",
+      "y": 270
+    },
+    "facing=up": {
+      "model": "progressiveautomation:capacitor_iron",
+      "x": 90
+    },
+    "facing=down": {
+      "model": "progressiveautomation:capacitor_iron",
+      "x": -90
     }
+  }
 }
