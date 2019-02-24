@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "progressiveautomation:planter_stone"
+  },
+  "pattern": [
+    "sss",
+    "scs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:stone_hoe"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "c": {
+      "item": "progressiveautomation:planter_wooden"
+    }
+  }
+}

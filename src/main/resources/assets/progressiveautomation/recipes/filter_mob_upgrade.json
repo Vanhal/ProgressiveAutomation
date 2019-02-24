@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "progressiveautomation:filter_mob_upgrade"
+  },
+  "pattern": [
+    "pgp",
+    "zrz",
+    "pgp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "g": {
+      "item": "minecraft:gunpowder"
+    },
+    "z": {
+      "item": "minecraft:rotten_flesh"
+    }
+  }
+}

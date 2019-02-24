@@ -22,7 +22,7 @@ import java.util.List;
 
 public class ItemWrench extends BaseItem {
 
-    //TODO Fix the missing texture on shift right click.
+    //TODO Fix the missing texture on shift right click. - ProxyNeko
     public ItemWrench() {
         this.setMaxStackSize(1);
     }

@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "progressiveautomation:farmer_wooden"
+  },
+  "pattern": [
+    "scs",
+    "srs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:shears"
+    },
+    "r": {
+      "item": "minecraft:furnace"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    }
+  }
+}

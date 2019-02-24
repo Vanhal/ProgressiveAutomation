@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "progressiveautomation:shearing_upgrade"
+  },
+  "pattern": [
+    "plp",
+    "wsw",
+    "plp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "s": {
+      "item": "minecraft:shears"
+    },
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "blockWool"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    }
+  }
+}

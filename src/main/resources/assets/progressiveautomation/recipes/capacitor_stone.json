@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "progressiveautomation:capacitor_stone"
+  },
+  "pattern": [
+    "sss",
+    "scs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "progressiveautomation:rf_engine"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "c": {
+      "item": "progressiveautomation:capacitor_wooden"
+    }
+  }
+}

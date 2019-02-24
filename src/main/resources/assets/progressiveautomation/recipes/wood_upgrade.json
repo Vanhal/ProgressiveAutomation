@@ -1,0 +1,20 @@
+{
+  "result": {
+    "item": "progressiveautomation:wood_upgrade"
+  },
+  "pattern": [
+    "ppp",
+    "prp",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  }
+}

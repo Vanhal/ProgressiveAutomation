@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "progressiveautomation:killer_diamond"
+  },
+  "pattern": [
+    "sss",
+    "scs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:diamond_sword"
+    },
+    "s": {
+      "item": "minecraft:diamond"
+    },
+    "c": {
+      "item": "progressiveautomation:killer_iron"
+    }
+  }
+}

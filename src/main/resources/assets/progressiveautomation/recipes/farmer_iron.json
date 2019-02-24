@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "progressiveautomation:farmer_iron"
+  },
+  "pattern": [
+    "sbs",
+    "scs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:shears"
+    },
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "s": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "progressiveautomation:farmer_stone"
+    }
+  }
+}

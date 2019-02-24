@@ -1,0 +1,27 @@
+{
+  "result": {
+    "item": "progressiveautomation:chopper_wooden"
+  },
+  "pattern": [
+    "scs",
+    "srs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:wooden_axe"
+    },
+    "r": {
+      "item": "minecraft:furnace"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    },
+    "c": {
+      "type": "forge:ore_dict",
+      "ore": "chestWood"
+    }
+  }
+}
