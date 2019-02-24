@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 
 public class ItemManual extends BaseItem {
 
-    //TODO Finish this up. This was not previously implemented in the game.
+    //TODO Finish this up. This was not previously implemented in the game. - ProxyNeko
     public ItemManual() {
         this.setMaxStackSize(1);
     }

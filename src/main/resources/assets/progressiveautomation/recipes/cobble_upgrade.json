@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "progressiveautomation:cobble_upgrade"
+  },
+  "pattern": [
+    "ppp",
+    "lrw",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "r": {
+      "item": "progressiveautomation:miner_stone"
+    },
+    "w": {
+      "item": "minecraft:water_bucket"
+    },
+    "l": {
+      "item": "minecraft:lava_bucket"
+    }
+  }
+}

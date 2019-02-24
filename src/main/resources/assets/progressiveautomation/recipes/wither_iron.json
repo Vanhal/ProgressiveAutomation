@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "progressiveautomation:wither_iron",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

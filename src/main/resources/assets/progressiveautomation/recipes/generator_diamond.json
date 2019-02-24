@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "progressiveautomation:generator_diamond"
+  },
+  "pattern": [
+    "ses",
+    "scs",
+    "sss"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "s": {
+      "item": "minecraft:diamond"
+    },
+    "c": {
+      "item": "progressiveautomation:generator_iron"
+    },
+    "e": {
+      "item": "progressiveautomation:rf_engine"
+    }
+  }
+}

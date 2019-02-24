@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "progressiveautomation:generator_iron"
+  },
+  "pattern": [
+    "ses",
+    "scs",
+    "sbs"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "s": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "progressiveautomation:generator_stone"
+    },
+    "e": {
+      "item": "progressiveautomation:rf_engine"
+    }
+  }
+}

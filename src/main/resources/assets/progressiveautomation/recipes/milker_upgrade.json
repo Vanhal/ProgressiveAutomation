@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "progressiveautomation:milker_upgrade"
+  },
+  "pattern": [
+    "ppp",
+    "brb",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "b": {
+      "item": "minecraft:milk_bucket"
+    }
+  }
+}

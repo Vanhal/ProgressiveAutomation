@@ -1,0 +1,25 @@
+{
+  "result": {
+    "item": "progressiveautomation:capacitor_iron"
+  },
+  "pattern": [
+    "sbs",
+    "scs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "progressiveautomation:rf_engine"
+    },
+    "b": {
+      "item": "minecraft:iron_block"
+    },
+    "s": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "progressiveautomation:capacitor_stone"
+    }
+  }
+}

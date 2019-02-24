@@ -1,0 +1,18 @@
+{
+  "result": {
+    "item": "progressiveautomation:wither_gold",
+    "count": 2
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

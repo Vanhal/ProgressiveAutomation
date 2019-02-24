@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "progressiveautomation:iron_upgrade"
+  },
+  "pattern": [
+    "ppp",
+    "prp",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:iron_ingot"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  }
+}
