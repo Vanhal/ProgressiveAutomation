@@ -6,7 +6,10 @@ import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.common.util.StringHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class GUICapacitor extends BaseGUI {
 
@@ -24,12 +27,13 @@ public class GUICapacitor extends BaseGUI {
     }
 
     protected void drawText() {
+    	IEnergyStorage cap = capacitor.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
         drawString(StringHelper.localize("gui.capacitor"), 5, GRAY);
-        drawString(StringHelper.localize("gui.maximum") + ": " + capacitor.getTransferRate() + " RF/t", infoScreenX, infoScreenW, infroScreenY1, GREEN);
-        if ((capacitor.getEnergyStored() >= capacitor.getMaxEnergyStored())) {
-            drawString(StringHelper.getScaledNumber(capacitor.getEnergyStored(), 100) + " / " + StringHelper.getScaledNumber(capacitor.getMaxEnergyStored()) + " RF", infoScreenX, infoScreenW, infroScreenY2, RED);
+        drawString(StringHelper.localize("gui.maximum") + ": " + capacitor.getTransferRate() + " FE/t", infoScreenX, infoScreenW, infroScreenY1, GREEN);
+        if ((cap.getEnergyStored() >= cap.getMaxEnergyStored())) {
+            drawString(StringHelper.getScaledNumber(cap.getEnergyStored(), 100) + " / " + StringHelper.getScaledNumber(cap.getMaxEnergyStored()) + " FE", infoScreenX, infoScreenW, infroScreenY2, RED);
         } else {
-            drawString(StringHelper.getScaledNumber(capacitor.getEnergyStored(), 100) + " / " + StringHelper.getScaledNumber(capacitor.getMaxEnergyStored()) + " RF", infoScreenX, infoScreenW, infroScreenY2, BLUE);
+            drawString(StringHelper.getScaledNumber(cap.getEnergyStored(), 100) + " / " + StringHelper.getScaledNumber(cap.getMaxEnergyStored()) + " FE", infoScreenX, infoScreenW, infroScreenY2, BLUE);
         }
     }
 }

@@ -1,11 +1,10 @@
 package com.vanhal.progressiveautomation.common.entities.generator;
 
-import cofh.redstoneflux.api.IEnergyContainerItem;
-import cofh.redstoneflux.api.IEnergyReceiver;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import com.vanhal.progressiveautomation.common.util.Point2I;
+import com.vanhal.progressiveautomation.common.util.PAEnergyStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -14,19 +13,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class TileGenerator extends BaseTileEntity {
 
     protected float fireRisk = 0.02f;
-    protected int maxStorage = 10000;
     protected int currentStorage = 0;
     protected int generationRate = 10;
     protected int consumeRate = 1;
     protected boolean burnUpdate = false;
     public int SLOT_CHARGER = 1;
-
+    private PAEnergyStorage energyStorage;
+    
     public TileGenerator() {
         super(1);
         setEnergyStorage(20000, 0.5f);
@@ -53,7 +53,8 @@ public class TileGenerator extends BaseTileEntity {
     }
 
     public void setEnergyStorage(int size, float rate) {
-        maxStorage = size;
+    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size,(int)rate);
+    	
         generationRate = (int) ((float) PAConfig.rfCost * rate);
         consumeRate = (int) ((float) PAConfig.fuelCost * rate);
     }
@@ -63,19 +64,20 @@ public class TileGenerator extends BaseTileEntity {
         super.update();
         if (!world.isRemote) {
             if (isBurning()) {
-                changeCharge(generationRate);
+                this.energyStorage.generatePower(generationRate);
                 checkForFire();
             }
 
             //Charge items in charge slot
+            //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
                 if (currentStorage > 0) {
-                    if (slots[SLOT_CHARGER].getItem() instanceof IEnergyContainerItem) {
-                        IEnergyContainerItem container = (IEnergyContainerItem) slots[SLOT_CHARGER].getItem();
-                        if (container.getEnergyStored(slots[SLOT_CHARGER]) < container.getMaxEnergyStored(slots[SLOT_CHARGER])) {
-                            int giveAmount = container.receiveEnergy(slots[SLOT_CHARGER], currentStorage, false);
+                    if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
+                        IEnergyStorage container = (IEnergyStorage) slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
+                        if (container.getEnergyStored() < container.getMaxEnergyStored()) {
+                            int giveAmount = container.receiveEnergy(currentStorage, false);
                             if (giveAmount > 0) {
-                                changeCharge(giveAmount * -1);
+                            	energyStorage.extractEnergy(giveAmount, false);
                             }
                         }
                     }
@@ -116,7 +118,7 @@ public class TileGenerator extends BaseTileEntity {
 
     @Override
     public boolean readyToBurn() {
-        if (currentStorage < maxStorage) {
+        if (this.energyStorage.canReceive()) {
             return true;
         }
         return false;
@@ -131,60 +133,6 @@ public class TileGenerator extends BaseTileEntity {
         return getItemBurnTime(item) / consumeRate;
     }
 
-    //Energy stuff
-    @Override
-    public boolean canConnectEnergy(EnumFacing from) {
-        return true;
-    }
-
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        return 0;
-    }
-
-    @Override
-    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        int energyExtracted = Math.min(currentStorage, maxExtract);
-        if (!simulate) {
-            changeCharge((energyExtracted * -1));
-        }
-        return energyExtracted;
-    }
-
-    public void changeCharge(int amount) {
-        int prevAmount = currentStorage;
-        currentStorage += amount;
-        if (currentStorage >= maxStorage) {
-            currentStorage = maxStorage;
-        }
-
-        if (currentStorage < 0) {
-            currentStorage = 0;
-        }
-
-        if (currentStorage != prevAmount) {
-            addPartialUpdate("energy", currentStorage);
-        }
-    }
-
-    @Override
-    public int getEnergyStored(EnumFacing facing) {
-        return getEnergyStored();
-    }
-
-    public int getEnergyStored() {
-        return currentStorage;
-    }
-
-    @Override
-    public int getMaxEnergyStored(EnumFacing facing) {
-        return getMaxEnergyStored();
-    }
-
-    public int getMaxEnergyStored() {
-        return maxStorage;
-    }
-
     public void outputEnergy() {
         //Lets go around the world and try and give it to someone!
         for (EnumFacing facing : EnumFacing.values()) {
@@ -197,17 +145,7 @@ public class TileGenerator extends BaseTileEntity {
                         if (energy.canReceive()) {
                             int giveAmount = energy.receiveEnergy(currentStorage, false);
                             if (giveAmount > 0) {
-                                changeCharge(giveAmount * -1);
-                            }
-                        }
-                    } else {
-                        if (entity instanceof IEnergyReceiver) {
-                            IEnergyReceiver energy = (IEnergyReceiver) entity;
-                            if (energy.canConnectEnergy(facing.getOpposite())) {
-                                int giveAmount = energy.receiveEnergy(facing.getOpposite(), currentStorage, false);
-                                if (giveAmount > 0) {
-                                    changeCharge(giveAmount * -1);
-                                }
+                                this.energyStorage.extractEnergy(giveAmount, false);
                             }
                         }
                     }
@@ -216,6 +154,19 @@ public class TileGenerator extends BaseTileEntity {
         }
     }
 
+    
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		if(capability == CapabilityEnergy.ENERGY) return true;
+		return super.hasCapability(capability, facing);
+	}
+	
+	@Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityEnergy.ENERGY) return CapabilityEnergy.ENERGY.cast(energyStorage);
+		else return super.hasCapability(capability, facing)?super.getCapability(capability, facing):null;
+	}
+    
     /* ISided Stuff */
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {

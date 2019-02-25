@@ -19,7 +19,7 @@ public class RecipeRegistry {
     @SubscribeEvent
     public static void onRegister(RegistryEvent.Register<IRecipe> event) {
         //TODO Needs a Resource Location adding to enable Tool Recipes again. - ProxyNeko
-        /*
+        
         //wither_sword
         registerRecipe(event, new RecipeWitherTool(Items.WOODEN_SWORD, new Object[]{" m ", " m ", " s ", 'm', PAItems.WITHER_WOOD, 's', "stickWood"}));
         registerRecipe(event, new RecipeWitherTool(Items.STONE_SWORD, new Object[]{" m ", " m ", " s ", 'm', PAItems.WITHER_STONE, 's', "stickWood"}));
@@ -54,7 +54,7 @@ public class RecipeRegistry {
         registerRecipe(event, new RecipeWitherTool(Items.IRON_HOE, new Object[]{"mm ", " s ", " s ", 'm', PAItems.WITHER_IRON, 's', "stickWood"}));
         registerRecipe(event, new RecipeWitherTool(Items.GOLDEN_HOE, new Object[]{"mm ", " s ", " s ", 'm', PAItems.WITHER_GOLD, 's', "stickWood"}));
         registerRecipe(event, new RecipeWitherTool(Items.DIAMOND_HOE, new Object[]{"mm ", " s ", " s ", 'm', PAItems.WITHER_DIAMOND, 's', "stickWood"}));
-        */
+        
 
         if (PAConfig.allowDiamondLevel) {
             registerRecipe(event, new ItemStack(PAItems.WITHER_UPGRADE), "dgd", "gng", "dgd", 'd', PAItems.DIAMOND_UPGRADE, 'g', Items.GOLD_INGOT, 'n', Items.NETHER_STAR);
@@ -63,6 +63,10 @@ public class RecipeRegistry {
         }
     }
 
+    private static void registerRecipe(RegistryEvent.Register<IRecipe> event, RecipeWitherTool recipe) {
+    	event.getRegistry().register(recipe);
+    }
+    
     private static void registerRecipe(RegistryEvent.Register<IRecipe> event, ItemStack stack, Object... recipe) {
         event.getRegistry().register(new ShapedOreRecipe(stack.getItem().getRegistryName(), stack, recipe)
                 .setRegistryName(stack.getItem().getRegistryName()));

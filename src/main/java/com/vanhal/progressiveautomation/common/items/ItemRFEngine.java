@@ -1,22 +1,28 @@
 package com.vanhal.progressiveautomation.common.items;
 
-import cofh.redstoneflux.api.IEnergyContainerItem;
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.common.util.PAEnergyStorage;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
+public class ItemRFEngine extends BaseItem {
 
     protected int maxCharge = 100000;
     private static DecimalFormat rfDecimalFormat = new DecimalFormat("###,###,###,###,###");
-
+    private PAEnergyStorage storage;
+    
     public ItemRFEngine() {
         setMaxStackSize(1);
         setMaxCharge(PAConfig.rfStored);
@@ -24,6 +30,7 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
 
     public void setMaxCharge(int amount) {
         maxCharge = amount;
+        if(this.storage == null) this.storage = new PAEnergyStorage(this.maxCharge, 640);
     }
 
     public int getMaxCharge() {
@@ -88,24 +95,22 @@ public class ItemRFEngine extends BaseItem implements IEnergyContainerItem {
     }
 
     @Override
-    public int receiveEnergy(ItemStack itemStack, int maxReceive, boolean simulate) {
-        if (simulate) return maxReceive;
-        return addCharge(itemStack, maxReceive);
+    public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+        return new ICapabilityProvider() {
+        	private PAEnergyStorage storage = new PAEnergyStorage(10000, 640);
+        	
+        	@Override
+        	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        		if(capability == CapabilityEnergy.ENERGY) return true;
+        		return false;
+        	}
+        	
+        	@Override
+            public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        		if(capability == CapabilityEnergy.ENERGY) return CapabilityEnergy.ENERGY.cast(storage);
+        		else return null;
+        	}
+        };
     }
 
-    @Override
-    public int extractEnergy(ItemStack itemStack, int maxExtract, boolean simulate) {
-        if (simulate) return maxExtract;
-        return addCharge(itemStack, maxExtract * -1);
-    }
-
-    @Override
-    public int getEnergyStored(ItemStack container) {
-        return getCharge(container);
-    }
-
-    @Override
-    public int getMaxEnergyStored(ItemStack container) {
-        return getMaxCharge();
-    }
 }
