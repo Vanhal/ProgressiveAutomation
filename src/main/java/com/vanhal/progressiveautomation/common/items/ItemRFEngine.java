@@ -11,6 +11,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,13 +39,23 @@ public class ItemRFEngine extends BaseItem {
     }
 
     public int getCharge(ItemStack itemStack) {
-        initNBT(itemStack);
-        return itemStack.getTagCompound().getInteger("charge");
+    	if(itemStack.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
+    		return itemStack.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP).getEnergyStored();
+    	} else return 0;
     }
 
     public void setCharge(ItemStack itemStack, int charge) {
-        initNBT(itemStack);
-        itemStack.getTagCompound().setInteger("charge", charge);
+    	if(itemStack.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
+    		IEnergyStorage cap = itemStack.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
+    		int curCharge = cap.getEnergyStored();
+    		int diff = charge - curCharge;
+    		if(diff < 0) {
+    			diff *= -1;
+    			cap.extractEnergy(diff, false);
+    		} else {
+    			cap.receiveEnergy(diff, false);
+    		}
+    	}
     }
 
     public int addCharge(ItemStack itemStack, int amount) {
@@ -59,21 +70,9 @@ public class ItemRFEngine extends BaseItem {
         return amountUsed;
     }
 
-    protected void initNBT(ItemStack itemStack) {
-        if (itemStack.getTagCompound() == null) {
-            itemStack.setTagCompound(new NBTTagCompound());
-            itemStack.getTagCompound().setInteger("charge", 0);
-        }
-    }
-
-    protected boolean isInit(ItemStack itemStack) {
-        return (itemStack.getTagCompound() != null);
-    }
-
-
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
-        if ((!itemStack.isEmpty()) && (isInit(itemStack))) {
+        if ((!itemStack.isEmpty()) && (itemStack.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP))) {
             int charge = getCharge(itemStack);
             list.add(TextFormatting.RED + "" +
                     String.format("%s", rfDecimalFormat.format(charge)) + "/" +
@@ -86,7 +85,7 @@ public class ItemRFEngine extends BaseItem {
 
     @SideOnly(Side.CLIENT)
     public boolean showDurabilityBar(ItemStack itemStack) {
-        return isInit(itemStack);
+        return true;
     }
 
     @SideOnly(Side.CLIENT)

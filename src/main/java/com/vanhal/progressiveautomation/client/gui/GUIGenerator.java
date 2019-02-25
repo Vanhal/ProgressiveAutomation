@@ -30,7 +30,7 @@ public class GUIGenerator extends BaseGUI {
     protected void drawText() {
     	IEnergyStorage cap = generator.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
         drawString(StringHelper.localize("gui.generator"), 5, GRAY);
-        drawString(StringHelper.getScaledNumber(cap.getEnergyStored(), 100) + " / " + StringHelper.getScaledNumber(cap.getMaxEnergyStored()) + " RF", infoScreenX, infoScreenW, infroScreenY3, RED);
+        drawString(StringHelper.getScaledNumber(cap.getEnergyStored(), 100) + " / " + StringHelper.getScaledNumber(cap.getMaxEnergyStored()) + " FE", infoScreenX, infoScreenW, infroScreenY3, RED);
         boolean ready = false;
         if ((!generator.hasFuel()) && (!generator.isBurning())) {
             drawString(StringHelper.localize("gui.need.fuel"), infoScreenX, infoScreenW, infroScreenY2, RED);

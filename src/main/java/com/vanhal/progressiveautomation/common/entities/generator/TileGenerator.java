@@ -20,7 +20,6 @@ import net.minecraftforge.energy.IEnergyStorage;
 public class TileGenerator extends BaseTileEntity {
 
     protected float fireRisk = 0.02f;
-    protected int currentStorage = 0;
     protected int generationRate = 10;
     protected int consumeRate = 1;
     protected boolean burnUpdate = false;
@@ -36,7 +35,7 @@ public class TileGenerator extends BaseTileEntity {
     public void writeCommonNBT(NBTTagCompound nbt) {
         super.writeCommonNBT(nbt);
         //save the current energy stored
-        nbt.setInteger("energy", currentStorage);
+        nbt.setInteger("energy", this.energyStorage.getEnergyStored());
         sides[extDirection.ordinal()] = WrenchModes.Mode.Normal;
     }
 
@@ -44,7 +43,7 @@ public class TileGenerator extends BaseTileEntity {
         super.readCommonNBT(nbt);
         //load the current energy stored
         if (nbt.hasKey("energy")) {
-            currentStorage = nbt.getInteger("energy");
+        	this.energyStorage.setEnergy(nbt.getInteger("energy"));
         }
     }
 
@@ -55,8 +54,8 @@ public class TileGenerator extends BaseTileEntity {
     public void setEnergyStorage(int size, float rate) {
     	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size,(int)Math.ceil(rate));
     	
-        generationRate = (int) ((float) PAConfig.rfCost * rate);
-        consumeRate = (int) ((float) PAConfig.fuelCost * rate);
+        generationRate = (int) Math.ceil(((float) PAConfig.rfCost * rate));
+        consumeRate = (int) Math.ceil(((float) PAConfig.fuelCost * rate));
     }
 
     @Override
@@ -69,13 +68,12 @@ public class TileGenerator extends BaseTileEntity {
             }
 
             //Charge items in charge slot
-            //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
-                if (currentStorage > 0) {
+                if (this.energyStorage.canExtract()) {
                     if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
-                        IEnergyStorage container = (IEnergyStorage) slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
-                        if (container.getEnergyStored() < container.getMaxEnergyStored()) {
-                            int giveAmount = container.receiveEnergy(currentStorage, false);
+                        IEnergyStorage container = slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
+                        if (container.canReceive()) {
+                            int giveAmount = container.receiveEnergy(this.energyStorage.getEnergyStored(), false);
                             if (giveAmount > 0) {
                             	energyStorage.extractEnergy(giveAmount, false);
                             }
@@ -134,24 +132,24 @@ public class TileGenerator extends BaseTileEntity {
     }
 
     public void outputEnergy() {
-        //Lets go around the world and try and give it to someone!
-        for (EnumFacing facing : EnumFacing.values()) {
-            //Do we have any energy up for grabs?
-            if (currentStorage > 0) {
-                TileEntity entity = world.getTileEntity(pos.offset(facing));
-                if (entity != null) {
-                    if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                        IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
-                        if (energy.canReceive()) {
-                            int giveAmount = energy.receiveEnergy(currentStorage, false);
-                            if (giveAmount > 0) {
-                                this.energyStorage.extractEnergy(giveAmount, false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    	//Lets go around the world and try and give it to someone!
+    	if (this.energyStorage.canExtract()) {
+    		for (EnumFacing facing : EnumFacing.values()) {
+    			//Do we have any energy up for grabs?
+    			TileEntity entity = world.getTileEntity(pos.offset(facing));
+    			if (entity != null) {
+    				if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
+    					IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
+    					if (energy.canReceive()) {
+    						int giveAmount = energy.receiveEnergy(this.energyStorage.getEnergyStored(), false);
+    						if (giveAmount > 0) {
+    							this.energyStorage.extractEnergy(giveAmount, false);
+    						}
+    					}
+    				}
+    			}
+    		}
+    	}
     }
 
     
