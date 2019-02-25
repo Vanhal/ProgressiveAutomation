@@ -97,7 +97,7 @@ public class CommonProxy {
         Class<?> gui = null;
         Class<?> container = null;
         try {
-            gui = CommonProxy.class.getClassLoader().loadClass("com.vanhal.progressiveautomation.client.gui.client.GUI" + guiName);
+            gui = CommonProxy.class.getClassLoader().loadClass("com.vanhal.progressiveautomation.client.gui.GUI" + guiName);
         } catch (ClassNotFoundException e) {
         }
 
