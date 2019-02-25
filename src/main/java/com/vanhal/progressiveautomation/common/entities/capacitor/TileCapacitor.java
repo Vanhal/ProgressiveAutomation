@@ -1,7 +1,5 @@
 package com.vanhal.progressiveautomation.common.entities.capacitor;
 
-import cofh.redstoneflux.api.IEnergyContainerItem;
-import cofh.redstoneflux.api.IEnergyReceiver;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.common.util.WrenchModes;
@@ -13,7 +11,7 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 
-public class TileCapacitor extends BaseTileEntity {
+public class TileCapacitor extends BaseTileEntity implements IEnergyStorage {
 
     protected int transferRate = 10;
     protected int maxStorage = 10000;
@@ -53,10 +51,10 @@ public class TileCapacitor extends BaseTileEntity {
             //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
                 if (currentStorage > 0) {
-                    if (slots[SLOT_CHARGER].getItem() instanceof IEnergyContainerItem) {
-                        IEnergyContainerItem container = (IEnergyContainerItem) slots[SLOT_CHARGER].getItem();
-                        if (container.getEnergyStored(slots[SLOT_CHARGER]) < container.getMaxEnergyStored(slots[SLOT_CHARGER])) {
-                            int giveAmount = container.receiveEnergy(slots[SLOT_CHARGER], currentStorage, false);
+                    if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
+                    	IEnergyStorage cap = slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
+                        if (cap.getEnergyStored() < cap.getMaxEnergyStored()) {
+                            int giveAmount = cap.receiveEnergy(currentStorage, false);
                             if (giveAmount > 0) {
                                 changeCharge(giveAmount * -1);
                             }
@@ -166,17 +164,15 @@ public class TileCapacitor extends BaseTileEntity {
                                 changeCharge(giveAmount * -1);
                             }
                         }
-                    } else if (entity instanceof IEnergyReceiver) {
-                        IEnergyReceiver energy = (IEnergyReceiver) entity;
-                        if (energy.canConnectEnergy(facing.getOpposite())) {
-                            int giveAmount = energy.receiveEnergy(facing.getOpposite(), currentStorage, false);
-                            if (giveAmount > 0) {
-                                changeCharge(giveAmount * -1);
-                            }
+                    } else if (entity.hasCapability(CapabilityEnergy.ENERGY, facing)) {
+                        IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing);
+                        int giveAmount = energy.receiveEnergy(currentStorage, false);
+                        if (giveAmount > 0) {
+                        	changeCharge(giveAmount * -1);
                         }
-                    }
-                }
-            }
+                    }	
+                }	
+            }	
         }
     }
 

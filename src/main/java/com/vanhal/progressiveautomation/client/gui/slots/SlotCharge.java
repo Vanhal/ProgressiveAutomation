@@ -1,9 +1,10 @@
 package com.vanhal.progressiveautomation.client.gui.slots;
 
-import cofh.redstoneflux.api.IEnergyContainerItem;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 public class SlotCharge extends Slot {
 
@@ -13,9 +14,6 @@ public class SlotCharge extends Slot {
 
     @Override
     public boolean isItemValid(ItemStack itemStack) {
-        if (itemStack.getItem() instanceof IEnergyContainerItem) {
-            return true;
-        }
-        return false;
+    	return itemStack.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
     }
 }

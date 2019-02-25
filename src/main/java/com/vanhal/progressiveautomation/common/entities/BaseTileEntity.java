@@ -1,7 +1,5 @@
 package com.vanhal.progressiveautomation.common.entities;
 
-import cofh.redstoneflux.api.IEnergyProvider;
-import cofh.redstoneflux.api.IEnergyReceiver;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.common.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.common.items.ItemRFEngine;
@@ -35,11 +33,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
-
 import javax.annotation.Nonnull;
 import java.util.Random;
 
-public class BaseTileEntity extends TileEntity implements ISidedInventory, IEnergyStorage, IEnergyProvider, IEnergyReceiver, ITickable {
+public class BaseTileEntity extends TileEntity implements IEnergyStorage, ISidedInventory, ITickable {
 
     protected ItemStack[] slots;
     protected int progress = 0;
@@ -57,7 +54,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
     //Tag holding partial updates that will be sent to players upon synchronisation
     private NBTTagCompound partialUpdateTag = new NBTTagCompound();
     protected Random RND = new Random();
-
+    
     //inventory slots variables
     public int SLOT_FUEL = 0;
     public int SLOT_PICKAXE = -1;
@@ -1010,7 +1007,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
     @Nonnull
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
-            return CapabilityEnergy.ENERGY.cast(this);
+            return CapabilityEnergy.ENERGY.cast(getEngine());
         }
 
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
@@ -1021,7 +1018,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
 
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
-        return this.receiveEnergy(EnumFacing.UP, maxReceive, simulate);
+        return this.receiveEnergy(maxReceive, simulate);
     }
 
     @Override
@@ -1049,7 +1046,6 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
         return this.receiveEnergy(1, true) > 0;
     }
 
-    @Override
     public boolean canConnectEnergy(EnumFacing from) {
         if (getEngine() == null) {
             return false;
@@ -1058,7 +1054,6 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
         }
     }
 
-    @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         if (world.isRemote) {
             return 0;
@@ -1066,9 +1061,8 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
         return addEnergy(maxReceive, simulate);
     }
 
-    @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
-        return 0;
+        return getEngine().canExtract()?getEngine().extractEnergy(maxExtract, simulate):0;
     }
 
     protected int useEnergy(int amount, boolean simulate) {
@@ -1077,13 +1071,13 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
             return 0;
         }
 
-        int energyExtracted = Math.min(engine.getCharge(slots[SLOT_FUEL]), amount);
+        int energyExtracted = Math.min(engine.getCharge(), amount);
         if (energyExtracted != amount) {
             return 0;
         }
 
         if (!simulate) {
-            engine.addCharge(slots[SLOT_FUEL], (energyExtracted * -1));
+            engine.addCharge((energyExtracted * -1));
         }
         return energyExtracted;
     }
@@ -1094,16 +1088,16 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, IEner
             return 0;
         }
 
-        int energyReceived = Math.min(engine.getMaxCharge() - engine.getCharge(slots[SLOT_FUEL]), Math.min(amount, PAConfig.rfRate));
+        int energyReceived = Math.min(engine.getMaxCharge() - engine.getCharge(), Math.min(amount, PAConfig.rfRate));
         if (!simulate) {
-            engine.addCharge(slots[SLOT_FUEL], energyReceived);
+            engine.addCharge(energyReceived);
         }
         return energyReceived;
     }
 
     public int getEnergyStored(EnumFacing from) {
         if (hasEngine()) {
-            return getEngine().getCharge(slots[SLOT_FUEL]);
+            return getEngine().getCharge();
         } else {
             return 0;
         }
