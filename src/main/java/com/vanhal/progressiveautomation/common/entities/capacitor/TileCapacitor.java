@@ -4,6 +4,7 @@ import cofh.redstoneflux.api.IEnergyContainerItem;
 import cofh.redstoneflux.api.IEnergyReceiver;
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.common.util.PAEnergyStorage;
 import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,11 +16,10 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class TileCapacitor extends BaseTileEntity {
 
-    protected int transferRate = 10;
-    protected int maxStorage = 10000;
     protected int currentStorage = 0;
     public int SLOT_CHARGER = 1;
-
+    protected PAEnergyStorage energyStorage;
+    
     public TileCapacitor() {
         super(1);
         setEnergyStorage(5000 * PAConfig.rfStorageFactor, 80);
@@ -42,8 +42,8 @@ public class TileCapacitor extends BaseTileEntity {
     }
 
     public void setEnergyStorage(int size, int rate) {
-        maxStorage = size;
-        transferRate = rate;
+    	if(this.energyStorage == null) this.energyStorage = new PAEnergyStorage(size, rate);
+    	else this.energyStorage.resetStats(size, rate);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class TileCapacitor extends BaseTileEntity {
     }
 
     public int getTransferRate() {
-        return transferRate;
+        return this.energyStorage.getMaxTransfer();
     }
 
     //Energy stuff

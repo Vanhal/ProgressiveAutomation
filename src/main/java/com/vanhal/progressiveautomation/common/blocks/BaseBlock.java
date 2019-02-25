@@ -43,6 +43,9 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
         setRegistryName(blockName);
         setTranslationKey(References.MODID + ":" + blockName);
         setCreativeTab(ProgressiveAutomation.PATab);
+        
+        this.blockLevel = level;
+        
         GUIid = ProgressiveAutomation.proxy.registerGui(machine);
     }
 
