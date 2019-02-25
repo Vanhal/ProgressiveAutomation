@@ -53,14 +53,14 @@ repositories {
     }
 }
 
-dependencies {/*
+dependencies {
     deobfCompile("cofh:CoFHCore:${project.cofhcore_version}:universal") {
         exclude group: 'mezz.jei'
     }
 
     deobfCompile("cofh:RedstoneFlux:${project.redstoneflux_version}:universal") {
         exclude group: 'mezz.jei'
-    }*/
+    }
 }
 
   
