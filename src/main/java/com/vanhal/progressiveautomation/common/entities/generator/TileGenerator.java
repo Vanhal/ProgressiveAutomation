@@ -53,7 +53,7 @@ public class TileGenerator extends BaseTileEntity {
     }
 
     public void setEnergyStorage(int size, float rate) {
-    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size,(int)rate);
+    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size,(int)Math.ceil(rate));
     	
         generationRate = (int) ((float) PAConfig.rfCost * rate);
         consumeRate = (int) ((float) PAConfig.fuelCost * rate);
