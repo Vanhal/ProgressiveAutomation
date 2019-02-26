@@ -979,14 +979,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
 
     //the following are for handling energy
     public boolean hasEngine() {
-        if (slots[SLOT_FUEL].isEmpty()) {
-            return false;
-        }
-
-        if (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine) {
-            return true;
-        }
-        return false;
+    	return (!slots[SLOT_FUEL].isEmpty()) && (slots[SLOT_FUEL].getItem() instanceof ItemRFEngine);
     }
 
     private ItemStack getEngineInternal() {
@@ -1015,7 +1008,6 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
     @Nonnull
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
-        	ProgressiveAutomation.logger.fatal("Returning {} from getCapability() in BaseTileEntity", getEngineInternal().getCapability(capability, facing));
             return getEngineInternal().getCapability(capability, facing);
         }
 

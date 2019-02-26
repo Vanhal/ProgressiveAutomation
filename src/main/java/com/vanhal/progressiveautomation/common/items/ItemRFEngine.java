@@ -94,23 +94,38 @@ public class ItemRFEngine extends Item {
         	private PAEnergyStorage storage = new PAEnergyStorage(((ItemRFEngine)stack.getItem()).getMaxCharge(), 640) {
                 @Override
                 public int getEnergyStored(){
-                    if(stack.hasTagCompound()){
-                    	this.energy = stack.getTagCompound().getInteger("Energy");
-                    } else {
-                        this.energy = 0;
-                    }
-                    
+                	if(!stack.hasTagCompound()) initStack();
+                	this.energy = stack.getTagCompound().getInteger("Energy");
+                   
                     return this.energy;
                 }
 
                 @Override
                 public void setEnergy(int energy){
-                    if(!stack.hasTagCompound()){
-                        stack.setTagCompound(new NBTTagCompound());
-                    }
+                    if(!stack.hasTagCompound()) initStack();
 
                     stack.getTagCompound().setInteger("Energy", energy);
                     this.energy = energy;
+                }
+                
+                protected void initStack() {
+                	stack.setTagCompound(new NBTTagCompound());
+                	stack.getTagCompound().setInteger("Energy", this.energy);
+                }
+                
+                @Override 
+                public int receiveEnergy(int amount, boolean simulate) {
+                	if(!stack.hasTagCompound()) initStack();
+                	int rcv = (amount > this.maxReceive?this.maxReceive:amount);
+                	int next = this.energy + rcv;
+                	int rv = 0;
+                	
+                	if(next > this.capacity) rv = this.capacity - next;
+                	else rv = rcv;
+                	
+                	this.energy += rv;
+                	setEnergy(this.energy);
+                	return rv;
                 }
                 
             	@Override
