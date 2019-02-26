@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -20,7 +21,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class ItemWrench extends BaseItem {
+public class ItemWrench extends Item {
 
     //TODO Fix the missing texture on shift right click. - ProxyNeko
     public ItemWrench() {

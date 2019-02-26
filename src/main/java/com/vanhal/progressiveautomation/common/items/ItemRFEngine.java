@@ -1,25 +1,24 @@
 package com.vanhal.progressiveautomation.common.items;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.common.util.PAEnergyStorage;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
-public class ItemRFEngine extends BaseItem {
+public class ItemRFEngine extends Item {
 
     protected int maxCharge = 100000;
     private static DecimalFormat rfDecimalFormat = new DecimalFormat("###,###,###,###,###");
@@ -71,8 +70,8 @@ public class ItemRFEngine extends BaseItem {
         return amountUsed;
     }
 
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> list, boolean par) {
+    @Override
+    public void addInformation(ItemStack itemStack, World player, List<String> list, ITooltipFlag advanced) {
         if ((!itemStack.isEmpty()) && (itemStack.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP))) {
             int charge = getCharge(itemStack);
             list.add(TextFormatting.RED + "" +
@@ -84,12 +83,12 @@ public class ItemRFEngine extends BaseItem {
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
     public boolean showDurabilityBar(ItemStack itemStack) {
         return true;
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
         return 1.0 - (double) getCharge(itemStack) / (double) maxCharge;
     }
