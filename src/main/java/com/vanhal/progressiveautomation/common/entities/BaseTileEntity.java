@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.common.entities;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.common.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.common.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.common.util.ToolHelper;
@@ -1005,7 +1006,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
-        if ((capability == CapabilityEnergy.ENERGY && getEngine() != null) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if ((capability == CapabilityEnergy.ENERGY && hasEngine()) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return true;
         }
         return super.hasCapability(capability, facing);
@@ -1015,12 +1016,14 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
     @Nonnull
     public <T> T getCapability(@Nonnull Capability<T> capability, @Nonnull EnumFacing facing) {
         if (capability == CapabilityEnergy.ENERGY) {
-            return this.getEngineInternal().getCapability(capability, facing);
+        	ProgressiveAutomation.logger.fatal("Returning {} from getCapability() in BaseTileEntity", getEngineInternal().getCapability(capability, facing));
+            return getEngineInternal().getCapability(capability, facing);
         }
 
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) new SidedInvWrapper(this, facing);
         }
+        
         return super.getCapability(capability, facing);
     }
 

@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.common.items;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.common.util.PAEnergyStorage;
 
 import net.minecraft.entity.player.EntityPlayer;
