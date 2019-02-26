@@ -52,7 +52,7 @@ public class TileGenerator extends BaseTileEntity {
     }
 
     public void setEnergyStorage(int size, float rate) {
-    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size,(int)Math.ceil(rate));
+    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size, 0, (int)Math.ceil(rate));
     	
         generationRate = (int) Math.ceil(((float) PAConfig.rfCost * rate));
         consumeRate = (int) Math.ceil(((float) PAConfig.fuelCost * rate));
@@ -73,7 +73,8 @@ public class TileGenerator extends BaseTileEntity {
                     if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
                         IEnergyStorage container = slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
                         if (container.canReceive()) {
-                            int giveAmount = container.receiveEnergy(this.energyStorage.getEnergyStored(), false);
+                        	int trans = this.energyStorage.getMaxTransfer() >= this.energyStorage.getEnergyStored()?this.energyStorage.getEnergyStored():this.energyStorage.getMaxTransfer();
+                        	int giveAmount = container.receiveEnergy(trans, false);
                             if (giveAmount > 0) {
                             	energyStorage.extractEnergy(giveAmount, false);
                             }

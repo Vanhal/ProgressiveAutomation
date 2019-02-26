@@ -61,7 +61,8 @@ public class TileCapacitor extends BaseTileEntity {
                     if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
                         IEnergyStorage container = (IEnergyStorage) slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
                         if (container.canReceive()) {
-                          int giveAmount = container.receiveEnergy(this.energyStorage.getEnergyStored(), false);
+                        	int trans = this.maxTransfer < this.energyStorage.getEnergyStored()?this.maxTransfer:this.energyStorage.getEnergyStored();
+                        	int giveAmount = container.receiveEnergy(trans, false);
                             if (giveAmount > 0) {
                             	energyStorage.extractEnergy(giveAmount, false);
                             }

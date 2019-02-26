@@ -22,16 +22,19 @@ public class ItemRFEngine extends Item {
 
     protected int maxCharge = 100000;
     private static DecimalFormat rfDecimalFormat = new DecimalFormat("###,###,###,###,###");
-    private PAEnergyStorage storage;
     
     public ItemRFEngine() {
         setMaxStackSize(1);
         setMaxCharge(PAConfig.rfStored);
     }
 
-    public void setMaxCharge(int amount) {
+    protected void setMaxCharge(int amount) {
         maxCharge = amount;
-        if(this.storage == null) this.storage = new PAEnergyStorage(this.maxCharge, 640);
+    }
+
+    @Override
+    public boolean getShareTag(){
+        return true;
     }
 
     public int getMaxCharge() {
@@ -44,29 +47,13 @@ public class ItemRFEngine extends Item {
     	} else return 0;
     }
 
-    public void setCharge(ItemStack itemStack, int charge) {
-    	if(itemStack.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
-    		IEnergyStorage cap = itemStack.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
-    		int curCharge = cap.getEnergyStored();
-    		int diff = charge - curCharge;
-    		if(diff < 0) {
-    			diff *= -1;
-    			cap.extractEnergy(diff, false);
-    		} else {
-    			cap.receiveEnergy(diff, false);
-    		}
-    	}
-    }
-
     public int addCharge(ItemStack itemStack, int amount) {
-        int amountUsed = amount;
-        int current = getCharge(itemStack);
-        if ((current + amount) > maxCharge) amountUsed = (maxCharge - current);
-        if ((current + amount) < 0) amountUsed = (current);
-        current += amount;
-        if (current >= maxCharge) current = maxCharge;
-        if (current < 0) current = 0;
-        setCharge(itemStack, current);
+        int amountUsed = 0;
+        IEnergyStorage cap = itemStack.hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)?itemStack.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP):null;
+        if(cap == null) return 0;
+        if(cap.canReceive()) {
+        	amountUsed = cap.receiveEnergy(amount, false);
+        }
         return amountUsed;
     }
 
@@ -90,13 +77,52 @@ public class ItemRFEngine extends Item {
 
     @Override
     public double getDurabilityForDisplay(ItemStack itemStack) {
-        return 1.0 - (double) getCharge(itemStack) / (double) maxCharge;
+        if(itemStack.hasCapability(CapabilityEnergy.ENERGY, null)){
+            IEnergyStorage storage = itemStack.getCapability(CapabilityEnergy.ENERGY, null);
+            if(storage != null){
+                double maxAmount = storage.getMaxEnergyStored();
+                double energyDif = maxAmount-storage.getEnergyStored();
+                return energyDif/maxAmount;
+            }
+        }
+        return super.getDurabilityForDisplay(itemStack);
     }
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
         return new ICapabilityProvider() {
-        	private PAEnergyStorage storage = new PAEnergyStorage(10000, 640);
+        	private PAEnergyStorage storage = new PAEnergyStorage(((ItemRFEngine)stack.getItem()).getMaxCharge(), 640) {
+                @Override
+                public int getEnergyStored(){
+                    if(stack.hasTagCompound()){
+                    	this.energy = stack.getTagCompound().getInteger("Energy");
+                    } else {
+                        this.energy = 0;
+                    }
+                    
+                    return this.energy;
+                }
+
+                @Override
+                public void setEnergy(int energy){
+                    if(!stack.hasTagCompound()){
+                        stack.setTagCompound(new NBTTagCompound());
+                    }
+
+                    stack.getTagCompound().setInteger("Energy", energy);
+                    this.energy = energy;
+                }
+                
+            	@Override
+            	public boolean canReceive() {
+            		return ((this.energy < this.capacity) && (this.maxReceive > 0));
+            	}
+            	
+            	@Override
+            	public boolean canExtract() {
+            		return ((this.energy > 0) && (this.maxExtract > 0));
+            	}
+        	};
         	
         	@Override
         	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
