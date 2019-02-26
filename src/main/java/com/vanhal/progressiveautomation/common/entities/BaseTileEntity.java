@@ -1005,7 +1005,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
-        if (capability == CapabilityEnergy.ENERGY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if ((capability == CapabilityEnergy.ENERGY && getEngine() != null) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return true;
         }
         return super.hasCapability(capability, facing);
