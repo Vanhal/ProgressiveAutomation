@@ -13,7 +13,7 @@ import net.minecraftforge.energy.EnergyStorage;
 public class PAEnergyStorage extends EnergyStorage {
 
 	public PAEnergyStorage(int capacity, int maxTransfer) {
-		super(capacity, maxTransfer);
+		this(capacity, maxTransfer, maxTransfer);
 	}
 
 	public PAEnergyStorage(int capacity, int maxReceive, int maxExtract) {

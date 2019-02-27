@@ -41,7 +41,23 @@ public class TileCapacitor extends BaseTileEntity {
     	if(this.energyStorage == null) this.energyStorage = new PAEnergyStorage(size, rate) ;
     	else {
     		int curStorage = this.energyStorage.getEnergyStored();
-    		this.energyStorage = new PAEnergyStorage(size, rate);
+    		this.energyStorage = new PAEnergyStorage(size, rate) {
+    			@Override
+    			public int receiveEnergy(int amount, boolean simulate) {
+    				int curCharge = this.energy;
+    				int newCharge = super.receiveEnergy(amount, simulate);
+    				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+    				return newCharge;
+    			}
+    			
+    			@Override
+    			public int extractEnergy(int amount, boolean simulate) {
+    				int curCharge = this.energy;
+    				int newCharge = super.extractEnergy(amount, simulate);
+    				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+    				return newCharge;
+    			}
+    		};
     		this.energyStorage.setEnergyStored(curStorage);
     	}
     	

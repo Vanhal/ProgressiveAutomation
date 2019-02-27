@@ -14,7 +14,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 
 public class TileGenerator extends BaseTileEntity {
@@ -53,7 +52,29 @@ public class TileGenerator extends BaseTileEntity {
     }
 
     public void setEnergyStorage(int size, float rate) {
-    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size, 0, (int)Math.ceil(rate));    	
+    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size, 0, (int)Math.ceil(rate*640)) {
+			@Override
+			public int receiveEnergy(int amount, boolean simulate) {
+				int curCharge = this.energy;
+				int newCharge = super.receiveEnergy(amount, simulate);
+				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+				return newCharge;
+			}
+			
+			@Override
+			public int extractEnergy(int amount, boolean simulate) {
+				int curCharge = this.energy;
+				int newCharge = super.extractEnergy(amount, simulate);
+				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+				return newCharge;
+			}
+			
+			@Override
+			public void addEnergyRaw(int amount) {
+				super.addEnergyRaw(amount);
+				addPartialUpdate("energy", this.energy);
+			}
+		};
         generationRate = (int) Math.ceil(((float) PAConfig.rfCost * rate));
         consumeRate = (int) Math.ceil(((float) PAConfig.fuelCost * rate));
         this.maxExtract = (int)(Math.ceil(640 * rate));
@@ -65,26 +86,13 @@ public class TileGenerator extends BaseTileEntity {
         if (!world.isRemote) {
         	// generate!
             if (isBurning()) {
-            	// update fuel burn time/consume fuel
-            	// add energy to storage
-            	// if storage is full, set "isBurning()" to false once curTime exceeds fuel burn time
+            	this.energyStorage.addEnergyRaw(generationRate);
                 checkForFire();
             }
             
             //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
-                if (this.energyStorage.canExtract()) {
-                    if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
-                        IEnergyStorage container = slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
-                        if (container.canReceive()) {
-                        	int trans = this.maxExtract >= this.energyStorage.getEnergyStored()?this.energyStorage.getEnergyStored():this.maxExtract;
-                        	int giveAmount = container.receiveEnergy(trans, false);
-                            if (giveAmount > 0) {
-                            	energyStorage.extractEnergy(giveAmount, false);
-                            }
-                        }
-                    }
-                }
+            	doEnergyInteraction(this, slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, null), this.maxExtract);
             }
 
             //output the energy to connected devices....
@@ -121,7 +129,7 @@ public class TileGenerator extends BaseTileEntity {
 
     @Override
     public boolean readyToBurn() {
-        if (this.energyStorage.canReceive()) {
+        if (this.energyStorage.getEnergyStored() < this.energyStorage.getMaxEnergyStored()) {
             return true;
         }
         return false;
@@ -133,7 +141,7 @@ public class TileGenerator extends BaseTileEntity {
 
     @Override
     public int getBurnTime(ItemStack item) {
-    	// fix this - we do't burn at an enhanced or diminished rate
+    	// Thought: should we burn faster/slower as the tiers progress ?
         return getItemBurnTime(item) / consumeRate;
     }
 
@@ -142,6 +150,7 @@ public class TileGenerator extends BaseTileEntity {
     	if (this.energyStorage.canExtract()) {
     		for (EnumFacing facing : EnumFacing.values()) {
     			doEnergyInteraction(this, world.getTileEntity(pos.offset(facing)), facing, this.maxExtract);
+    	    	addPartialUpdate("energy", this.energyStorage.getEnergyStored());
     		}
     	}
     }
