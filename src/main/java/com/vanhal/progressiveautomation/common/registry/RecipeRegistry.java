@@ -1,7 +1,5 @@
 package com.vanhal.progressiveautomation.common.registry;
 
-import java.util.Arrays;
-
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.api.PAItems;
