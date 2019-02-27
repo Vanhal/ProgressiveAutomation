@@ -2,6 +2,7 @@ package com.vanhal.progressiveautomation.common.registry;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.api.PABlocks;
 import com.vanhal.progressiveautomation.common.items.ItemCoalPellet;
 import com.vanhal.progressiveautomation.common.items.ItemCreativeRFEngine;
@@ -26,7 +27,6 @@ import com.vanhal.progressiveautomation.common.items.upgrades.ItemShearingUpgrad
 import com.vanhal.progressiveautomation.common.items.upgrades.ItemStoneUpgrade;
 import com.vanhal.progressiveautomation.common.items.upgrades.ItemWitherUpgrade;
 import com.vanhal.progressiveautomation.common.items.upgrades.ItemWoodUpgrade;
-import com.vanhal.progressiveautomation.References;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;

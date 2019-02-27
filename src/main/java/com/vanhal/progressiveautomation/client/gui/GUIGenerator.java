@@ -1,8 +1,8 @@
 package com.vanhal.progressiveautomation.client.gui;
 
-import com.vanhal.progressiveautomation.common.entities.generator.TileGenerator;
-import com.vanhal.progressiveautomation.client.gui.container.ContainerGenerator;
 import com.vanhal.progressiveautomation.References;
+import com.vanhal.progressiveautomation.client.gui.container.ContainerGenerator;
+import com.vanhal.progressiveautomation.common.entities.generator.TileGenerator;
 import com.vanhal.progressiveautomation.common.util.StringHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +28,7 @@ public class GUIGenerator extends BaseGUI {
     }
 
     protected void drawText() {
-    	IEnergyStorage cap = generator.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
+        IEnergyStorage cap = generator.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
         drawString(StringHelper.localize("gui.generator"), 5, GRAY);
         drawString(StringHelper.getScaledNumber(cap.getEnergyStored(), 100) + " / " + StringHelper.getScaledNumber(cap.getMaxEnergyStored()) + " FE", infoScreenX, infoScreenW, infroScreenY3, RED);
         boolean ready = false;

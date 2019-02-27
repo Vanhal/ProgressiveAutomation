@@ -1,10 +1,10 @@
 package com.vanhal.progressiveautomation.common.entities.crafter;
 
 import com.vanhal.progressiveautomation.common.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.common.util.ToolHelper;
-import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import com.vanhal.progressiveautomation.common.util.BlockHelper;
 import com.vanhal.progressiveautomation.common.util.OreHelper;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
+import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;

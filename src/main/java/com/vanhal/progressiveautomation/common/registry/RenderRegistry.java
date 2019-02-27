@@ -1,10 +1,10 @@
 package com.vanhal.progressiveautomation.common.registry;
 
 import com.vanhal.progressiveautomation.PAConfig;
+import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.api.PABlocks;
 import com.vanhal.progressiveautomation.api.PAItems;
 import com.vanhal.progressiveautomation.common.util.WrenchModes;
-import com.vanhal.progressiveautomation.References;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -20,9 +20,9 @@ public class RenderRegistry {
     public static void onRegister(ModelRegistryEvent event) {
         registerModel(PAItems.MANUAL, 0);
         if (PAConfig.allowWrench) {
-        	for(WrenchModes.Mode mode : WrenchModes.Mode.values()) {
-        		registerModel(PAItems.WRENCH, mode.ordinal());
-        	}
+            for (WrenchModes.Mode mode : WrenchModes.Mode.values()) {
+                registerModel(PAItems.WRENCH, mode.ordinal());
+            }
         }
         if (PAConfig.allowWoodenLevel) registerModel(PAItems.WOOD_UPGRADE, 0);
         if ((PAConfig.allowCobbleUpgrade) && (PAConfig.minerEnabled)) registerModel(PAItems.COBBLE_UPGRADE, 0);

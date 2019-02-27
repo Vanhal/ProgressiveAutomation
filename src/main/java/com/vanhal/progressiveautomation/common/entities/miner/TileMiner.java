@@ -1,9 +1,9 @@
 package com.vanhal.progressiveautomation.common.entities.miner;
 
 import com.vanhal.progressiveautomation.common.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.common.util.Point2I;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;

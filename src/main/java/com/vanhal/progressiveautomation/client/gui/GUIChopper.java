@@ -1,8 +1,8 @@
 package com.vanhal.progressiveautomation.client.gui;
 
-import com.vanhal.progressiveautomation.common.entities.chopper.TileChopper;
-import com.vanhal.progressiveautomation.client.gui.container.ContainerChopper;
 import com.vanhal.progressiveautomation.References;
+import com.vanhal.progressiveautomation.client.gui.container.ContainerChopper;
+import com.vanhal.progressiveautomation.common.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.common.util.StringHelper;
 import net.minecraft.entity.player.InventoryPlayer;

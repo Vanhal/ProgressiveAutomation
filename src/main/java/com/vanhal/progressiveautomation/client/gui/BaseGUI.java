@@ -1,7 +1,7 @@
 package com.vanhal.progressiveautomation.client.gui;
 
-import com.vanhal.progressiveautomation.client.events.EventPlayers;
 import com.vanhal.progressiveautomation.References;
+import com.vanhal.progressiveautomation.client.events.EventPlayers;
 import com.vanhal.progressiveautomation.common.util.StringHelper;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -78,9 +78,9 @@ public class BaseGUI extends GuiContainer {
     public String getTextLine(int line, String text) {
         return EventPlayers.getPlayerLine(mc.player.getDisplayNameString(), line, StringHelper.localize(text));
     }
-    
+
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks){
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);

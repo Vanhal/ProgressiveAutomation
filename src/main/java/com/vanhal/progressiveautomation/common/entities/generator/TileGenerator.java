@@ -2,9 +2,9 @@ package com.vanhal.progressiveautomation.common.entities.generator;
 
 import com.vanhal.progressiveautomation.PAConfig;
 import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.common.util.WrenchModes;
-import com.vanhal.progressiveautomation.common.util.Point2I;
 import com.vanhal.progressiveautomation.common.util.PAEnergyStorage;
+import com.vanhal.progressiveautomation.common.util.Point2I;
+import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -25,7 +25,7 @@ public class TileGenerator extends BaseTileEntity {
     public int SLOT_CHARGER = 1;
     private PAEnergyStorage energyStorage;
     protected int maxExtract;
-    
+
     public TileGenerator() {
         super(1);
         setEnergyStorage(20000, 0.5f);
@@ -43,7 +43,7 @@ public class TileGenerator extends BaseTileEntity {
         super.readCommonNBT(nbt);
         //load the current energy stored
         if (nbt.hasKey("energy")) {
-        	this.energyStorage.setEnergyStored(nbt.getInteger("energy"));
+            this.energyStorage.setEnergyStored(nbt.getInteger("energy"));
         }
     }
 
@@ -52,47 +52,47 @@ public class TileGenerator extends BaseTileEntity {
     }
 
     public void setEnergyStorage(int size, float rate) {
-    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size, 0, (int)Math.ceil(rate*640)) {
-			@Override
-			public int receiveEnergy(int amount, boolean simulate) {
-				int curCharge = this.energy;
-				int newCharge = super.receiveEnergy(amount, simulate);
-				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
-				return newCharge;
-			}
-			
-			@Override
-			public int extractEnergy(int amount, boolean simulate) {
-				int curCharge = this.energy;
-				int newCharge = super.extractEnergy(amount, simulate);
-				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
-				return newCharge;
-			}
-			
-			@Override
-			public void addEnergyRaw(int amount) {
-				super.addEnergyRaw(amount);
-				addPartialUpdate("energy", this.energy);
-			}
-		};
+        if (this.energyStorage == null) this.energyStorage = new PAEnergyStorage(size, 0, (int) Math.ceil(rate * 640)) {
+            @Override
+            public int receiveEnergy(int amount, boolean simulate) {
+                int curCharge = this.energy;
+                int newCharge = super.receiveEnergy(amount, simulate);
+                if (curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+                return newCharge;
+            }
+
+            @Override
+            public int extractEnergy(int amount, boolean simulate) {
+                int curCharge = this.energy;
+                int newCharge = super.extractEnergy(amount, simulate);
+                if (curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+                return newCharge;
+            }
+
+            @Override
+            public void addEnergyRaw(int amount) {
+                super.addEnergyRaw(amount);
+                addPartialUpdate("energy", this.energy);
+            }
+        };
         generationRate = (int) Math.ceil(((float) PAConfig.rfCost * rate));
         consumeRate = (int) Math.ceil(((float) PAConfig.fuelCost * rate));
-        this.maxExtract = (int)(Math.ceil(640 * rate));
+        this.maxExtract = (int) (Math.ceil(640 * rate));
     }
 
     @Override
     public void update() {
         super.update();
         if (!world.isRemote) {
-        	// generate!
+            // generate!
             if (isBurning()) {
-            	this.energyStorage.addEnergyRaw(generationRate);
+                this.energyStorage.addEnergyRaw(generationRate);
                 checkForFire();
             }
-            
+
             //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
-            	doEnergyInteraction(this, slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, null), this.maxExtract);
+                doEnergyInteraction(this, slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, null), this.maxExtract);
             }
 
             //output the energy to connected devices....
@@ -141,32 +141,33 @@ public class TileGenerator extends BaseTileEntity {
 
     @Override
     public int getBurnTime(ItemStack item) {
-    	// Thought: should we burn faster/slower as the tiers progress ?
+        // Thought: should we burn faster/slower as the tiers progress ?
         return getItemBurnTime(item) / consumeRate;
     }
 
     public void outputEnergy() {
-    	//Lets go around the world and try and give it to someone!
-    	if (this.energyStorage.canExtract()) {
-    		for (EnumFacing facing : EnumFacing.values()) {
-    			doEnergyInteraction(this, world.getTileEntity(pos.offset(facing)), facing, this.maxExtract);
-    	    	addPartialUpdate("energy", this.energyStorage.getEnergyStored());
-    		}
-    	}
+        //Lets go around the world and try and give it to someone!
+        if (this.energyStorage.canExtract()) {
+            for (EnumFacing facing : EnumFacing.values()) {
+                doEnergyInteraction(this, world.getTileEntity(pos.offset(facing)), facing, this.maxExtract);
+                addPartialUpdate("energy", this.energyStorage.getEnergyStored());
+            }
+        }
     }
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityEnergy.ENERGY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return true;
-		else return super.hasCapability(capability, facing);
-	}
-	
-	@Override
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            return true;
+        else return super.hasCapability(capability, facing);
+    }
+
+    @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityEnergy.ENERGY) return CapabilityEnergy.ENERGY.cast(energyStorage);
-		else return super.hasCapability(capability, facing)?super.getCapability(capability, facing):null;
-	}
-    
+        if (capability == CapabilityEnergy.ENERGY) return CapabilityEnergy.ENERGY.cast(energyStorage);
+        else return super.hasCapability(capability, facing) ? super.getCapability(capability, facing) : null;
+    }
+
     /* ISided Stuff */
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) {

@@ -2,10 +2,10 @@ package com.vanhal.progressiveautomation.common.entities.planter;
 
 import com.vanhal.progressiveautomation.common.compat.ModHelper;
 import com.vanhal.progressiveautomation.common.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.common.util.Point2I;
 import com.vanhal.progressiveautomation.common.util.Point3I;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;

@@ -1,8 +1,8 @@
 package com.vanhal.progressiveautomation.client.gui;
 
-import com.vanhal.progressiveautomation.common.entities.planter.TilePlanter;
-import com.vanhal.progressiveautomation.client.gui.container.ContainerPlanter;
 import com.vanhal.progressiveautomation.References;
+import com.vanhal.progressiveautomation.client.gui.container.ContainerPlanter;
+import com.vanhal.progressiveautomation.common.entities.planter.TilePlanter;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.common.util.StringHelper;
 import net.minecraft.entity.player.InventoryPlayer;

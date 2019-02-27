@@ -1,8 +1,8 @@
 package com.vanhal.progressiveautomation.client.gui;
 
-import com.vanhal.progressiveautomation.common.entities.capacitor.TileCapacitor;
-import com.vanhal.progressiveautomation.client.gui.container.ContainerCapacitor;
 import com.vanhal.progressiveautomation.References;
+import com.vanhal.progressiveautomation.client.gui.container.ContainerCapacitor;
+import com.vanhal.progressiveautomation.common.entities.capacitor.TileCapacitor;
 import com.vanhal.progressiveautomation.common.util.StringHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -27,7 +27,7 @@ public class GUICapacitor extends BaseGUI {
     }
 
     protected void drawText() {
-    	IEnergyStorage cap = capacitor.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
+        IEnergyStorage cap = capacitor.getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
         drawString(StringHelper.localize("gui.capacitor"), 5, GRAY);
         drawString(StringHelper.localize("gui.maximum") + ": " + capacitor.getTransferRate() + " FE/t", infoScreenX, infoScreenW, infroScreenY1, GREEN);
         if ((cap.getEnergyStored() >= cap.getMaxEnergyStored())) {
