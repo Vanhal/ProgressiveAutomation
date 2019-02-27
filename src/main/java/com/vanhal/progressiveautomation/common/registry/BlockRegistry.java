@@ -1,5 +1,6 @@
 package com.vanhal.progressiveautomation.common.registry;
 
+import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.common.blocks.BlockCapacitor;
 import com.vanhal.progressiveautomation.common.blocks.BlockChopper;
 import com.vanhal.progressiveautomation.common.blocks.BlockCrafter;
@@ -8,7 +9,6 @@ import com.vanhal.progressiveautomation.common.blocks.BlockGenerator;
 import com.vanhal.progressiveautomation.common.blocks.BlockKiller;
 import com.vanhal.progressiveautomation.common.blocks.BlockMiner;
 import com.vanhal.progressiveautomation.common.blocks.BlockPlanter;
-import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import net.minecraft.block.Block;
 import net.minecraftforge.event.RegistryEvent;

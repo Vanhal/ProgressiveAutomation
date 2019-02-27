@@ -1,8 +1,8 @@
 package com.vanhal.progressiveautomation.client.gui.container;
 
+import com.vanhal.progressiveautomation.client.gui.slots.SlotCharge;
 import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.common.entities.capacitor.TileCapacitor;
-import com.vanhal.progressiveautomation.client.gui.slots.SlotCharge;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 

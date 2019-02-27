@@ -1,8 +1,8 @@
 package com.vanhal.progressiveautomation.client.gui;
 
-import com.vanhal.progressiveautomation.common.entities.crafter.TileCrafter;
-import com.vanhal.progressiveautomation.client.gui.container.ContainerCrafter;
 import com.vanhal.progressiveautomation.References;
+import com.vanhal.progressiveautomation.client.gui.container.ContainerCrafter;
+import com.vanhal.progressiveautomation.common.entities.crafter.TileCrafter;
 import com.vanhal.progressiveautomation.common.util.StringHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;

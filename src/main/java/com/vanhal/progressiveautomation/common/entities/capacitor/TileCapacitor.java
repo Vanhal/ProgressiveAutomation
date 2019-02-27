@@ -15,7 +15,7 @@ public class TileCapacitor extends BaseTileEntity {
     public int SLOT_CHARGER = 1;
     protected PAEnergyStorage energyStorage;
     private int maxTransfer;
-    
+
     public TileCapacitor() {
         super(1);
         setEnergyStorage(5000 * PAConfig.rfStorageFactor, 80);
@@ -33,48 +33,48 @@ public class TileCapacitor extends BaseTileEntity {
         super.readCommonNBT(nbt);
         //load the current energy stored
         if (nbt.hasKey("energy")) {
-        	this.energyStorage.setEnergyStored(nbt.getInteger("energy"));
+            this.energyStorage.setEnergyStored(nbt.getInteger("energy"));
         }
     }
 
     public void setEnergyStorage(int size, int rate) {
-    	if(this.energyStorage == null) this.energyStorage = new PAEnergyStorage(size, rate) ;
-    	else {
-    		int curStorage = this.energyStorage.getEnergyStored();
-    		this.energyStorage = new PAEnergyStorage(size, rate) {
-    			@Override
-    			public int receiveEnergy(int amount, boolean simulate) {
-    				int curCharge = this.energy;
-    				int newCharge = super.receiveEnergy(amount, simulate);
-    				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
-    				return newCharge;
-    			}
-    			
-    			@Override
-    			public int extractEnergy(int amount, boolean simulate) {
-    				int curCharge = this.energy;
-    				int newCharge = super.extractEnergy(amount, simulate);
-    				if(curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
-    				return newCharge;
-    			}
-    		};
-    		this.energyStorage.setEnergyStored(curStorage);
-    	}
-    	
-    	this.maxTransfer = rate;
+        if (this.energyStorage == null) this.energyStorage = new PAEnergyStorage(size, rate);
+        else {
+            int curStorage = this.energyStorage.getEnergyStored();
+            this.energyStorage = new PAEnergyStorage(size, rate) {
+                @Override
+                public int receiveEnergy(int amount, boolean simulate) {
+                    int curCharge = this.energy;
+                    int newCharge = super.receiveEnergy(amount, simulate);
+                    if (curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+                    return newCharge;
+                }
+
+                @Override
+                public int extractEnergy(int amount, boolean simulate) {
+                    int curCharge = this.energy;
+                    int newCharge = super.extractEnergy(amount, simulate);
+                    if (curCharge != newCharge && !simulate) addPartialUpdate("energy", this.energy);
+                    return newCharge;
+                }
+            };
+            this.energyStorage.setEnergyStored(curStorage);
+        }
+
+        this.maxTransfer = rate;
     }
 
     public int getTransferRate() {
-    	return this.maxTransfer;
+        return this.maxTransfer;
     }
-    
+
     @Override
     public void update() {
         super.update();
         if (!world.isRemote) {
             //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
-            	doEnergyInteraction(this, slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, null), this.maxTransfer);
+                doEnergyInteraction(this, slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, null), this.maxTransfer);
             }
 
             //output only of we don't get a redstone signal
@@ -91,25 +91,25 @@ public class TileCapacitor extends BaseTileEntity {
     }
 
     public void outputEnergy() {
-    	//Lets go around the world and try and give it to someone!
-    	if (this.energyStorage.canExtract()) {
-    		for (EnumFacing facing : EnumFacing.values()) {
-    			doEnergyInteraction(this, world.getTileEntity(pos.offset(facing)), facing, this.maxTransfer);
-    		}
-    	}
+        //Lets go around the world and try and give it to someone!
+        if (this.energyStorage.canExtract()) {
+            for (EnumFacing facing : EnumFacing.values()) {
+                doEnergyInteraction(this, world.getTileEntity(pos.offset(facing)), facing, this.maxTransfer);
+            }
+        }
     }
-    
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityEnergy.ENERGY) return true;
-		return super.hasCapability(capability, facing);
-	}
-	
-	@Override
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) return true;
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityEnergy.ENERGY) return CapabilityEnergy.ENERGY.cast(energyStorage);
-		else return super.hasCapability(capability, facing)?super.getCapability(capability, facing):null;
-	}
+        if (capability == CapabilityEnergy.ENERGY) return CapabilityEnergy.ENERGY.cast(energyStorage);
+        else return super.hasCapability(capability, facing) ? super.getCapability(capability, facing) : null;
+    }
 
     /* ISided Stuff */
     @Override

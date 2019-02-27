@@ -78,7 +78,6 @@ public class ProgressiveAutomation {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, guiHandler);
         MinecraftForge.EVENT_BUS.register(instance);
         proxy.init();
-        //TODO ore dict so all recipes can use stone and the sub blocks of stone or see what Dark is doing in BookShelf to fix this. - ProxyNeko
         // Added so that any coloured wool can be used in our recipes.
         OreDictionary.registerOre("blockWool", Blocks.WOOL);
     }
@@ -94,5 +93,5 @@ public class ProgressiveAutomation {
         if (eventArgs.getModID().equals(References.MODID))
             PAConfig.syncConfig();
     }
-    
+
 }

@@ -1,6 +1,7 @@
 package com.vanhal.progressiveautomation.common;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.common.entities.capacitor.TileCapacitor;
 import com.vanhal.progressiveautomation.common.entities.capacitor.TileCapacitorDiamond;
 import com.vanhal.progressiveautomation.common.entities.capacitor.TileCapacitorIron;
@@ -33,7 +34,6 @@ import com.vanhal.progressiveautomation.common.entities.planter.TilePlanter;
 import com.vanhal.progressiveautomation.common.entities.planter.TilePlanterDiamond;
 import com.vanhal.progressiveautomation.common.entities.planter.TilePlanterIron;
 import com.vanhal.progressiveautomation.common.entities.planter.TilePlanterStone;
-import com.vanhal.progressiveautomation.References;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 

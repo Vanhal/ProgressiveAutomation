@@ -1,7 +1,7 @@
 package com.vanhal.progressiveautomation.common.entities.planter;
 
-import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
 
 public class TilePlanterIron extends TilePlanter {
 

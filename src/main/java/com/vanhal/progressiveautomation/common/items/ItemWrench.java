@@ -2,8 +2,8 @@ package com.vanhal.progressiveautomation.common.items;
 
 import com.vanhal.progressiveautomation.common.blocks.BaseBlock;
 import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import com.vanhal.progressiveautomation.common.util.IDismantleable;
+import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
@@ -23,7 +23,6 @@ import java.util.List;
 
 public class ItemWrench extends Item {
 
-    //TODO Fix the missing texture on shift right click. - ProxyNeko
     public ItemWrench() {
         this.setMaxStackSize(1);
     }

@@ -1,10 +1,10 @@
 package com.vanhal.progressiveautomation.client.gui.container;
 
-import com.vanhal.progressiveautomation.common.network.NetworkHandler;
-import com.vanhal.progressiveautomation.common.network.PartialTileNBTUpdateMessage;
-import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotBurn;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotPower;
+import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.common.network.NetworkHandler;
+import com.vanhal.progressiveautomation.common.network.PartialTileNBTUpdateMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;

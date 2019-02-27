@@ -1,11 +1,11 @@
 package com.vanhal.progressiveautomation.common.entities.farmer;
 
 import com.vanhal.progressiveautomation.common.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.common.util.PlayerFake;
 import com.vanhal.progressiveautomation.common.util.Point2I;
 import com.vanhal.progressiveautomation.common.util.Point3I;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -302,10 +302,9 @@ public class TileFarmer extends UpgradeableTileEntity {
                             animal = findAnimalToShear(searchBlock);
                             if (animal != null) {
                                 shearAnimal(animal);
-                            }
-                            else {
+                            } else {
                                 animal = findAnimalToMilk(searchBlock);
-                                if (animal != null){
+                                if (animal != null) {
                                     milkAnimal(animal);
                                 } else {
                                     searchBlock = -1;

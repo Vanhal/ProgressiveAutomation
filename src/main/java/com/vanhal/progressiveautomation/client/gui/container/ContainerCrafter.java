@@ -1,10 +1,10 @@
 package com.vanhal.progressiveautomation.client.gui.container;
 
-import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.common.entities.crafter.TileCrafter;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotCraftingLocked;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotFalseCopy;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotRemoveOnly;
+import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.common.entities.crafter.TileCrafter;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;

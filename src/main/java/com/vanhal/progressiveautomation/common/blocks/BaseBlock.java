@@ -1,14 +1,14 @@
 package com.vanhal.progressiveautomation.common.blocks;
 
 import com.vanhal.progressiveautomation.ProgressiveAutomation;
+import com.vanhal.progressiveautomation.References;
 import com.vanhal.progressiveautomation.api.PAItems;
 import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
 import com.vanhal.progressiveautomation.common.entities.UpgradeableTileEntity;
-import com.vanhal.progressiveautomation.References;
-import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeRegistry;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
 import com.vanhal.progressiveautomation.common.util.IDismantleable;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -43,9 +43,9 @@ public class BaseBlock extends BlockContainer implements IDismantleable {
         setRegistryName(blockName);
         setTranslationKey(References.MODID + ":" + blockName);
         setCreativeTab(ProgressiveAutomation.PATab);
-        
+
         this.blockLevel = level;
-        
+
         GUIid = ProgressiveAutomation.proxy.registerGui(machine);
     }
 

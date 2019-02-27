@@ -1,13 +1,13 @@
 package com.vanhal.progressiveautomation.client.gui.container;
 
-import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
-import com.vanhal.progressiveautomation.common.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotSaplings;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotShearsDisabledUpgrade;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotTool;
 import com.vanhal.progressiveautomation.client.gui.slots.SlotUpgrades;
-import com.vanhal.progressiveautomation.common.util.ToolHelper;
+import com.vanhal.progressiveautomation.common.entities.BaseTileEntity;
+import com.vanhal.progressiveautomation.common.entities.chopper.TileChopper;
 import com.vanhal.progressiveautomation.common.upgrades.UpgradeType;
+import com.vanhal.progressiveautomation.common.util.ToolHelper;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
