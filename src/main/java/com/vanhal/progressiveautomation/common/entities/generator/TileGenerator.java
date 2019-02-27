@@ -10,12 +10,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 public class TileGenerator extends BaseTileEntity {
 
@@ -25,6 +25,7 @@ public class TileGenerator extends BaseTileEntity {
     protected boolean burnUpdate = false;
     public int SLOT_CHARGER = 1;
     private PAEnergyStorage energyStorage;
+    protected int maxExtract;
     
     public TileGenerator() {
         super(1);
@@ -43,7 +44,7 @@ public class TileGenerator extends BaseTileEntity {
         super.readCommonNBT(nbt);
         //load the current energy stored
         if (nbt.hasKey("energy")) {
-        	this.energyStorage.setEnergy(nbt.getInteger("energy"));
+        	this.energyStorage.setEnergyStored(nbt.getInteger("energy"));
         }
     }
 
@@ -52,28 +53,31 @@ public class TileGenerator extends BaseTileEntity {
     }
 
     public void setEnergyStorage(int size, float rate) {
-    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size, 0, (int)Math.ceil(rate));
-    	
+    	if(this.energyStorage==null) this.energyStorage = new PAEnergyStorage(size, 0, (int)Math.ceil(rate));    	
         generationRate = (int) Math.ceil(((float) PAConfig.rfCost * rate));
         consumeRate = (int) Math.ceil(((float) PAConfig.fuelCost * rate));
+        this.maxExtract = (int)(Math.ceil(640 * rate));
     }
 
     @Override
     public void update() {
         super.update();
         if (!world.isRemote) {
+        	// generate!
             if (isBurning()) {
-                this.energyStorage.generatePower(generationRate);
+            	// update fuel burn time/consume fuel
+            	// add energy to storage
+            	// if storage is full, set "isBurning()" to false once curTime exceeds fuel burn time
                 checkForFire();
             }
-
+            
             //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
                 if (this.energyStorage.canExtract()) {
                     if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
                         IEnergyStorage container = slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
                         if (container.canReceive()) {
-                        	int trans = this.energyStorage.getMaxTransfer() >= this.energyStorage.getEnergyStored()?this.energyStorage.getEnergyStored():this.energyStorage.getMaxTransfer();
+                        	int trans = this.maxExtract >= this.energyStorage.getEnergyStored()?this.energyStorage.getEnergyStored():this.maxExtract;
                         	int giveAmount = container.receiveEnergy(trans, false);
                             if (giveAmount > 0) {
                             	energyStorage.extractEnergy(giveAmount, false);
@@ -129,6 +133,7 @@ public class TileGenerator extends BaseTileEntity {
 
     @Override
     public int getBurnTime(ItemStack item) {
+    	// fix this - we do't burn at an enhanced or diminished rate
         return getItemBurnTime(item) / consumeRate;
     }
 
@@ -136,28 +141,15 @@ public class TileGenerator extends BaseTileEntity {
     	//Lets go around the world and try and give it to someone!
     	if (this.energyStorage.canExtract()) {
     		for (EnumFacing facing : EnumFacing.values()) {
-    			//Do we have any energy up for grabs?
-    			TileEntity entity = world.getTileEntity(pos.offset(facing));
-    			if (entity != null) {
-    				if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-    					IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
-    					if (energy.canReceive()) {
-    						int giveAmount = energy.receiveEnergy(this.energyStorage.getEnergyStored(), false);
-    						if (giveAmount > 0) {
-    							this.energyStorage.extractEnergy(giveAmount, false);
-    						}
-    					}
-    				}
-    			}
+    			doEnergyInteraction(this, world.getTileEntity(pos.offset(facing)), facing, this.maxExtract);
     		}
     	}
     }
 
-    
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(capability == CapabilityEnergy.ENERGY) return true;
-		return super.hasCapability(capability, facing);
+		if(capability == CapabilityEnergy.ENERGY || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) return true;
+		else return super.hasCapability(capability, facing);
 	}
 	
 	@Override

@@ -101,7 +101,7 @@ public class ItemRFEngine extends Item {
                 }
 
                 @Override
-                public void setEnergy(int energy){
+                public void setEnergyStored(int energy){
                     if(!stack.hasTagCompound()) initStack();
 
                     stack.getTagCompound().setInteger("Energy", energy);
@@ -124,7 +124,7 @@ public class ItemRFEngine extends Item {
                 	else rv = rcv;
                 	
                 	this.energy += rv;
-                	setEnergy(this.energy);
+                	setEnergyStored(this.energy);
                 	return rv;
                 }
                 

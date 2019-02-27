@@ -20,55 +20,39 @@ public class PAEnergyStorage extends EnergyStorage {
 		super(capacity, maxReceive, maxExtract);
 	}
 	
-	public void setEnergy(int energy) {
-		this.energy = energy;
-	}
+    public void addEnergyRaw(int energy){
+    	this.energy = Math.min(this.energy + energy, this.capacity);
+    }
 
-	public void consumePower(int energy) {
-		this.energy -= energy;
-		if (this.energy < 0) {
-			this.energy = 0;
-		}
-	}
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate){
+        if(!this.canReceive()){
+            return 0;
+        }
+        int energy = this.getEnergyStored();
 
-	public void generatePower(int energy) {
-		this.energy += energy;
-		if (this.energy > capacity) {
-			this.energy = capacity;
-		}
-	}
-	
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
-	}
-	
-	public void setMaxTransfer(int transfer) {
-		if(this.maxReceive != 0) this.maxExtract = this.maxReceive = transfer;
-		else this.maxExtract = transfer;
-	}
-	
-	public void resetStats(int capacity, int transfer) {
-		this.setCapacity(capacity);
-		this.setMaxTransfer(transfer);
-	}
-	
-	public int getMaxTransfer() {
-		return this.maxExtract;
-	
-	}
-	
-	@Override
-	public int receiveEnergy(int amount, boolean simulate) {
-		int rv = super.receiveEnergy(amount, simulate);
-		return rv;
-	}
-	
-	@Override
-	public int extractEnergy(int amount, boolean simulate) {
-		int rv = super.extractEnergy(amount, simulate);
-		return rv;
-	}
-	
+        int energyReceived = Math.min(this.capacity-energy, Math.min(this.maxReceive, maxReceive));
+        if(!simulate){
+            this.setEnergyStored(energy+energyReceived);
+        }
+
+        return energyReceived;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate){
+        if(!this.canExtract()){
+            return 0;
+        }
+        int energy = this.getEnergyStored();
+
+        int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
+        if(!simulate){
+            this.setEnergyStored(energy-energyExtracted);
+        }
+        return energyExtracted;
+    }
+
     public void readFromNBT(NBTTagCompound compound){
         this.setEnergyStored(compound.getInteger("Energy"));
     }
@@ -81,3 +65,4 @@ public class PAEnergyStorage extends EnergyStorage {
         this.energy = energy;
     }
 }
+

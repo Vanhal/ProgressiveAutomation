@@ -6,12 +6,9 @@ import com.vanhal.progressiveautomation.common.util.PAEnergyStorage;
 import com.vanhal.progressiveautomation.common.util.WrenchModes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
-
 
 public class TileCapacitor extends BaseTileEntity {
 
@@ -36,13 +33,17 @@ public class TileCapacitor extends BaseTileEntity {
         super.readCommonNBT(nbt);
         //load the current energy stored
         if (nbt.hasKey("energy")) {
-        	this.energyStorage.setEnergy(nbt.getInteger("energy"));
+        	this.energyStorage.setEnergyStored(nbt.getInteger("energy"));
         }
     }
 
     public void setEnergyStorage(int size, int rate) {
-    	if(this.energyStorage == null) this.energyStorage = new PAEnergyStorage(size, rate);
-    	else this.energyStorage.resetStats(size, rate);
+    	if(this.energyStorage == null) this.energyStorage = new PAEnergyStorage(size, rate) ;
+    	else {
+    		int curStorage = this.energyStorage.getEnergyStored();
+    		this.energyStorage = new PAEnergyStorage(size, rate);
+    		this.energyStorage.setEnergyStored(curStorage);
+    	}
     	
     	this.maxTransfer = rate;
     }
@@ -57,18 +58,7 @@ public class TileCapacitor extends BaseTileEntity {
         if (!world.isRemote) {
             //Charge items in charge slot
             if (!slots[SLOT_CHARGER].isEmpty()) {
-                if (this.energyStorage.canExtract()) {
-                    if (slots[SLOT_CHARGER].hasCapability(CapabilityEnergy.ENERGY, EnumFacing.UP)) {
-                        IEnergyStorage container = (IEnergyStorage) slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, EnumFacing.UP);
-                        if (container.canReceive()) {
-                        	int trans = this.maxTransfer < this.energyStorage.getEnergyStored()?this.maxTransfer:this.energyStorage.getEnergyStored();
-                        	int giveAmount = container.receiveEnergy(trans, false);
-                            if (giveAmount > 0) {
-                            	energyStorage.extractEnergy(giveAmount, false);
-                            }
-                        }
-                    }
-                }
+            	doEnergyInteraction(this, slots[SLOT_CHARGER].getCapability(CapabilityEnergy.ENERGY, null), this.maxTransfer);
             }
 
             //output only of we don't get a redstone signal
@@ -85,24 +75,12 @@ public class TileCapacitor extends BaseTileEntity {
     }
 
     public void outputEnergy() {
-        //Lets go around the world and try and give it to someone!
-        for (EnumFacing facing : EnumFacing.values()) {
-            //Do we have any energy up for grabs?
-            if (this.energyStorage.canExtract()) {
-                TileEntity entity = world.getTileEntity(pos.offset(facing));
-                if (entity != null) {
-                    if (entity.hasCapability(CapabilityEnergy.ENERGY, facing.getOpposite())) {
-                        IEnergyStorage energy = entity.getCapability(CapabilityEnergy.ENERGY, facing.getOpposite());
-                        if (energy.canReceive()) {
-                            int giveAmount = energy.receiveEnergy(this.energyStorage.getEnergyStored(), false);
-                            if (giveAmount > 0) {
-                            	energyStorage.extractEnergy(giveAmount, false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    	//Lets go around the world and try and give it to someone!
+    	if (this.energyStorage.canExtract()) {
+    		for (EnumFacing facing : EnumFacing.values()) {
+    			doEnergyInteraction(this, world.getTileEntity(pos.offset(facing)), facing, this.maxTransfer);
+    		}
+    	}
     }
     
 	@Override

@@ -1,7 +1,6 @@
 package com.vanhal.progressiveautomation.common.entities;
 
 import com.vanhal.progressiveautomation.PAConfig;
-import com.vanhal.progressiveautomation.ProgressiveAutomation;
 import com.vanhal.progressiveautomation.common.network.PartialTileNBTUpdateMessage;
 import com.vanhal.progressiveautomation.common.items.ItemRFEngine;
 import com.vanhal.progressiveautomation.common.util.ToolHelper;
@@ -29,6 +28,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -996,6 +996,50 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
         return null;
     }
 
+    public static int doEnergyInteraction(TileEntity source, IEnergyStorage target, int maxTransfer) {
+    	if(maxTransfer > 0) {
+    		// we are sending
+    		EnumFacing interfaceSide = EnumFacing.UP;
+    		if(source != null && target != null) {
+    			IEnergyStorage sourceCap = source.getCapability(CapabilityEnergy.ENERGY, interfaceSide);
+    			if(sourceCap != null) {
+    				if(sourceCap.getEnergyStored() == 0) return 0; // can't send if there is nothing to send
+    				int availableToSend = sourceCap.extractEnergy(maxTransfer, true); // simulate this, but get an amount
+    				if(availableToSend > 0) {
+    					// we have power to send, yes...
+    					int totalSent = target.receiveEnergy(availableToSend, false);
+    					sourceCap.extractEnergy(totalSent, false);
+    					return totalSent;
+    				}
+    			}
+    		}
+    	}
+    	return 0;
+    }
+    
+    public static int doEnergyInteraction(TileEntity source, TileEntity target, EnumFacing side, int maxTransfer) {
+    	if(maxTransfer > 0) {
+    		// we are sending
+    		EnumFacing interfaceSide = side == null ? EnumFacing.UP : side.getOpposite();
+    		if(source != null && target != null) {
+    			IEnergyStorage sourceCap = source.getCapability(CapabilityEnergy.ENERGY, interfaceSide);
+    			IEnergyStorage targetCap = target.getCapability(CapabilityEnergy.ENERGY, interfaceSide);
+    			if(sourceCap != null && targetCap != null) {
+    				// we can send, yay!
+    				if(sourceCap.getEnergyStored() == 0) return 0; // can't send if there is nothing to send
+    				int availableToSend = sourceCap.extractEnergy(maxTransfer, true); // simulate this, but get an amount
+    				if(availableToSend > 0) {
+    					// we have power to send, yes...
+    					int totalSent = targetCap.receiveEnergy(availableToSend, false);
+    					sourceCap.extractEnergy(totalSent, false);
+    					return totalSent;
+    				}
+    			}
+    		}
+    	}
+    	return 0;
+    }
+    
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
         if ((capability == CapabilityEnergy.ENERGY && hasEngine()) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {

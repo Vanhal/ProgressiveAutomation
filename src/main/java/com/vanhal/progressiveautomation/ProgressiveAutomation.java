@@ -31,8 +31,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = References.MODID,
         name = References.MODNAME,
         version = References.Version,
-        guiFactory = "com.vanhal.progressiveautomation.client.PAGuiFactory",
-        dependencies = "after:CoFHAPI|energy;after:CoFHCore;")
+        guiFactory = "com.vanhal.progressiveautomation.client.PAGuiFactory")
 public class ProgressiveAutomation {
 
     @Instance(References.MODID)
