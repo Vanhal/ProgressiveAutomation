@@ -1,0 +1,5 @@
+{
+	"recipes": {
+		"wither_recipe": "com.vanhal.progressiveautomation.common.items.tools.WitherRecipe$Factory"
+	}
+}

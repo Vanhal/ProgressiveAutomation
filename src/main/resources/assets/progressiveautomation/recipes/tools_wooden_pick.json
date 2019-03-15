@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "minecraft:wooden_pickaxe"
+  },
+  "pattern": [
+    "www",
+    " s ",
+    " s "
+  ],
+  "type": "progressiveautomation:wither_recipe",
+  "key": {
+    "w": {
+      "item": "progressiveautomation:wither_wood"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  }
+}

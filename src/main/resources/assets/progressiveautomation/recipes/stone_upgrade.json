@@ -14,7 +14,7 @@
       "ore": "stone"
     },
     "r": {
-      "item": "minecraft:redstone"
+      "item": "progressiveautomation:wood_upgrade"
     }
   }
 }

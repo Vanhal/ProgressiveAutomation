@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "minecraft:wooden_axe"
+  },
+  "pattern": [
+    "ww ",
+    "ws ",
+    " s "
+  ],
+  "type": "progressiveautomation:wither_recipe",
+  "key": {
+    "w": {
+      "item": "progressiveautomation:wither_wood"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "minecraft:iron_sword"
+  },
+  "pattern": [
+    " w ",
+    " w ",
+    " s "
+  ],
+  "type": "progressiveautomation:wither_recipe",
+  "key": {
+    "w": {
+      "item": "progressiveautomation:wither_iron"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  }
+}

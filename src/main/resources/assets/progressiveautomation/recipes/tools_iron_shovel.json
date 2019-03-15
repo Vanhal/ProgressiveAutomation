@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "minecraft:iron_shovel"
+  },
+  "pattern": [
+    " w ",
+    " s ",
+    " s "
+  ],
+  "type": "progressiveautomation:wither_recipe",
+  "key": {
+    "w": {
+      "item": "progressiveautomation:wither_iron"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  }
+}

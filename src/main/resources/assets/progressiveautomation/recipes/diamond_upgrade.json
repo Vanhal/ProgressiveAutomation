@@ -2,18 +2,16 @@
   "result": {
     "item": "progressiveautomation:diamond_upgrade"
   },
-  "pattern": [
-    "ppp",
-    "prp",
-    "ppp"
-  ],
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "p": {
+  "ingredients": [
+    {
+      "item": "progressiveautomation:iron_upgrade"
+    },
+    {
       "item": "minecraft:diamond"
     },
-    "r": {
-      "item": "minecraft:redstone"
+    {
+      "item": "minecraft:diamond"
     }
-  }
+  ],
+  "type": "minecraft:crafting_shapeless"
 }

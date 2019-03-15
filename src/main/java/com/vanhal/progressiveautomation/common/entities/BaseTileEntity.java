@@ -1022,19 +1022,21 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
             // we are sending
             EnumFacing interfaceSide = side == null ? EnumFacing.UP : side.getOpposite();
             if (source != null && target != null) {
-                IEnergyStorage sourceCap = source.getCapability(CapabilityEnergy.ENERGY, interfaceSide);
-                IEnergyStorage targetCap = target.getCapability(CapabilityEnergy.ENERGY, interfaceSide);
-                if (sourceCap != null && targetCap != null) {
-                    // we can send, yay!
-                    if (sourceCap.getEnergyStored() == 0) return 0; // can't send if there is nothing to send
-                    int availableToSend = sourceCap.extractEnergy(maxTransfer, true); // simulate this, but get an amount
-                    if (availableToSend > 0) {
-                        // we have power to send, yes...
-                        int totalSent = targetCap.receiveEnergy(availableToSend, false);
-                        sourceCap.extractEnergy(totalSent, false);
-                        return totalSent;
-                    }
-                }
+            	if (target.hasCapability(CapabilityEnergy.ENERGY, interfaceSide)) {
+	                IEnergyStorage sourceCap = source.getCapability(CapabilityEnergy.ENERGY, interfaceSide);
+	                IEnergyStorage targetCap = target.getCapability(CapabilityEnergy.ENERGY, interfaceSide);
+	                if (sourceCap != null && targetCap != null) {
+	                    // we can send, yay!
+	                    if (sourceCap.getEnergyStored() == 0) return 0; // can't send if there is nothing to send
+	                    int availableToSend = sourceCap.extractEnergy(maxTransfer, true); // simulate this, but get an amount
+	                    if (availableToSend > 0) {
+	                        // we have power to send, yes...
+	                        int totalSent = targetCap.receiveEnergy(availableToSend, false);
+	                        sourceCap.extractEnergy(totalSent, false);
+	                        return totalSent;
+	                    }
+	                }
+            	}
             }
         }
         return 0;
@@ -1042,7 +1044,7 @@ public class BaseTileEntity extends TileEntity implements ISidedInventory, ITick
 
     @Override
     public boolean hasCapability(@Nonnull Capability<?> capability, @Nonnull EnumFacing facing) {
-        if ((capability == CapabilityEnergy.ENERGY && hasEngine()) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+        if (((capability == CapabilityEnergy.ENERGY) && hasEngine()) || capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return true;
         }
         return super.hasCapability(capability, facing);

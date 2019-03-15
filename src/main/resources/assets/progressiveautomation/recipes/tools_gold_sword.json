@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "minecraft:golden_sword"
+  },
+  "pattern": [
+    " w ",
+    " w ",
+    " s "
+  ],
+  "type": "progressiveautomation:wither_recipe",
+  "key": {
+    "w": {
+      "item": "progressiveautomation:wither_gold"
+    },
+    "s": {
+      "item": "minecraft:stick"
+    }
+  }
+}
