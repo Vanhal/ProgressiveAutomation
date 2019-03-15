@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": [ { "model": "progressiveautomation:crafter_diamond" } ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "progressiveautomation:crafter_diamond"
+      }
+    ]
+  }
 }

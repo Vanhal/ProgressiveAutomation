@@ -1,8 +1,8 @@
 {
-    "parent": "progressiveautomation:block/three_face",
-    "textures": {
-        "up": "progressiveautomation:blocks/iron_diamond",
-        "side": "progressiveautomation:blocks/iron_sword",
-        "down": "progressiveautomation:blocks/iron_small"
-    }
+  "parent": "progressiveautomation:block/three_face",
+  "textures": {
+    "up": "progressiveautomation:blocks/iron_diamond",
+    "side": "progressiveautomation:blocks/iron_sword",
+    "down": "progressiveautomation:blocks/iron_small"
+  }
 }

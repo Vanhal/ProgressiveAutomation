@@ -1,0 +1,26 @@
+{
+  "result": {
+    "item": "progressiveautomation:generator_wooden"
+  },
+  "pattern": [
+    "sps",
+    "ses",
+    "srs"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:redstone_block"
+    },
+    "r": {
+      "item": "minecraft:furnace"
+    },
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    },
+    "e": {
+      "item": "progressiveautomation:rf_engine"
+    }
+  }
+}

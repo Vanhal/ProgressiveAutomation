@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "progressiveautomation:rf_engine"
+  },
+  "pattern": [
+    "iii",
+    "grg",
+    "iii"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  }
+}

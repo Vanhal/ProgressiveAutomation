@@ -1,8 +1,8 @@
 {
-    "parent": "progressiveautomation:block/three_face",
-    "textures": {
-        "up": "progressiveautomation:blocks/wooden_small",
-        "down": "progressiveautomation:blocks/wooden_big",
-        "side": "progressiveautomation:blocks/wooden_blank"
-    }
+  "parent": "progressiveautomation:block/three_face",
+  "textures": {
+    "up": "progressiveautomation:blocks/wooden_small",
+    "down": "progressiveautomation:blocks/wooden_big",
+    "side": "progressiveautomation:blocks/wooden_blank"
+  }
 }

@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": [ { "model": "progressiveautomation:killer_stone" } ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "progressiveautomation:killer_stone"
+      }
+    ]
+  }
 }

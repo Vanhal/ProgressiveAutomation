@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "progressiveautomation:wither_stone",
+    "count": 4
+  },
+  "pattern": [
+    " p ",
+    "pnp",
+    " p "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "n": {
+      "item": "minecraft:nether_star"
+    }
+  }
+}

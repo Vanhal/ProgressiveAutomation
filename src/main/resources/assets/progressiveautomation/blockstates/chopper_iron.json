@@ -1,5 +1,7 @@
 {
-    "variants": {
-        "normal": { "model": "progressiveautomation:chopper_iron" }
+  "variants": {
+    "normal": {
+      "model": "progressiveautomation:chopper_iron"
     }
+  }
 }
