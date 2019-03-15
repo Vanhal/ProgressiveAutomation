@@ -1,0 +1,21 @@
+{
+  "result": {
+    "item": "progressiveautomation:wither_wood",
+    "count": 8
+  },
+  "pattern": [
+    "ppp",
+    "pnp",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "logWood"
+    },
+    "n": {
+      "item": "minecraft:nether_star"
+    }
+  }
+}

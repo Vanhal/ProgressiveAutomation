@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": [ { "model": "progressiveautomation:miner_diamond" } ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "progressiveautomation:miner_diamond"
+      }
+    ]
+  }
 }

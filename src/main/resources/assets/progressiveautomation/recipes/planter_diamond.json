@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "progressiveautomation:planter_diamond"
+  },
+  "pattern": [
+    "sss",
+    "scs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:diamond_hoe"
+    },
+    "s": {
+      "item": "minecraft:diamond"
+    },
+    "c": {
+      "item": "progressiveautomation:planter_iron"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "result": {
+    "item": "progressiveautomation:generator_stone"
+  },
+  "pattern": [
+    "ses",
+    "scs",
+    "sss"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "s": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "c": {
+      "item": "progressiveautomation:generator_wooden"
+    },
+    "e": {
+      "item": "progressiveautomation:rf_engine"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "result": {
+    "item": "progressiveautomation:wither_diamond"
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless"
+}

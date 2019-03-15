@@ -1,0 +1,19 @@
+{
+  "result": {
+    "item": "progressiveautomation:wrench"
+  },
+  "pattern": [
+    "s s",
+    " i ",
+    " s "
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  }
+}

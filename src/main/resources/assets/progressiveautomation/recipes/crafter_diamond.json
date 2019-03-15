@@ -1,0 +1,22 @@
+{
+  "result": {
+    "item": "progressiveautomation:crafter_diamond"
+  },
+  "pattern": [
+    "sss",
+    "scs",
+    "sps"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "item": "minecraft:crafting_table"
+    },
+    "s": {
+      "item": "minecraft:diamond"
+    },
+    "c": {
+      "item": "progressiveautomation:crafter_iron"
+    }
+  }
+}

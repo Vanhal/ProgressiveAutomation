@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": [ { "model": "progressiveautomation:crafter_stone" } ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "progressiveautomation:crafter_stone"
+      }
+    ]
+  }
 }

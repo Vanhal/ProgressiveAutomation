@@ -1,5 +1,9 @@
 {
-    "variants": {
-        "normal": [ { "model": "progressiveautomation:miner_stone" } ]
-    }
+  "variants": {
+    "normal": [
+      {
+        "model": "progressiveautomation:miner_stone"
+      }
+    ]
+  }
 }

@@ -1,9 +1,6 @@
 ## gradle
 /.gradle
 /build
-/gradle
-/gradlew
-/gradlew.bat
 
 ## ForgeGradle
 /run
@@ -25,10 +22,8 @@
 /*.ipr
 /*.iws
 /atlassian-ide-plugin.xml
+/classes
 
 *Thumbs.db
 
-/PA1.8_Client.launch
-/PA1.8_Server.launch
-/PA1.9_Client.launch
-/PA1.9_Server.launch
+*.launch

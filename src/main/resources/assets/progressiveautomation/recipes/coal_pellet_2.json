@@ -1,0 +1,13 @@
+{
+  "result": {
+    "item": "progressiveautomation:coal_pellet",
+    "count": 8
+  },
+  "ingredients": [
+    {
+      "item": "minecraft:coal",
+      "data": 1
+    }
+  ],
+  "type": "forge:ore_shapeless"
+}

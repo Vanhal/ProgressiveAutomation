@@ -1,0 +1,30 @@
+{
+  "result": {
+    "item": "progressiveautomation:filter_animal_upgrade"
+  },
+  "pattern": [
+    "pep",
+    "lrw",
+    "ppp"
+  ],
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "p": {
+      "type": "forge:ore_dict",
+      "ore": "stone"
+    },
+    "r": {
+      "item": "minecraft:redstone_block"
+    },
+    "e": {
+      "item": "minecraft:egg"
+    },
+    "w": {
+      "type": "forge:ore_dict",
+      "ore": "blockWool"
+    },
+    "l": {
+      "item": "minecraft:leather"
+    }
+  }
+}
