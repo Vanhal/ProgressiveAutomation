@@ -1,0 +1,69 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:stone_upgrade"
+    ]
+  },
+  "criteria": {
+    "has_killer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:killer_stone"
+          }
+        ]
+      }
+    },
+    "has_miner": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:miner_stone"
+          }
+        ]
+      }
+    },
+    "has_planter": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:planter_stone"
+          }
+        ]
+      }
+    },
+    "has_farmer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:farmer_stone"
+          }
+        ]
+      }
+    },
+    "has_chopper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:chopper_stone"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_killer",
+      "has_miner",
+      "has_planter",
+      "has_farmer",
+      "has_chopper"
+    ]
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:chopper_iron",
+      "progressiveautomation:farmer_iron",
+      "progressiveautomation:miner_iron",
+      "progressiveautomation:crafter_iron",
+      "progressiveautomation:killer_iron",
+      "progressiveautomation:planter_iron",
+      "progressiveautomation:wrench"
+    ]
+  },
+  "criteria": {
+    "has_iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:iron_ingot"
+          }
+        ]
+      }
+    },
+    "has_tier2": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "progressiveautomation:chopper_stone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_iron"
+    ],
+    [
+      "has_tier2"
+    ]
+  ]
+}

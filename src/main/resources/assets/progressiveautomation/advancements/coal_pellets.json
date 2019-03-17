@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:coal_pellet"
+    ]
+  },
+  "criteria": {
+    "has_coal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:coal"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_coal"
+    ]
+  ]
+}

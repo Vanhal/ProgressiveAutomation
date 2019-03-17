@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:wither_wood",
+      "progressiveautomation:wither_stone",
+      "progressiveautomation:wither_iron",
+      "progressiveautomation:wither_gold",
+      "progressiveautomation:wither_diamond"
+    ]
+  },
+  "criteria": {
+    "has_nether_star": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:nether_star"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_nether_star"
+    ]
+  ]
+}

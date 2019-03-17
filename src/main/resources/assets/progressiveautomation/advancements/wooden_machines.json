@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:chopper_wooden",
+      "progressiveautomation:farmer_wooden",
+      "progressiveautomation:miner_wooden",
+      "progressiveautomation:crafter_wooden",
+      "progressiveautomation:killer_wooden",
+      "progressiveautomation:planter_wooden"
+    ]
+  },
+  "criteria": {
+    "has_furnace": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:furnace"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_furnace"
+    ]
+  ]
+}

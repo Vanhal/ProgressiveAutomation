@@ -14,6 +14,8 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 
+import com.vanhal.progressiveautomation.ProgressiveAutomation;
+
 public class EventPlayers {
 
     private ArrayList<String> names = new ArrayList<>();
@@ -63,7 +65,7 @@ public class EventPlayers {
         if (!event.getWorld().isRemote) {
             if (event.getEntity() instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer) event.getEntity();
-                if (names.contains(player.getDisplayName().toString())) {
+                if (names.contains(player.getDisplayName().getUnformattedText())) {
                     ItemStack potato = new ItemStack(Items.POISONOUS_POTATO);
                     potato.addEnchantment(Enchantments.UNBREAKING, 1);
                     potato.setStackDisplayName("Death Potato");

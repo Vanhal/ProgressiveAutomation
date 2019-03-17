@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:rf_engine",
+      "progressiveautomation:capacitor_diamond",
+      "progressiveautomation:generator_diamond"
+    ]
+  },
+  "criteria": {
+    "has_redstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:redstone"
+          }
+        ]
+      }
+    },
+    "has_tier4": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "progressiveautomation:chopper_diamond"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_redstone"
+    ],
+    [
+      "has_tier4"
+    ]
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:milker_upgrade",
+      "progressiveautomation:shearing_upgrade"
+    ]
+  },
+  "criteria": {
+    "has_wooden": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:farmer_wooden"
+          }
+        ]
+      }
+    },
+    "has_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:farmer_stone"
+          }
+        ]
+      }
+    },
+    "has_iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:farmer_iron"
+          }
+        ]
+      }
+    },
+    "has_diamond": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:farmer_diamond"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_wooden",
+      "has_stone",
+      "has_iron",
+      "has_diamond"
+    ]
+  ]
+}

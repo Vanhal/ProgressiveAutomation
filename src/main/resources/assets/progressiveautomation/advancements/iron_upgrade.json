@@ -1,0 +1,69 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:iron_upgrade"
+    ]
+  },
+  "criteria": {
+    "has_killer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:killer_iron"
+          }
+        ]
+      }
+    },
+    "has_miner": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:miner_iron"
+          }
+        ]
+      }
+    },
+    "has_planter": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:planter_iron"
+          }
+        ]
+      }
+    },
+    "has_farmer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:farmer_iron"
+          }
+        ]
+      }
+    },
+    "has_chopper": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "progressiveautomation:chopper_iron"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_killer",
+      "has_miner",
+      "has_planter",
+      "has_farmer",
+      "has_chopper"
+    ]
+  ]
+}

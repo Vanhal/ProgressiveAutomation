@@ -1,0 +1,36 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:rf_engine",
+      "progressiveautomation:capacitor_wooden",
+      "progressiveautomation:generator_wooden"
+    ]
+  },
+  "criteria": {
+    "has_redstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:redstone"
+          }
+        ]
+      }
+    },
+    "has_tier1": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "progressiveautomation:chopper_wooden"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_redstone"
+    ],
+    [
+      "has_tier1"
+    ]
+  ]
+}

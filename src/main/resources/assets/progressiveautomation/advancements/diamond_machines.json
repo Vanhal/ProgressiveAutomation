@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:chopper_diamond",
+      "progressiveautomation:farmer_diamond",
+      "progressiveautomation:miner_diamond",
+      "progressiveautomation:crafter_diamond",
+      "progressiveautomation:killer_diamond",
+      "progressiveautomation:planter_diamond"
+    ]
+  },
+  "criteria": {
+    "has_diamond": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:diamond"
+          }
+        ]
+      }
+    },
+    "has_tier3": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "progressiveautomation:chopper_iron"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_diamond"
+    ],
+    [
+      "has_tier3"
+    ]
+  ]
+}

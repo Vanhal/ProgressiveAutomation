@@ -93,18 +93,18 @@ public class PAConfig {
         if (fuelCost <= 0) fuelCost = 1;
 
         //rf options
-        rfSupport = config.getBoolean("enableRF", "general", true, "Set to false to disable RF support in this mod");
+        rfSupport = config.getBoolean("enableRF", "general", true, "Set to false to disable FE support in this mod");
 
-        rfCost = config.getInt("rfCost", "rfoptions", 40, 1, 50000, "RF per tick that the machines use");
+        rfCost = config.getInt("rfCost", "rfoptions", 40, 1, 50000, "FE per tick that the machines use");
         if (rfCost <= 0) rfCost = 1000; //Cheater! Take that! :P
 
-        rfStored = config.getInt("rfStored", "rfoptions", 40000, rfCost, 100000, "Amount of RF that the Engines store, needs to be at least the same as the cost");
+        rfStored = config.getInt("rfStored", "rfoptions", 40000, rfCost, 100000, "Amount of FE that the Engines store, needs to be at least the same as the cost");
         if (rfStored < rfCost) rfStored = rfCost;
 
-        rfRate = config.getInt("rfRate", "rfoptions", 1000, 1, 100000, "The max rate at which RF can flow into the machines");
+        rfRate = config.getInt("rfRate", "rfoptions", 1000, 1, 100000, "The max rate at which FE can flow into the machines");
         if (rfRate <= 0) rfRate = 1000;
 
-        rfStorageFactor = config.getInt("rfStorageFactor", "rfoptions", 4, 1, 8, "The multiplier that is applied to the Capacitor RF storage size");
+        rfStorageFactor = config.getInt("rfStorageFactor", "rfoptions", 4, 1, 8, "The multiplier that is applied to the Capacitor FE storage size");
         if (rfStorageFactor <= 0) rfStorageFactor = 1;
 
         //misc options

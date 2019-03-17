@@ -1,0 +1,40 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "progressiveautomation:chopper_stone",
+      "progressiveautomation:farmer_stone",
+      "progressiveautomation:miner_stone",
+      "progressiveautomation:crafter_stone",
+      "progressiveautomation:killer_stone",
+      "progressiveautomation:planter_stone"
+    ]
+  },
+  "criteria": {
+    "has_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:stone",
+            "data": 0
+          }
+        ]
+      }
+    },
+    "has_tier1": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "progressiveautomation:chopper_wooden"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_stone"
+    ],
+    [
+      "has_tier1"
+    ]
+  ]
+}
