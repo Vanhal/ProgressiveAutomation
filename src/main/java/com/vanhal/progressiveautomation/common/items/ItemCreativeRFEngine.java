@@ -28,4 +28,9 @@ public class ItemCreativeRFEngine extends ItemRFEngine {
         list.add(TextFormatting.GRAY + "Can power a machine");
         list.add(TextFormatting.DARK_PURPLE + "Creative Only");
     }
+    
+    @Override
+    public double getDurabilityForDisplay(ItemStack itemStack) {
+    	return 0.00;
+    }
 }
